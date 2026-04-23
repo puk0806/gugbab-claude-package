@@ -1,0 +1,37 @@
+{
+  "name": "gugbab-claude-package",
+  "version": "0.0.0",
+  "private": true,
+  "description": "gugbab 공용 프론트엔드 패키지 모노레포 (@gugbab-ui/*)",
+  "packageManager": "pnpm@9.9.0",
+  "engines": {
+    "node": ">=20.17.0",
+    "pnpm": ">=9.9.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "ci": "biome ci .",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "clean": "turbo run clean",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.12",
+    "@changesets/cli": "^2.27.9",
+    "@commitlint/cli": "^19.5.0",
+    "@gugbab-ui/biome-config": "workspace:*",
+    "@gugbab-ui/commitlint-config": "workspace:*",
+    "@gugbab-ui/tsconfig": "workspace:*",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "turbo": "^2.2.3"
+  }
+}

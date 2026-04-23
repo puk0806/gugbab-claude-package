@@ -1,0 +1,21 @@
+{
+  "name": "@gugbab-ui/commitlint-config",
+  "version": "0.0.1",
+  "description": "Shared commitlint configuration for @gugbab-ui/* packages (gugbab git.md 컨벤션)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/puk0806/gugbab-claude-package.git",
+    "directory": "packages/commitlint-config"
+  },
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "peerDependencies": {
+    "@commitlint/cli": ">=19.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

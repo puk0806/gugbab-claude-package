@@ -1,0 +1,20 @@
+{
+  "name": "@gugbab-ui/biome-config",
+  "version": "0.0.1",
+  "description": "Shared Biome configuration for @gugbab-ui/* packages",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/puk0806/gugbab-claude-package.git",
+    "directory": "packages/biome-config"
+  },
+  "files": [
+    "base.json"
+  ],
+  "peerDependencies": {
+    "@biomejs/biome": ">=2.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

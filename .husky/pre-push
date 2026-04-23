@@ -1,0 +1,14 @@
+echo "🔍 pre-push: typecheck → biome ci → codex review (advisory)"
+
+# 1) 필수 검증 — 실패 시 push 차단
+pnpm typecheck || exit 1
+pnpm exec biome ci . || exit 1
+
+# 2) Codex 리뷰 — advisory (실패해도 push 차단 안 함)
+if [ "$SKIP_CODEX" = "1" ]; then
+  echo "⏭️  SKIP_CODEX=1 — Codex 리뷰 생략"
+else
+  UPSTREAM=$(git rev-parse --abbrev-ref "HEAD@{upstream}" 2>/dev/null || echo "origin/main")
+  echo "🤖 Codex 리뷰 (base=$UPSTREAM, 생략: SKIP_CODEX=1 git push ...)"
+  codex review --base "$UPSTREAM" || echo "⚠️  Codex 리뷰 실행 실패/미인증 — push는 계속 진행"
+fi
