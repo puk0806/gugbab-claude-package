@@ -11,15 +11,40 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 ```
 01_gugbab-claude-package/
 ├── CLAUDE.md              # 프로젝트 지침
-├── .claude/
+├── .claude/               # Claude Code 자산
 │   ├── agents/            # 서브에이전트
 │   ├── skills/            # 스킬
 │   ├── hooks/             # 훅
 │   ├── rules/             # 규칙 문서
 │   └── settings.json      # Claude Code 설정·플러그인
+├── .husky/                # Git 훅 (pre-commit / commit-msg / pre-push)
+├── .changeset/            # Changesets 버전 기록
+├── packages/              # 배포 대상 패키지 (@gugbab-ui/*)
+│   ├── tsconfig/          # @gugbab-ui/tsconfig
+│   ├── biome-config/      # @gugbab-ui/biome-config
+│   └── commitlint-config/ # @gugbab-ui/commitlint-config
 ├── docs/                  # 에이전트·스킬 검증 문서 및 리서치
 └── examples/              # CLAUDE.md 템플릿
 ```
+
+## 배포 패키지 (@gugbab-ui/\*)
+
+| 패키지                           | 역할                        | 상태 |
+| -------------------------------- | --------------------------- | ---- |
+| `@gugbab-ui/tsconfig`            | 공용 TS 프리셋 (base / react-library / node-library) | 0.0.1 |
+| `@gugbab-ui/biome-config`        | 공용 Biome 프리셋 (base.json) | 0.0.1 |
+| `@gugbab-ui/commitlint-config`   | 공용 commitlint 컨벤션 (`[category] Type: Subject`) | 0.0.1 |
+
+## 개발 워크플로우
+
+| 단계         | 실행              | 검증 | 차단 |
+| ------------ | ----------------- | ---- | :---: |
+| pre-commit   | `lint-staged`     | staged 파일에 `biome check --write` | ✅ |
+| commit-msg   | `commitlint`      | `[category] Type: Subject` 정규식 | ✅ |
+| **pre-push** | `pnpm typecheck && pnpm exec biome ci .` | 전체 레포 typecheck + biome CI | ✅ |
+| **pre-push** | `codex review --base <upstream>` | Codex 독립 리뷰 (advisory) | ❌ |
+
+Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 
 ## Claude 자산 현황
 
