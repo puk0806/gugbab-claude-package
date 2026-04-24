@@ -22,7 +22,8 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 ├── packages/              # 배포 대상 패키지 (@gugbab-ui/*)
 │   ├── tsconfig/          # @gugbab-ui/tsconfig
 │   ├── biome-config/      # @gugbab-ui/biome-config
-│   └── commitlint-config/ # @gugbab-ui/commitlint-config
+│   ├── commitlint-config/ # @gugbab-ui/commitlint-config
+│   └── utils/             # @gugbab-ui/utils
 ├── docs/                  # 에이전트·스킬 검증 문서 및 리서치
 └── examples/              # CLAUDE.md 템플릿
 ```
@@ -34,6 +35,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 | `@gugbab-ui/tsconfig`            | 공용 TS 프리셋 (base / react-library / node-library) | 0.0.1 |
 | `@gugbab-ui/biome-config`        | 공용 Biome 프리셋 (base.json) | 0.0.1 |
 | `@gugbab-ui/commitlint-config`   | 공용 commitlint 컨벤션 (`[category] Type: Subject`) | 0.0.1 |
+| `@gugbab-ui/utils`               | 프레임워크 독립 순수 유틸 (string/object/array/guard/fn/format, 22개 함수) | 0.0.1 |
 
 ## 개발 워크플로우
 
@@ -97,3 +99,4 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 날짜       | 변경 내용                                                                                                     |
 | ---------- | ------------------------------------------------------------------------------------------------------------- |
 | 2026-04-22 | 초기 스캐폴드 — gugbab-claude 메타 레포에서 프론트엔드 관련 자산 선별 import, Codex·Superpowers 플러그인 등록 |
+| 2026-04-23 | `@gugbab-ui/utils` 0.0.1 추가 — string/object/array/guard/fn/format 6개 카테고리, 22개 함수, 108개 테스트     |
