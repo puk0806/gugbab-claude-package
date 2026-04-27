@@ -1,1 +1,8 @@
-export { Select, type SelectItemProps, type SelectRootProps } from './Select';
+export {
+  Select,
+  type SelectContentProps,
+  type SelectItemProps,
+  type SelectRootProps,
+  type SelectScrollButtonProps,
+  type SelectTriggerProps,
+} from './Select';

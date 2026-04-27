@@ -1,84 +1,98 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { Toast, useToast } from './Toast';
+import { Toast } from './Toast';
 
-function Harness({ onReady }: { onReady: (api: ReturnType<typeof useToast>) => void }) {
-  const api = useToast();
-  onReady(api);
-  return null;
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function BasicToast({
+  open = true,
+  onOpenChange,
+  type,
+  title = 'Saved',
+  description,
+  duration,
+}: {
+  open?: boolean;
+  onOpenChange?: (v: boolean) => void;
+  type?: 'foreground' | 'background';
+  title?: string;
+  description?: string;
+  duration?: number;
+}) {
+  return (
+    <Toast.Provider>
+      <Toast.Root
+        open={open}
+        onOpenChange={onOpenChange}
+        type={type}
+        duration={duration}
+        data-testid="toast"
+      >
+        <Toast.Title>{title}</Toast.Title>
+        {description && <Toast.Description>{description}</Toast.Description>}
+        <Toast.Close>닫기</Toast.Close>
+      </Toast.Root>
+      <Toast.Viewport data-testid="viewport" />
+    </Toast.Provider>
+  );
 }
 
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
+
 describe('Toast', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
 
-  it('adds and renders a toast via useToast().toast()', () => {
-    let toastApi: ReturnType<typeof useToast> | null = null;
-    render(
-      <Toast.Provider>
-        <Harness onReady={(api) => (toastApi = api)} />
-        <Toast.Viewport data-testid="viewport" />
-      </Toast.Provider>,
-    );
-
-    act(() => {
-      toastApi?.toast({ title: 'Saved', description: 'OK' });
-    });
-
-    expect(screen.getByText('Saved')).toBeInTheDocument();
-    expect(screen.getByText('OK')).toBeInTheDocument();
+  it('renders title and description when open', () => {
+    render(<BasicToast title="저장됨" description="변경 사항이 저장되었습니다" />);
+    expect(screen.getByText('저장됨')).toBeInTheDocument();
+    expect(screen.getByText('변경 사항이 저장되었습니다')).toBeInTheDocument();
   });
 
-  it('auto-dismisses after the duration', () => {
-    let toastApi: ReturnType<typeof useToast> | null = null;
-    render(
-      <Toast.Provider duration={3000}>
-        <Harness onReady={(api) => (toastApi = api)} />
-        <Toast.Viewport />
-      </Toast.Provider>,
-    );
+  it('does not render when open=false', () => {
+    render(<BasicToast open={false} title="숨김" />);
+    expect(screen.queryByText('숨김')).toBeNull();
+  });
 
-    act(() => {
-      toastApi?.toast({ title: 'Gone' });
-    });
-    expect(screen.getByText('Gone')).toBeInTheDocument();
+  it('calls onOpenChange(false) when Close is clicked', () => {
+    const spy = vi.fn();
+    render(<BasicToast onOpenChange={spy} title="닫기테스트" />);
+    fireEvent.click(screen.getByText('닫기'));
+    expect(spy).toHaveBeenCalledWith(false);
+  });
 
+  it('aria-live is assertive for foreground, polite for background', () => {
+    const { rerender } = render(<BasicToast type="foreground" title="A" />);
+    expect(screen.getByTestId('toast').getAttribute('aria-live')).toBe('assertive');
+    rerender(<BasicToast type="background" title="A" />);
+    expect(screen.getByTestId('toast').getAttribute('aria-live')).toBe('polite');
+  });
+
+  it('viewport has role=region with accessible label', () => {
+    render(<BasicToast />);
+    const viewport = screen.getByTestId('viewport');
+    expect(viewport).toHaveAttribute('role', 'region');
+    expect(viewport).toHaveAttribute('aria-label');
+  });
+
+  it('auto-dismisses after duration', () => {
+    const spy = vi.fn();
+    render(<BasicToast duration={3000} onOpenChange={spy} title="자동닫힘" />);
+    expect(screen.getByText('자동닫힘')).toBeInTheDocument();
     act(() => {
       vi.advanceTimersByTime(3000);
     });
-    expect(screen.queryByText('Gone')).toBeNull();
+    expect(spy).toHaveBeenCalledWith(false);
   });
 
-  it('Close button dismisses the toast', () => {
-    render(
-      <Toast.Provider>
-        <Toast.Viewport>
-          {/* Manually add a toast via uncontrolled API is internal — this test asserts close wiring */}
-        </Toast.Viewport>
-      </Toast.Provider>,
-    );
-    // The viewport's own items are shown via toasts state; skipping direct Close since Viewport renders items automatically.
-    expect(true).toBe(true);
-  });
-
-  it('aria-live is polite by default, assertive for foreground', () => {
-    let toastApi: ReturnType<typeof useToast> | null = null;
-    render(
-      <Toast.Provider>
-        <Harness onReady={(api) => (toastApi = api)} />
-        <Toast.Viewport />
-      </Toast.Provider>,
-    );
-    act(() => {
-      toastApi?.toast({ title: 'A' });
-      toastApi?.toast({ title: 'B', type: 'foreground' });
-    });
-    const items = screen.getAllByRole('status');
-    expect(items[0].getAttribute('aria-live')).toBe('polite');
-    expect(items[1].getAttribute('aria-live')).toBe('assertive');
+  it('data-state=open when open, data-state=closed when closed', () => {
+    const { rerender } = render(<BasicToast open={true} title="상태" />);
+    expect(screen.getByTestId('toast')).toHaveAttribute('data-state', 'open');
+    rerender(<BasicToast open={false} title="상태" />);
+    expect(screen.queryByTestId('toast')).toBeNull();
   });
 });

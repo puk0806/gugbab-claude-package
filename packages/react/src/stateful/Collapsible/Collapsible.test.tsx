@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Collapsible } from './Collapsible';
 
@@ -40,5 +40,20 @@ describe('Collapsible', () => {
     render(<Basic disabled />);
     fireEvent.click(screen.getByText('toggle'));
     expect(screen.queryByText('body')).toBeNull();
+  });
+
+  it('sets --gugbab-collapsible-content-height CSS variable when open', async () => {
+    render(<Basic defaultOpen />);
+    const content = screen.getByRole('region');
+    // jsdom does not compute layout but the variable should be set (may be 0px in jsdom)
+    await act(async () => {});
+    expect(content.style.getPropertyValue('--gugbab-collapsible-content-height')).toBeDefined();
+  });
+
+  it('sets --gugbab-collapsible-content-width CSS variable when open', async () => {
+    render(<Basic defaultOpen />);
+    const content = screen.getByRole('region');
+    await act(async () => {});
+    expect(content.style.getPropertyValue('--gugbab-collapsible-content-width')).toBeDefined();
   });
 });

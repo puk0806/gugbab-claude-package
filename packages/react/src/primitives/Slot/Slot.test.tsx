@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { createRef } from 'react';
+import { createRef, lazy, Suspense } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { Slot } from './Slot';
 
@@ -72,5 +72,20 @@ describe('Slot', () => {
   it('returns null when children is not a valid element', () => {
     const { container } = render(<Slot>just text</Slot>);
     expect(container.firstChild).toBeNull();
+  });
+
+  it('passes through a lazy-loaded component without crashing', async () => {
+    const LazyBtn = lazy(() =>
+      Promise.resolve({ default: () => <button type="button">lazy</button> }),
+    );
+    render(
+      <Suspense fallback={<span>loading</span>}>
+        <Slot>
+          <LazyBtn />
+        </Slot>
+      </Suspense>,
+    );
+    // Should render without throwing — either fallback or resolved text
+    expect(document.body.textContent).toMatch(/loading|lazy/);
   });
 });

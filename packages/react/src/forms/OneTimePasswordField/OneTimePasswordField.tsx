@@ -10,7 +10,6 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import { type Direction, useDirection } from '../../shared/DirectionProvider';

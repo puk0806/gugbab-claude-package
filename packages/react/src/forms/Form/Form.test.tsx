@@ -88,4 +88,41 @@ describe('Form', () => {
     fireEvent.click(screen.getByTestId('submit'));
     expect(onSubmit).toHaveBeenCalled();
   });
+
+  it('serverInvalid=true sets data-invalid and aria-invalid on Field', () => {
+    render(
+      <Form.Root>
+        <Form.Field name="email" serverInvalid data-testid="field">
+          <Form.Control data-testid="ctl" />
+        </Form.Field>
+      </Form.Root>,
+    );
+    const field = screen.getByTestId('field');
+    expect(field.getAttribute('data-invalid')).toBe('');
+    expect(field.getAttribute('aria-invalid')).toBe('true');
+  });
+
+  it('serverInvalid=true does not set data-valid', () => {
+    render(
+      <Form.Root>
+        <Form.Field name="email" serverInvalid data-testid="field">
+          <Form.Control />
+        </Form.Field>
+      </Form.Root>,
+    );
+    expect(screen.getByTestId('field').hasAttribute('data-valid')).toBe(false);
+  });
+
+  it('serverInvalid=false (default) renders data-valid when no client error', () => {
+    render(
+      <Form.Root>
+        <Form.Field name="email" data-testid="field">
+          <Form.Control />
+        </Form.Field>
+      </Form.Root>,
+    );
+    const field = screen.getByTestId('field');
+    expect(field.getAttribute('data-valid')).toBe('');
+    expect(field.hasAttribute('aria-invalid')).toBe(false);
+  });
 });

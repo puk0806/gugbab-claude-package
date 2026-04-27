@@ -22,8 +22,8 @@ export interface BubbleInputProps
   checked: boolean;
   /** When true, the underlying input has its `indeterminate` IDL property set. */
   indeterminate?: boolean;
-  /** Form-input type. Switch and Checkbox both use `"checkbox"`. */
-  type?: 'checkbox';
+  /** Form-input type. Switch and Checkbox use `"checkbox"`, RadioGroup uses `"radio"`. */
+  type?: 'checkbox' | 'radio';
 }
 
 export const BubbleInput = forwardRef<HTMLInputElement, BubbleInputProps>(function BubbleInput(

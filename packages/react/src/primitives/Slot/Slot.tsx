@@ -64,9 +64,33 @@ export const Slot = forwardRef<HTMLElement, SlotProps>(function Slot(props, forw
 
 const SlotClone = forwardRef<HTMLElement, SlotProps>(function SlotClone(props, forwardedRef) {
   const { children, ...slotProps } = props;
+
+  // Hooks must run unconditionally — compute element + merged ref first,
+  // then decide which render path to take.
+  const isPromise =
+    children !== null &&
+    children !== undefined &&
+    !isValidElement(children) &&
+    typeof children === 'object' &&
+    'then' in (children as object);
+
   const element = isValidElement(children) ? (children as ReactElement<AnyProps>) : null;
+
+  const REACT_LAZY = Symbol.for('react.lazy');
+  const isLazy =
+    element !== null &&
+    typeof element.type === 'object' &&
+    element.type !== null &&
+    (element.type as { $$typeof?: symbol }).$$typeof === REACT_LAZY;
+
   const childRef = element ? getElementRef(element) : null;
   const mergedRef = useMergedRefs(forwardedRef, childRef);
+
+  // React 19 use() — Promise child: render as-is so Suspense handles it.
+  if (isPromise) return children as unknown as React.ReactElement;
+
+  // Lazy child: cloneElement on lazy is unsafe; render directly.
+  if (isLazy) return element;
 
   if (!element) {
     return Children.count(children) > 1 ? Children.only(null) : null;

@@ -1,7 +1,12 @@
 export {
+  type SwipeDirection,
+  type SwipeEvent,
   Toast,
-  type ToastItem,
+  type ToastActionProps,
+  type ToastCloseProps,
+  type ToastDescriptionProps,
   type ToastProviderProps,
   type ToastRootProps,
-  useToast,
+  type ToastTitleProps,
+  type ToastViewportProps,
 } from './Toast';

@@ -5,7 +5,9 @@ import {
   forwardRef,
   type HTMLAttributes,
   useContext,
+  useEffect,
   useId,
+  useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import { usePresence } from '../../shared/usePresence';
@@ -100,15 +102,34 @@ const Trigger = forwardRef<HTMLButtonElement, CollapsibleTriggerProps>(function 
 });
 
 const Content = forwardRef<HTMLDivElement, CollapsibleContentProps>(function CollapsibleContent(
-  { forceMount, ...props },
+  { forceMount, style, ...props },
   ref,
 ) {
   const ctx = useCollapsibleContext('Collapsible.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  const sizeRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const node = sizeRef.current;
+    if (!node) return;
+
+    const updateSize = () => {
+      node.style.setProperty('--gugbab-collapsible-content-height', `${node.scrollHeight}px`);
+      node.style.setProperty('--gugbab-collapsible-content-width', `${node.scrollWidth}px`);
+    };
+    updateSize();
+
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   if (!mounted && !forceMount) return null;
   return (
     <div
       ref={(node) => {
+        sizeRef.current = node;
         presenceRef.current = node;
         if (typeof ref === 'function') ref(node);
         else if (ref) ref.current = node;
@@ -118,6 +139,7 @@ const Content = forwardRef<HTMLDivElement, CollapsibleContentProps>(function Col
       aria-labelledby={ctx.triggerId}
       data-state={ctx.open ? 'open' : 'closed'}
       hidden={!ctx.open}
+      style={style}
       {...props}
     />
   );

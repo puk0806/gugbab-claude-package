@@ -42,6 +42,7 @@ interface FieldContextValue {
   controlId: string;
   validity: ValidityState | null;
   value: string;
+  serverInvalid: boolean;
   setValidity: (validity: ValidityState | null) => void;
   setValue: (value: string) => void;
 }
@@ -67,25 +68,34 @@ const Root = forwardRef<HTMLFormElement, FormRootProps>(function FormRoot(
 export interface FormFieldProps extends HTMLAttributes<HTMLDivElement> {
   name: string;
   asChild?: boolean;
+  /**
+   * When true, forces the field into an invalid state regardless of the
+   * native ValidityState — useful for surfacing server-side errors.
+   */
+  serverInvalid?: boolean;
   children: ReactNode;
 }
 
 const Field = forwardRef<HTMLDivElement, FormFieldProps>(function FormField(
-  { name, asChild, children, ...rest },
+  { name, asChild, serverInvalid = false, children, ...rest },
   ref,
 ) {
   const controlId = useId();
   const [validity, setValidity] = useState<ValidityState | null>(null);
   const [value, setValue] = useState('');
   const Comp = asChild ? Slot : 'div';
-  const valid = validity === null || validity.valid;
+  const clientInvalid = validity !== null && !validity.valid;
+  const isInvalid = serverInvalid || clientInvalid;
 
   return (
-    <FieldContext.Provider value={{ name, controlId, validity, value, setValidity, setValue }}>
+    <FieldContext.Provider
+      value={{ name, controlId, validity, value, serverInvalid, setValidity, setValue }}
+    >
       <Comp
         ref={ref}
-        data-valid={valid ? '' : undefined}
-        data-invalid={!valid ? '' : undefined}
+        data-valid={!isInvalid ? '' : undefined}
+        data-invalid={isInvalid ? '' : undefined}
+        aria-invalid={isInvalid ? true : undefined}
         {...rest}
       >
         {children}
