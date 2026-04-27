@@ -24,7 +24,8 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 │   ├── biome-config/      # @gugbab-ui/biome-config
 │   ├── commitlint-config/ # @gugbab-ui/commitlint-config
 │   ├── utils/             # @gugbab-ui/utils
-│   └── hooks/             # @gugbab-ui/hooks
+│   ├── hooks/             # @gugbab-ui/hooks
+│   └── react/             # @gugbab-ui/react (headless 컴포넌트 30종)
 ├── docs/                  # 에이전트·스킬 검증 문서 및 리서치
 └── examples/              # CLAUDE.md 템플릿
 ```
@@ -38,6 +39,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 | `@gugbab-ui/commitlint-config`   | 공용 commitlint 컨벤션 (`[category] Type: Subject`) | 0.0.1 |
 | `@gugbab-ui/utils`               | 프레임워크 독립 순수 유틸 (string/object/array/guard/fn/format, 22개 함수) | 0.0.1 |
 | `@gugbab-ui/hooks`               | 헤드리스 공용 React 훅 (lifecycle/ref/binding/state/dom, 11개 훅) | 0.0.1 |
+| `@gugbab-ui/react`               | 헤드리스 React 컴포넌트 31종 + Form (Radix-parity Phase 2: asChild 전체 / Presence / FloatingList / CheckboxItem·RadioItem / typeahead / RTL 키보드) | 0.0.1 |
 
 ## 개발 워크플로우
 
@@ -103,3 +105,6 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-04-22 | 초기 스캐폴드 — gugbab-claude 메타 레포에서 프론트엔드 관련 자산 선별 import, Codex·Superpowers 플러그인 등록 |
 | 2026-04-23 | `@gugbab-ui/utils` 0.0.1 추가 — string/object/array/guard/fn/format 6개 카테고리, 22개 함수, 108개 테스트     |
 | 2026-04-24 | `@gugbab-ui/hooks` 0.0.1 추가 — lifecycle/ref/binding/state/dom 5개 카테고리, 11개 훅, 42개 테스트 (`utils` 소비) |
+| 2026-04-24 | `@gugbab-ui/react` 0.0.1 추가 — 헤드리스 컴포넌트 30종 (5 tier: primitives/stateful/overlays/forms/navigation), 98개 테스트, Floating UI 기반 |
+| 2026-04-24 | `@gugbab-ui/react` 고도화 — DirectionProvider(RTL), Dialog asChild+scrollLock, Slider 포인터 드래그, Toast pause/swipe, axe-core a11y smoke (총 121 tests) |
+| 2026-04-27 | `@gugbab-ui/react` Phase 2 (Radix parity) — asChild 14개 subcomponent 일괄 확장, usePresence(애니메이션 후 unmount), DropdownMenu/Select FloatingList+typeahead, DropdownMenu.CheckboxItem/RadioGroup/RadioItem/ItemIndicator, Tabs/RadioGroup RTL 키보드, Form (Field/Label/Control/Message/Submit) 추가 (총 158 tests) |
