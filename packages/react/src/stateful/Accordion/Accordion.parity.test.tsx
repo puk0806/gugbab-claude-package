@@ -1,10 +1,26 @@
 /**
  * Radix-parity tests for Accordion — keyboard, orientation, dir, ARIA locked.
  */
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DirectionProvider } from '../../shared/DirectionProvider';
 import { Accordion } from './Accordion';
+
+// RovingFocusGroup defers focus moves with setTimeout(0); flush before assertions.
+function flush() {
+  act(() => {
+    vi.advanceTimersByTime(1);
+  });
+}
+
+beforeEach(() => {
+  vi.useFakeTimers({ shouldAdvanceTime: false });
+});
+
+afterEach(() => {
+  vi.runOnlyPendingTimers();
+  vi.useRealTimers();
+});
 
 function Sample({
   type = 'single' as 'single' | 'multiple',
@@ -18,9 +34,8 @@ function Sample({
   disabled?: boolean;
 }) {
   return (
-    // biome-ignore lint/suspicious/noExplicitAny: union type expansion is awkward in test fixtures
     <Accordion.Root
-      type={type as any}
+      type={type as 'single' | 'multiple'}
       collapsible={collapsible}
       orientation={orientation}
       disabled={disabled}
@@ -51,42 +66,48 @@ describe('Accordion parity — keyboard (vertical default)', () => {
   it('ArrowDown moves focus to next trigger', () => {
     render(<Sample />);
     const a = screen.getByText('A');
-    a.focus();
+    act(() => a.focus());
     fireEvent.keyDown(a, { key: 'ArrowDown' });
+    flush();
     expect(screen.getByText('B')).toHaveFocus();
   });
 
   it('ArrowUp moves focus to previous trigger (wraps)', () => {
     render(<Sample />);
     const a = screen.getByText('A');
-    a.focus();
+    act(() => a.focus());
     fireEvent.keyDown(a, { key: 'ArrowUp' });
+    flush();
     expect(screen.getByText('C')).toHaveFocus();
   });
 
   it('Home jumps to first trigger', () => {
     render(<Sample />);
     const c = screen.getByText('C');
-    c.focus();
+    act(() => c.focus());
     fireEvent.keyDown(c, { key: 'Home' });
+    flush();
     expect(screen.getByText('A')).toHaveFocus();
   });
 
   it('End jumps to last trigger', () => {
     render(<Sample />);
     const a = screen.getByText('A');
-    a.focus();
+    act(() => a.focus());
     fireEvent.keyDown(a, { key: 'End' });
+    flush();
     expect(screen.getByText('C')).toHaveFocus();
   });
 
   it('ArrowLeft/Right do nothing in vertical orientation', () => {
     render(<Sample />);
     const a = screen.getByText('A');
-    a.focus();
+    act(() => a.focus());
     fireEvent.keyDown(a, { key: 'ArrowRight' });
+    flush();
     expect(a).toHaveFocus();
     fireEvent.keyDown(a, { key: 'ArrowLeft' });
+    flush();
     expect(a).toHaveFocus();
   });
 });
@@ -95,24 +116,27 @@ describe('Accordion parity — keyboard (horizontal)', () => {
   it('ArrowRight moves focus to next trigger (LTR)', () => {
     render(<Sample orientation="horizontal" />);
     const a = screen.getByText('A');
-    a.focus();
+    act(() => a.focus());
     fireEvent.keyDown(a, { key: 'ArrowRight' });
+    flush();
     expect(screen.getByText('B')).toHaveFocus();
   });
 
   it('ArrowLeft moves focus to previous trigger (LTR, wraps)', () => {
     render(<Sample orientation="horizontal" />);
     const a = screen.getByText('A');
-    a.focus();
+    act(() => a.focus());
     fireEvent.keyDown(a, { key: 'ArrowLeft' });
+    flush();
     expect(screen.getByText('C')).toHaveFocus();
   });
 
   it('ArrowUp/Down do nothing in horizontal orientation', () => {
     render(<Sample orientation="horizontal" />);
     const a = screen.getByText('A');
-    a.focus();
+    act(() => a.focus());
     fireEvent.keyDown(a, { key: 'ArrowDown' });
+    flush();
     expect(a).toHaveFocus();
   });
 
@@ -123,8 +147,9 @@ describe('Accordion parity — keyboard (horizontal)', () => {
       </DirectionProvider>,
     );
     const a = screen.getByText('A');
-    a.focus();
+    act(() => a.focus());
     fireEvent.keyDown(a, { key: 'ArrowLeft' });
+    flush();
     expect(screen.getByText('B')).toHaveFocus();
   });
 });
@@ -158,8 +183,9 @@ describe('Accordion parity — disabled states', () => {
       </Accordion.Root>,
     );
     const a = screen.getByText('A');
-    a.focus();
+    act(() => a.focus());
     fireEvent.keyDown(a, { key: 'ArrowDown' });
+    flush();
     expect(screen.getByText('C')).toHaveFocus();
   });
 });

@@ -1,14 +1,18 @@
-import { useControllableState } from '@gugbab-ui/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab-ui/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
   forwardRef,
   type HTMLAttributes,
-  type KeyboardEvent,
+  type Ref,
   useContext,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
-import { type Direction, useDirection } from '../../shared/DirectionProvider';
+import {
+  type RovingFocusDirection,
+  RovingFocusGroup,
+  useRovingFocusGroupItem,
+} from '../../shared/RovingFocusGroup';
 
 interface ToggleGroupContextValue {
   type: 'single' | 'multiple';
@@ -28,12 +32,10 @@ function useCtx(consumer: string) {
   return ctx;
 }
 
-const ITEM_SELECTOR = '[data-toggle-group-item]:not([disabled])';
-
-interface CommonProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue'> {
+interface CommonProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'dir'> {
   disabled?: boolean;
   orientation?: 'horizontal' | 'vertical';
-  dir?: Direction;
+  dir?: RovingFocusDirection;
   loop?: boolean;
   /**
    * When false, the group does NOT manage its own keyboard navigation —
@@ -116,10 +118,10 @@ const Root = forwardRef<HTMLDivElement, ToggleGroupRootProps>(function ToggleGro
 interface InnerCommon {
   disabled: boolean;
   orientation: 'horizontal' | 'vertical';
-  dir?: Direction;
+  dir?: RovingFocusDirection;
   loop: boolean;
   rovingFocus: boolean;
-  rest: HTMLAttributes<HTMLDivElement>;
+  rest: Omit<HTMLAttributes<HTMLDivElement>, 'dir'>;
 }
 
 interface InnerSingleProps extends InnerCommon {
@@ -208,43 +210,30 @@ const MultipleInner = forwardRef<HTMLDivElement, InnerMultipleProps>(function Mu
 
 interface ContainerProps {
   orientation: 'horizontal' | 'vertical';
-  dir?: Direction;
+  dir?: RovingFocusDirection;
   loop: boolean;
   rovingFocus: boolean;
   role: 'radiogroup' | 'group';
-  rest: HTMLAttributes<HTMLDivElement>;
+  rest: Omit<HTMLAttributes<HTMLDivElement>, 'dir'>;
 }
 const Container = forwardRef<HTMLDivElement, ContainerProps>(function Container(
   { orientation, dir, loop, rovingFocus, role, rest },
   ref,
 ) {
-  const direction = useDirection(dir);
-  const isLtr = direction === 'ltr';
-  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    rest.onKeyDown?.(e);
-    if (e.defaultPrevented) return;
-    if (!rovingFocus) return;
-    const horizontal = orientation === 'horizontal';
-    const nextKey = horizontal ? (isLtr ? 'ArrowRight' : 'ArrowLeft') : 'ArrowDown';
-    const prevKey = horizontal ? (isLtr ? 'ArrowLeft' : 'ArrowRight') : 'ArrowUp';
-    if (![nextKey, prevKey, 'Home', 'End'].includes(e.key)) return;
-    const root = e.currentTarget;
-    const items = Array.from(root.querySelectorAll<HTMLButtonElement>(ITEM_SELECTOR));
-    const idx = items.indexOf(e.target as HTMLButtonElement);
-    if (idx === -1) return;
-    e.preventDefault();
-    const last = items.length - 1;
-    let next = idx;
-    if (e.key === 'Home') next = 0;
-    else if (e.key === 'End') next = last;
-    else if (e.key === nextKey) next = idx === last ? (loop ? 0 : last) : idx + 1;
-    else if (e.key === prevKey) next = idx === 0 ? (loop ? last : 0) : idx - 1;
-    items[next]?.focus();
-  };
-
-  return (
-    <div ref={ref} role={role} data-orientation={orientation} {...rest} onKeyDown={onKeyDown} />
-  );
+  if (rovingFocus) {
+    return (
+      <RovingFocusGroup
+        ref={ref}
+        orientation={orientation}
+        dir={dir}
+        loop={loop}
+        role={role}
+        data-orientation={orientation}
+        {...rest}
+      />
+    );
+  }
+  return <div ref={ref} role={role} data-orientation={orientation} {...rest} />;
 });
 
 export interface ToggleGroupItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -260,13 +249,24 @@ const Item = forwardRef<HTMLButtonElement, ToggleGroupItemProps>(function Toggle
   const pressed = ctx.value.includes(itemValue);
   const finalDisabled = disabled ?? ctx.disabled;
   const Comp = asChild ? Slot : 'button';
-  // roving tabindex applies only when the group manages its own keyboard nav;
-  // when nested inside a parent that handles focus (e.g. Toolbar), defer.
-  const tabIndex = ctx.rovingFocus ? (pressed || !ctx.hasAnyPressed ? 0 : -1) : undefined;
+
+  const rovingProps = useRovingFocusGroupItem({
+    active: pressed,
+    focusable: !finalDisabled,
+  });
+
+  const composedRef = useMergedRefs<HTMLButtonElement>(
+    ref,
+    rovingProps.ref as Ref<HTMLButtonElement>,
+  );
+
+  // When rovingFocus is disabled (e.g. nested in Toolbar), fall back to
+  // the legacy tabIndex logic so the group still behaves correctly.
+  const tabIndex = ctx.rovingFocus ? rovingProps.tabIndex : pressed || !ctx.hasAnyPressed ? 0 : -1;
 
   return (
     <Comp
-      ref={ref}
+      ref={composedRef}
       type={asChild ? undefined : type}
       aria-pressed={ctx.type === 'multiple' ? pressed : undefined}
       role={ctx.type === 'single' ? 'radio' : undefined}
@@ -277,6 +277,9 @@ const Item = forwardRef<HTMLButtonElement, ToggleGroupItemProps>(function Toggle
       data-toggle-group-item=""
       data-orientation={ctx.orientation}
       tabIndex={tabIndex}
+      onFocus={ctx.rovingFocus ? rovingProps.onFocus : rest.onFocus}
+      onMouseDown={ctx.rovingFocus ? rovingProps.onMouseDown : rest.onMouseDown}
+      onKeyDown={ctx.rovingFocus ? rovingProps.onKeyDown : rest.onKeyDown}
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(e);
         if (!e.defaultPrevented && !finalDisabled) ctx.toggle(itemValue);

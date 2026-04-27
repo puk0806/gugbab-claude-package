@@ -1,10 +1,10 @@
-import { useControllableState } from '@gugbab-ui/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab-ui/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
   forwardRef,
   type HTMLAttributes,
-  type KeyboardEvent,
+  type Ref,
   useCallback,
   useContext,
   useId,
@@ -12,6 +12,7 @@ import {
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import { type Direction, useDirection } from '../../shared/DirectionProvider';
+import { RovingFocusGroup, useRovingFocusGroupItem } from '../../shared/RovingFocusGroup';
 import { usePresence } from '../../shared/usePresence';
 
 type Orientation = 'horizontal' | 'vertical';
@@ -26,6 +27,7 @@ interface AccordionContextValue {
   disabled: boolean;
   collapsible: boolean;
   orientation: Orientation;
+  dir: 'ltr' | 'rtl';
   toggle: (itemValue: string) => void;
 }
 
@@ -58,9 +60,6 @@ export type AccordionRootProps =
   | (AccordionSingleProps & { type: 'single' })
   | (AccordionMultipleProps & { type: 'multiple' });
 
-const ACCORDION_KEYS = ['Home', 'End', 'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'] as const;
-const TRIGGER_SELECTOR = '[data-accordion-trigger]:not([disabled])';
-
 const Root = forwardRef<HTMLDivElement, AccordionRootProps>(function AccordionRoot(props, ref) {
   if (props.type === 'single') {
     const { type: _t, disabled = false, ...rest } = props;
@@ -84,6 +83,7 @@ const SingleRoot = forwardRef<HTMLDivElement, AccordionSingleProps & { disabled:
     },
     ref,
   ) {
+    const resolvedDir = useDirection(dir);
     const [current, setCurrent] = useControllableState<string>({
       value,
       defaultValue: defaultValue ?? '',
@@ -103,9 +103,17 @@ const SingleRoot = forwardRef<HTMLDivElement, AccordionSingleProps & { disabled:
 
     return (
       <AccordionContext.Provider
-        value={{ type: 'single', value: values, disabled, collapsible, orientation, toggle }}
+        value={{
+          type: 'single',
+          value: values,
+          disabled,
+          collapsible,
+          orientation,
+          dir: resolvedDir,
+          toggle,
+        }}
       >
-        <Impl ref={ref} disabled={disabled} orientation={orientation} dir={dir} {...rest} />
+        <Impl ref={ref} disabled={disabled} orientation={orientation} dir={resolvedDir} {...rest} />
       </AccordionContext.Provider>
     );
   },
@@ -116,6 +124,7 @@ const MultipleRoot = forwardRef<HTMLDivElement, AccordionMultipleProps & { disab
     { value, defaultValue, onValueChange, disabled, orientation = 'vertical', dir, ...rest },
     ref,
   ) {
+    const resolvedDir = useDirection(dir);
     const [current, setCurrent] = useControllableState<string[]>({
       value,
       defaultValue: defaultValue ?? [],
@@ -138,10 +147,11 @@ const MultipleRoot = forwardRef<HTMLDivElement, AccordionMultipleProps & { disab
           disabled,
           collapsible: true,
           orientation,
+          dir: resolvedDir,
           toggle,
         }}
       >
-        <Impl ref={ref} disabled={disabled} orientation={orientation} dir={dir} {...rest} />
+        <Impl ref={ref} disabled={disabled} orientation={orientation} dir={resolvedDir} {...rest} />
       </AccordionContext.Provider>
     );
   },
@@ -150,72 +160,17 @@ const MultipleRoot = forwardRef<HTMLDivElement, AccordionMultipleProps & { disab
 interface ImplProps extends HTMLAttributes<HTMLDivElement> {
   disabled: boolean;
   orientation: Orientation;
-  dir?: Direction;
+  dir: 'ltr' | 'rtl';
 }
 
 const Impl = forwardRef<HTMLDivElement, ImplProps>(function AccordionImpl(
-  { disabled, orientation, dir, onKeyDown, ...rest },
+  { disabled, orientation, dir, ...rest },
   ref,
 ) {
-  const direction = useDirection(dir);
-  const isLtr = direction === 'ltr';
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    onKeyDown?.(e);
-    if (e.defaultPrevented) return;
-    if (disabled) return;
-    if (!ACCORDION_KEYS.includes(e.key as (typeof ACCORDION_KEYS)[number])) return;
-
-    const target = e.target as HTMLElement;
-    const root = e.currentTarget;
-    const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>(TRIGGER_SELECTOR));
-    const triggerIndex = triggers.indexOf(target as HTMLButtonElement);
-    if (triggerIndex === -1) return;
-
-    e.preventDefault();
-    const last = triggers.length - 1;
-
-    let nextIndex = triggerIndex;
-    const moveNext = () => {
-      nextIndex = triggerIndex + 1;
-      if (nextIndex > last) nextIndex = 0;
-    };
-    const movePrev = () => {
-      nextIndex = triggerIndex - 1;
-      if (nextIndex < 0) nextIndex = last;
-    };
-
-    switch (e.key) {
-      case 'Home':
-        nextIndex = 0;
-        break;
-      case 'End':
-        nextIndex = last;
-        break;
-      case 'ArrowDown':
-        if (orientation === 'vertical') moveNext();
-        break;
-      case 'ArrowUp':
-        if (orientation === 'vertical') movePrev();
-        break;
-      case 'ArrowRight':
-        if (orientation === 'horizontal') (isLtr ? moveNext : movePrev)();
-        break;
-      case 'ArrowLeft':
-        if (orientation === 'horizontal') (isLtr ? movePrev : moveNext)();
-        break;
-    }
-
-    triggers[nextIndex]?.focus();
-  };
-
   return (
-    <div
-      ref={ref}
-      data-orientation={orientation}
-      onKeyDown={disabled ? undefined : handleKeyDown}
-      {...rest}
-    />
+    <RovingFocusGroup asChild orientation={orientation} dir={dir} loop>
+      <div ref={ref} data-orientation={orientation} {...rest} />
+    </RovingFocusGroup>
   );
 });
 
@@ -284,7 +239,7 @@ export interface AccordionTriggerProps extends ButtonHTMLAttributes<HTMLButtonEl
 }
 
 const Trigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(function AccordionTrigger(
-  { onClick, type = 'button', disabled, asChild, ...rest },
+  { onClick, onFocus, onMouseDown, onKeyDown, type = 'button', disabled, asChild, ...rest },
   ref,
 ) {
   const root = useAccordionContext('Accordion.Trigger');
@@ -292,10 +247,21 @@ const Trigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(function Ac
   const finalDisabled = disabled ?? item.disabled;
   // single mode: open trigger cannot be closed → ARIA disabled
   const ariaLocked = root.type === 'single' && item.open && !root.collapsible;
+
+  const rovingProps = useRovingFocusGroupItem({
+    active: item.open,
+    focusable: !finalDisabled,
+  });
+
+  const composedRef = useMergedRefs<HTMLButtonElement>(
+    ref,
+    rovingProps.ref as Ref<HTMLButtonElement>,
+  );
+
   const Comp = asChild ? Slot : 'button';
   return (
     <Comp
-      ref={ref}
+      ref={composedRef}
       type={asChild ? undefined : type}
       id={item.triggerId}
       aria-controls={item.contentId}
@@ -306,6 +272,19 @@ const Trigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(function Ac
       data-orientation={root.orientation}
       data-accordion-trigger=""
       disabled={finalDisabled}
+      tabIndex={rovingProps.tabIndex}
+      onFocus={(e: React.FocusEvent<HTMLButtonElement>) => {
+        onFocus?.(e);
+        if (!e.defaultPrevented) rovingProps.onFocus(e);
+      }}
+      onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+        onMouseDown?.(e);
+        if (!e.defaultPrevented) rovingProps.onMouseDown(e);
+      }}
+      onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
+        onKeyDown?.(e);
+        if (!e.defaultPrevented) rovingProps.onKeyDown(e);
+      }}
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         onClick?.(e);
         if (!e.defaultPrevented && !finalDisabled && !ariaLocked) root.toggle(item.value);

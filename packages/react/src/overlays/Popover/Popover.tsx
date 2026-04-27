@@ -1,9 +1,7 @@
 import {
-  FloatingFocusManager,
   FloatingPortal,
   type Placement,
   useClick,
-  useDismiss,
   useInteractions,
   useRole,
 } from '@floating-ui/react';
@@ -17,6 +15,12 @@ import {
   useId,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
+import {
+  DismissableLayer,
+  type FocusOutsideEvent,
+  type PointerDownOutsideEvent,
+} from '../../shared/DismissableLayer';
+import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
 import { useFloatingBase } from '../_floatingBase';
 
@@ -78,11 +82,9 @@ function PopoverRoot({
   });
 
   const click = useClick(floating.context);
-  const dismiss = useDismiss(floating.context, {
-    outsidePressEvent: 'mousedown',
-  });
+  // Dismissal is handled by <DismissableLayer> on Content.
   const role = useRole(floating.context, { role: 'dialog' });
-  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, role]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([click, role]);
   const contentId = useId();
 
   return (
@@ -143,31 +145,77 @@ function Portal({ children, container, forceMount }: PopoverPortalProps) {
 
 export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean;
+  asChild?: boolean;
+  /** Cancellable. Called on `pointerdown` outside. */
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
+  /** Cancellable. Called when focus moves outside. */
+  onFocusOutside?: (event: FocusOutsideEvent) => void;
+  /** Cancellable. Called for any outside interaction (pointer or focus). */
+  onInteractOutside?: (event: PointerDownOutsideEvent | FocusOutsideEvent) => void;
+  /** Cancellable. Called when Escape is pressed. */
+  onEscapeKeyDown?: (event: KeyboardEvent) => void;
+  /** Cancellable. Called when Content auto-focuses on open. */
+  onOpenAutoFocus?: (event: Event) => void;
+  /** Cancellable. Called when focus is restored on close. */
+  onCloseAutoFocus?: (event: Event) => void;
 }
 
 const Content = forwardRef<HTMLDivElement, PopoverContentProps>(function PopoverContent(
-  { forceMount, style, ...props },
+  {
+    forceMount,
+    asChild,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+    onEscapeKeyDown,
+    onOpenAutoFocus,
+    onCloseAutoFocus,
+    style,
+    ...props
+  },
   ref,
 ) {
   const ctx = useCtx('Popover.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
   if (!mounted && !forceMount) return null;
 
+  const Comp = asChild ? Slot : 'div';
+
+  const composeRef = (node: HTMLDivElement | null) => {
+    ctx.refs.setFloating(node);
+    presenceRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
+
   return (
-    <FloatingFocusManager context={ctx.context} modal={ctx.modal} initialFocus={0}>
-      <div
-        ref={(node) => {
-          ctx.refs.setFloating(node);
-          presenceRef.current = node;
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
-        id={ctx.contentId}
-        style={{ ...ctx.floatingStyles, ...style }}
-        data-state={ctx.open ? 'open' : 'closed'}
-        {...ctx.getFloatingProps(props)}
-      />
-    </FloatingFocusManager>
+    <DismissableLayer
+      asChild
+      disableOutsidePointerEvents={ctx.modal}
+      onPointerDownOutside={onPointerDownOutside}
+      onFocusOutside={onFocusOutside}
+      onInteractOutside={onInteractOutside}
+      onEscapeKeyDown={onEscapeKeyDown}
+      onDismiss={() => ctx.setOpen(false)}
+    >
+      <FocusScope
+        asChild
+        trapped={ctx.modal}
+        loop
+        onMountAutoFocus={onOpenAutoFocus}
+        onUnmountAutoFocus={onCloseAutoFocus}
+      >
+        <Comp
+          ref={composeRef}
+          id={ctx.contentId}
+          role="dialog"
+          aria-modal={ctx.modal || undefined}
+          style={{ ...ctx.floatingStyles, ...style }}
+          data-state={ctx.open ? 'open' : 'closed'}
+          {...ctx.getFloatingProps(props)}
+        />
+      </FocusScope>
+    </DismissableLayer>
   );
 });
 

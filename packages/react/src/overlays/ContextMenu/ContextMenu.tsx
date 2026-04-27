@@ -1,11 +1,9 @@
 import {
   autoUpdate,
-  FloatingFocusManager,
   FloatingPortal,
   safePolygon,
   useClick,
   useClientPoint,
-  useDismiss,
   useFloating,
   useHover,
   useInteractions,
@@ -18,7 +16,7 @@ import {
   createContext,
   forwardRef,
   type HTMLAttributes,
-  type KeyboardEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
   type ReactNode,
   useContext,
@@ -28,6 +26,13 @@ import {
   useState,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
+import {
+  DismissableLayer,
+  type EscapeKeyDownEvent,
+  type FocusOutsideEvent,
+  type PointerDownOutsideEvent,
+} from '../../shared/DismissableLayer';
+import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
 import { useFloatingBase } from '../_floatingBase';
 
@@ -75,8 +80,9 @@ function ContextMenuRoot({ children }: ContextMenuRootProps) {
     whileElementsMounted: autoUpdate,
   });
 
+  // Dismissal handled by <DismissableLayer> on Content; floating-ui only
+  // provides clientPoint + role + list-nav wiring here.
   const clientPoint = useClientPoint(context, coords ?? undefined);
-  const dismiss = useDismiss(context);
   const role = useRole(context, { role: 'menu' });
   const listNav = useListNavigation(context, {
     listRef,
@@ -87,7 +93,6 @@ function ContextMenuRoot({ children }: ContextMenuRootProps) {
 
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
     clientPoint,
-    dismiss,
     role,
     listNav,
   ]);
@@ -154,30 +159,78 @@ function Portal({ children, container, forceMount }: ContextMenuPortalProps) {
 
 export interface ContextMenuContentProps extends HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean;
+  asChild?: boolean;
+  /** Cancellable. Called on `pointerdown` outside. */
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
+  /** Cancellable. Called when focus moves outside. */
+  onFocusOutside?: (event: FocusOutsideEvent) => void;
+  /** Cancellable. Called for any outside interaction (pointer or focus). */
+  onInteractOutside?: (event: PointerDownOutsideEvent | FocusOutsideEvent) => void;
+  /** Cancellable. Called when Escape is pressed. */
+  onEscapeKeyDown?: (event: EscapeKeyDownEvent) => void;
+  /** Cancellable. Called when Content auto-focuses on open. */
+  onOpenAutoFocus?: (event: Event) => void;
+  /** Cancellable. Called when focus is restored on close. */
+  onCloseAutoFocus?: (event: Event) => void;
 }
 
 const Content = forwardRef<HTMLDivElement, ContextMenuContentProps>(function ContextMenuContent(
-  { forceMount, style, ...props },
+  {
+    forceMount,
+    asChild,
+    style,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+    onEscapeKeyDown,
+    onOpenAutoFocus,
+    onCloseAutoFocus,
+    ...props
+  },
   ref,
 ) {
   const ctx = useCtx('ContextMenu.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
   if (!mounted && !forceMount) return null;
+
+  const Comp = asChild ? Slot : 'div';
+
+  const composeRef = (node: HTMLDivElement | null) => {
+    ctx.refs.setFloating(node);
+    presenceRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
+
   return (
-    <FloatingFocusManager context={ctx.context} modal={false}>
-      <div
-        ref={(node) => {
-          ctx.refs.setFloating(node);
-          presenceRef.current = node;
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
-        id={ctx.contentId}
-        style={{ ...ctx.floatingStyles, ...style }}
-        data-state={ctx.open ? 'open' : 'closed'}
-        {...ctx.getFloatingProps(props)}
-      />
-    </FloatingFocusManager>
+    <DismissableLayer
+      asChild
+      // ContextMenu is non-modal: no outside pointer events blocking
+      disableOutsidePointerEvents={false}
+      onPointerDownOutside={onPointerDownOutside}
+      onFocusOutside={onFocusOutside}
+      onInteractOutside={onInteractOutside}
+      onEscapeKeyDown={onEscapeKeyDown}
+      onDismiss={() => ctx.setOpen(false)}
+    >
+      <FocusScope
+        asChild
+        // ContextMenu is non-modal: focus is not trapped
+        trapped={false}
+        loop
+        onMountAutoFocus={onOpenAutoFocus}
+        onUnmountAutoFocus={onCloseAutoFocus}
+      >
+        <Comp
+          ref={composeRef}
+          id={ctx.contentId}
+          role="menu"
+          style={{ ...ctx.floatingStyles, ...style }}
+          data-state={ctx.open ? 'open' : 'closed'}
+          {...ctx.getFloatingProps(props)}
+        />
+      </FocusScope>
+    </DismissableLayer>
   );
 });
 
@@ -271,7 +324,8 @@ function Sub({ open, defaultOpen, onOpenChange, children }: ContextMenuSubProps)
     toggle: false,
     ignoreMouse: true,
   });
-  const dismiss = useDismiss(floating.context, { bubbles: true });
+  // Sub dismissal handled by nested <DismissableLayer> on SubContent.
+  // bubbles:true propagates Escape to the parent layer.
   const role = useRole(floating.context, { role: 'menu' });
   const listNav = useListNavigation(floating.context, {
     listRef: elementsRef,
@@ -283,7 +337,6 @@ function Sub({ open, defaultOpen, onOpenChange, children }: ContextMenuSubProps)
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
     hover,
     click,
-    dismiss,
     role,
     listNav,
   ]);
@@ -332,7 +385,7 @@ const SubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTriggerProps>(
       if (typeof ref === 'function') ref(node);
       else if (ref) ref.current = node;
     };
-    const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+    const handleKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>) => {
       onKeyDown?.(e);
       if (e.defaultPrevented) return;
       if (e.key === 'ArrowRight') {
@@ -364,27 +417,76 @@ const SubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTriggerProps>(
 
 export interface ContextMenuSubContentProps extends HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean;
+  asChild?: boolean;
+  /** Cancellable. Called on `pointerdown` outside the sub menu. */
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
+  /** Cancellable. Called when focus moves outside the sub menu. */
+  onFocusOutside?: (event: FocusOutsideEvent) => void;
+  /** Cancellable. Called for any outside interaction. */
+  onInteractOutside?: (event: PointerDownOutsideEvent | FocusOutsideEvent) => void;
+  /** Cancellable. Called when Escape is pressed inside the sub menu. */
+  onEscapeKeyDown?: (event: EscapeKeyDownEvent) => void;
+  /** Cancellable. Called when SubContent auto-focuses on open. */
+  onOpenAutoFocus?: (event: Event) => void;
+  /** Cancellable. Called when focus is restored on sub menu close. */
+  onCloseAutoFocus?: (event: Event) => void;
 }
 
 const SubContent = forwardRef<HTMLDivElement, ContextMenuSubContentProps>(
-  function ContextMenuSubContent({ forceMount, style, ...props }, ref) {
+  function ContextMenuSubContent(
+    {
+      forceMount,
+      asChild,
+      style,
+      onPointerDownOutside,
+      onFocusOutside,
+      onInteractOutside,
+      onEscapeKeyDown,
+      onOpenAutoFocus,
+      onCloseAutoFocus,
+      ...props
+    },
+    ref,
+  ) {
     const sub = useSubCtx('ContextMenu.SubContent');
     const { mounted, presenceRef } = usePresence<HTMLDivElement>(sub.open);
     if (!mounted && !forceMount) return null;
+
+    const Comp = asChild ? Slot : 'div';
+
+    const composeRef = (node: HTMLDivElement | null) => {
+      sub.refs.setFloating(node);
+      presenceRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    };
+
     return (
-      <FloatingFocusManager context={sub.context} modal={false} initialFocus={-1}>
-        <div
-          ref={(node) => {
-            sub.refs.setFloating(node);
-            presenceRef.current = node;
-            if (typeof ref === 'function') ref(node);
-            else if (ref) ref.current = node;
-          }}
-          style={{ ...sub.floatingStyles, ...style }}
-          data-state={sub.open ? 'open' : 'closed'}
-          {...sub.getFloatingProps(props)}
-        />
-      </FloatingFocusManager>
+      <DismissableLayer
+        asChild
+        disableOutsidePointerEvents={false}
+        onPointerDownOutside={onPointerDownOutside}
+        onFocusOutside={onFocusOutside}
+        onInteractOutside={onInteractOutside}
+        onEscapeKeyDown={onEscapeKeyDown}
+        onDismiss={() => sub.setOpen(false)}
+      >
+        <FocusScope
+          asChild
+          trapped={false}
+          loop
+          onMountAutoFocus={onOpenAutoFocus}
+          onUnmountAutoFocus={onCloseAutoFocus}
+        >
+          <Comp
+            ref={composeRef}
+            role="menu"
+            style={{ ...sub.floatingStyles, ...style }}
+            data-state={sub.open ? 'open' : 'closed'}
+            {...sub.getFloatingProps(props)}
+          />
+        </FocusScope>
+      </DismissableLayer>
     );
   },
 );

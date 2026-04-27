@@ -1,11 +1,9 @@
 import {
-  FloatingFocusManager,
   FloatingList,
   FloatingPortal,
   type Placement,
   safePolygon,
   useClick,
-  useDismiss,
   useHover,
   useInteractions,
   useListItem,
@@ -27,6 +25,13 @@ import {
   useState,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
+import {
+  DismissableLayer,
+  type EscapeKeyDownEvent,
+  type FocusOutsideEvent,
+  type PointerDownOutsideEvent,
+} from '../../shared/DismissableLayer';
+import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
 import { useFloatingBase } from '../_floatingBase';
 
@@ -36,6 +41,12 @@ export interface DropdownMenuTriggerProps extends ButtonHTMLAttributes<HTMLButto
 
 export interface DropdownMenuContentProps extends HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean;
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
+  onFocusOutside?: (event: FocusOutsideEvent) => void;
+  onInteractOutside?: (event: PointerDownOutsideEvent | FocusOutsideEvent) => void;
+  onEscapeKeyDown?: (event: EscapeKeyDownEvent) => void;
+  onOpenAutoFocus?: (event: Event) => void;
+  onCloseAutoFocus?: (event: Event) => void;
 }
 
 interface DropdownMenuContextValue {
@@ -91,7 +102,6 @@ function DropdownMenuRoot({
   });
 
   const click = useClick(floating.context);
-  const dismiss = useDismiss(floating.context);
   const role = useRole(floating.context, { role: 'menu' });
   const listNav = useListNavigation(floating.context, {
     listRef: elementsRef,
@@ -102,7 +112,6 @@ function DropdownMenuRoot({
 
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
     click,
-    dismiss,
     role,
     listNav,
   ]);
@@ -169,27 +178,53 @@ function Portal({ children, container, forceMount }: DropdownMenuPortalProps) {
 }
 
 const Content = forwardRef<HTMLDivElement, DropdownMenuContentProps>(function DropdownMenuContent(
-  { forceMount, style, ...props },
+  {
+    forceMount,
+    style,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+    onEscapeKeyDown,
+    onOpenAutoFocus,
+    onCloseAutoFocus,
+    ...props
+  },
   ref,
 ) {
   const ctx = useCtx('DropdownMenu.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
   if (!mounted && !forceMount) return null;
   return (
-    <FloatingFocusManager context={ctx.context} modal={false}>
-      <div
-        ref={(node) => {
-          ctx.refs.setFloating(node);
-          presenceRef.current = node;
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
-        id={ctx.contentId}
-        style={{ ...ctx.floatingStyles, ...style }}
-        data-state={ctx.open ? 'open' : 'closed'}
-        {...ctx.getFloatingProps(props)}
-      />
-    </FloatingFocusManager>
+    <DismissableLayer
+      asChild
+      disableOutsidePointerEvents={false}
+      onPointerDownOutside={onPointerDownOutside}
+      onFocusOutside={onFocusOutside}
+      onInteractOutside={onInteractOutside}
+      onEscapeKeyDown={onEscapeKeyDown}
+      onDismiss={() => ctx.setOpen(false)}
+    >
+      <FocusScope
+        asChild
+        trapped={false}
+        loop
+        onMountAutoFocus={onOpenAutoFocus}
+        onUnmountAutoFocus={onCloseAutoFocus}
+      >
+        <div
+          ref={(node) => {
+            ctx.refs.setFloating(node);
+            presenceRef.current = node;
+            if (typeof ref === 'function') ref(node);
+            else if (ref) ref.current = node;
+          }}
+          id={ctx.contentId}
+          style={{ ...ctx.floatingStyles, ...style }}
+          data-state={ctx.open ? 'open' : 'closed'}
+          {...ctx.getFloatingProps(props)}
+        />
+      </FocusScope>
+    </DismissableLayer>
   );
 });
 
@@ -495,7 +530,6 @@ function Sub({ open, defaultOpen, onOpenChange, children }: DropdownMenuSubProps
     toggle: false,
     ignoreMouse: true,
   });
-  const dismiss = useDismiss(floating.context, { bubbles: true });
   const role = useRole(floating.context, { role: 'menu' });
   const listNav = useListNavigation(floating.context, {
     listRef: elementsRef,
@@ -508,7 +542,6 @@ function Sub({ open, defaultOpen, onOpenChange, children }: DropdownMenuSubProps
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
     hover,
     click,
-    dismiss,
     role,
     listNav,
   ]);
@@ -600,27 +633,62 @@ const SubTrigger = forwardRef<HTMLButtonElement, DropdownMenuSubTriggerProps>(
 
 export interface DropdownMenuSubContentProps extends HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean;
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
+  onFocusOutside?: (event: FocusOutsideEvent) => void;
+  onInteractOutside?: (event: PointerDownOutsideEvent | FocusOutsideEvent) => void;
+  onEscapeKeyDown?: (event: EscapeKeyDownEvent) => void;
+  onOpenAutoFocus?: (event: Event) => void;
+  onCloseAutoFocus?: (event: Event) => void;
 }
 
 const SubContent = forwardRef<HTMLDivElement, DropdownMenuSubContentProps>(
-  function DropdownMenuSubContent({ forceMount, style, ...props }, ref) {
+  function DropdownMenuSubContent(
+    {
+      forceMount,
+      style,
+      onPointerDownOutside,
+      onFocusOutside,
+      onInteractOutside,
+      onEscapeKeyDown,
+      onOpenAutoFocus,
+      onCloseAutoFocus,
+      ...props
+    },
+    ref,
+  ) {
     const sub = useSubCtx('DropdownMenu.SubContent');
     const { mounted, presenceRef } = usePresence<HTMLDivElement>(sub.open);
     if (!mounted && !forceMount) return null;
     return (
-      <FloatingFocusManager context={sub.context} modal={false} initialFocus={-1}>
-        <div
-          ref={(node) => {
-            sub.refs.setFloating(node);
-            presenceRef.current = node;
-            if (typeof ref === 'function') ref(node);
-            else if (ref) ref.current = node;
-          }}
-          style={{ ...sub.floatingStyles, ...style }}
-          data-state={sub.open ? 'open' : 'closed'}
-          {...sub.getFloatingProps(props)}
-        />
-      </FloatingFocusManager>
+      <DismissableLayer
+        asChild
+        disableOutsidePointerEvents={false}
+        onPointerDownOutside={onPointerDownOutside}
+        onFocusOutside={onFocusOutside}
+        onInteractOutside={onInteractOutside}
+        onEscapeKeyDown={onEscapeKeyDown}
+        onDismiss={() => sub.setOpen(false)}
+      >
+        <FocusScope
+          asChild
+          trapped={false}
+          loop
+          onMountAutoFocus={onOpenAutoFocus}
+          onUnmountAutoFocus={onCloseAutoFocus}
+        >
+          <div
+            ref={(node) => {
+              sub.refs.setFloating(node);
+              presenceRef.current = node;
+              if (typeof ref === 'function') ref(node);
+              else if (ref) ref.current = node;
+            }}
+            style={{ ...sub.floatingStyles, ...style }}
+            data-state={sub.open ? 'open' : 'closed'}
+            {...sub.getFloatingProps(props)}
+          />
+        </FocusScope>
+      </DismissableLayer>
     );
   },
 );

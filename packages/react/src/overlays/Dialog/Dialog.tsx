@@ -1,9 +1,7 @@
 import {
-  FloatingFocusManager,
   FloatingOverlay,
   FloatingPortal,
   useClick,
-  useDismiss,
   useFloating,
   useInteractions,
   useRole,
@@ -15,9 +13,17 @@ import {
   forwardRef,
   type HTMLAttributes,
   useContext,
+  useEffect,
   useId,
+  useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
+import {
+  DismissableLayer,
+  type FocusOutsideEvent,
+  type PointerDownOutsideEvent,
+} from '../../shared/DismissableLayer';
+import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
 
 interface DialogContextValue {
@@ -70,16 +76,12 @@ function DialogRoot({
     onOpenChange: (next) => setOpen(next),
   });
 
+  // Dismissal handled by <DismissableLayer> on Content; floating-ui only
+  // provides reference click + role wiring here.
   const click = useClick(context);
-  const dismiss = useDismiss(context, {
-    outsidePressEvent: 'mousedown',
-    // AlertDialog: never close on outside/escape
-    escapeKey: role !== 'alertdialog',
-    outsidePress: role !== 'alertdialog',
-  });
   const roleHook = useRole(context, { role });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([click, dismiss, roleHook]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([click, roleHook]);
   const contentId = useId();
   const titleId = useId();
   const descriptionId = useId();
@@ -166,31 +168,136 @@ const Overlay = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
 export interface DialogContentProps extends HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean;
   asChild?: boolean;
+  /** Cancellable. Called on `pointerdown` outside. AlertDialog default-prevents. */
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
+  /** Cancellable. Called when focus moves outside. */
+  onFocusOutside?: (event: FocusOutsideEvent) => void;
+  /** Cancellable. Called for any outside interaction (pointer or focus). */
+  onInteractOutside?: (event: PointerDownOutsideEvent | FocusOutsideEvent) => void;
+  /** Cancellable. Called when Escape is pressed. AlertDialog default-prevents. */
+  onEscapeKeyDown?: (event: KeyboardEvent) => void;
+  /** Cancellable. Called when Content auto-focuses on open. */
+  onOpenAutoFocus?: (event: Event) => void;
+  /** Cancellable. Called when focus is restored on close. */
+  onCloseAutoFocus?: (event: Event) => void;
+}
+
+/** Apply aria-hidden to all body children except the given node (and Portal containers). */
+function hideOthers(contentNode: HTMLElement): () => void {
+  const parent = contentNode.ownerDocument?.body ?? document.body;
+  const hiddenNodes: Array<{ node: Element; prev: string | null }> = [];
+
+  for (const child of Array.from(parent.children)) {
+    // Skip the content node itself and any of its ancestors / containers
+    if (child === contentNode || child.contains(contentNode)) continue;
+    // Skip nodes already hidden
+    if (child.getAttribute('aria-hidden') === 'true') continue;
+    hiddenNodes.push({ node: child, prev: child.getAttribute('aria-hidden') });
+    child.setAttribute('aria-hidden', 'true');
+  }
+
+  return () => {
+    for (const { node, prev } of hiddenNodes) {
+      if (prev === null) {
+        node.removeAttribute('aria-hidden');
+      } else {
+        node.setAttribute('aria-hidden', prev);
+      }
+    }
+  };
 }
 
 const Content = forwardRef<HTMLDivElement, DialogContentProps>(function DialogContent(
-  { forceMount, asChild, ...props },
+  {
+    forceMount,
+    asChild,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+    onEscapeKeyDown,
+    onOpenAutoFocus,
+    onCloseAutoFocus,
+    ...props
+  },
   ref,
 ) {
   const ctx = useDialogContext('Dialog.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  const contentNodeRef = useRef<HTMLDivElement | null>(null);
+
+  // dev-only: warn when Dialog.Title is absent
+  useEffect(() => {
+    if (!mounted) return;
+    const node = contentNodeRef.current;
+    if (!node) return;
+    const titleEl = ctx.titleId ? node.ownerDocument?.getElementById(ctx.titleId) : null;
+    if (!titleEl) {
+      console.error(
+        '[gugbab-ui/Dialog] Missing accessible title. ' +
+          'Add a <Dialog.Title> inside <Dialog.Content>, ' +
+          'or use a visually hidden title: <Dialog.Title asChild><VisuallyHidden>…</VisuallyHidden></Dialog.Title>.',
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, ctx.titleId]);
+
+  // modal: hide siblings from assistive technology
+  useEffect(() => {
+    if (!ctx.modal || !mounted) return;
+    const node = contentNodeRef.current;
+    if (!node) return;
+    return hideOthers(node);
+  }, [ctx.modal, mounted]);
+
   if (!mounted && !forceMount) return null;
+  const isAlert = ctx.role === 'alertdialog';
   const Comp = asChild ? Slot : 'div';
+
+  const composeRef = (node: HTMLDivElement | null) => {
+    contentNodeRef.current = node;
+    ctx.refs.setFloating(node);
+    presenceRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
+
   return (
-    <FloatingFocusManager context={ctx.context} modal={ctx.modal} returnFocus>
-      <Comp
-        ref={(node: HTMLDivElement | null) => {
-          ctx.refs.setFloating(node);
-          presenceRef.current = node;
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
-        aria-labelledby={ctx.titleId}
-        aria-describedby={ctx.descriptionId}
-        data-state={ctx.open ? 'open' : 'closed'}
-        {...ctx.getFloatingProps(props)}
-      />
-    </FloatingFocusManager>
+    <DismissableLayer
+      asChild
+      disableOutsidePointerEvents={ctx.modal}
+      onPointerDownOutside={(event) => {
+        // AlertDialog: outside click never closes.
+        if (isAlert) event.preventDefault();
+        onPointerDownOutside?.(event);
+      }}
+      onFocusOutside={onFocusOutside}
+      onInteractOutside={onInteractOutside}
+      onEscapeKeyDown={(event) => {
+        // AlertDialog: Escape never closes.
+        if (isAlert) event.preventDefault();
+        onEscapeKeyDown?.(event);
+      }}
+      onDismiss={() => ctx.setOpen(false)}
+    >
+      <FocusScope
+        asChild
+        trapped={ctx.modal}
+        loop
+        onMountAutoFocus={onOpenAutoFocus}
+        onUnmountAutoFocus={onCloseAutoFocus}
+      >
+        <Comp
+          ref={composeRef}
+          id={ctx.contentId}
+          role={ctx.role}
+          aria-modal={ctx.modal || undefined}
+          aria-labelledby={ctx.titleId}
+          aria-describedby={ctx.descriptionId}
+          data-state={ctx.open ? 'open' : 'closed'}
+          {...ctx.getFloatingProps(props)}
+        />
+      </FocusScope>
+    </DismissableLayer>
   );
 });
 

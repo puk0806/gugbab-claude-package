@@ -59,4 +59,16 @@ describe('Tabs', () => {
     fireEvent.click(screen.getByText('B'));
     expect(screen.getByText('body-b')).toBeInTheDocument();
   });
+
+  it('renders dir attribute on root element', () => {
+    const { container } = render(<Sample dir="rtl" />);
+    const root = container.firstChild as HTMLElement;
+    expect(root.getAttribute('dir')).toBe('rtl');
+  });
+
+  it('renders dir="ltr" when explicitly set', () => {
+    const { container } = render(<Sample dir="ltr" />);
+    const root = container.firstChild as HTMLElement;
+    expect(root.getAttribute('dir')).toBe('ltr');
+  });
 });

@@ -1,7 +1,6 @@
 import {
   FloatingPortal,
   type Placement,
-  useDismiss,
   useFocus,
   useHover,
   useInteractions,
@@ -20,6 +19,12 @@ import {
   useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
+import {
+  DismissableLayer,
+  type FocusOutsideEvent,
+  type PointerDownOutsideEvent,
+} from '../../shared/DismissableLayer';
+import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
 import { useFloatingBase } from '../_floatingBase';
 
@@ -94,6 +99,19 @@ const TooltipProvider = ({
 
 export interface TooltipContentProps extends HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean;
+  asChild?: boolean;
+  /** Cancellable. Called on `pointerdown` outside. */
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
+  /** Cancellable. Called when focus moves outside. */
+  onFocusOutside?: (event: FocusOutsideEvent) => void;
+  /** Cancellable. Called for any outside interaction (pointer or focus). */
+  onInteractOutside?: (event: PointerDownOutsideEvent | FocusOutsideEvent) => void;
+  /** Cancellable. Called when Escape is pressed. */
+  onEscapeKeyDown?: (event: KeyboardEvent) => void;
+  /** Cancellable. Called when Content auto-focuses on open. */
+  onOpenAutoFocus?: (event: Event) => void;
+  /** Cancellable. Called when focus is restored on close. */
+  onCloseAutoFocus?: (event: Event) => void;
 }
 
 export interface TooltipTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -102,6 +120,7 @@ export interface TooltipTriggerProps extends ButtonHTMLAttributes<HTMLButtonElem
 
 interface TooltipContextValue {
   open: boolean;
+  setOpen: (v: boolean) => void;
   refs: ReturnType<typeof useFloatingBase>['refs'];
   floatingStyles: ReturnType<typeof useFloatingBase>['floatingStyles'];
   getReferenceProps: ReturnType<typeof useInteractions>['getReferenceProps'];
@@ -166,16 +185,16 @@ function TooltipRoot({
     handleClose: disableHoverable ? null : undefined,
   });
   const focus = useFocus(floating.context);
-  const dismiss = useDismiss(floating.context);
   const role = useRole(floating.context, { role: 'tooltip' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, role]);
   const contentId = useId();
 
   return (
     <Ctx.Provider
       value={{
         open: isOpen,
+        setOpen: (v) => setOpen(v),
         refs: floating.refs,
         floatingStyles: floating.floatingStyles,
         getReferenceProps,
@@ -224,26 +243,58 @@ function Portal({ children, container, forceMount }: TooltipPortalProps) {
 }
 
 const Content = forwardRef<HTMLDivElement, TooltipContentProps>(function TooltipContent(
-  { forceMount, style, ...props },
+  {
+    forceMount,
+    asChild,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+    onEscapeKeyDown,
+    onOpenAutoFocus,
+    onCloseAutoFocus,
+    style,
+    ...props
+  },
   ref,
 ) {
   const ctx = useCtx('Tooltip.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
   if (!mounted && !forceMount) return null;
+  const Comp = asChild ? Slot : 'div';
+
+  const composeRef = (node: HTMLDivElement | null) => {
+    ctx.refs.setFloating(node);
+    presenceRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
+
   return (
-    <div
-      ref={(node) => {
-        ctx.refs.setFloating(node);
-        presenceRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
-      id={ctx.contentId}
-      role="tooltip"
-      style={{ ...ctx.floatingStyles, ...style }}
-      data-state={ctx.open ? 'open' : 'closed'}
-      {...ctx.getFloatingProps(props)}
-    />
+    <DismissableLayer
+      asChild
+      disableOutsidePointerEvents={false}
+      onPointerDownOutside={onPointerDownOutside}
+      onFocusOutside={onFocusOutside}
+      onInteractOutside={onInteractOutside}
+      onEscapeKeyDown={onEscapeKeyDown}
+      onDismiss={() => ctx.setOpen(false)}
+    >
+      <FocusScope
+        asChild
+        trapped={false}
+        onMountAutoFocus={onOpenAutoFocus}
+        onUnmountAutoFocus={onCloseAutoFocus}
+      >
+        <Comp
+          ref={composeRef}
+          id={ctx.contentId}
+          role="tooltip"
+          style={{ ...ctx.floatingStyles, ...style }}
+          data-state={ctx.open ? 'open' : 'closed'}
+          {...ctx.getFloatingProps(props)}
+        />
+      </FocusScope>
+    </DismissableLayer>
   );
 });
 

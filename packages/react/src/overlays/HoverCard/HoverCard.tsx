@@ -2,7 +2,6 @@ import {
   FloatingPortal,
   type Placement,
   safePolygon,
-  useDismiss,
   useHover,
   useInteractions,
   useRole,
@@ -17,11 +16,29 @@ import {
   useId,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
+import {
+  DismissableLayer,
+  type FocusOutsideEvent,
+  type PointerDownOutsideEvent,
+} from '../../shared/DismissableLayer';
+import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
 import { useFloatingBase } from '../_floatingBase';
 
 export interface HoverCardContentProps extends HTMLAttributes<HTMLDivElement> {
   forceMount?: boolean;
+  /** Cancellable. Called on `pointerdown` outside the card. */
+  onPointerDownOutside?: (event: PointerDownOutsideEvent) => void;
+  /** Cancellable. Called when focus moves outside the card. */
+  onFocusOutside?: (event: FocusOutsideEvent) => void;
+  /** Cancellable. Called for any outside interaction (pointer or focus). */
+  onInteractOutside?: (event: PointerDownOutsideEvent | FocusOutsideEvent) => void;
+  /** Cancellable. Called when Escape is pressed while the card is open. */
+  onEscapeKeyDown?: (event: KeyboardEvent) => void;
+  /** Cancellable. Called when Content auto-focuses on open. */
+  onOpenAutoFocus?: (event: Event) => void;
+  /** Cancellable. Called when focus is restored on close. */
+  onCloseAutoFocus?: (event: Event) => void;
 }
 
 export interface HoverCardTriggerProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -30,6 +47,7 @@ export interface HoverCardTriggerProps extends AnchorHTMLAttributes<HTMLAnchorEl
 
 interface HoverCardContextValue {
   open: boolean;
+  setOpen: (v: boolean) => void;
   refs: ReturnType<typeof useFloatingBase>['refs'];
   floatingStyles: ReturnType<typeof useFloatingBase>['floatingStyles'];
   getReferenceProps: ReturnType<typeof useInteractions>['getReferenceProps'];
@@ -78,16 +96,16 @@ function HoverCardRoot({
     delay: { open: openDelay, close: closeDelay },
     handleClose: safePolygon(),
   });
-  const dismiss = useDismiss(floating.context);
   const role = useRole(floating.context, { role: 'dialog' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover, dismiss, role]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover, role]);
   const contentId = useId();
 
   return (
     <Ctx.Provider
       value={{
         open: isOpen,
+        setOpen: (v) => setOpen(v),
         refs: floating.refs,
         floatingStyles: floating.floatingStyles,
         getReferenceProps,
@@ -128,25 +146,56 @@ function Portal({ children, container, forceMount }: HoverCardPortalProps) {
 }
 
 const Content = forwardRef<HTMLDivElement, HoverCardContentProps>(function HoverCardContent(
-  { forceMount, style, ...props },
+  {
+    forceMount,
+    style,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+    onEscapeKeyDown,
+    onOpenAutoFocus,
+    onCloseAutoFocus,
+    ...props
+  },
   ref,
 ) {
   const ctx = useCtx('HoverCard.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
   if (!mounted && !forceMount) return null;
+
+  const composeRef = (node: HTMLDivElement | null) => {
+    ctx.refs.setFloating(node);
+    presenceRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
+
   return (
-    <div
-      ref={(node) => {
-        ctx.refs.setFloating(node);
-        presenceRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
-      id={ctx.contentId}
-      style={{ ...ctx.floatingStyles, ...style }}
-      data-state={ctx.open ? 'open' : 'closed'}
-      {...ctx.getFloatingProps(props)}
-    />
+    <DismissableLayer
+      asChild
+      disableOutsidePointerEvents={false}
+      onPointerDownOutside={onPointerDownOutside}
+      onFocusOutside={onFocusOutside}
+      onInteractOutside={onInteractOutside}
+      onEscapeKeyDown={onEscapeKeyDown}
+      onDismiss={() => ctx.setOpen(false)}
+    >
+      <FocusScope
+        asChild
+        trapped={false}
+        loop={false}
+        onMountAutoFocus={onOpenAutoFocus}
+        onUnmountAutoFocus={onCloseAutoFocus}
+      >
+        <div
+          ref={composeRef}
+          id={ctx.contentId}
+          style={{ ...ctx.floatingStyles, ...style }}
+          data-state={ctx.open ? 'open' : 'closed'}
+          {...ctx.getFloatingProps(props)}
+        />
+      </FocusScope>
+    </DismissableLayer>
   );
 });
 

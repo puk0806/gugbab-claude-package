@@ -45,4 +45,26 @@ describe('RadioGroup', () => {
     fireEvent.keyDown(a, { key: 'ArrowRight' });
     expect(screen.getByText('B').getAttribute('aria-checked')).toBe('true');
   });
+
+  it('renders hidden radio BubbleInputs when name is provided', () => {
+    const { container } = render(<Sample name="color" defaultValue="a" />);
+    const radios = container.querySelectorAll('input[type="radio"]');
+    expect(radios.length).toBe(3);
+    expect(radios[0]?.getAttribute('name')).toBe('color');
+  });
+
+  it('BubbleInput value attributes match item values', () => {
+    const { container } = render(<Sample name="color" defaultValue="b" />);
+    const radios = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+    expect(radios[0]?.value).toBe('a');
+    expect(radios[1]?.value).toBe('b');
+    expect(radios[2]?.value).toBe('c');
+  });
+
+  it('does not render BubbleInput when name prop is not explicitly provided', () => {
+    const { container } = render(<Sample defaultValue="a" />);
+    const radios = container.querySelectorAll('input[type="radio"]');
+    // name was not passed to Sample → hasName=false → no BubbleInputs
+    expect(radios.length).toBe(0);
+  });
 });

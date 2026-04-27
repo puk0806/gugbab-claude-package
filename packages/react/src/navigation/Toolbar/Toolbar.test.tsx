@@ -1,9 +1,16 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DirectionProvider } from '../../shared/DirectionProvider';
 import { Toolbar } from './Toolbar';
 
 describe('Toolbar', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('renders Root with role="toolbar" and aria-orientation', () => {
     render(
       <Toolbar.Root data-testid="t">
@@ -45,8 +52,13 @@ describe('Toolbar', () => {
       </Toolbar.Root>,
     );
     const a = screen.getByText('a');
-    a.focus();
+    act(() => {
+      a.focus();
+    });
     fireEvent.keyDown(a, { key: 'ArrowRight' });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(screen.getByText('b')).toHaveFocus();
   });
 
@@ -58,8 +70,13 @@ describe('Toolbar', () => {
       </Toolbar.Root>,
     );
     const b = screen.getByText('b');
-    b.focus();
+    act(() => {
+      b.focus();
+    });
     fireEvent.keyDown(b, { key: 'ArrowRight' });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(screen.getByText('a')).toHaveFocus();
   });
 
@@ -72,10 +89,20 @@ describe('Toolbar', () => {
       </Toolbar.Root>,
     );
     const b = screen.getByText('b');
-    b.focus();
+    act(() => {
+      b.focus();
+    });
     fireEvent.keyDown(b, { key: 'Home' });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(screen.getByText('a')).toHaveFocus();
-    fireEvent.keyDown(screen.getByText('a'), { key: 'End' });
+
+    const a = screen.getByText('a');
+    fireEvent.keyDown(a, { key: 'End' });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(screen.getByText('c')).toHaveFocus();
   });
 
@@ -89,8 +116,13 @@ describe('Toolbar', () => {
       </DirectionProvider>,
     );
     const a = screen.getByText('a');
-    a.focus();
+    act(() => {
+      a.focus();
+    });
     fireEvent.keyDown(a, { key: 'ArrowLeft' });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(screen.getByText('b')).toHaveFocus();
   });
 
@@ -102,8 +134,13 @@ describe('Toolbar', () => {
       </Toolbar.Root>,
     );
     const a = screen.getByText('a');
-    a.focus();
+    act(() => {
+      a.focus();
+    });
     fireEvent.keyDown(a, { key: 'ArrowDown' });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(screen.getByText('b')).toHaveFocus();
   });
 
@@ -117,8 +154,13 @@ describe('Toolbar', () => {
       </Toolbar.Root>,
     );
     const link = screen.getByText('link');
-    link.focus();
+    act(() => {
+      link.focus();
+    });
     fireEvent.keyDown(link, { key: ' ' });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(onClick).toHaveBeenCalled();
   });
 
@@ -131,8 +173,13 @@ describe('Toolbar', () => {
       </Toolbar.Root>,
     );
     const a = screen.getByText('a');
-    a.focus();
+    act(() => {
+      a.focus();
+    });
     fireEvent.keyDown(a, { key: 'ArrowRight' });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(screen.getByText('c')).toHaveFocus();
   });
 
@@ -147,9 +194,14 @@ describe('Toolbar', () => {
       </Toolbar.Root>,
     );
     const a = screen.getByText('a');
-    a.focus();
-    // toolbar's keyboard handler should pick up B as the next sibling
+    act(() => {
+      a.focus();
+    });
+    // toolbar's RovingFocusGroup should pick up B as the next item
     fireEvent.keyDown(a, { key: 'ArrowRight' });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(screen.getByText('B')).toHaveFocus();
   });
 });

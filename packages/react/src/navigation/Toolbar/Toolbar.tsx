@@ -1,4 +1,5 @@
-import {
+import { useMergedRefs } from '@gugbab-ui/hooks';
+import React, {
   type AnchorHTMLAttributes,
   type ButtonHTMLAttributes,
   createContext,
@@ -10,6 +11,7 @@ import {
 import { Separator, type SeparatorProps } from '../../primitives/Separator/Separator';
 import { Slot } from '../../primitives/Slot/Slot';
 import { type Direction, useDirection } from '../../shared/DirectionProvider';
+import { RovingFocusGroup, useRovingFocusGroupItem } from '../../shared/RovingFocusGroup';
 import {
   ToggleGroup,
   type ToggleGroupItemProps,
@@ -29,8 +31,6 @@ function useToolbarContext(consumer: string) {
   return ctx;
 }
 
-const ITEM_SELECTOR = '[data-toolbar-item]:not([disabled])';
-
 export interface ToolbarRootProps extends HTMLAttributes<HTMLDivElement> {
   orientation?: Orientation;
   dir?: Direction;
@@ -39,46 +39,26 @@ export interface ToolbarRootProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const Root = forwardRef<HTMLDivElement, ToolbarRootProps>(function ToolbarRoot(
-  { orientation = 'horizontal', dir, loop = true, asChild, onKeyDown, ...rest },
+  { orientation = 'horizontal', dir, loop = true, asChild, children, ...rest },
   ref,
 ) {
   const direction = useDirection(dir);
-  const isLtr = direction === 'ltr';
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    onKeyDown?.(e);
-    if (e.defaultPrevented) return;
-    const horizontal = orientation === 'horizontal';
-    const nextKey = horizontal ? (isLtr ? 'ArrowRight' : 'ArrowLeft') : 'ArrowDown';
-    const prevKey = horizontal ? (isLtr ? 'ArrowLeft' : 'ArrowRight') : 'ArrowUp';
-    if (![nextKey, prevKey, 'Home', 'End'].includes(e.key)) return;
-    const root = e.currentTarget;
-    const items = Array.from(root.querySelectorAll<HTMLElement>(ITEM_SELECTOR));
-    const idx = items.indexOf(e.target as HTMLElement);
-    if (idx === -1) return;
-    e.preventDefault();
-    const last = items.length - 1;
-    let next = idx;
-    if (e.key === 'Home') next = 0;
-    else if (e.key === 'End') next = last;
-    else if (e.key === nextKey) next = idx === last ? (loop ? 0 : last) : idx + 1;
-    else if (e.key === prevKey) next = idx === 0 ? (loop ? last : 0) : idx - 1;
-    items[next]?.focus();
-  };
-
   const Comp = asChild ? Slot : 'div';
 
   return (
     <ToolbarContext.Provider value={{ orientation, dir: direction }}>
-      <Comp
-        ref={ref}
-        role="toolbar"
-        aria-orientation={orientation}
-        dir={direction}
-        data-orientation={orientation}
-        onKeyDown={handleKeyDown}
-        {...rest}
-      />
+      <RovingFocusGroup asChild orientation={orientation} dir={direction} loop={loop}>
+        <Comp
+          ref={ref}
+          role="toolbar"
+          aria-orientation={orientation}
+          dir={direction}
+          data-orientation={orientation}
+          {...rest}
+        >
+          {children}
+        </Comp>
+      </RovingFocusGroup>
     </ToolbarContext.Provider>
   );
 });
@@ -104,11 +84,38 @@ export interface ToolbarButtonProps extends ButtonHTMLAttributes<HTMLButtonEleme
 }
 
 const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(function ToolbarButton(
-  { asChild, type = 'button', ...rest },
-  ref,
+  { asChild, type = 'button', onFocus, onMouseDown, onKeyDown, disabled, ...rest },
+  forwardedRef,
 ) {
+  const rovingProps = useRovingFocusGroupItem({ focusable: !disabled });
+  const composedRef = useMergedRefs<HTMLButtonElement>(
+    forwardedRef,
+    rovingProps.ref as React.Ref<HTMLButtonElement>,
+  );
+
   const Comp = asChild ? Slot : 'button';
-  return <Comp ref={ref} type={asChild ? undefined : type} data-toolbar-item="" {...rest} />;
+
+  return (
+    <Comp
+      ref={composedRef}
+      type={asChild ? undefined : type}
+      disabled={disabled}
+      tabIndex={rovingProps.tabIndex}
+      onFocus={(e: React.FocusEvent<HTMLButtonElement>) => {
+        onFocus?.(e);
+        if (!e.defaultPrevented) rovingProps.onFocus(e);
+      }}
+      onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+        onMouseDown?.(e);
+        if (!e.defaultPrevented) rovingProps.onMouseDown(e);
+      }}
+      onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
+        onKeyDown?.(e);
+        if (!e.defaultPrevented) rovingProps.onKeyDown(e);
+      }}
+      {...rest}
+    />
+  );
 });
 
 export interface ToolbarLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -116,16 +123,40 @@ export interface ToolbarLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement
 }
 
 const ToolbarLink = forwardRef<HTMLAnchorElement, ToolbarLinkProps>(function ToolbarLink(
-  { asChild, onKeyDown, ...rest },
-  ref,
+  { asChild, onFocus, onMouseDown, onKeyDown, ...rest },
+  forwardedRef,
 ) {
+  const rovingProps = useRovingFocusGroupItem({ focusable: true });
+  const composedRef = useMergedRefs<HTMLAnchorElement>(
+    forwardedRef,
+    rovingProps.ref as React.Ref<HTMLAnchorElement>,
+  );
+
   const Comp = asChild ? Slot : 'a';
+
   const handleKeyDown = (e: KeyboardEvent<HTMLAnchorElement>) => {
     onKeyDown?.(e);
     // Space activates anchor (matching Radix behavior)
     if (!e.defaultPrevented && e.key === ' ') e.currentTarget.click();
+    if (!e.defaultPrevented) rovingProps.onKeyDown(e);
   };
-  return <Comp ref={ref} data-toolbar-item="" onKeyDown={handleKeyDown} {...rest} />;
+
+  return (
+    <Comp
+      ref={composedRef}
+      tabIndex={rovingProps.tabIndex}
+      onFocus={(e: React.FocusEvent<HTMLAnchorElement>) => {
+        onFocus?.(e);
+        if (!e.defaultPrevented) rovingProps.onFocus(e);
+      }}
+      onMouseDown={(e: React.MouseEvent<HTMLAnchorElement>) => {
+        onMouseDown?.(e);
+        if (!e.defaultPrevented) rovingProps.onMouseDown(e);
+      }}
+      onKeyDown={handleKeyDown}
+      {...rest}
+    />
+  );
 });
 
 export type ToolbarToggleGroupProps = ToggleGroupRootProps;
@@ -133,7 +164,7 @@ export type ToolbarToggleGroupProps = ToggleGroupRootProps;
 const ToolbarToggleGroup = forwardRef<HTMLDivElement, ToolbarToggleGroupProps>(
   function ToolbarToggleGroup(props, ref) {
     const ctx = useToolbarContext('Toolbar.ToggleGroup');
-    // ToolbarRoot owns the keyboard navigation; the group must defer.
+    // ToolbarRoot owns the keyboard navigation via RovingFocusGroup; the group must defer.
     return (
       <ToggleGroup.Root
         ref={ref}
@@ -147,11 +178,37 @@ const ToolbarToggleGroup = forwardRef<HTMLDivElement, ToolbarToggleGroupProps>(
   },
 );
 
-export interface ToolbarToggleItemProps extends ToggleGroupItemProps {}
+export interface ToolbarToggleItemProps extends ToggleGroupItemProps {
+  active?: boolean;
+}
 
 const ToolbarToggleItem = forwardRef<HTMLButtonElement, ToolbarToggleItemProps>(
-  function ToolbarToggleItem({ ...rest }, ref) {
-    return <ToggleGroup.Item ref={ref} data-toolbar-item="" {...rest} />;
+  function ToolbarToggleItem({ active, onFocus, onMouseDown, onKeyDown, ...rest }, forwardedRef) {
+    const rovingProps = useRovingFocusGroupItem({ focusable: true, active });
+    const composedRef = useMergedRefs<HTMLButtonElement>(
+      forwardedRef,
+      rovingProps.ref as React.Ref<HTMLButtonElement>,
+    );
+
+    return (
+      <ToggleGroup.Item
+        ref={composedRef}
+        tabIndex={rovingProps.tabIndex}
+        onFocus={(e: React.FocusEvent<HTMLButtonElement>) => {
+          onFocus?.(e);
+          if (!e.defaultPrevented) rovingProps.onFocus(e);
+        }}
+        onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+          onMouseDown?.(e);
+          if (!e.defaultPrevented) rovingProps.onMouseDown(e);
+        }}
+        onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
+          onKeyDown?.(e);
+          if (!e.defaultPrevented) rovingProps.onKeyDown(e);
+        }}
+        {...rest}
+      />
+    );
   },
 );
 

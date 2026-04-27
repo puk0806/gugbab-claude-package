@@ -1,15 +1,17 @@
-import { useControllableState } from '@gugbab-ui/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab-ui/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
   forwardRef,
   type HTMLAttributes,
   type KeyboardEvent,
+  type Ref,
   useContext,
   useId,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import { useDirection } from '../../shared/DirectionProvider';
+import { RovingFocusGroup, useRovingFocusGroupItem } from '../../shared/RovingFocusGroup';
 
 type Orientation = 'horizontal' | 'vertical';
 type Activation = 'automatic' | 'manual';
@@ -20,6 +22,8 @@ interface TabsContextValue {
   orientation: Orientation;
   activationMode: Activation;
   baseId: string;
+  loop: boolean;
+  dir?: 'ltr' | 'rtl';
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -36,6 +40,8 @@ export interface TabsRootProps extends HTMLAttributes<HTMLDivElement> {
   onValueChange?: (value: string) => void;
   orientation?: Orientation;
   activationMode?: Activation;
+  loop?: boolean;
+  dir?: 'ltr' | 'rtl';
 }
 
 const Root = forwardRef<HTMLDivElement, TabsRootProps>(function TabsRoot(
@@ -45,6 +51,8 @@ const Root = forwardRef<HTMLDivElement, TabsRootProps>(function TabsRoot(
     onValueChange,
     orientation = 'horizontal',
     activationMode = 'automatic',
+    loop = false,
+    dir,
     ...rest
   },
   ref,
@@ -55,6 +63,7 @@ const Root = forwardRef<HTMLDivElement, TabsRootProps>(function TabsRoot(
     onChange: onValueChange,
   });
   const baseId = useId();
+  const resolvedDir = useDirection(dir);
 
   return (
     <TabsContext.Provider
@@ -64,84 +73,120 @@ const Root = forwardRef<HTMLDivElement, TabsRootProps>(function TabsRoot(
         orientation,
         activationMode,
         baseId,
+        loop,
+        dir: resolvedDir,
       }}
     >
-      <div ref={ref} data-orientation={orientation} {...rest} />
+      <div ref={ref} data-orientation={orientation} dir={resolvedDir} {...rest} />
     </TabsContext.Provider>
   );
 });
 
-const List = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  function TabsList(props, ref) {
-    const ctx = useTabsContext('Tabs.List');
-    return (
+const List = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function TabsList(
+  { children, ...props },
+  ref,
+) {
+  const ctx = useTabsContext('Tabs.List');
+  return (
+    <RovingFocusGroup asChild orientation={ctx.orientation} dir={ctx.dir} loop={ctx.loop}>
       <div
         ref={ref}
         role="tablist"
         aria-orientation={ctx.orientation}
         data-orientation={ctx.orientation}
         {...props}
-      />
-    );
-  },
-);
+      >
+        {children}
+      </div>
+    </RovingFocusGroup>
+  );
+});
 
 export interface TabsTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
   asChild?: boolean;
 }
 
+/** Compute which sibling trigger value to activate given a keypress. */
+function getNextValue(
+  e: KeyboardEvent<HTMLButtonElement>,
+  orientation: Orientation,
+  dir: 'ltr' | 'rtl' | undefined,
+  loop: boolean,
+): string | null {
+  const horizontal = orientation === 'horizontal';
+  const rtl = dir === 'rtl';
+
+  const nextKey = horizontal ? (rtl ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown';
+  const prevKey = horizontal ? (rtl ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp';
+  const isNav = [nextKey, prevKey, 'Home', 'End'].includes(e.key);
+  if (!isNav) return null;
+
+  const list = (
+    e.currentTarget.parentElement as HTMLElement | null
+  )?.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([disabled])');
+  if (!list || list.length === 0) return null;
+
+  const items = Array.from(list);
+  const currentIndex = items.indexOf(e.currentTarget);
+  let nextIndex = currentIndex;
+
+  if (e.key === nextKey) {
+    nextIndex = loop
+      ? (currentIndex + 1) % items.length
+      : Math.min(currentIndex + 1, items.length - 1);
+  } else if (e.key === prevKey) {
+    nextIndex = loop
+      ? (currentIndex - 1 + items.length) % items.length
+      : Math.max(currentIndex - 1, 0);
+  } else if (e.key === 'Home') {
+    nextIndex = 0;
+  } else if (e.key === 'End') {
+    nextIndex = items.length - 1;
+  }
+
+  return items[nextIndex]?.dataset.value ?? null;
+}
+
 const Trigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(function TabsTrigger(
-  { value: itemValue, onClick, onKeyDown, type = 'button', disabled, asChild, ...rest },
+  {
+    value: itemValue,
+    onClick,
+    onFocus,
+    onKeyDown,
+    onMouseDown,
+    type = 'button',
+    disabled,
+    asChild,
+    ...rest
+  },
   ref,
 ) {
   const ctx = useTabsContext('Tabs.Trigger');
-  const dir = useDirection();
   const selected = ctx.value === itemValue;
   const triggerId = `${ctx.baseId}-trigger-${itemValue}`;
   const contentId = `${ctx.baseId}-content-${itemValue}`;
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
-    onKeyDown?.(e);
-    if (e.defaultPrevented) return;
+  const rovingProps = useRovingFocusGroupItem({
+    active: selected,
+    focusable: !disabled,
+  });
 
-    const horizontal = ctx.orientation === 'horizontal';
-    const rtl = dir === 'rtl';
-    const nextKey = horizontal ? (rtl ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown';
-    const prevKey = horizontal ? (rtl ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp';
-
-    if (![nextKey, prevKey, 'Home', 'End'].includes(e.key)) return;
-    e.preventDefault();
-
-    const list = (
-      e.currentTarget.parentElement as HTMLElement | null
-    )?.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([disabled])');
-    if (!list || list.length === 0) return;
-
-    const currentIndex = Array.from(list).indexOf(e.currentTarget);
-    let nextIndex = currentIndex;
-    if (e.key === nextKey) nextIndex = (currentIndex + 1) % list.length;
-    else if (e.key === prevKey) nextIndex = (currentIndex - 1 + list.length) % list.length;
-    else if (e.key === 'Home') nextIndex = 0;
-    else if (e.key === 'End') nextIndex = list.length - 1;
-
-    const target = list[nextIndex];
-    target?.focus();
-    if (ctx.activationMode === 'automatic' && target) {
-      ctx.setValue(target.dataset.value ?? '');
-    }
-  };
+  const composedRef = useMergedRefs<HTMLButtonElement>(
+    ref,
+    rovingProps.ref as Ref<HTMLButtonElement>,
+  );
 
   const Comp = asChild ? Slot : 'button';
   return (
     <Comp
-      ref={ref}
+      ref={composedRef}
       type={asChild ? undefined : type}
       role="tab"
       id={triggerId}
       aria-selected={selected}
       aria-controls={contentId}
-      tabIndex={selected ? 0 : -1}
+      tabIndex={rovingProps.tabIndex}
       disabled={disabled}
       data-state={selected ? 'active' : 'inactive'}
       data-disabled={disabled ? '' : undefined}
@@ -150,7 +195,25 @@ const Trigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(function TabsTri
         onClick?.(e);
         if (!e.defaultPrevented && !disabled) ctx.setValue(itemValue);
       }}
-      onKeyDown={handleKeyDown}
+      onFocus={(e: React.FocusEvent<HTMLButtonElement>) => {
+        onFocus?.(e);
+        rovingProps.onFocus(e);
+      }}
+      onMouseDown={(e: React.MouseEvent<HTMLButtonElement>) => {
+        onMouseDown?.(e);
+        rovingProps.onMouseDown(e);
+      }}
+      onKeyDown={(e: KeyboardEvent<HTMLButtonElement>) => {
+        onKeyDown?.(e);
+        if (e.defaultPrevented) return;
+        // automatic mode: activate the target tab synchronously on nav key
+        // Must run before rovingProps.onKeyDown because it calls preventDefault()
+        if (ctx.activationMode === 'automatic' && !disabled) {
+          const nextVal = getNextValue(e, ctx.orientation, ctx.dir, ctx.loop);
+          if (nextVal !== null) ctx.setValue(nextVal);
+        }
+        rovingProps.onKeyDown(e);
+      }}
       {...rest}
     />
   );
