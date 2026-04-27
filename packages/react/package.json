@@ -1,0 +1,72 @@
+{
+  "name": "@gugbab-ui/react",
+  "version": "0.0.1",
+  "description": "Headless React components for @gugbab-ui/* — accessible behavior, unstyled (Radix + MUI 기본 세트)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/puk0806/gugbab-claude-package.git",
+    "directory": "packages/react"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo coverage"
+  },
+  "dependencies": {
+    "@floating-ui/react": "^0.27.0",
+    "@gugbab-ui/hooks": "workspace:*",
+    "@gugbab-ui/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@gugbab-ui/tsconfig": "workspace:*",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.5.2",
+    "axe-core": "^4.10.2",
+    "vitest-axe": "^0.1.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitest/coverage-v8": "^2.1.9",
+    "jsdom": "^25.0.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.9"
+  }
+}

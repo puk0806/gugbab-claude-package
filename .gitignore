@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Radix reference (external repo, not committed)
+_radix-reference/
+
 # Build outputs
 dist/
 build/
