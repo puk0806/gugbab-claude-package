@@ -46,13 +46,13 @@
 
 ## 네이밍
 
-| 대상            | 규칙                   | 예시          |
-| --------------- | ---------------------- | ------------- |
-| 컴포넌트        | PascalCase             | `UserCard`    |
-| 훅              | camelCase + use 접두사 | `useUserData` |
-| 상수            | UPPER_SNAKE_CASE       | `MAX_RETRY`   |
-| 일반 변수·함수  | camelCase              | `fetchUser`   |
-| 타입·인터페이스 | PascalCase             | `UserProfile` |
+| 대상 | 규칙 | 예시 |
+|------|------|------|
+| 컴포넌트 | PascalCase | `UserCard` |
+| 훅 | camelCase + use 접두사 | `useUserData` |
+| 상수 | UPPER_SNAKE_CASE | `MAX_RETRY` |
+| 일반 변수·함수 | camelCase | `fetchUser` |
+| 타입·인터페이스 | PascalCase | `UserProfile` |
 
 ## 금지 패턴
 
