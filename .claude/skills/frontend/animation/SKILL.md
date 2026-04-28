@@ -12,15 +12,15 @@ description: motion 12.x (구 framer-motion) 핵심 패턴, CSS transition/keyfr
 
 ## CSS vs motion 선택 기준
 
-|                            | CSS transition/keyframe | motion                                                   |
-| -------------------------- | ----------------------- | -------------------------------------------------------- |
-| 단순 hover/focus 효과      | 적합                    | 과함                                                     |
-| 마운트/언마운트 애니메이션 | 어려움                  | 적합                                                     |
-| 드래그 & 제스처            | 불가                    | 적합                                                     |
-| 스크롤 기반 애니메이션     | 가능 (scroll-timeline)  | 적합 (useScroll)                                         |
-| 레이아웃 애니메이션        | 불가                    | 적합 (layout prop)                                       |
-| 성능                       | GPU 가속 가능           | GPU 가속 + JS                                            |
-| 번들 크기                  | 0                       | motion 컴포넌트 ~34kb / LazyMotion+m 사용 시 초기 ~4.6kb |
+| | CSS transition/keyframe | motion |
+|---|---|---|
+| 단순 hover/focus 효과 | 적합 | 과함 |
+| 마운트/언마운트 애니메이션 | 어려움 | 적합 |
+| 드래그 & 제스처 | 불가 | 적합 |
+| 스크롤 기반 애니메이션 | 가능 (scroll-timeline) | 적합 (useScroll) |
+| 레이아웃 애니메이션 | 불가 | 적합 (layout prop) |
+| 성능 | GPU 가속 가능 | GPU 가속 + JS |
+| 번들 크기 | 0 | motion 컴포넌트 ~34kb / LazyMotion+m 사용 시 초기 ~4.6kb |
 
 > 주의: 번들 크기는 버전별로 변동됨. 정확한 수치는 bundlephobia 또는 빌드 분석으로 확인 권장.
 
@@ -37,26 +37,15 @@ description: motion 12.x (구 framer-motion) 핵심 패턴, CSS transition/keyfr
   background: var(--color-primary);
   transform: scale(1);
   // 성능을 위해 transform/opacity만 사용 (layout 재계산 없음)
-  transition:
-    transform 150ms ease,
-    opacity 150ms ease;
+  transition: transform 150ms ease, opacity 150ms ease;
 
-  &:hover {
-    transform: scale(1.05);
-  }
-  &:active {
-    transform: scale(0.97);
-  }
-  &:disabled {
-    opacity: 0.5;
-  }
+  &:hover { transform: scale(1.05); }
+  &:active { transform: scale(0.97); }
+  &:disabled { opacity: 0.5; }
 }
 
 // 피해야 할 transition (레이아웃 재계산 유발)
-transition:
-  width 300ms,
-  height 300ms,
-  margin 300ms;
+transition: width 300ms, height 300ms, margin 300ms;
 
 // transform으로 대체
 transform: scaleX(1.2); // width 변화 효과
@@ -66,20 +55,12 @@ transform: scaleX(1.2); // width 변화 효과
 
 ```scss
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 .modal {
@@ -92,8 +73,7 @@ transform: scaleX(1.2); // width 변화 효과
 
 // prefers-reduced-motion 대응 (접근성)
 @media (prefers-reduced-motion: reduce) {
-  .modal,
-  .spinner {
+  .modal, .spinner {
     animation: none;
   }
 }
@@ -124,7 +104,6 @@ pnpm remove framer-motion
 ```
 
 **마이그레이션 체크리스트:**
-
 - `import { motion } from "framer-motion"` → `import { motion } from "motion/react"`
 - `import { AnimatePresence } from "framer-motion"` → `import { AnimatePresence } from "motion/react"`
 - `motion('button')` 함수 호출 방식 → `motion.create('button')` 사용 (motion 11+)
@@ -138,7 +117,7 @@ pnpm remove framer-motion
 ### 기본 animate
 
 ```tsx
-import { motion } from 'motion/react';
+import { motion } from 'motion/react'
 
 // 마운트 시 애니메이션
 function Card() {
@@ -151,14 +130,14 @@ function Card() {
     >
       내용
     </motion.div>
-  );
+  )
 }
 ```
 
 ### AnimatePresence — 언마운트 애니메이션
 
 ```tsx
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react'
 
 function Modal({ open, children }: { open: boolean; children: React.ReactNode }) {
   return (
@@ -175,12 +154,11 @@ function Modal({ open, children }: { open: boolean; children: React.ReactNode })
         </motion.div>
       )}
     </AnimatePresence>
-  );
+  )
 }
 ```
 
 **AnimatePresence mode:**
-
 - `"sync"` (기본) — 진입/퇴장 동시 실행
 - `"wait"` — 퇴장 완료 후 진입 (페이지 전환에 적합)
 - `"popLayout"` — 퇴장 요소를 position: absolute로 빼내고 진입 즉시 시작
@@ -204,42 +182,46 @@ const listVariants = {
       staggerChildren: 0.05, // 자식 0.05초 간격으로 순차 등장
     },
   },
-};
+}
 
 const itemVariants = {
   hidden: { opacity: 0, x: -20 },
   visible: { opacity: 1, x: 0 },
-};
+}
 
 function List({ items }: { items: string[] }) {
   return (
     <motion.ul variants={listVariants} initial="hidden" animate="visible">
-      {items.map((item) => (
+      {items.map(item => (
         <motion.li key={item} variants={itemVariants}>
           {item}
         </motion.li>
       ))}
     </motion.ul>
-  );
+  )
 }
 ```
 
 ### motion.create() — 커스텀 컴포넌트 래핑
 
 ```tsx
-import { motion } from 'motion/react';
+import { motion } from 'motion/react'
 
 // 서드파티 또는 자체 컴포넌트를 motion 컴포넌트로 변환
-const MotionButton = motion.create('button');
+const MotionButton = motion.create('button')
 // 또는 커스텀 컴포넌트 (ref를 전달받을 수 있어야 함)
-const MotionCard = motion.create(Card);
+const MotionCard = motion.create(Card)
 
 function Example() {
   return (
-    <MotionCard initial={{ opacity: 0 }} animate={{ opacity: 1 }} whileHover={{ scale: 1.02 }}>
+    <MotionCard
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      whileHover={{ scale: 1.02 }}
+    >
       내용
     </MotionCard>
-  );
+  )
 }
 ```
 
@@ -254,18 +236,18 @@ function Example() {
 ### useAnimate — 명령형 애니메이션 (권장)
 
 ```tsx
-import { useAnimate } from 'motion/react';
+import { useAnimate } from 'motion/react'
 
 function ShakeOnError({ hasError }: { hasError: boolean }) {
-  const [scope, animate] = useAnimate();
+  const [scope, animate] = useAnimate()
 
   useEffect(() => {
     if (hasError) {
-      animate(scope.current, { x: [0, -10, 10, -10, 0] }, { duration: 0.4 });
+      animate(scope.current, { x: [0, -10, 10, -10, 0] }, { duration: 0.4 })
     }
-  }, [hasError]);
+  }, [hasError])
 
-  return <div ref={scope}>입력 필드</div>;
+  return <div ref={scope}>입력 필드</div>
 }
 ```
 
@@ -275,31 +257,35 @@ function ShakeOnError({ hasError }: { hasError: boolean }) {
 ### useScroll — 스크롤 기반 애니메이션
 
 ```tsx
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react'
 
 function ParallaxHero() {
-  const { scrollYProgress } = useScroll();
+  const { scrollYProgress } = useScroll()
 
   // 스크롤 0~50%를 opacity 1~0, y 0~-50으로 변환
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, -50]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -50])
 
-  return <motion.div style={{ opacity, y }}>히어로 섹션</motion.div>;
+  return (
+    <motion.div style={{ opacity, y }}>
+      히어로 섹션
+    </motion.div>
+  )
 }
 
 // 특정 요소 기준 스크롤 추적
 function ProgressBar() {
-  const ref = useRef(null);
+  const ref = useRef(null)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'], // 요소가 뷰포트에 진입~퇴장
-  });
+  })
 
   return (
     <div ref={ref}>
       <motion.div style={{ scaleX: scrollYProgress }} />
     </div>
-  );
+  )
 }
 ```
 
@@ -308,14 +294,14 @@ function ProgressBar() {
 ### useTransform — MotionValue 변환
 
 ```tsx
-import { useMotionValue, useTransform, motion } from 'motion/react';
+import { useMotionValue, useTransform, motion } from 'motion/react'
 
 function Slider() {
-  const x = useMotionValue(0);
+  const x = useMotionValue(0)
 
   // x: -200~200 -> opacity: 0~1~0 / background: 빨강~초록
-  const opacity = useTransform(x, [-200, 0, 200], [0, 1, 0]);
-  const background = useTransform(x, [-200, 0, 200], ['#ff0000', '#ffffff', '#00ff00']);
+  const opacity = useTransform(x, [-200, 0, 200], [0, 1, 0])
+  const background = useTransform(x, [-200, 0, 200], ['#ff0000', '#ffffff', '#00ff00'])
 
   return (
     <motion.div
@@ -323,33 +309,33 @@ function Slider() {
       dragConstraints={{ left: -200, right: 200 }}
       style={{ x, opacity, background }}
     />
-  );
+  )
 }
 ```
 
 ### useSpring — 스프링 기반 모션 값
 
 ```tsx
-import { useSpring, useMotionValue, motion } from 'motion/react';
+import { useSpring, useMotionValue, motion } from 'motion/react'
 
 function SmoothFollow() {
-  const x = useMotionValue(0);
+  const x = useMotionValue(0)
   // skipInitialAnimation: true → 컴포넌트 마운트 시 초기값에서 스프링 애니메이션 건너뜀 (motion 12.36+)
-  const smoothX = useSpring(x, { stiffness: 300, damping: 30, skipInitialAnimation: true });
+  const smoothX = useSpring(x, { stiffness: 300, damping: 30, skipInitialAnimation: true })
 
-  return <motion.div style={{ x: smoothX }} />;
+  return <motion.div style={{ x: smoothX }} />
 }
 ```
 
 ### useInView — 뷰포트 진입 감지
 
 ```tsx
-import { useInView } from 'motion/react';
-import { useRef } from 'react';
+import { useInView } from 'motion/react'
+import { useRef } from 'react'
 
 function FadeInSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-100px' })
 
   return (
     <motion.div
@@ -360,7 +346,7 @@ function FadeInSection() {
     >
       스크롤하면 나타남
     </motion.div>
-  );
+  )
 }
 ```
 
@@ -376,9 +362,9 @@ function DraggableCard() {
     <motion.div
       drag
       dragConstraints={{ left: -100, right: 100, top: -50, bottom: 50 }}
-      dragElastic={0.2} // 경계 벗어날 때 탄성
-      dragSnapToOrigin // boolean 또는 "x" | "y" (motion 12.36+ 축별 지정)
-      whileDrag={{ scale: 1.05 }} // 드래그 중 스타일
+      dragElastic={0.2}            // 경계 벗어날 때 탄성
+      dragSnapToOrigin             // boolean 또는 "x" | "y" (motion 12.36+ 축별 지정)
+      whileDrag={{ scale: 1.05 }}  // 드래그 중 스타일
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onDragEnd={(_, info) => {
@@ -390,7 +376,7 @@ function DraggableCard() {
     >
       드래그하세요
     </motion.div>
-  );
+  )
 }
 ```
 
@@ -402,7 +388,7 @@ function DraggableCard() {
 ## 레이아웃 애니메이션
 
 ```tsx
-import { motion, LayoutGroup } from 'motion/react';
+import { motion, LayoutGroup } from 'motion/react'
 
 // layout prop — 크기/위치 변화를 자동으로 부드럽게 처리 (FLIP 기법)
 function ExpandableCard({ isExpanded }: { isExpanded: boolean }) {
@@ -411,7 +397,7 @@ function ExpandableCard({ isExpanded }: { isExpanded: boolean }) {
       <motion.h2 layout="position">제목</motion.h2>
       {isExpanded && <motion.p layout>상세 내용...</motion.p>}
     </motion.div>
-  );
+  )
 }
 
 // LayoutGroup — 여러 컴포넌트 간 레이아웃 동기화
@@ -421,12 +407,11 @@ function TabLayout() {
       <TabList />
       <TabContent />
     </LayoutGroup>
-  );
+  )
 }
 ```
 
 **layout prop 옵션 (motion 12.36+ 포함):**
-
 - `layout` — 크기 + 위치 모두 애니메이션
 - `layout="position"` — 위치만 (크기 변화 무시)
 - `layout="size"` — 크기만 (위치 변화 무시)
@@ -439,7 +424,7 @@ function TabLayout() {
 ## LazyMotion — 번들 최적화
 
 ```tsx
-import { LazyMotion, domAnimation, m } from 'motion/react';
+import { LazyMotion, domAnimation, m } from 'motion/react'
 
 // domAnimation: 핵심 기능 (animate, exit, variants, whileHover, whileTap 등)
 // domMax: 전체 기능 (drag, layout, useScroll 등 포함)
@@ -448,36 +433,40 @@ function App() {
   return (
     <LazyMotion features={domAnimation}>
       {/* motion.div 대신 m.div 사용 (tree-shaking 최적화) */}
-      <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <m.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
         내용
       </m.div>
     </LazyMotion>
-  );
+  )
 }
 
 // 비동기 로딩으로 초기 번들에서 제거
-const loadFeatures = () => import('motion/react').then((mod) => mod.domMax);
+const loadFeatures = () =>
+  import('motion/react').then(mod => mod.domMax)
 
 function App() {
   return (
     <LazyMotion features={loadFeatures} strict>
       <m.div animate={{ opacity: 1 }} />
     </LazyMotion>
-  );
+  )
 }
 ```
 
 **domAnimation vs domMax:**
 
-| 기능                               | domAnimation | domMax |
-| ---------------------------------- | :----------: | :----: |
-| animate / initial / exit           |      O       |   O    |
-| variants / transition              |      O       |   O    |
-| whileHover / whileTap / whileFocus |      O       |   O    |
-| whileInView                        |      O       |   O    |
-| drag / whileDrag                   |      X       |   O    |
-| layout / LayoutGroup               |      X       |   O    |
-| useScroll / useTransform           |      X       |   O    |
+| 기능 | domAnimation | domMax |
+|------|:---:|:---:|
+| animate / initial / exit | O | O |
+| variants / transition | O | O |
+| whileHover / whileTap / whileFocus | O | O |
+| whileInView | O | O |
+| drag / whileDrag | X | O |
+| layout / LayoutGroup | X | O |
+| useScroll / useTransform | X | O |
 
 > 주의: domAnimation과 domMax의 정확한 번들 크기는 버전마다 달라짐. LazyMotion 사용 시 초기 렌더 ~4.6kb, features 비동기 로드 후 추가 크기 발생.
 
@@ -487,9 +476,9 @@ function App() {
 
 ```tsx
 // motion 컴포넌트는 클라이언트 전용 — "use client" 필수
-'use client';
+'use client'
 
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react'
 
 // Server Component에서 Client Component로 분리
 // layout.tsx (Server) -> AnimatedLayout.tsx (Client)
@@ -500,7 +489,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={/* pathname 등 고유 키 */ undefined}
+        key={/* pathname 등 고유 키 */undefined}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -508,7 +497,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
         {children}
       </motion.div>
     </AnimatePresence>
-  );
+  )
 }
 ```
 
@@ -517,7 +506,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 ```tsx
 // Server Component에서 "use client" 없이 motion 컴포넌트를 사용하려면
 // motion/react-client 임포트 사용 (SSR 최적화, JS 전송량 절감)
-import { motion } from 'motion/react-client';
+import { motion } from 'motion/react-client'
 
 // 주의: 완전한 클라이언트 기능이 필요하면 여전히 "use client" + "motion/react" 사용 권장
 ```
@@ -540,7 +529,6 @@ animate={{ width: 0, height: 0, margin: 0 }}
 ```
 
 **성능 체크리스트:**
-
 1. `transform`과 `opacity`만 직접 animate — GPU 가속
 2. 크기/위치 변화 → `layout` prop 사용 (FLIP 기법 자동 적용)
 3. 많은 요소 동시 애니메이션 → `LazyMotion` + `m` 컴포넌트
@@ -552,11 +540,11 @@ animate={{ width: 0, height: 0, margin: 0 }}
 ## prefers-reduced-motion 대응
 
 ```tsx
-import { useReducedMotion, MotionConfig } from 'motion/react';
+import { useReducedMotion, MotionConfig } from 'motion/react'
 
 // 컴포넌트 단위: useReducedMotion
 function AnimatedCard() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <motion.div
@@ -566,18 +554,16 @@ function AnimatedCard() {
     >
       내용
     </motion.div>
-  );
+  )
 }
 
 // 앱 전체 단위: MotionConfig reducedMotion
 function App() {
   return (
-    <MotionConfig reducedMotion="user">
-      {' '}
-      {/* OS 설정 따름 */}
+    <MotionConfig reducedMotion="user"> {/* OS 설정 따름 */}
       <AppContent />
     </MotionConfig>
-  );
+  )
 }
 ```
 

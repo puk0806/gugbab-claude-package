@@ -35,7 +35,10 @@ import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+  ],
   framework: {
     name: '@storybook/react-vite',
     options: {},
@@ -61,7 +64,10 @@ import type { StorybookConfig } from '@storybook/nextjs';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+  ],
   framework: {
     name: '@storybook/nextjs',
     options: {},
@@ -172,18 +178,18 @@ export const Default: Story = {
 
 ### ArgTypes — Control 타입
 
-| control 타입 | 용도          | 예시                |
-| ------------ | ------------- | ------------------- |
-| `'text'`     | 문자열 입력   | label, placeholder  |
-| `'number'`   | 숫자 입력     | count, max          |
-| `'boolean'`  | 토글 스위치   | disabled, loading   |
-| `'select'`   | 드롭다운 선택 | variant, size       |
-| `'radio'`    | 라디오 버튼   | size, theme         |
-| `'color'`    | 색상 선택     | backgroundColor     |
-| `'date'`     | 날짜 선택     | createdAt           |
-| `'object'`   | JSON 편집     | style, config       |
-| `'range'`    | 슬라이더      | opacity, fontSize   |
-| `false`      | 컨트롤 숨김   | children, className |
+| control 타입 | 용도 | 예시 |
+|-------------|------|------|
+| `'text'` | 문자열 입력 | label, placeholder |
+| `'number'` | 숫자 입력 | count, max |
+| `'boolean'` | 토글 스위치 | disabled, loading |
+| `'select'` | 드롭다운 선택 | variant, size |
+| `'radio'` | 라디오 버튼 | size, theme |
+| `'color'` | 색상 선택 | backgroundColor |
+| `'date'` | 날짜 선택 | createdAt |
+| `'object'` | JSON 편집 | style, config |
+| `'range'` | 슬라이더 | opacity, fontSize |
+| `false` | 컨트롤 숨김 | children, className |
 
 ```typescript
 argTypes: {
@@ -212,9 +218,9 @@ TypeScript props가 있으면 argTypes가 자동 추론된다. 추가 커스터�
 
 ```typescript
 interface ButtonProps {
-  variant: 'primary' | 'secondary'; // → 자동으로 select 컨트롤
-  disabled?: boolean; // → 자동으로 boolean 컨트롤
-  onClick?: () => void; // → 자동으로 action 타입
+  variant: 'primary' | 'secondary';  // → 자동으로 select 컨트롤
+  disabled?: boolean;                 // → 자동으로 boolean 컨트롤
+  onClick?: () => void;              // → 자동으로 action 타입
 }
 ```
 
@@ -265,15 +271,23 @@ export const FilledForm: Story = {
     const canvas = within(canvasElement);
 
     // 사용자 입력 시뮬레이션 — 항상 await
-    await userEvent.type(canvas.getByLabelText('Email'), 'user@example.com');
-    await userEvent.type(canvas.getByLabelText('Password'), 'password123');
+    await userEvent.type(
+      canvas.getByLabelText('Email'),
+      'user@example.com'
+    );
+    await userEvent.type(
+      canvas.getByLabelText('Password'),
+      'password123'
+    );
 
     // 버튼 클릭
     await userEvent.click(canvas.getByRole('button', { name: /submit/i }));
 
     // 검증 — 항상 await
     await expect(args.onSubmit).toHaveBeenCalledTimes(1);
-    await expect(canvas.getByText('Successfully submitted')).toBeInTheDocument();
+    await expect(
+      canvas.getByText('Successfully submitted')
+    ).toBeInTheDocument();
   },
 };
 ```
@@ -698,7 +712,9 @@ export const AsyncContent: Story = {
     // await expect(canvas.getByText('Loaded')).toBeInTheDocument();
 
     // 좋은 예: waitFor로 대기
-    await waitFor(() => expect(canvas.getByText('Loaded')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(canvas.getByText('Loaded')).toBeInTheDocument()
+    );
   },
 };
 ```

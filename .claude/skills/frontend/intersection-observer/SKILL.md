@@ -21,7 +21,7 @@ const observer = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.1 }, // 10% 이상 보일 때 콜백 실행
+  { threshold: 0.1 } // 10% 이상 보일 때 콜백 실행
 );
 
 observer.observe(targetElement);
@@ -45,7 +45,7 @@ const observer = new IntersectionObserver((entries, obs) => {
   });
 });
 
-document.querySelectorAll('img[data-src]').forEach((img) => {
+document.querySelectorAll("img[data-src]").forEach((img) => {
   observer.observe(img);
 });
 ```
@@ -57,7 +57,10 @@ document.querySelectorAll('img[data-src]').forEach((img) => {
 ## 3. React에서 커스텀 훅
 
 ```tsx
-function useIntersection(ref: React.RefObject<Element>, options?: IntersectionObserverInit) {
+function useIntersection(
+  ref: React.RefObject<Element>,
+  options?: IntersectionObserverInit
+) {
   const [isIntersecting, setIsIntersecting] = useState(false);
 
   useEffect(() => {
@@ -66,7 +69,7 @@ function useIntersection(ref: React.RefObject<Element>, options?: IntersectionOb
 
     const observer = new IntersectionObserver(
       ([entry]) => setIsIntersecting(entry.isIntersecting),
-      options,
+      options
     );
     observer.observe(el);
 
@@ -83,8 +86,8 @@ function useIntersection(ref: React.RefObject<Element>, options?: IntersectionOb
 
 ## 정리
 
-| 메서드          | 용도                       |
-| --------------- | -------------------------- |
-| `observe(el)`   | 관찰 시작                  |
-| `unobserve(el)` | 특정 요소 관찰 해제        |
-| `disconnect()`  | 모든 관찰 해제 (cleanup용) |
+| 메서드 | 용도 |
+|--------|------|
+| `observe(el)` | 관찰 시작 |
+| `unobserve(el)` | 특정 요소 관찰 해제 |
+| `disconnect()` | 모든 관찰 해제 (cleanup용) |

@@ -72,9 +72,9 @@ index.html     ← 루트에 위치, %PUBLIC_URL% 제거
 
 ```typescript
 // vite.config.ts
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
-import path from 'path';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
@@ -97,7 +97,7 @@ export default defineConfig({
     outDir: 'build', // CRA 기본값 유지하려면 'build', Vite 기본은 'dist'
     sourcemap: true,
   },
-});
+})
 ```
 
 ### path alias + vite-tsconfig-paths (선택)
@@ -109,12 +109,12 @@ npm install -D vite-tsconfig-paths
 ```
 
 ```typescript
-import tsconfigPaths from 'vite-tsconfig-paths';
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   // resolve.alias 없어도 tsconfig paths 자동 반영
-});
+})
 ```
 
 ---
@@ -152,21 +152,21 @@ VITE_FEATURE_FLAG=true
 
 ```typescript
 // Before (CRA)
-const apiUrl = process.env.REACT_APP_API_URL;
-const flag = process.env.REACT_APP_FEATURE_FLAG === 'true';
+const apiUrl = process.env.REACT_APP_API_URL
+const flag = process.env.REACT_APP_FEATURE_FLAG === 'true'
 
 // After (Vite)
-const apiUrl = import.meta.env.VITE_API_URL;
-const flag = import.meta.env.VITE_FEATURE_FLAG === 'true';
+const apiUrl = import.meta.env.VITE_API_URL
+const flag = import.meta.env.VITE_FEATURE_FLAG === 'true'
 ```
 
 ### 내장 환경 변수 대응
 
-| CRA                       | Vite                       |
-| ------------------------- | -------------------------- |
-| `process.env.NODE_ENV`    | `import.meta.env.MODE`     |
-| `process.env.PUBLIC_URL`  | `import.meta.env.BASE_URL` |
-| `process.env.REACT_APP_*` | `import.meta.env.VITE_*`   |
+| CRA | Vite |
+|-----|------|
+| `process.env.NODE_ENV` | `import.meta.env.MODE` |
+| `process.env.PUBLIC_URL` | `import.meta.env.BASE_URL` |
+| `process.env.REACT_APP_*` | `import.meta.env.VITE_*` |
 
 > **주의:** `VITE_` 접두사 없는 변수는 클라이언트에 노출되지 않음. 의도적으로 숨기는 서버 전용 값은 접두사 없이 유지.
 
@@ -180,11 +180,11 @@ npm install -D vite-plugin-svgr
 
 ```typescript
 // vite.config.ts
-import svgr from 'vite-plugin-svgr';
+import svgr from 'vite-plugin-svgr'
 
 export default defineConfig({
   plugins: [react(), svgr()],
-});
+})
 ```
 
 ```typescript
@@ -195,14 +195,14 @@ export default defineConfig({
 
 ```tsx
 // Before (CRA — @svgr/webpack 내장)
-import { ReactComponent as Logo } from './logo.svg';
+import { ReactComponent as Logo } from './logo.svg'
 
 // After (Vite + vite-plugin-svgr v4)
-import Logo from './logo.svg?react';
+import Logo from './logo.svg?react'
 
 // 사용은 동일
 function App() {
-  return <Logo className="logo" />;
+  return <Logo className="logo" />
 }
 ```
 
@@ -235,12 +235,12 @@ function App() {
 
 **CRA tsconfig에서 주요 변경점:**
 
-| 항목                         | CRA 기본값          | Vite 권장값       |
-| ---------------------------- | ------------------- | ----------------- |
-| `moduleResolution`           | `node`              | `bundler`         |
-| `types`                      | `["react-scripts"]` | `["vite/client"]` |
-| `noEmit`                     | 없음                | `true`            |
-| `allowImportingTsExtensions` | 없음                | `true`            |
+| 항목 | CRA 기본값 | Vite 권장값 |
+|------|-----------|------------|
+| `moduleResolution` | `node` | `bundler` |
+| `types` | `["react-scripts"]` | `["vite/client"]` |
+| `noEmit` | 없음 | `true` |
+| `allowImportingTsExtensions` | 없음 | `true` |
 
 ---
 
@@ -258,28 +258,28 @@ npm install -D vitest @vitest/coverage-v8 jsdom @testing-library/jest-dom
 
 ```typescript
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
 
 export default defineConfig({
   plugins: [react()],
   test: {
-    globals: true, // describe/it/expect 전역 사용
-    environment: 'jsdom', // 브라우저 DOM 시뮬레이션
+    globals: true,              // describe/it/expect 전역 사용
+    environment: 'jsdom',       // 브라우저 DOM 시뮬레이션
     setupFiles: './src/setupTests.ts',
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
     },
   },
-});
+})
 ```
 
 ### setupTests.ts — 수정 불필요
 
 ```typescript
 // src/setupTests.ts (CRA와 동일하게 유지)
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom'
 ```
 
 ### jest.config.js 삭제
@@ -290,16 +290,16 @@ Vitest는 vite.config.ts의 `test` 블록으로 통합. `jest.config.js` 삭제.
 
 ```typescript
 // Before (Jest)
-import { jest } from '@jest/globals';
-jest.fn();
-jest.mock('./module');
-jest.spyOn(obj, 'method');
+import { jest } from '@jest/globals'
+jest.fn()
+jest.mock('./module')
+jest.spyOn(obj, 'method')
 
 // After (Vitest — API 동일, 네이밍만 변경)
-import { vi } from 'vitest';
-vi.fn();
-vi.mock('./module');
-vi.spyOn(obj, 'method');
+import { vi } from 'vitest'
+vi.fn()
+vi.mock('./module')
+vi.spyOn(obj, 'method')
 ```
 
 ---
@@ -320,21 +320,21 @@ vi.spyOn(obj, 'method');
 
 ```typescript
 // ❌ Vite에서 process.env.REACT_APP_* undefined 반환
-const url = process.env.REACT_APP_API_URL;
+const url = process.env.REACT_APP_API_URL
 
 // ✅
-const url = import.meta.env.VITE_API_URL;
+const url = import.meta.env.VITE_API_URL
 ```
 
 ### 3. SVG ?react 쿼리 누락
 
 ```tsx
 // ❌ 문자열 URL이 반환됨 (컴포넌트 아님)
-import Logo from './logo.svg';
-return <Logo />; // 런타임 에러
+import Logo from './logo.svg'
+return <Logo />  // 런타임 에러
 
 // ✅
-import Logo from './logo.svg?react';
+import Logo from './logo.svg?react'
 ```
 
 ### 4. script 태그 미추가
@@ -353,7 +353,7 @@ import Logo from './logo.svg?react';
 </body>
 ```
 
-### 5. VITE\_ 없는 변수 클라이언트 노출 불가
+### 5. VITE_ 없는 변수 클라이언트 노출 불가
 
 ```bash
 # ❌ 아래 변수는 import.meta.env에서 undefined

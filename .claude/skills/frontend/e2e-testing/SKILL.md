@@ -38,7 +38,6 @@ npx playwright install --with-deps
 ```
 
 초기화 시 생성되는 파일:
-
 - `playwright.config.ts` — 테스트 설정
 - `tests/example.spec.ts` — 예시 테스트
 - `tests-examples/` — 추가 예제
@@ -54,14 +53,17 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
-  forbidOnly: !!process.env.CI, // CI에서 test.only 방지
-  retries: process.env.CI ? 2 : 0, // CI에서만 재시도
+  forbidOnly: !!process.env.CI,     // CI에서 test.only 방지
+  retries: process.env.CI ? 2 : 0,  // CI에서만 재시도
   workers: process.env.CI ? 2 : undefined,
-  reporter: [['html'], ['list']],
+  reporter: [
+    ['html'],
+    ['list'],
+  ],
 
   use: {
     baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry', // 실패 시 트레이스 수집
+    trace: 'on-first-retry',        // 실패 시 트레이스 수집
     screenshot: 'only-on-failure',
   },
 
@@ -175,13 +177,13 @@ test('프로필 페이지 요소 확인', async ({ page }) => {
 
 ### 우선순위 (공식 권장)
 
-| 순위 | 로케이터           | 용도                                      |
-| ---- | ------------------ | ----------------------------------------- |
-| 1    | `getByRole`        | ARIA 역할 기반 (접근성과 일치, 가장 견고) |
-| 2    | `getByLabel`       | 폼 필드 (label과 연결된 input)            |
-| 3    | `getByPlaceholder` | placeholder가 유일한 식별자일 때          |
-| 4    | `getByText`        | 텍스트 콘텐츠로 식별                      |
-| 5    | `getByTestId`      | 시맨틱 식별이 불가능할 때 (`data-testid`) |
+| 순위 | 로케이터 | 용도 |
+|------|----------|------|
+| 1 | `getByRole` | ARIA 역할 기반 (접근성과 일치, 가장 견고) |
+| 2 | `getByLabel` | 폼 필드 (label과 연결된 input) |
+| 3 | `getByPlaceholder` | placeholder가 유일한 식별자일 때 |
+| 4 | `getByText` | 텍스트 콘텐츠로 식별 |
+| 5 | `getByTestId` | 시맨틱 식별이 불가능할 때 (`data-testid`) |
 
 ### 체이닝과 필터링
 
@@ -344,7 +346,7 @@ test('가격에 할인 적용', async ({ page }) => {
 test('API 응답 녹화', async ({ page }) => {
   await page.routeFromHAR('e2e/fixtures/products.har', {
     url: '**/api/products',
-    update: true, // 실제 API 호출하여 HAR 파일 생성
+    update: true,  // 실제 API 호출하여 HAR 파일 생성
   });
   await page.goto('/products');
 });
@@ -460,9 +462,9 @@ test('헤더 비주얼 확인', async ({ page }) => {
 
 ```typescript
 await expect(page).toHaveScreenshot('home.png', {
-  maxDiffPixels: 100, // 허용할 최대 다른 픽셀 수
-  maxDiffPixelRatio: 0.01, // 전체 대비 허용 비율 (1%)
-  threshold: 0.2, // 색상 차이 허용치 (0=엄격, 1=느슨)
+  maxDiffPixels: 100,        // 허용할 최대 다른 픽셀 수
+  maxDiffPixelRatio: 0.01,   // 전체 대비 허용 비율 (1%)
+  threshold: 0.2,            // 색상 차이 허용치 (0=엄격, 1=느슨)
 });
 ```
 
@@ -477,8 +479,8 @@ await expect(page).toHaveScreenshot('dashboard.png', {
 
 ```css
 /* e2e/screenshot-styles.css */
-[data-testid='current-time'],
-[data-testid='ad-banner'] {
+[data-testid="current-time"],
+[data-testid="ad-banner"] {
   visibility: hidden;
 }
 ```
@@ -572,7 +574,7 @@ jobs:
 export default defineConfig({
   // 기본값: 논리 CPU 코어의 절반
   workers: process.env.CI ? 2 : undefined,
-  fullyParallel: true, // 파일 내 테스트도 병렬 실행
+  fullyParallel: true,  // 파일 내 테스트도 병렬 실행
 });
 ```
 
@@ -581,12 +583,8 @@ export default defineConfig({
 ```typescript
 test.describe.configure({ mode: 'parallel' });
 
-test('테스트 A', async ({ page }) => {
-  /* ... */
-});
-test('테스트 B', async ({ page }) => {
-  /* ... */
-});
+test('테스트 A', async ({ page }) => { /* ... */ });
+test('테스트 B', async ({ page }) => { /* ... */ });
 ```
 
 ### 샤딩 (CLI)
@@ -636,7 +634,6 @@ use: {
 ```
 
 Trace Viewer 기능:
-
 - 타임라인에서 각 액션별 DOM 스냅샷 확인
 - 네트워크 요청/응답 상세 확인
 - 콘솔 로그 확인
@@ -687,13 +684,13 @@ playwright/
 
 ## 흔한 실수
 
-| 실수                                                | 올바른 방법                                            |
-| --------------------------------------------------- | ------------------------------------------------------ |
-| `page.locator('.btn')` CSS 선택자 남용              | `page.getByRole('button', { name: '...' })`            |
-| `await page.waitForTimeout(3000)` 하드코딩 대기     | Web-first assertion 사용 (`toBeVisible`, `toHaveText`) |
-| `expect(await el.isVisible()).toBe(true)` 수동 검증 | `await expect(el).toBeVisible()` 자동 재시도           |
-| 테스트 간 상태 공유/의존                            | 각 테스트는 독립적으로 실행 (test isolation)           |
-| storageState 파일을 Git에 커밋                      | `.gitignore`에 `playwright/.auth/` 추가                |
-| `test.only` CI에 남기기                             | `forbidOnly: !!process.env.CI` 설정                    |
-| 외부 서비스(결제 API 등) 직접 호출                  | `page.route`로 모킹하여 격리                           |
-| 스크린샷 비교 시 동적 요소 무시 안 함               | `stylePath`로 동적 요소 숨기기                         |
+| 실수 | 올바른 방법 |
+|------|------------|
+| `page.locator('.btn')` CSS 선택자 남용 | `page.getByRole('button', { name: '...' })` |
+| `await page.waitForTimeout(3000)` 하드코딩 대기 | Web-first assertion 사용 (`toBeVisible`, `toHaveText`) |
+| `expect(await el.isVisible()).toBe(true)` 수동 검증 | `await expect(el).toBeVisible()` 자동 재시도 |
+| 테스트 간 상태 공유/의존 | 각 테스트는 독립적으로 실행 (test isolation) |
+| storageState 파일을 Git에 커밋 | `.gitignore`에 `playwright/.auth/` 추가 |
+| `test.only` CI에 남기기 | `forbidOnly: !!process.env.CI` 설정 |
+| 외부 서비스(결제 API 등) 직접 호출 | `page.route`로 모킹하여 격리 |
+| 스크린샷 비교 시 동적 요소 무시 안 함 | `stylePath`로 동적 요소 숨기기 |

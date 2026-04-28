@@ -70,11 +70,11 @@ function App() {
 
 ## 2. 스타일링 방법 선택 기준
 
-| 방법               | 사용 시점                              | 성능              |
-| ------------------ | -------------------------------------- | ----------------- |
-| `sx` prop          | 1회성·조건부 스타일, 빠른 프로토타이핑 | 런타임 (적당)     |
-| `styled()`         | 재사용 컴포넌트, 복잡한 스타일         | 런타임 (최적화됨) |
-| `theme.components` | 글로벌 기본 스타일 오버라이드          | 테마 레벨         |
+| 방법 | 사용 시점 | 성능 |
+|------|----------|------|
+| `sx` prop | 1회성·조건부 스타일, 빠른 프로토타이핑 | 런타임 (적당) |
+| `styled()` | 재사용 컴포넌트, 복잡한 스타일 | 런타임 (최적화됨) |
+| `theme.components` | 글로벌 기본 스타일 오버라이드 | 테마 레벨 |
 
 > 주의: makeStyles (@mui/styles)는 JSS 기반이며 MUI v5에서 레거시. 신규 코드에서는 사용하지 않는다.
 
@@ -88,8 +88,8 @@ import { Box, Typography } from '@mui/material';
 <Box
   sx={{
     // 테마 spacing 참조
-    p: 2, // padding: theme.spacing(2) = '16px'
-    mt: 3, // marginTop: theme.spacing(3) = '24px'
+    p: 2,           // padding: theme.spacing(2) = '16px'
+    mt: 3,          // marginTop: theme.spacing(3) = '24px'
 
     // 테마 palette 참조
     bgcolor: 'primary.main',
@@ -107,25 +107,25 @@ import { Box, Typography } from '@mui/material';
   }}
 >
   <Typography variant="h6">제목</Typography>
-</Box>;
+</Box>
 ```
 
 **sx 단축 속성 정리:**
 
-| 단축                                      | CSS 속성                              |
-| ----------------------------------------- | ------------------------------------- |
-| `p`, `px`, `py`, `pt`, `pr`, `pb`, `pl`   | padding 계열                          |
-| `m`, `mx`, `my`, `mt`, `mr`, `mb`, `ml`   | margin 계열                           |
-| `bgcolor`                                 | backgroundColor                       |
-| `color`                                   | color (palette 경로 가능)             |
-| `width`, `height`, `minWidth`, `maxWidth` | 크기                                  |
-| `display`, `overflow`, `textOverflow`     | 디스플레이                            |
-| `flexGrow`, `flexShrink`, `flexDirection` | Flex                                  |
-| `gap`                                     | gap                                   |
-| `gridColumn`, `gridRow`                   | Grid                                  |
-| `borderRadius`                            | borderRadius                          |
-| `boxShadow`                               | boxShadow (theme.shadows 인덱스 가능) |
-| `zIndex`                                  | zIndex                                |
+| 단축 | CSS 속성 |
+|------|----------|
+| `p`, `px`, `py`, `pt`, `pr`, `pb`, `pl` | padding 계열 |
+| `m`, `mx`, `my`, `mt`, `mr`, `mb`, `ml` | margin 계열 |
+| `bgcolor` | backgroundColor |
+| `color` | color (palette 경로 가능) |
+| `width`, `height`, `minWidth`, `maxWidth` | 크기 |
+| `display`, `overflow`, `textOverflow` | 디스플레이 |
+| `flexGrow`, `flexShrink`, `flexDirection` | Flex |
+| `gap` | gap |
+| `gridColumn`, `gridRow` | Grid |
+| `borderRadius` | borderRadius |
+| `boxShadow` | boxShadow (theme.shadows 인덱스 가능) |
+| `zIndex` | zIndex |
 
 ### styled() 컴포넌트
 
@@ -224,10 +224,10 @@ const theme = createTheme({
 });
 
 // breakpoint 사용법
-theme.breakpoints.up('sm'); // @media (min-width: 600px)
-theme.breakpoints.down('md'); // @media (max-width: 899.95px)
-theme.breakpoints.between('sm', 'lg'); // @media (min-width: 600px) and (max-width: 1199.95px)
-theme.breakpoints.only('md'); // @media (min-width: 900px) and (max-width: 1199.95px)
+theme.breakpoints.up('sm')    // @media (min-width: 600px)
+theme.breakpoints.down('md')  // @media (max-width: 899.95px)
+theme.breakpoints.between('sm', 'lg') // @media (min-width: 600px) and (max-width: 1199.95px)
+theme.breakpoints.only('md')  // @media (min-width: 900px) and (max-width: 1199.95px)
 ```
 
 ---
@@ -394,7 +394,7 @@ import { Box } from '@mui/material';
 >
   <Box sx={{ flex: 1 }}>사이드바</Box>
   <Box sx={{ flex: 3 }}>메인 콘텐츠</Box>
-</Box>;
+</Box>
 ```
 
 ### Stack
@@ -427,12 +427,8 @@ import { Stack, Divider } from '@mui/material';
 
 ```tsx
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  IconButton,
+  Dialog, DialogTitle, DialogContent, DialogActions,
+  Button, IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -461,12 +457,8 @@ function ConfirmDialog({ open, title, children, onConfirm, onClose }: ConfirmDia
       </DialogTitle>
       <DialogContent dividers>{children}</DialogContent>
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button onClick={onClose} color="inherit">
-          취소
-        </Button>
-        <Button onClick={onConfirm} variant="contained">
-          확인
-        </Button>
+        <Button onClick={onClose} color="inherit">취소</Button>
+        <Button onClick={onConfirm} variant="contained">확인</Button>
       </DialogActions>
     </Dialog>
   );
@@ -477,14 +469,8 @@ function ConfirmDialog({ open, title, children, onConfirm, onClose }: ConfirmDia
 
 ```tsx
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  TablePagination,
+  Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, TablePagination
 } from '@mui/material';
 
 function DataTable<T extends { id: string | number }>({
@@ -511,15 +497,17 @@ function DataTable<T extends { id: string | number }>({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow key={row.id} hover>
-                {columns.map((col) => (
-                  <TableCell key={col.id} align={col.align ?? 'left'}>
-                    {(row as Record<string, unknown>)[col.id] as React.ReactNode}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
+            {rows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
+                <TableRow key={row.id} hover>
+                  {columns.map((col) => (
+                    <TableCell key={col.id} align={col.align ?? 'left'}>
+                      {(row as Record<string, unknown>)[col.id] as React.ReactNode}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -594,7 +582,7 @@ import 'dayjs/locale/ko';
 // Provider (최상위 1회)
 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
   <App />
-</LocalizationProvider>;
+</LocalizationProvider>
 
 // 사용
 function DateField() {
@@ -748,13 +736,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ## 10. 흔한 실수
 
-| 실수                                                        | 올바른 방법                       |
-| ----------------------------------------------------------- | --------------------------------- |
-| makeStyles 사용                                             | sx prop 또는 styled() 사용        |
-| sx 객체를 렌더 함수 안에서 매번 생성                        | 컴포넌트 밖에 상수로 선언         |
-| Grid v1의 `item` prop을 Grid v2에서 사용                    | Grid v2에서는 `size` prop 사용    |
-| `styled()` 커스텀 prop이 DOM에 전달됨                       | `shouldForwardProp`으로 필터링    |
-| TypeScript에서 커스텀 palette 색상 에러                     | Module augmentation으로 타입 확장 |
+| 실수 | 올바른 방법 |
+|------|-----------|
+| makeStyles 사용 | sx prop 또는 styled() 사용 |
+| sx 객체를 렌더 함수 안에서 매번 생성 | 컴포넌트 밖에 상수로 선언 |
+| Grid v1의 `item` prop을 Grid v2에서 사용 | Grid v2에서는 `size` prop 사용 |
+| `styled()` 커스텀 prop이 DOM에 전달됨 | `shouldForwardProp`으로 필터링 |
+| TypeScript에서 커스텀 palette 색상 에러 | Module augmentation으로 타입 확장 |
 | Next.js App Router에서 ThemeProvider가 서버 컴포넌트에 있음 | 'use client' + ThemeRegistry 패턴 |
-| Button `variant="text"` 인데 색상이 안 보임                 | `color` prop 확인 (기본 primary)  |
-| `@mui/material`과 `@mui/system` 버전 불일치                 | 모든 @mui/\* 패키지 버전 통일     |
+| Button `variant="text"` 인데 색상이 안 보임 | `color` prop 확인 (기본 primary) |
+| `@mui/material`과 `@mui/system` 버전 불일치 | 모든 @mui/* 패키지 버전 통일 |

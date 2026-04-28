@@ -103,7 +103,7 @@ jobs:
 ```yaml
 on:
   schedule:
-    - cron: '0 9 * * 1-5' # 평일 09:00 UTC
+    - cron: '0 9 * * 1-5'  # 평일 09:00 UTC
 
 jobs:
   nightly:
@@ -131,7 +131,7 @@ on:
         required: false
     outputs:
       build-result:
-        description: '빌드 결과'
+        description: "빌드 결과"
         value: ${{ jobs.build.outputs.result }}
 ```
 
@@ -154,7 +154,7 @@ jobs:
       - run: npm test
 
   build:
-    needs: [lint, test] # lint, test 모두 성공 후 실행
+    needs: [lint, test]  # lint, test 모두 성공 후 실행
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -248,14 +248,12 @@ jobs:
 ```
 
 **캐시 키 매칭 순서:**
-
 1. 현재 브랜치에서 `key` 정확히 일치
 2. 현재 브랜치에서 `key` 접두사 일치
 3. 현재 브랜치에서 `restore-keys` 순차 매칭
 4. 기본 브랜치(main)에서 같은 순서 반복
 
 **캐시 제한:**
-
 - 기본 저장 한도: 레포지토리당 10 GB (설정으로 최대 10 TB까지 증가 가능)
 - 7일간 접근되지 않은 캐시 자동 삭제
 - 용량 초과 시 마지막 접근일 기준 오래된 순서대로 퇴거
@@ -299,10 +297,10 @@ jobs:
 
 ### 시크릿 레벨
 
-| 레벨         | 범위      | CLI 생성                                               |
-| ------------ | --------- | ------------------------------------------------------ |
-| Repository   | 단일 레포 | `gh secret set SECRET_NAME`                            |
-| Environment  | 특정 환경 | `gh secret set --env production SECRET_NAME`           |
+| 레벨 | 범위 | CLI 생성 |
+|------|------|----------|
+| Repository | 단일 레포 | `gh secret set SECRET_NAME` |
+| Environment | 특정 환경 | `gh secret set --env production SECRET_NAME` |
 | Organization | 조직 전체 | `gh secret set --org ORG SECRET_NAME --visibility all` |
 
 ### 워크플로우에서 사용
@@ -321,7 +319,6 @@ jobs:
 ```
 
 **주의사항:**
-
 - 포크된 레포의 워크플로우에는 시크릿이 전달되지 않음 (`GITHUB_TOKEN` 제외)
 - 재사용 워크플로우에 시크릿이 자동 전달되지 않음 (명시적으로 전달 필요)
 - 시크릿을 커맨드라인 인자로 직접 전달 금지 (환경 변수로 전달)
@@ -656,7 +653,7 @@ outputs:
     description: '캐시 히트 여부'
     value: ${{ steps.cache.outputs.cache-hit }}
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - uses: pnpm/action-setup@v4
       with:
@@ -675,12 +672,12 @@ runs:
 
 **Reusable Workflow vs Composite Action:**
 
-| 구분        | Reusable Workflow         | Composite Action           |
-| ----------- | ------------------------- | -------------------------- |
-| 단위        | 전체 워크플로우 (여러 잡) | 단일 스텝 (잡 내부)        |
-| runner      | 자체 `runs-on` 지정       | 호출자의 runner 사용       |
-| 시크릿 접근 | 명시적 전달 필요          | 호출 잡의 시크릿 접근 가능 |
-| 적합한 경우 | 독립 CI 파이프라인 공유   | 반복 스텝 묶음 재사용      |
+| 구분 | Reusable Workflow | Composite Action |
+|------|-------------------|------------------|
+| 단위 | 전체 워크플로우 (여러 잡) | 단일 스텝 (잡 내부) |
+| runner | 자체 `runs-on` 지정 | 호출자의 runner 사용 |
+| 시크릿 접근 | 명시적 전달 필요 | 호출 잡의 시크릿 접근 가능 |
+| 적합한 경우 | 독립 CI 파이프라인 공유 | 반복 스텝 묶음 재사용 |
 
 ---
 
@@ -747,7 +744,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          fetch-depth: 0 # turbo prune에 필요
+          fetch-depth: 0  # turbo prune에 필요
 
       - uses: pnpm/action-setup@v4
         with:
@@ -790,7 +787,7 @@ permissions:
   contents: read
   pull-requests: write
   packages: write
-  id-token: write # OIDC 토큰 (AWS, GCP 인증 등)
+  id-token: write   # OIDC 토큰 (AWS, GCP 인증 등)
 ```
 
 - 워크플로우 또는 잡 레벨에서 설정 가능

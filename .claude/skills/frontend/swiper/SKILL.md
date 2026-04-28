@@ -23,13 +23,13 @@ npm install swiper@11
 
 ## 방식 선택 기준: React 컴포넌트 vs Swiper Element
 
-| 기준          | `swiper/react`               | Swiper Element (Web Component)          |
-| ------------- | ---------------------------- | --------------------------------------- |
-| React 친화성  | 높음 — JSX props로 바로 설정 | 낮음 — `Object.assign` + `initialize()` |
-| TypeScript    | 자연스러운 타입 추론         | 별도 JSX 타입 선언 필요                 |
-| 공식 권장     | React 프로젝트에 적합        | 프레임워크 독립 프로젝트에 적합         |
-| SSR           | `'use client'` 추가로 해결   | 동일                                    |
-| React 19 지원 | 지원                         | 지원                                    |
+| 기준 | `swiper/react` | Swiper Element (Web Component) |
+|------|---------------|-------------------------------|
+| React 친화성 | 높음 — JSX props로 바로 설정 | 낮음 — `Object.assign` + `initialize()` |
+| TypeScript | 자연스러운 타입 추론 | 별도 JSX 타입 선언 필요 |
+| 공식 권장 | React 프로젝트에 적합 | 프레임워크 독립 프로젝트에 적합 |
+| SSR | `'use client'` 추가로 해결 | 동일 |
+| React 19 지원 | 지원 | 지원 |
 
 > 주의: Swiper Element가 "미래 권장 방식"으로 소개되었으나, Swiper 12.x 기준 `swiper/react`는 계속 유지·제공됩니다. React 프로젝트에서는 `swiper/react` 사용을 권장합니다.
 
@@ -76,17 +76,17 @@ function HeroSlider() {
 
 ```tsx
 import {
-  Navigation, // 좌우 화살표
-  Pagination, // 페이지 도트
-  Autoplay, // 자동 재생
-  EffectFade, // 페이드 효과
-  EffectCoverflow, // 커버플로우 효과
-  Thumbs, // 썸네일 연동
-  FreeMode, // 자유 스크롤
-  Virtual, // 가상 슬라이드 (대량 슬라이드)
-  Keyboard, // 키보드 제어
-  Mousewheel, // 마우스휠 제어
-  A11y, // 접근성
+  Navigation,       // 좌우 화살표
+  Pagination,       // 페이지 도트
+  Autoplay,         // 자동 재생
+  EffectFade,       // 페이드 효과
+  EffectCoverflow,  // 커버플로우 효과
+  Thumbs,           // 썸네일 연동
+  FreeMode,         // 자유 스크롤
+  Virtual,          // 가상 슬라이드 (대량 슬라이드)
+  Keyboard,         // 키보드 제어
+  Mousewheel,       // 마우스휠 제어
+  A11y,             // 접근성
 } from 'swiper/modules';
 
 // 사용하는 모듈의 CSS만 import (bundle 대신 개별 import로 번들 최적화)
@@ -117,9 +117,12 @@ const swiperRef = useRef<SwiperRef>(null);
 // 패턴 2: onSwiper 콜백으로 인스턴스 직접 보관 (권장)
 const [swiperInstance, setSwiperInstance] = useState<SwiperClass | null>(null);
 
-<Swiper ref={swiperRef} onSwiper={setSwiperInstance}>
+<Swiper
+  ref={swiperRef}
+  onSwiper={setSwiperInstance}
+>
   {/* ... */}
-</Swiper>;
+</Swiper>
 
 // 외부에서 메서드 호출
 swiperInstance?.slideNext();
@@ -288,15 +291,9 @@ function GallerySlider() {
         thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
         spaceBetween={10}
       >
-        <SwiperSlide>
-          <img src="/img1.jpg" alt="" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/img2.jpg" alt="" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/img3.jpg" alt="" />
-        </SwiperSlide>
+        <SwiperSlide><img src="/img1.jpg" alt="" /></SwiperSlide>
+        <SwiperSlide><img src="/img2.jpg" alt="" /></SwiperSlide>
+        <SwiperSlide><img src="/img3.jpg" alt="" /></SwiperSlide>
       </Swiper>
 
       {/* 썸네일 슬라이더 */}
@@ -308,15 +305,9 @@ function GallerySlider() {
         freeMode
         watchSlidesProgress
       >
-        <SwiperSlide>
-          <img src="/img1-thumb.jpg" alt="" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/img2-thumb.jpg" alt="" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="/img3-thumb.jpg" alt="" />
-        </SwiperSlide>
+        <SwiperSlide><img src="/img1-thumb.jpg" alt="" /></SwiperSlide>
+        <SwiperSlide><img src="/img2-thumb.jpg" alt="" /></SwiperSlide>
+        <SwiperSlide><img src="/img3-thumb.jpg" alt="" /></SwiperSlide>
       </Swiper>
     </>
   );
@@ -415,7 +406,10 @@ declare namespace JSX {
       },
       HTMLElement
     >;
-    'swiper-slide': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    'swiper-slide': React.DetailedHTMLProps<
+      React.HTMLAttributes<HTMLElement>,
+      HTMLElement
+    >;
   }
 }
 ```
@@ -451,7 +445,12 @@ import { Virtual } from 'swiper/modules';
 
 function VirtualSlider({ items }: { items: string[] }) {
   return (
-    <Swiper modules={[Virtual]} virtual slidesPerView={3} spaceBetween={10}>
+    <Swiper
+      modules={[Virtual]}
+      virtual
+      slidesPerView={3}
+      spaceBetween={10}
+    >
       {items.map((item, index) => (
         // virtualIndex prop 필수 — 누락 시 슬라이드 순서 꼬임
         <SwiperSlide key={item} virtualIndex={index}>

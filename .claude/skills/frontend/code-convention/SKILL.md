@@ -21,11 +21,11 @@ description: ESLint 9+ flat config, Biome, Prettier, Husky, lint-staged, commitl
    └─ ESLint 9+ flat config + Prettier
 ```
 
-| 도구      | 역할             | 속도               | 플러그인 생태계 |
-| --------- | ---------------- | ------------------ | --------------- |
-| Biome     | 린트 + 포맷 통합 | ⭐⭐⭐⭐ 매우 빠름 | 제한적          |
-| ESLint 9+ | 린트 전용        | ⭐⭐               | 풍부함          |
-| Prettier  | 포맷 전용        | ⭐⭐⭐             | -               |
+| 도구 | 역할 | 속도 | 플러그인 생태계 |
+|------|------|------|--------------|
+| Biome | 린트 + 포맷 통합 | ⭐⭐⭐⭐ 매우 빠름 | 제한적 |
+| ESLint 9+ | 린트 전용 | ⭐⭐ | 풍부함 |
+| Prettier | 포맷 전용 | ⭐⭐⭐ | - |
 
 **모노레포 권장:** ESLint + Prettier (Next.js, eslint-config-next 호환성 때문)
 
@@ -37,11 +37,11 @@ description: ESLint 9+ flat config, Biome, Prettier, Husky, lint-staged, commitl
 
 ```javascript
 // eslint.config.js (ESLint 9 기본 포맷)
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import reactPlugin from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import nextPlugin from '@next/eslint-plugin-next';
+import js from '@eslint/js'
+import tseslint from 'typescript-eslint'
+import reactPlugin from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
+import nextPlugin from '@next/eslint-plugin-next'
 
 export default tseslint.config(
   // 전역 무시 패턴
@@ -60,7 +60,7 @@ export default tseslint.config(
       ...reactPlugin.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off', // React 17+ JSX Transform
-      'react/prop-types': 'off', // TypeScript가 커버
+      'react/prop-types': 'off',          // TypeScript가 커버
     },
     settings: { react: { version: 'detect' } },
   },
@@ -79,8 +79,8 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/consistent-type-imports': 'error', // import type 강제
     },
-  },
-);
+  }
+)
 ```
 
 ### 모노레포 설정 패턴
@@ -94,8 +94,8 @@ monorepo/
 
 ```javascript
 // apps/web/eslint.config.js
-import rootConfig from '../../eslint.config.js';
-import nextPlugin from '@next/eslint-plugin-next';
+import rootConfig from '../../eslint.config.js'
+import nextPlugin from '@next/eslint-plugin-next'
 
 export default [
   ...rootConfig,
@@ -103,29 +103,31 @@ export default [
     plugins: { '@next/next': nextPlugin },
     rules: { ...nextPlugin.configs['core-web-vitals'].rules },
   },
-];
+]
 ```
 
 ### 공유 패키지 설정 (packages/eslint-config)
 
 ```javascript
 // packages/eslint-config/index.js
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import js from '@eslint/js'
+import tseslint from 'typescript-eslint'
 
-export const base = tseslint.config(js.configs.recommended, ...tseslint.configs.recommended, {
-  ignores: ['dist/**'],
-});
+export const base = tseslint.config(
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  { ignores: ['dist/**'] }
+)
 
 export const react = tseslint.config(
   ...base,
   // React 규칙 추가
-);
+)
 
 export const nextjs = tseslint.config(
   ...react,
   // Next.js 규칙 추가
-);
+)
 ```
 
 ---
@@ -173,13 +175,13 @@ export const nextjs = tseslint.config(
 
 ### Biome vs ESLint+Prettier 비교
 
-| 항목             | Biome            | ESLint + Prettier |
-| ---------------- | ---------------- | ----------------- |
-| 설정 파일 수     | 1개 (biome.json) | 2개 이상          |
-| 실행 속도        | 10-20x 빠름      | 기준              |
-| next-eslint 지원 | ❌ (직접 없음)   | ✅                |
-| import 정렬      | ✅ 내장          | 플러그인 필요     |
-| 성숙도           | 비교적 신생      | 검증됨            |
+| 항목 | Biome | ESLint + Prettier |
+|------|-------|-----------------|
+| 설정 파일 수 | 1개 (biome.json) | 2개 이상 |
+| 실행 속도 | 10-20x 빠름 | 기준 |
+| next-eslint 지원 | ❌ (직접 없음) | ✅ |
+| import 정렬 | ✅ 내장 | 플러그인 필요 |
+| 성숙도 | 비교적 신생 | 검증됨 |
 
 ---
 
@@ -193,7 +195,7 @@ export const nextjs = tseslint.config(
   "trailingComma": "es5",
   "tabWidth": 2,
   "printWidth": 100,
-  "plugins": ["prettier-plugin-tailwindcss"] // Tailwind 사용 시
+  "plugins": ["prettier-plugin-tailwindcss"]  // Tailwind 사용 시
 }
 ```
 
@@ -213,8 +215,8 @@ pnpm add -D eslint-config-prettier  # ESLint의 포맷 규칙 비활성화
 
 ```javascript
 // eslint.config.js
-import prettierConfig from 'eslint-config-prettier/flat'; // flat config용 서브패스
-export default [...기존설정, prettierConfig]; // 항상 마지막에
+import prettierConfig from 'eslint-config-prettier/flat'  // flat config용 서브패스
+export default [...기존설정, prettierConfig]  // 항상 마지막에
 ```
 
 ---
@@ -237,8 +239,13 @@ npx lint-staged
 // package.json (루트)
 {
   "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix", "prettier --write"],
-    "*.{json,md,yaml}": ["prettier --write"]
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yaml}": [
+      "prettier --write"
+    ]
   }
 }
 ```
@@ -255,14 +262,13 @@ npx --no -- commitlint --edit $1
 export default {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    'type-enum': [
-      2,
-      'always',
-      ['feat', 'fix', 'docs', 'style', 'refactor', 'test', 'chore', 'ci', 'perf', 'revert'],
-    ],
+    'type-enum': [2, 'always', [
+      'feat', 'fix', 'docs', 'style', 'refactor',
+      'test', 'chore', 'ci', 'perf', 'revert'
+    ]],
     'subject-max-length': [2, 'always', 72],
-  },
-};
+  }
+}
 ```
 
 ---
@@ -307,7 +313,7 @@ tsc --noEmit --watch
 {
   "tasks": {
     "typecheck": {
-      "dependsOn": ["^typecheck"], // 의존 패키지 타입 체크 먼저
+      "dependsOn": ["^typecheck"],  // 의존 패키지 타입 체크 먼저
       "cache": true
     },
     "lint": {
@@ -353,15 +359,15 @@ pnpm typecheck
 ```typescript
 // ❌ ts-ignore: 다음 줄 에러를 무조건 무시 (에러 없어도 경고 없음)
 // @ts-ignore
-const value = badFunction();
+const value = badFunction()
 
 // ✅ ts-expect-error: 에러가 있을 것을 명시적으로 표현
 // → 에러가 사라지면 TypeScript가 오히려 경고를 줌
 // @ts-expect-error: TODO 서드파티 타입 수정 전 임시 처리
-const value = badFunction();
+const value = badFunction()
 
 // ✅ 더 좋은 방법: 타입 단언으로 범위 제한
-const value = badFunction() as unknown as ExpectedType;
+const value = (badFunction() as unknown) as ExpectedType
 ```
 
 ### strict 옵션별 의미
@@ -370,7 +376,7 @@ const value = badFunction() as unknown as ExpectedType;
 // tsconfig.json
 {
   "compilerOptions": {
-    "strict": true, // 아래 옵션 모두 활성화
+    "strict": true,                    // 아래 옵션 모두 활성화
     // strict: true가 포함하는 것들:
     // "strictNullChecks": true,       // null/undefined 엄격 처리
     // "strictFunctionTypes": true,    // 함수 타입 반공변성 체크
@@ -379,8 +385,8 @@ const value = badFunction() as unknown as ExpectedType;
     // "noImplicitThis": true,         // this 타입 명시 요구
 
     // strict에 포함 안 되지만 권장:
-    "noUncheckedIndexedAccess": true, // arr[0]에 undefined 포함
-    "noImplicitReturns": true, // 모든 코드 경로에 return 필요
+    "noUncheckedIndexedAccess": true,  // arr[0]에 undefined 포함
+    "noImplicitReturns": true,         // 모든 코드 경로에 return 필요
     "noFallthroughCasesInSwitch": true // switch case fallthrough 금지
   }
 }

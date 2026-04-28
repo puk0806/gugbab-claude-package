@@ -18,10 +18,10 @@ description: Vite 환경에서 PWA/Service Worker 설정 — vite-plugin-pwa, ge
                                NO ──→ generateSW 전략 (자동 생성)
 ```
 
-| 전략             | 설명                             | 적합한 경우            |
-| ---------------- | -------------------------------- | ---------------------- |
-| `generateSW`     | Workbox가 SW 자동 생성           | SW 커스터마이징 불필요 |
-| `injectManifest` | 기존 SW에 precache manifest 주입 | 커스텀 SW 로직 유지    |
+| 전략 | 설명 | 적합한 경우 |
+|------|------|------------|
+| `generateSW` | Workbox가 SW 자동 생성 | SW 커스터마이징 불필요 |
+| `injectManifest` | 기존 SW에 precache manifest 주입 | 커스텀 SW 로직 유지 |
 
 ---
 
@@ -37,16 +37,16 @@ npm install -D vite-plugin-pwa workbox-precaching workbox-routing workbox-strate
 
 ```typescript
 // vite.config.ts
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
-import { VitePWA } from 'vite-plugin-pwa';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate', // SW 업데이트 자동 적용
-      strategies: 'generateSW', // 기본값, 생략 가능
+      registerType: 'autoUpdate',  // SW 업데이트 자동 적용
+      strategies: 'generateSW',   // 기본값, 생략 가능
       workbox: {
         // 사전 캐시 파일 패턴
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
@@ -84,7 +84,7 @@ export default defineConfig({
       },
     }),
   ],
-});
+})
 ```
 
 ---
@@ -101,43 +101,43 @@ export default defineConfig({
     react(),
     VitePWA({
       strategies: 'injectManifest',
-      srcDir: 'src', // 커스텀 SW 소스 위치
-      filename: 'sw.ts', // 커스텀 SW 파일명
-      injectRegister: 'auto', // SW 등록 자동화
+      srcDir: 'src',           // 커스텀 SW 소스 위치
+      filename: 'sw.ts',       // 커스텀 SW 파일명
+      injectRegister: 'auto',  // SW 등록 자동화
     }),
   ],
-});
+})
 ```
 
 ### 커스텀 서비스 워커 (src/sw.ts)
 
 ```typescript
 // src/sw.ts — Workbox + 기존 커스텀 로직 통합
-import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
-import { registerRoute } from 'workbox-routing';
-import { NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
+import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching'
+import { registerRoute } from 'workbox-routing'
+import { NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 
-declare const self: ServiceWorkerGlobalScope;
+declare const self: ServiceWorkerGlobalScope
 
 // Workbox가 self.__WB_MANIFEST에 precache 목록 자동 주입
-precacheAndRoute(self.__WB_MANIFEST);
-cleanupOutdatedCaches();
+precacheAndRoute(self.__WB_MANIFEST)
+cleanupOutdatedCaches()
 
 // 기존 커스텀 SW 로직 유지 가능
 registerRoute(
   ({ request }) => request.destination === 'image',
-  new CacheFirst({ cacheName: 'images' }),
-);
+  new CacheFirst({ cacheName: 'images' })
+)
 
 registerRoute(
   ({ url }) => url.pathname.startsWith('/api/'),
-  new NetworkFirst({ cacheName: 'api-responses' }),
-);
+  new NetworkFirst({ cacheName: 'api-responses' })
+)
 
 // 기존 push 알림, background sync 등 커스텀 로직
 self.addEventListener('push', (event) => {
   // 기존 push 핸들러 그대로 유지
-});
+})
 ```
 
 > **주의:** `self.__WB_MANIFEST`를 사용하지 않으면 빌드 에러 발생. precaching이 필요 없으면 `injectManifest: { injectionPoint: undefined }` 설정.
@@ -149,9 +149,9 @@ self.addEventListener('push', (event) => {
 VitePWA({
   strategies: 'injectManifest',
   injectManifest: {
-    injectionPoint: undefined, // precache manifest 주입 비활성화
+    injectionPoint: undefined,  // precache manifest 주입 비활성화
   },
-});
+})
 ```
 
 ---
@@ -171,7 +171,6 @@ public/
 ```
 
 **마이그레이션 체크리스트:**
-
 1. `public/service-worker.js` 내용을 `src/sw.ts`로 이전
 2. Workbox import 추가 (`precacheAndRoute`, `registerRoute` 등)
 3. `self.__WB_MANIFEST` 추가
@@ -184,19 +183,19 @@ public/
 
 ```typescript
 // src/main.tsx — SW 업데이트 알림 UI
-import { registerSW } from 'virtual:pwa-register';
+import { registerSW } from 'virtual:pwa-register'
 
 const updateSW = registerSW({
   onNeedRefresh() {
     // 새 버전 배포 시 사용자에게 업데이트 알림
     if (confirm('새 버전이 있습니다. 업데이트할까요?')) {
-      updateSW(true); // true: 즉시 업데이트 적용
+      updateSW(true)  // true: 즉시 업데이트 적용
     }
   },
   onOfflineReady() {
-    console.log('오프라인 사용 준비 완료');
+    console.log('오프라인 사용 준비 완료')
   },
-});
+})
 ```
 
 ```typescript
@@ -216,10 +215,10 @@ const updateSW = registerSW({
 // vite.config.ts
 VitePWA({
   devOptions: {
-    enabled: true, // 개발 서버에서 SW 활성화 (기본 false)
-    type: 'module', // ES 모듈 SW
+    enabled: true,         // 개발 서버에서 SW 활성화 (기본 false)
+    type: 'module',        // ES 모듈 SW
   },
-});
+})
 ```
 
 > **주의:** 개발 환경 SW 활성화는 캐시 문제로 디버깅이 어려울 수 있음. 프로덕션 빌드(`vite preview`)에서 테스트 권장.
@@ -228,27 +227,27 @@ VitePWA({
 
 ## 6. Workbox 캐싱 전략 선택 기준
 
-| 전략                   | 동작                        | 적합한 리소스                  |
-| ---------------------- | --------------------------- | ------------------------------ |
-| `CacheFirst`           | 캐시 → 네트워크             | 이미지, 폰트, 정적 자산        |
-| `NetworkFirst`         | 네트워크 → 캐시(실패 시)    | API 응답, 자주 변경되는 데이터 |
-| `StaleWhileRevalidate` | 캐시 즉시 + 백그라운드 갱신 | JS/CSS 번들, 세미 동적 데이터  |
-| `NetworkOnly`          | 네트워크만                  | POST 요청, 결제 API            |
-| `CacheOnly`            | 캐시만                      | 완전 오프라인 전용             |
+| 전략 | 동작 | 적합한 리소스 |
+|------|------|--------------|
+| `CacheFirst` | 캐시 → 네트워크 | 이미지, 폰트, 정적 자산 |
+| `NetworkFirst` | 네트워크 → 캐시(실패 시) | API 응답, 자주 변경되는 데이터 |
+| `StaleWhileRevalidate` | 캐시 즉시 + 백그라운드 갱신 | JS/CSS 번들, 세미 동적 데이터 |
+| `NetworkOnly` | 네트워크만 | POST 요청, 결제 API |
+| `CacheOnly` | 캐시만 | 완전 오프라인 전용 |
 
 ---
 
 ## 흔한 실수 패턴
 
-### 1. self.\_\_WB_MANIFEST 누락
+### 1. self.__WB_MANIFEST 누락
 
 ```typescript
 // ❌ injectManifest에서 self.__WB_MANIFEST 없으면 빌드 에러
 // "Unable to find a place to inject the manifest"
-export default {};
+export default {}
 
 // ✅
-precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST)
 ```
 
 ### 2. public/에 SW 파일 남겨두기
@@ -267,12 +266,12 @@ src/
 
 ```typescript
 // ❌ 기본값은 prompt — 사용자 확인 없이 자동 업데이트 안 됨
-VitePWA({});
+VitePWA({})
 
 // ✅ 자동 업데이트
-VitePWA({ registerType: 'autoUpdate' });
+VitePWA({ registerType: 'autoUpdate' })
 // 또는 명시적 업데이트 UI
-VitePWA({ registerType: 'prompt' });
+VitePWA({ registerType: 'prompt' })
 // → onNeedRefresh 콜백에서 확인 후 updateSW(true) 호출
 ```
 
@@ -281,8 +280,8 @@ VitePWA({ registerType: 'prompt' });
 ```typescript
 // ❌ public/manifest.json과 plugin manifest 옵션 동시 사용 시 충돌
 VitePWA({
-  manifest: { name: '...' }, // plugin이 manifest 생성
-});
+  manifest: { name: '...' }  // plugin이 manifest 생성
+})
 // + public/manifest.json 도 존재 → 중복
 
 // ✅ 하나만 사용

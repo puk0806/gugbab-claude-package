@@ -22,11 +22,11 @@ description: tsup/Vite/Turbopack 번들러 선택 기준, React Compiler, Tree S
    └─ SPA/기타 → Vite
 ```
 
-| 도구      | 용도            | Dev 속도           | 설정 복잡도  |
-| --------- | --------------- | ------------------ | ------------ |
-| tsup      | 라이브러리 빌드 | -                  | ⭐ 매우 간단 |
-| Vite      | SPA 앱          | ⭐⭐⭐ 빠름        | ⭐⭐         |
-| Turbopack | Next.js 앱      | ⭐⭐⭐⭐ 매우 빠름 | ⭐⭐ (내장)  |
+| 도구 | 용도 | Dev 속도 | 설정 복잡도 |
+|------|------|---------|------------|
+| tsup | 라이브러리 빌드 | - | ⭐ 매우 간단 |
+| Vite | SPA 앱 | ⭐⭐⭐ 빠름 | ⭐⭐ |
+| Turbopack | Next.js 앱 | ⭐⭐⭐⭐ 매우 빠름 | ⭐⭐ (내장) |
 
 ---
 
@@ -36,17 +36,17 @@ description: tsup/Vite/Turbopack 번들러 선택 기준, React Compiler, Tree S
 
 ```typescript
 // tsup.config.ts
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsup'
 
 export default defineConfig({
   entry: ['src/index.ts'],
-  format: ['esm', 'cjs'], // ESM + CommonJS 동시 빌드
-  dts: true, // TypeScript 선언 파일 생성
-  clean: true, // 빌드 전 dist/ 정리
+  format: ['esm', 'cjs'],    // ESM + CommonJS 동시 빌드
+  dts: true,                  // TypeScript 선언 파일 생성
+  clean: true,                // 빌드 전 dist/ 정리
   sourcemap: true,
-  splitting: false, // 라이브러리는 대개 false
+  splitting: false,           // 라이브러리는 대개 false
   treeshake: true,
-});
+})
 ```
 
 ### 다중 Entry 패턴
@@ -61,9 +61,9 @@ export default defineConfig({
   format: ['esm', 'cjs'],
   dts: true,
   outExtension({ format }) {
-    return { js: format === 'esm' ? '.mjs' : '.cjs' };
+    return { js: format === 'esm' ? '.mjs' : '.cjs' }
   },
-});
+})
 ```
 
 ### package.json exports 설정
@@ -97,14 +97,14 @@ export default defineConfig({
 
 ```typescript
 // vite.config.ts
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
-import path from 'path';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
+import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: { '@': path.resolve(__dirname, './src') },
+    alias: { '@': path.resolve(__dirname, './src') }
   },
   build: {
     outDir: 'dist',
@@ -112,8 +112,8 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-  },
-});
+  }
+})
 ```
 
 ### 라이브러리 모드
@@ -125,16 +125,16 @@ export default defineConfig({
       entry: 'src/index.ts',
       name: 'MyLibrary',
       formats: ['es', 'cjs'],
-      fileName: (format) => `my-library.${format}.js`,
+      fileName: (format) => `my-library.${format}.js`
     },
     rollupOptions: {
-      external: ['react', 'react-dom'], // peer deps 제외
+      external: ['react', 'react-dom'],  // peer deps 제외
       output: {
-        globals: { react: 'React', 'react-dom': 'ReactDOM' },
-      },
-    },
-  },
-});
+        globals: { react: 'React', 'react-dom': 'ReactDOM' }
+      }
+    }
+  }
+})
 ```
 
 ---
@@ -146,9 +146,9 @@ export default defineConfig({
 ```javascript
 // next.config.js - Next.js 16+에서는 기본값
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {}
 
-export default nextConfig;
+export default nextConfig
 
 // Next.js 15: CLI 플래그로 활성화 (next dev --turbopack)
 // Next.js 16+: 기본값. 커스터마이징만 turbopack 키 사용
@@ -156,18 +156,18 @@ const nextConfig = {
   turbopack: {
     // resolveAlias, rules 등 커스터마이징 시에만 설정
   },
-};
+}
 ```
 
 ### Webpack vs Turbopack
 
-| 항목          | Webpack    | Turbopack                          |
-| ------------- | ---------- | ---------------------------------- |
-| 언어          | JavaScript | Rust                               |
-| Dev 시작      | 느림       | 매우 빠름                          |
-| HMR           | 느림       | 거의 즉각                          |
-| 플러그인 호환 | 전체       | 제한적 (재구현 필요)               |
-| 프로덕션 빌드 | 안정       | 15.3에서 alpha, 안정화 시점 미확정 |
+| 항목 | Webpack | Turbopack |
+|------|---------|-----------|
+| 언어 | JavaScript | Rust |
+| Dev 시작 | 느림 | 매우 빠름 |
+| HMR | 느림 | 거의 즉각 |
+| 플러그인 호환 | 전체 | 제한적 (재구현 필요) |
+| 프로덕션 빌드 | 안정 | 15.3에서 alpha, 안정화 시점 미확정 |
 
 **Turbopack 제약:** 일부 Webpack 플러그인 미지원 → 대안 확인 필요
 
@@ -209,13 +209,16 @@ export default defineConfig({
 
 ```tsx
 // ❌ React Compiler 없이: 수동 최적화 필요
-const sortedItems = useMemo(() => items.sort((a, b) => a.name.localeCompare(b.name)), [items]);
-const handleClick = useCallback(() => onSelect(id), [onSelect, id]);
-const MemoizedComponent = memo(MyComponent);
+const sortedItems = useMemo(
+  () => items.sort((a, b) => a.name.localeCompare(b.name)),
+  [items]
+)
+const handleClick = useCallback(() => onSelect(id), [onSelect, id])
+const MemoizedComponent = memo(MyComponent)
 
 // ✅ React Compiler 활성화 시: 자동 처리됨 (수동 최적화 제거 가능)
-const sortedItems = items.sort((a, b) => a.name.localeCompare(b.name));
-const handleClick = () => onSelect(id);
+const sortedItems = items.sort((a, b) => a.name.localeCompare(b.name))
+const handleClick = () => onSelect(id)
 // memo 제거 가능
 ```
 
@@ -226,14 +229,14 @@ const handleClick = () => onSelect(id);
 function BadComponent() {
   // 조건부 Hook 호출 (규칙 위반)
   if (someCondition) {
-    const [state, setState] = useState(0); // ❌
+    const [state, setState] = useState(0)  // ❌
   }
 }
 
 // ✅ 올바른 패턴 (컴파일러가 최적화 가능)
 function GoodComponent({ condition }: { condition: boolean }) {
-  const [state, setState] = useState(0);
-  return condition ? <div>{state}</div> : null;
+  const [state, setState] = useState(0)
+  return condition ? <div>{state}</div> : null
 }
 ```
 
@@ -245,38 +248,38 @@ function GoodComponent({ condition }: { condition: boolean }) {
 
 ```javascript
 // next.config.js
-import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin';
+import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin'
 
-const withVanillaExtract = createVanillaExtractPlugin();
+const withVanillaExtract = createVanillaExtractPlugin()
 
 export default withVanillaExtract({
   // 다른 Next.js 설정
-});
+})
 ```
 
 ### 사용 패턴
 
 ```typescript
 // styles.css.ts
-import { style, styleVariants } from '@vanilla-extract/css';
+import { style, styleVariants } from '@vanilla-extract/css'
 
 export const base = style({
   display: 'flex',
   padding: '12px',
-});
+})
 
 export const variants = styleVariants({
   primary: { backgroundColor: 'blue', color: 'white' },
   secondary: { backgroundColor: 'gray', color: 'black' },
-});
+})
 ```
 
 ```tsx
 // 컴포넌트에서 사용
-import { base, variants } from './styles.css';
+import { base, variants } from './styles.css'
 
 function Button({ variant = 'primary' }: { variant: keyof typeof variants }) {
-  return <button className={`${base} ${variants[variant]}`}>Click</button>;
+  return <button className={`${base} ${variants[variant]}`}>Click</button>
 }
 ```
 
@@ -306,18 +309,14 @@ function Button({ variant = 'primary' }: { variant: keyof typeof variants }) {
 
 ```typescript
 // ✅ ESM: Tree Shaking 가능
-export function add(a: number, b: number) {
-  return a + b;
-}
-export function subtract(a: number, b: number) {
-  return a - b;
-}
+export function add(a: number, b: number) { return a + b }
+export function subtract(a: number, b: number) { return a - b }
 
 // 사용 측에서 add만 import → subtract는 번들에서 제거됨
-import { add } from '@myorg/utils';
+import { add } from '@myorg/utils'
 
 // ❌ CJS: Tree Shaking 불가
-module.exports = { add, subtract };
+module.exports = { add, subtract }
 // → 전체가 번들에 포함됨
 ```
 
@@ -326,12 +325,12 @@ module.exports = { add, subtract };
 ```typescript
 // ❌ 배럴 파일이 tree shaking을 방해하는 경우
 // index.ts
-export * from './heavy-module'; // side effect가 있으면 전체 포함
+export * from './heavy-module'  // side effect가 있으면 전체 포함
 
 // ✅ named export 명시
-export { HeavyComponent } from './heavy-module';
+export { HeavyComponent } from './heavy-module'
 // 또는 직접 경로로 import
-import { HeavyComponent } from '@myorg/ui/heavy-module';
+import { HeavyComponent } from '@myorg/ui/heavy-module'
 ```
 
 ---
@@ -341,11 +340,11 @@ import { HeavyComponent } from '@myorg/ui/heavy-module';
 ### React lazy + Suspense
 
 ```tsx
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react'
 
 // 라우트 기반 스플리팅
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Settings = lazy(() => import('./pages/Settings'));
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const Settings = lazy(() => import('./pages/Settings'))
 
 function App() {
   return (
@@ -355,23 +354,23 @@ function App() {
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </Suspense>
-  );
+  )
 }
 ```
 
 ### Next.js dynamic
 
 ```tsx
-import dynamic from 'next/dynamic';
+import dynamic from 'next/dynamic'
 
 // SSR 비활성화 (브라우저 전용 컴포넌트)
 const Chart = dynamic(() => import('../components/Chart'), {
   ssr: false,
   loading: () => <ChartSkeleton />,
-});
+})
 
 // 조건부 로드
-const PDFViewer = dynamic(() => import('../components/PDFViewer'));
+const PDFViewer = dynamic(() => import('../components/PDFViewer'))
 ```
 
 ### 스플리팅 전략

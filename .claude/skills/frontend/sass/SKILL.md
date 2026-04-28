@@ -38,7 +38,7 @@ description: SCSS 핵심 패턴, CSS Modules + SCSS, 캡슐화 중심 스타일 
 
 ```tsx
 // Button.tsx — 클래스명이 컴포넌트 밖으로 누출되지 않음
-import styles from './Button.module.scss';
+import styles from './Button.module.scss'
 
 function Button({ variant, disabled, icon, children }) {
   return (
@@ -47,15 +47,13 @@ function Button({ variant, disabled, icon, children }) {
         styles.button,
         styles[`button--${variant}`],
         disabled && styles['button--disabled'],
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      ].filter(Boolean).join(' ')}
       disabled={disabled}
     >
       {icon && <span className={styles.button__icon}>{icon}</span>}
       {children}
     </button>
-  );
+  )
 }
 ```
 
@@ -158,7 +156,7 @@ $breakpoints: (
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip-path: inset(50%); // clip: rect() deprecated
+  clip-path: inset(50%);  // clip: rect() deprecated
   white-space: nowrap;
   border: 0;
 }
@@ -245,11 +243,11 @@ styles/
   inset: 0;
 
   // Radix가 노출하는 data-state 활용
-  &[data-state='open'] {
+  &[data-state="open"] {
     animation: fadeIn 150ms ease;
   }
 
-  &[data-state='closed'] {
+  &[data-state="closed"] {
     animation: fadeOut 150ms ease;
   }
 }
@@ -259,15 +257,15 @@ styles/
   border-radius: 8px;
   padding: 24px;
 
-  &[data-state='open'] {
+  &[data-state="open"] {
     animation: slideIn 150ms ease;
   }
 }
 
 // Tooltip, Popover 공통 패턴
 .trigger {
-  &[data-state='delayed-open'],
-  &[data-state='instant-open'] {
+  &[data-state="delayed-open"],
+  &[data-state="instant-open"] {
     color: var(--color-primary);
   }
 }
@@ -275,16 +273,16 @@ styles/
 
 ### 주요 data-attribute 목록
 
-| 컴포넌트          | attribute          | 값                                           |
-| ----------------- | ------------------ | -------------------------------------------- |
-| Dialog / Sheet    | `data-state`       | `open` \| `closed`                           |
-| Tooltip / Popover | `data-state`       | `delayed-open` \| `instant-open` \| `closed` |
-| Select / Combobox | `data-state`       | `open` \| `closed`                           |
-| Checkbox          | `data-state`       | `checked` \| `unchecked` \| `indeterminate`  |
-| Accordion Item    | `data-state`       | `open` \| `closed`                           |
-| Tab               | `data-state`       | `active` \| `inactive`                       |
-| Disabled 공통     | `data-disabled`    | 빈 문자열 (속성 존재 여부로 판별)            |
-| Orientation       | `data-orientation` | `horizontal` \| `vertical`                   |
+| 컴포넌트 | attribute | 값 |
+|---------|-----------|-----|
+| Dialog / Sheet | `data-state` | `open` \| `closed` |
+| Tooltip / Popover | `data-state` | `delayed-open` \| `instant-open` \| `closed` |
+| Select / Combobox | `data-state` | `open` \| `closed` |
+| Checkbox | `data-state` | `checked` \| `unchecked` \| `indeterminate` |
+| Accordion Item | `data-state` | `open` \| `closed` |
+| Tab | `data-state` | `active` \| `inactive` |
+| Disabled 공통 | `data-disabled` | 빈 문자열 (속성 존재 여부로 판별) |
+| Orientation | `data-orientation` | `horizontal` \| `vertical` |
 
 ### 컴포넌트 라이브러리 SCSS 폴더 구조
 
@@ -318,8 +316,8 @@ packages/ui/
 헤드리스 컴포넌트에 여러 CSS Modules 클래스를 조건부로 적용할 때 `clsx`를 활용한다.
 
 ```tsx
-import clsx from 'clsx';
-import styles from './Button.module.scss';
+import clsx from 'clsx'
+import styles from './Button.module.scss'
 
 function Button({ variant = 'primary', size = 'md', disabled, className }) {
   return (
@@ -329,13 +327,13 @@ function Button({ variant = 'primary', size = 'md', disabled, className }) {
         styles[`button--${variant}`],
         styles[`button--${size}`],
         disabled && styles['button--disabled'],
-        className, // 외부 클래스 병합 (오버라이드 허용 시)
+        className  // 외부 클래스 병합 (오버라이드 허용 시)
       )}
       disabled={disabled}
     >
       {children}
     </button>
-  );
+  )
 }
 ```
 

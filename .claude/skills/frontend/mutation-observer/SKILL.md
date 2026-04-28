@@ -18,7 +18,7 @@ description: MutationObserver API 핵심 패턴 2가지 (DOM 변경 감지)
 ```typescript
 const observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
-    if (mutation.type === 'childList') {
+    if (mutation.type === "childList") {
       mutation.addedNodes.forEach((node) => {
         if (node instanceof HTMLElement) {
           // 추가된 요소 처리
@@ -34,8 +34,8 @@ const observer = new MutationObserver((mutations) => {
 });
 
 observer.observe(targetElement, {
-  childList: true, // 자식 노드 추가/제거 감지
-  subtree: true, // 하위 트리 전체 감지
+  childList: true,   // 자식 노드 추가/제거 감지
+  subtree: true,     // 하위 트리 전체 감지
 });
 
 // 정리: 더 이상 필요 없을 때 반드시 호출
@@ -43,7 +43,6 @@ observer.disconnect();
 ```
 
 **주요 옵션:**
-
 - `childList: true` -- 직접 자식의 추가/제거 감지 (필수 옵션 중 하나)
 - `subtree: true` -- 대상 노드의 모든 하위 노드까지 범위 확장
 
@@ -56,7 +55,7 @@ observer.disconnect();
 ```typescript
 const observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
-    if (mutation.type === 'attributes') {
+    if (mutation.type === "attributes") {
       const target = mutation.target as HTMLElement;
       const name = mutation.attributeName!;
       const oldValue = mutation.oldValue;
@@ -67,14 +66,13 @@ const observer = new MutationObserver((mutations) => {
 });
 
 observer.observe(targetElement, {
-  attributes: true, // 속성 변경 감지
-  attributeOldValue: true, // 변경 전 값 기록
-  attributeFilter: ['class', 'data-state'], // 특정 속성만 필터링
+  attributes: true,              // 속성 변경 감지
+  attributeOldValue: true,       // 변경 전 값 기록
+  attributeFilter: ["class", "data-state"],  // 특정 속성만 필터링
 });
 ```
 
 **주요 옵션:**
-
 - `attributes: true` -- 속성 변경 감지 (필수 옵션 중 하나)
 - `attributeOldValue: true` -- `mutation.oldValue`로 이전 값 접근 가능
 - `attributeFilter` -- 배열에 지정한 속성명만 감지 (성능 최적화)

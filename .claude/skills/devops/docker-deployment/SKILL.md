@@ -90,7 +90,7 @@ Next.js의 `output: "standalone"` 모드를 활용하면 자체 포함 서버를
 ```typescript
 // next.config.ts
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  output: "standalone",
 };
 ```
 
@@ -175,11 +175,11 @@ CMD ["/bin/server"]
 
 ### Rust 캐시 마운트 요약
 
-| 마운트 대상                  | 용도                     |
-| ---------------------------- | ------------------------ |
+| 마운트 대상 | 용도 |
+|------------|------|
 | `/usr/local/cargo/registry/` | 다운로드된 크레이트 캐시 |
-| `/usr/local/cargo/git/db`    | Git 의존성 캐시          |
-| `/app/target/`               | 컴파일된 의존성 캐시     |
+| `/usr/local/cargo/git/db` | Git 의존성 캐시 |
+| `/app/target/` | 컴파일된 의존성 캐시 |
 
 > 주의: CI 환경에서는 `--mount=type=cache`가 유지되지 않는다. CI에서는 `cache-from` / `cache-to` 레지스트리 캐시 전략을 사용한다.
 
@@ -197,11 +197,11 @@ services:
       context: .
       target: development
     ports:
-      - '3000:3000'
-      - '9229:9229' # 디버깅
+      - "3000:3000"
+      - "9229:9229"  # 디버깅
     volumes:
-      - .:/app # 소스 바인드 마운트 (핫 리로드)
-      - /app/node_modules # 익명 볼륨으로 보호
+      - .:/app          # 소스 바인드 마운트 (핫 리로드)
+      - /app/node_modules  # 익명 볼륨으로 보호
     environment:
       - NODE_ENV=development
     depends_on:
@@ -215,11 +215,11 @@ services:
       POSTGRES_PASSWORD: devpass
       POSTGRES_DB: myapp
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U dev -d myapp']
+      test: ["CMD-SHELL", "pg_isready -U dev -d myapp"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -238,7 +238,7 @@ services:
       context: .
       target: production
     ports:
-      - '3000:3000'
+      - "3000:3000"
     restart: always
     # 소스 볼륨 바인드 제거 — 코드는 이미지 내부에만 존재
     volumes: []
@@ -247,7 +247,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.0'
+          cpus: "1.0"
           memory: 512M
     security_opt:
       - no-new-privileges:true
@@ -318,13 +318,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ### 경량 베이스 이미지 선택
 
-| 베이스 이미지          | 크기   | 적합한 경우                        |
-| ---------------------- | ------ | ---------------------------------- |
-| `alpine`               | ~6MB   | 최소 크기 필요 시 (musl libc 주의) |
-| `node:22-alpine`       | ~50MB  | Node.js 앱                         |
-| `rust:1.86-alpine`     | ~300MB | Rust 빌드 스테이지                 |
-| `scratch`              | 0MB    | 정적 바이너리 (Go, Rust musl)      |
-| `debian:bookworm-slim` | ~30MB  | glibc 필요 시                      |
+| 베이스 이미지 | 크기 | 적합한 경우 |
+|-------------|------|-----------|
+| `alpine` | ~6MB | 최소 크기 필요 시 (musl libc 주의) |
+| `node:22-alpine` | ~50MB | Node.js 앱 |
+| `rust:1.86-alpine` | ~300MB | Rust 빌드 스테이지 |
+| `scratch` | 0MB | 정적 바이너리 (Go, Rust musl) |
+| `debian:bookworm-slim` | ~30MB | glibc 필요 시 |
 
 ### 이미지 다이제스트 고정 (공급망 보안)
 
@@ -345,19 +345,19 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --start-interval=5s -
     CMD curl -f http://localhost:3000/health || exit 1
 ```
 
-| 옵션               | 기본값 | 설명                              |
-| ------------------ | ------ | --------------------------------- |
-| `--interval`       | 30s    | 검사 간격                         |
-| `--timeout`        | 30s    | 타임아웃                          |
-| `--start-period`   | 0s     | 컨테이너 시작 후 유예 기간        |
-| `--start-interval` | 5s     | 시작 기간 중 검사 간격            |
-| `--retries`        | 3      | unhealthy 판정까지 연속 실패 횟수 |
+| 옵션 | 기본값 | 설명 |
+|------|-------|------|
+| `--interval` | 30s | 검사 간격 |
+| `--timeout` | 30s | 타임아웃 |
+| `--start-period` | 0s | 컨테이너 시작 후 유예 기간 |
+| `--start-interval` | 5s | 시작 기간 중 검사 간격 |
+| `--retries` | 3 | unhealthy 판정까지 연속 실패 횟수 |
 
 ### Compose 헬스체크
 
 ```yaml
 healthcheck:
-  test: ['CMD-SHELL', 'curl -f http://localhost:3000/health || exit 1']
+  test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
   interval: 30s
   timeout: 3s
   start_period: 10s
@@ -366,10 +366,10 @@ healthcheck:
 
 ### 종료 코드
 
-| 코드 | 상태      |
-| ---- | --------- |
-| 0    | healthy   |
-| 1    | unhealthy |
+| 코드 | 상태 |
+|------|------|
+| 0 | healthy |
+| 1 | unhealthy |
 
 > 주의: Dockerfile에 HEALTHCHECK가 여러 개 있으면 마지막 것만 적용된다. 스테이지당 하나만 정의한다.
 
@@ -379,12 +379,12 @@ healthcheck:
 
 ### ARG vs ENV
 
-| 구분                  | `ARG`                  | `ENV`                     |
-| --------------------- | ---------------------- | ------------------------- |
-| 존재 시점             | 빌드 시에만            | 빌드 + 런타임             |
-| 최종 이미지 포함      | 아니오                 | 예                        |
-| `docker run`에서 접근 | 불가                   | `--env`로 오버라이드 가능 |
-| 용도                  | 빌드 시 버전/옵션 전달 | 런타임 설정               |
+| 구분 | `ARG` | `ENV` |
+|------|-------|-------|
+| 존재 시점 | 빌드 시에만 | 빌드 + 런타임 |
+| 최종 이미지 포함 | 아니오 | 예 |
+| `docker run`에서 접근 | 불가 | `--env`로 오버라이드 가능 |
+| 용도 | 빌드 시 버전/옵션 전달 | 런타임 설정 |
 
 ```dockerfile
 # 빌드 시에만 필요한 값 — ARG
@@ -433,14 +433,14 @@ COPY --chown=appuser:appgroup ./dist ./dist
 services:
   app:
     security_opt:
-      - no-new-privileges:true # 권한 상승 방지
-    read_only: true # 읽기 전용 파일시스템
+      - no-new-privileges:true   # 권한 상승 방지
+    read_only: true               # 읽기 전용 파일시스템
     tmpfs:
-      - /tmp # 쓰기 필요한 경로만 tmpfs
+      - /tmp                      # 쓰기 필요한 경로만 tmpfs
     cap_drop:
-      - ALL # 모든 Linux 기능 제거
+      - ALL                       # 모든 Linux 기능 제거
     cap_add:
-      - NET_BIND_SERVICE # 필요한 기능만 추가
+      - NET_BIND_SERVICE          # 필요한 기능만 추가
 ```
 
 ### 보안 체크리스트
@@ -470,30 +470,34 @@ services:
   "headers": [
     {
       "source": "/api/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "no-store" }],
-    },
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    }
   ],
-  "rewrites": [{ "source": "/api/:path*", "destination": "/api/:path*" }],
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/:path*" }
+  ],
   "crons": [
     {
       "path": "/api/cron/cleanup",
-      "schedule": "0 3 * * *",
-    },
-  ],
+      "schedule": "0 3 * * *"
+    }
+  ]
 }
 ```
 
 ### 주요 필드
 
-| 필드                                 | 설명                                           |
-| ------------------------------------ | ---------------------------------------------- |
-| `framework`                          | 프레임워크 프리셋 (nextjs, vite, sveltekit 등) |
-| `buildCommand`                       | 빌드 명령 오버라이드                           |
-| `outputDirectory`                    | 빌드 출력 디렉토리                             |
-| `installCommand`                     | 의존성 설치 명령                               |
-| `regions`                            | 함수 배포 리전 (Pro: 3개, Enterprise: 무제한)  |
-| `crons`                              | 크론 잡 스케줄                                 |
-| `headers` / `rewrites` / `redirects` | 라우팅 규칙                                    |
+| 필드 | 설명 |
+|------|------|
+| `framework` | 프레임워크 프리셋 (nextjs, vite, sveltekit 등) |
+| `buildCommand` | 빌드 명령 오버라이드 |
+| `outputDirectory` | 빌드 출력 디렉토리 |
+| `installCommand` | 의존성 설치 명령 |
+| `regions` | 함수 배포 리전 (Pro: 3개, Enterprise: 무제한) |
+| `crons` | 크론 잡 스케줄 |
+| `headers` / `rewrites` / `redirects` | 라우팅 규칙 |
 
 > 소스: https://vercel.com/docs/project-configuration/vercel-json
 
@@ -519,16 +523,16 @@ numReplicas = 2
 
 ### 주요 필드
 
-| 섹션       | 필드                      | 설명                              |
-| ---------- | ------------------------- | --------------------------------- |
-| `[build]`  | `dockerfilePath`          | Dockerfile 경로                   |
-| `[build]`  | `buildTarget`             | 멀티스테이지 빌드 타겟            |
-| `[deploy]` | `startCommand`            | 시작 명령                         |
-| `[deploy]` | `healthcheckPath`         | 헬스체크 엔드포인트               |
-| `[deploy]` | `healthcheckTimeout`      | 헬스체크 타임아웃 (초)            |
-| `[deploy]` | `restartPolicyType`       | `ON_FAILURE` / `ALWAYS` / `NEVER` |
-| `[deploy]` | `restartPolicyMaxRetries` | 최대 재시작 횟수                  |
-| `[deploy]` | `numReplicas`             | 레플리카 수                       |
+| 섹션 | 필드 | 설명 |
+|------|------|------|
+| `[build]` | `dockerfilePath` | Dockerfile 경로 |
+| `[build]` | `buildTarget` | 멀티스테이지 빌드 타겟 |
+| `[deploy]` | `startCommand` | 시작 명령 |
+| `[deploy]` | `healthcheckPath` | 헬스체크 엔드포인트 |
+| `[deploy]` | `healthcheckTimeout` | 헬스체크 타임아웃 (초) |
+| `[deploy]` | `restartPolicyType` | `ON_FAILURE` / `ALWAYS` / `NEVER` |
+| `[deploy]` | `restartPolicyMaxRetries` | 최대 재시작 횟수 |
+| `[deploy]` | `numReplicas` | 레플리카 수 |
 
 > 소스: https://docs.railway.com/config-as-code/reference
 
@@ -553,13 +557,13 @@ numReplicas = 2
 
 ## 흔한 실수
 
-| 실수                                 | 올바른 방법                                       |
-| ------------------------------------ | ------------------------------------------------- |
-| `apt-get update`를 별도 RUN에 분리   | `update + install`을 하나의 RUN으로 합침          |
-| 소스 코드 COPY 후 의존성 설치        | 의존성 파일 먼저 COPY, 소스는 나중에              |
-| root로 컨테이너 실행                 | `USER` 지시어로 non-root 전환                     |
-| `.env` 파일을 이미지에 포함          | `.dockerignore`에 추가, 런타임에 주입             |
-| 개발용 볼륨 바인드를 프로덕션에 사용 | 프로덕션에서는 볼륨 바인드 제거                   |
-| `latest` 태그 사용                   | 버전 고정 (`node:22-alpine`, `rust:1.86`)         |
-| `ADD`로 로컬 파일 복사               | `COPY` 사용 (`ADD`는 원격 URL/압축 해제에만)      |
-| `sudo` 사용                          | `gosu` 사용 또는 빌드 시 root, 런타임 시 non-root |
+| 실수 | 올바른 방법 |
+|------|-----------|
+| `apt-get update`를 별도 RUN에 분리 | `update + install`을 하나의 RUN으로 합침 |
+| 소스 코드 COPY 후 의존성 설치 | 의존성 파일 먼저 COPY, 소스는 나중에 |
+| root로 컨테이너 실행 | `USER` 지시어로 non-root 전환 |
+| `.env` 파일을 이미지에 포함 | `.dockerignore`에 추가, 런타임에 주입 |
+| 개발용 볼륨 바인드를 프로덕션에 사용 | 프로덕션에서는 볼륨 바인드 제거 |
+| `latest` 태그 사용 | 버전 고정 (`node:22-alpine`, `rust:1.86`) |
+| `ADD`로 로컬 파일 복사 | `COPY` 사용 (`ADD`는 원격 URL/압축 해제에만) |
+| `sudo` 사용 | `gosu` 사용 또는 빌드 시 root, 런타임 시 non-root |

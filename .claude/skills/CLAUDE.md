@@ -7,11 +7,10 @@
 검증 문서: `docs/skills/{category}/{name}/verification.md`
 
 SKILL.md frontmatter 필수:
-
 ```yaml
 ---
-name: { 스킬-이름 }
-description: { 한 줄 설명 }
+name: {스킬-이름}
+description: {한 줄 설명}
 ---
 ```
 

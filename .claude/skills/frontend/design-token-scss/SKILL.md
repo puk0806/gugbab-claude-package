@@ -66,7 +66,6 @@ Tokens Studio → Export → Style Dictionary 호환 JSON
 - 무료 버전에서도 기본 Export 가능, Pro에서 멀티파일/테마 지원
 
 **워크플로우:**
-
 1. Figma에서 Tokens Studio 플러그인으로 토큰 정의
 2. GitHub 저장소에 토큰 JSON 자동 동기화
 3. CI에서 Style Dictionary로 SCSS/CSS 빌드
@@ -88,13 +87,13 @@ curl -H "X-FIGMA-TOKEN: ${FIGMA_TOKEN}" \
 
 ### 선택 기준
 
-| 기준                | Tokens Studio        | Figma Variables + API     |
-| ------------------- | -------------------- | ------------------------- |
-| 설정 난이도         | 낮음 (플러그인 설치) | 높음 (변환 스크립트 필요) |
-| Figma 네이티브 통합 | 별도 플러그인        | 네이티브                  |
-| SD 호환성           | 직접 호환            | 변환 필요                 |
-| 팀 협업             | GitHub 연동          | API 자동화                |
-| 비용                | 무료/Pro             | Professional plan 이상    |
+| 기준 | Tokens Studio | Figma Variables + API |
+|------|---------------|----------------------|
+| 설정 난이도 | 낮음 (플러그인 설치) | 높음 (변환 스크립트 필요) |
+| Figma 네이티브 통합 | 별도 플러그인 | 네이티브 |
+| SD 호환성 | 직접 호환 | 변환 필요 |
+| 팀 협업 | GitHub 연동 | API 자동화 |
+| 비용 | 무료/Pro | Professional plan 이상 |
 
 ---
 
@@ -143,13 +142,13 @@ await sd.buildAllPlatforms();
 
 ### v4 주요 변경점 (v3에서 마이그레이션 시)
 
-| v3                                                   | v4                                                             |
-| ---------------------------------------------------- | -------------------------------------------------------------- |
-| `config.json` 또는 `config.js`                       | `sd.config.mjs` (ESM)                                          |
-| `StyleDictionary.registerTransform()`                | `hooks.transforms` 객체에 정의                                 |
-| `StyleDictionary.registerFormat()`                   | `hooks.formats` 객체에 정의                                    |
-| `value` 키                                           | `$value` 키 (DTCG 호환)                                        |
-| `type` 키                                            | `$type` 키 (DTCG 호환)                                         |
+| v3 | v4 |
+|----|----|
+| `config.json` 또는 `config.js` | `sd.config.mjs` (ESM) |
+| `StyleDictionary.registerTransform()` | `hooks.transforms` 객체에 정의 |
+| `StyleDictionary.registerFormat()` | `hooks.formats` 객체에 정의 |
+| `value` 키 | `$value` 키 (DTCG 호환) |
+| `type` 키 | `$type` 키 (DTCG 호환) |
 | `StyleDictionary.extend(config).buildAllPlatforms()` | `new StyleDictionary(config)` + `await sd.buildAllPlatforms()` |
 
 ### 커스텀 변환 예시 (v4 hooks API)
@@ -176,7 +175,9 @@ const sd = new StyleDictionary({
     scss: {
       transforms: ['attribute/cti', 'name/kebab', 'size/pxToRem'],
       buildPath: 'build/scss/',
-      files: [{ destination: '_variables.scss', format: 'scss/variables' }],
+      files: [
+        { destination: '_variables.scss', format: 'scss/variables' },
+      ],
     },
   },
 });
@@ -206,14 +207,14 @@ $spacing-md: 1rem;
 
 ## 4. SCSS 변수 vs CSS Custom Properties 선택 기준
 
-| 기준      | SCSS 변수 (`$var`)         | CSS Custom Properties (`--var`)    |
-| --------- | -------------------------- | ---------------------------------- |
-| 평가 시점 | **컴파일 타임**            | **런타임**                         |
-| 테마 전환 | 불가 (빌드 시 고정)        | 가능 (JS/클래스로 동적 변경)       |
-| 조건 분기 | `@if`/`@each` 등 SCSS 로직 | 미디어 쿼리 / 클래스 스코프        |
-| 번들 크기 | 사용된 곳에 값이 인라인됨  | 변수 선언 1회 + 참조               |
-| 폴백      | 불필요 (컴파일 시 해결)    | `var(--x, fallback)` 가능          |
-| JS 접근   | 불가                       | `getComputedStyle` / `setProperty` |
+| 기준 | SCSS 변수 (`$var`) | CSS Custom Properties (`--var`) |
+|------|--------------------|---------------------------------|
+| 평가 시점 | **컴파일 타임** | **런타임** |
+| 테마 전환 | 불가 (빌드 시 고정) | 가능 (JS/클래스로 동적 변경) |
+| 조건 분기 | `@if`/`@each` 등 SCSS 로직 | 미디어 쿼리 / 클래스 스코프 |
+| 번들 크기 | 사용된 곳에 값이 인라인됨 | 변수 선언 1회 + 참조 |
+| 폴백 | 불필요 (컴파일 시 해결) | `var(--x, fallback)` 가능 |
+| JS 접근 | 불가 | `getComputedStyle` / `setProperty` |
 
 ### 권장 전략: 하이브리드
 
@@ -246,7 +247,6 @@ $breakpoint-md: 768px; // 미디어 쿼리에는 SCSS 변수만 사용 가능
 ```
 
 **핵심 규칙:**
-
 - 미디어 쿼리 조건에는 SCSS 변수만 사용 (CSS Custom Properties는 미디어 쿼리 조건에 사용 불가)
 - 테마 전환이 필요한 시각적 속성(색상, 그림자 등)은 CSS Custom Properties
 - 컴파일 타임 계산/반복(`@each`, `@if`, `math.div`)은 SCSS 변수
@@ -407,11 +407,11 @@ $theme-dark: (
 }
 
 // 수동 전환 (JS에서 data-theme 속성 토글)
-[data-theme='dark'] {
+[data-theme="dark"] {
   @include apply-theme($theme-dark);
 }
 
-[data-theme='light'] {
+[data-theme="light"] {
   @include apply-theme($theme-light);
 }
 ```
@@ -421,7 +421,8 @@ $theme-dark: (
 function ThemeToggle() {
   const toggle = () => {
     const current = document.documentElement.dataset.theme;
-    document.documentElement.dataset.theme = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme =
+      current === 'dark' ? 'light' : 'dark';
   };
   return <button onClick={toggle}>테마 전환</button>;
 }
@@ -538,20 +539,12 @@ export default nextConfig;
 
 ```scss
 // BAD — 색상 변경 시 모든 컴포넌트를 수정해야 함
-.button {
-  background: var(--blue-500);
-}
-.link {
-  color: var(--blue-500);
-}
+.button { background: var(--blue-500); }
+.link { color: var(--blue-500); }
 
 // GOOD — Semantic 토큰으로 간접 참조
-.button {
-  background: var(--color-primary);
-}
-.link {
-  color: var(--color-link);
-}
+.button { background: var(--color-primary); }
+.link { color: var(--color-link); }
 ```
 
 ### 실수 2: 미디어 쿼리에 CSS Custom Properties 사용
@@ -571,14 +564,10 @@ export default nextConfig;
 $color: #3b82f6;
 
 // BAD — SCSS 변수 그대로 넣으면 리터럴 문자열이 됨
-:root {
-  --color-primary: $color;
-}
+:root { --color-primary: $color; }
 
 // GOOD — #{} 보간 필수
-:root {
-  --color-primary: #{$color};
-}
+:root { --color-primary: #{$color}; }
 ```
 
 ### 실수 4: 토큰 계층 역참조
@@ -620,14 +609,10 @@ await sd.buildAllPlatforms();
 ```scss
 // BAD — SCSS 변수는 컴파일 타임에 고정되므로 런타임 테마 전환 불가
 $bg: #fff;
-.card {
-  background: $bg;
-} // 빌드 후 background: #fff로 고정
+.card { background: $bg; } // 빌드 후 background: #fff로 고정
 
 // GOOD — 테마 전환 속성은 CSS Custom Properties 사용
-.card {
-  background: var(--color-bg);
-}
+.card { background: var(--color-bg); }
 ```
 
 ---

@@ -27,7 +27,6 @@ description: ARIA 패턴, 시맨틱 HTML, 키보드 네비게이션, a11y 테스
 ```
 
 **시맨틱 요소 우선순위:**
-
 - 클릭 → `<button>` (페이지 이동 없는 액션)
 - 이동 → `<a href>` (URL 변경, 새 탭 등)
 - 폼 → `<form>`, `<input>`, `<label>`
@@ -68,16 +67,16 @@ description: ARIA 패턴, 시맨틱 HTML, 키보드 네비게이션, a11y 테스
 
 ```tsx
 function Modal({ open, onClose, title, children }: ModalProps) {
-  const dialogRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null)
 
   // 포커스 트랩
   useEffect(() => {
     if (open) {
-      dialogRef.current?.focus();
+      dialogRef.current?.focus()
     }
-  }, [open]);
+  }, [open])
 
-  if (!open) return null;
+  if (!open) return null
 
   return (
     <div
@@ -89,11 +88,9 @@ function Modal({ open, onClose, title, children }: ModalProps) {
     >
       <h2 id="modal-title">{title}</h2>
       {children}
-      <button onClick={onClose} aria-label="모달 닫기">
-        ✕
-      </button>
+      <button onClick={onClose} aria-label="모달 닫기">✕</button>
     </div>
-  );
+  )
 }
 ```
 
@@ -111,7 +108,7 @@ function Toast({ message, type }: { message: string; type: 'success' | 'error' }
     >
       {message}
     </div>
-  );
+  )
 }
 ```
 
@@ -128,7 +125,7 @@ function LoadingButton({ isLoading, children, ...props }: ButtonProps) {
     >
       {isLoading ? <Spinner aria-hidden="true" /> : children}
     </button>
-  );
+  )
 }
 ```
 
@@ -136,19 +133,28 @@ function LoadingButton({ isLoading, children, ...props }: ButtonProps) {
 
 ```tsx
 function Accordion({ title, children, defaultOpen = false }) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  const contentId = useId();
+  const [isOpen, setIsOpen] = useState(defaultOpen)
+  const contentId = useId()
 
   return (
     <div>
-      <button onClick={() => setIsOpen((p) => !p)} aria-expanded={isOpen} aria-controls={contentId}>
+      <button
+        onClick={() => setIsOpen(p => !p)}
+        aria-expanded={isOpen}
+        aria-controls={contentId}
+      >
         {title}
       </button>
-      <div id={contentId} role="region" aria-labelledby={/* button id */} hidden={!isOpen}>
+      <div
+        id={contentId}
+        role="region"
+        aria-labelledby={/* button id */}
+        hidden={!isOpen}
+      >
         {children}
       </div>
     </div>
-  );
+  )
 }
 ```
 
@@ -159,27 +165,27 @@ function Accordion({ title, children, defaultOpen = false }) {
 ```tsx
 // 커스텀 드롭다운 — 방향키 네비게이션
 function Menu({ items }: { items: string[] }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0)
 
   function handleKeyDown(e: React.KeyboardEvent) {
     switch (e.key) {
       case 'ArrowDown':
-        e.preventDefault();
-        setActiveIndex((i) => Math.min(i + 1, items.length - 1));
-        break;
+        e.preventDefault()
+        setActiveIndex(i => Math.min(i + 1, items.length - 1))
+        break
       case 'ArrowUp':
-        e.preventDefault();
-        setActiveIndex((i) => Math.max(i - 1, 0));
-        break;
+        e.preventDefault()
+        setActiveIndex(i => Math.max(i - 1, 0))
+        break
       case 'Home':
-        setActiveIndex(0);
-        break;
+        setActiveIndex(0)
+        break
       case 'End':
-        setActiveIndex(items.length - 1);
-        break;
+        setActiveIndex(items.length - 1)
+        break
       case 'Escape':
-        onClose();
-        break;
+        onClose()
+        break
     }
   }
 
@@ -196,7 +202,7 @@ function Menu({ items }: { items: string[] }) {
         </li>
       ))}
     </ul>
-  );
+  )
 }
 ```
 
@@ -237,15 +243,15 @@ pnpm add -D @axe-core/react axe-core
 
 ```tsx
 // jest.setup.ts / vitest.setup.ts
-import { configureAxe, toHaveNoViolations } from 'jest-axe';
-expect.extend(toHaveNoViolations);
+import { configureAxe, toHaveNoViolations } from 'jest-axe'
+expect.extend(toHaveNoViolations)
 
 // 테스트에서
-import { axe } from 'jest-axe';
+import { axe } from 'jest-axe'
 
 it('접근성 위반이 없다', async () => {
-  const { container } = render(<Modal open title="테스트" onClose={() => {}} />);
-  const results = await axe(container);
-  expect(results).toHaveNoViolations();
-});
+  const { container } = render(<Modal open title="테스트" onClose={() => {}} />)
+  const results = await axe(container)
+  expect(results).toHaveNoViolations()
+})
 ```

@@ -20,37 +20,37 @@ TS 5.0에서 TC39 Stage 3 Decorators를 정식 지원한다. 기존 `experimenta
 ```tsx
 // 새 Stage 3 Decorator — tsconfig에서 별도 플래그 불필요 (5.0+)
 function logged(originalMethod: any, context: ClassMethodDecoratorContext) {
-  const methodName = String(context.name);
+  const methodName = String(context.name)
   function replacementMethod(this: any, ...args: any[]) {
-    console.log(`LOG: Entering method '${methodName}'.`);
-    const result = originalMethod.call(this, ...args);
-    console.log(`LOG: Exiting method '${methodName}'.`);
-    return result;
+    console.log(`LOG: Entering method '${methodName}'.`)
+    const result = originalMethod.call(this, ...args)
+    console.log(`LOG: Exiting method '${methodName}'.`)
+    return result
   }
-  return replacementMethod;
+  return replacementMethod
 }
 
 class Person {
-  name: string;
+  name: string
   constructor(name: string) {
-    this.name = name;
+    this.name = name
   }
 
   @logged
   greet() {
-    console.log(`Hello, my name is ${this.name}.`);
+    console.log(`Hello, my name is ${this.name}.`)
   }
 }
 ```
 
 **Stage 3 vs experimentalDecorators 차이:**
 
-| 항목                | Stage 3 (5.0+)            | experimentalDecorators                |
-| ------------------- | ------------------------- | ------------------------------------- |
-| 활성화              | 기본 활성                 | `"experimentalDecorators": true` 필요 |
-| 메타데이터          | `context` 매개변수로 접근 | `reflect-metadata` 필요               |
-| 호환성              | TC39 표준                 | 레거시 (Angular, NestJS 등)           |
-| 매개변수 데코레이터 | 미지원                    | 지원                                  |
+| 항목 | Stage 3 (5.0+) | experimentalDecorators |
+|------|----------------|----------------------|
+| 활성화 | 기본 활성 | `"experimentalDecorators": true` 필요 |
+| 메타데이터 | `context` 매개변수로 접근 | `reflect-metadata` 필요 |
+| 호환성 | TC39 표준 | 레거시 (Angular, NestJS 등) |
+| 매개변수 데코레이터 | 미지원 | 지원 |
 
 > 주의: Angular, NestJS 등 기존 프레임워크는 여전히 `experimentalDecorators`를 사용한다. 마이그레이션 시 주의 필요.
 
@@ -60,12 +60,12 @@ class Person {
 
 ```tsx
 // 5.0 이전: as const를 호출 측에서 명시해야 함
-declare function getRoutes<T extends readonly string[]>(routes: T): T;
-const r1 = getRoutes(['home', 'about'] as const); // readonly ["home", "about"]
+declare function getRoutes<T extends readonly string[]>(routes: T): T
+const r1 = getRoutes(["home", "about"] as const) // readonly ["home", "about"]
 
 // 5.0+: const type parameter
-declare function getRoutes<const T extends readonly string[]>(routes: T): T;
-const r2 = getRoutes(['home', 'about']); // readonly ["home", "about"] — as const 불필요
+declare function getRoutes<const T extends readonly string[]>(routes: T): T
+const r2 = getRoutes(["home", "about"]) // readonly ["home", "about"] — as const 불필요
 ```
 
 ### enum / namespace 개선
@@ -81,16 +81,16 @@ const r2 = getRoutes(['home', 'about']); // readonly ["home", "about"] — as co
 
 ```tsx
 class Box {
-  #value: number = 0;
+  #value: number = 0
 
   // getter는 number 반환
   get value(): number {
-    return this.#value;
+    return this.#value
   }
 
   // setter는 string | number 수용
   set value(newValue: string | number) {
-    this.#value = typeof newValue === 'string' ? parseInt(newValue) : newValue;
+    this.#value = typeof newValue === "string" ? parseInt(newValue) : newValue
   }
 }
 ```
@@ -118,23 +118,23 @@ TC39 Stage 3 Explicit Resource Management를 지원한다. `Symbol.dispose` / `S
 ```tsx
 // using: 동기 리소스 정리
 function readFile() {
-  using file = openFile('data.txt'); // Symbol.dispose 호출됨
+  using file = openFile("data.txt") // Symbol.dispose 호출됨
   // 스코프 종료 시 file[Symbol.dispose]() 자동 호출
-  return file.read();
+  return file.read()
 }
 
 // await using: 비동기 리소스 정리
 async function connectDB() {
-  await using connection = await getConnection();
+  await using connection = await getConnection()
   // 스코프 종료 시 connection[Symbol.asyncDispose]() 자동 await 호출
-  return connection.query('SELECT ...');
+  return connection.query("SELECT ...")
 }
 
 // DisposableStack: 여러 리소스 일괄 관리
 function processFiles() {
-  using stack = new DisposableStack();
-  const file1 = stack.use(openFile('a.txt'));
-  const file2 = stack.use(openFile('b.txt'));
+  using stack = new DisposableStack()
+  const file1 = stack.use(openFile("a.txt"))
+  const file2 = stack.use(openFile("b.txt"))
   // 스코프 종료 시 역순으로 dispose
 }
 ```
@@ -143,13 +143,13 @@ function processFiles() {
 
 ```tsx
 class TempFile implements Disposable {
-  #path: string;
+  #path: string
   constructor(path: string) {
-    this.#path = path;
+    this.#path = path
   }
   [Symbol.dispose]() {
     // 정리 로직: 임시 파일 삭제 등
-    fs.unlinkSync(this.#path);
+    fs.unlinkSync(this.#path)
   }
 }
 ```
@@ -159,12 +159,12 @@ class TempFile implements Disposable {
 데코레이터에서 `context.metadata`를 통해 메타데이터를 읽고 쓸 수 있다.
 
 ```tsx
-const validators: Map<symbol, { key: string; fn: (v: any) => boolean }[]> = new Map();
+const validators: Map<symbol, { key: string; fn: (v: any) => boolean }[]> = new Map()
 
 function validate(fn: (v: any) => boolean) {
   return function (target: any, context: ClassFieldDecoratorContext) {
     // context.metadata를 통해 메타데이터 기록
-  };
+  }
 }
 ```
 
@@ -176,10 +176,10 @@ function validate(fn: (v: any) => boolean) {
 
 ```tsx
 // JSON 모듈 임포트 시 타입 명시
-import data from './data.json' with { type: 'json' };
+import data from "./data.json" with { type: "json" }
 
 // 동적 임포트
-const config = await import('./config.json', { with: { type: 'json' } });
+const config = await import("./config.json", { with: { type: "json" } })
 ```
 
 > 주의: 이전 `assert` 구문은 deprecated — `with` 키워드 사용.
@@ -189,15 +189,15 @@ const config = await import('./config.json', { with: { type: 'json' } });
 ```tsx
 function classify(x: string | number | boolean) {
   switch (true) {
-    case typeof x === 'string':
+    case typeof x === "string":
       // x: string으로 좁혀짐
-      return x.toUpperCase();
-    case typeof x === 'number':
+      return x.toUpperCase()
+    case typeof x === "number":
       // x: number로 좁혀짐
-      return x.toFixed(2);
+      return x.toFixed(2)
     default:
       // x: boolean으로 좁혀짐
-      return !x;
+      return !x
   }
 }
 ```
@@ -246,12 +246,12 @@ function withDefault<T>(items: T[], fallback: NoInfer<T>): T[] {
 
 ```tsx
 function getUrls(url: string | URL) {
-  if (typeof url === 'string') {
+  if (typeof url === "string") {
     // 5.4 이전: 클로저 안에서 url이 string | URL로 돌아감
     // 5.4+: url이 string으로 유지됨
     const handler = () => {
-      url; // string (보존!)
-    };
+      url // string (보존!)
+    }
   }
 }
 ```
@@ -267,17 +267,17 @@ TS 5.5부터 함수 본문을 분석하여 타입 가드를 자동 추론한다.
 ```tsx
 // 5.5 이전: 명시적 타입 가드 필요
 function isNumber(x: unknown): x is number {
-  return typeof x === 'number';
+  return typeof x === "number"
 }
 
 // 5.5+: 자동 추론됨 (반환 타입에 x is number가 자동 추론)
 function isNumber(x: unknown) {
-  return typeof x === 'number';
+  return typeof x === "number"
   // 추론된 반환 타입: x is number
 }
 
 // 배열 필터에서 실용적 효과
-const nums = [1, null, 2, undefined, 3].filter((x) => x != null);
+const nums = [1, null, 2, undefined, 3].filter(x => x != null)
 // 5.5 이전: (number | null | undefined)[]
 // 5.5+: number[] — 자동 추론!
 ```
@@ -288,8 +288,8 @@ const nums = [1, null, 2, undefined, 3].filter((x) => x != null);
 
 ```tsx
 // 5.5+: 정규식 문법 에러 감지
-const re = /(?<name>\w+) \k<naem>/; // 에러: 존재하지 않는 그룹 참조
-const re2 = /[a-Z]/; // 에러: 잘못된 범위
+const re = /(?<name>\w+) \k<naem>/  // 에러: 존재하지 않는 그룹 참조
+const re2 = /[a-Z]/                  // 에러: 잘못된 범위
 ```
 
 ---
@@ -302,16 +302,14 @@ const re2 = /[a-Z]/; // 에러: 잘못된 범위
 function check(x: string) {
   // 5.6+: 에러! string은 항상 truthy가 아닐 수 있지만,
   // 함수 참조는 항상 truthy
-  if (check) {
-    // 에러: 함수는 항상 truthy
+  if (check) {  // 에러: 함수는 항상 truthy
     // ...
   }
 }
 
 // nullish 검사
 function process(x: string) {
-  if (x ?? true) {
-    // 경고: 항상 truthy
+  if (x ?? true) {  // 경고: 항상 truthy
     // ...
   }
 }
@@ -331,14 +329,13 @@ function process(x: string) {
 
 ```tsx
 // 소스 코드 (index.ts)
-import { helper } from './utils.ts'; // .ts 확장자 사용 가능
+import { helper } from "./utils.ts"  // .ts 확장자 사용 가능
 
 // 출력 (index.js) — 자동 변환
-import { helper } from './utils.js';
+import { helper } from "./utils.js"
 ```
 
 **tsconfig 설정:**
-
 ```json
 {
   "compilerOptions": {
@@ -350,15 +347,15 @@ import { helper } from './utils.js';
 ### 초기화되지 않은 변수 검사 강화
 
 ```tsx
-let x: number;
-console.log(x); // 5.7+: 에러! 변수 'x'가 할당되기 전에 사용됨
+let x: number
+console.log(x) // 5.7+: 에러! 변수 'x'가 할당되기 전에 사용됨
 
 // 조건부 초기화도 감지
-let result: string;
+let result: string
 if (condition) {
-  result = 'yes';
+  result = "yes"
 }
-console.log(result); // 에러: 모든 경로에서 초기화되지 않음
+console.log(result) // 에러: 모든 경로에서 초기화되지 않음
 ```
 
 ### 경로 이동 지원 (Path Completions)
@@ -377,14 +374,14 @@ console.log(result); // 에러: 모든 경로에서 초기화되지 않음
 function example(x: string | number): string {
   // 5.8 이전: 전체 조건식을 string | number로 판단 → 에러
   // 5.8+: 각 분기를 개별 검사
-  return typeof x === 'string' ? x : String(x); // OK
+  return typeof x === "string" ? x : String(x) // OK
 }
 
 // 실용 예시
 function formatValue(value: unknown): string {
-  return typeof value === 'string'
-    ? value // string — OK
-    : String(value); // string — OK
+  return typeof value === "string"
+    ? value        // string — OK
+    : String(value) // string — OK
   // 5.8+: 양쪽 분기 모두 string이므로 통과
 }
 ```
@@ -402,17 +399,17 @@ function formatValue(value: unknown): string {
 
 ### 5.x에서 추가/변경된 옵션
 
-| 옵션                              | 도입 버전 | 설명                                                                                 |
-| --------------------------------- | --------- | ------------------------------------------------------------------------------------ |
-| `verbatimModuleSyntax`            | 5.0       | `import type`을 강제하여 불필요한 런타임 임포트 방지 (`importsNotUsedAsValues` 대체) |
-| `moduleResolution: "bundler"`     | 5.0       | 번들러 환경 최적화 모듈 해석                                                         |
-| `allowImportingTsExtensions`      | 5.0       | `.ts` 확장자 임포트 허용 (`noEmit` 필수)                                             |
-| `customConditions`                | 5.0       | `package.json` exports의 커스텀 조건 해석                                            |
-| `resolvePackageJsonExports`       | 5.0       | `package.json` exports 필드 해석                                                     |
-| `resolvePackageJsonImports`       | 5.0       | `package.json` imports 필드 해석                                                     |
-| `allowArbitraryExtensions`        | 5.0       | `.css.d.ts` 등 임의 확장자 선언 파일 허용                                            |
-| `erasableSyntaxOnly`              | 5.8       | `enum`, `namespace` 등 런타임 코드 생성 구문 금지 (Node.js --strip-types 호환)       |
-| `rewriteRelativeImportExtensions` | 5.7       | `.ts` → `.js` 자동 변환                                                              |
+| 옵션 | 도입 버전 | 설명 |
+|------|-----------|------|
+| `verbatimModuleSyntax` | 5.0 | `import type`을 강제하여 불필요한 런타임 임포트 방지 (`importsNotUsedAsValues` 대체) |
+| `moduleResolution: "bundler"` | 5.0 | 번들러 환경 최적화 모듈 해석 |
+| `allowImportingTsExtensions` | 5.0 | `.ts` 확장자 임포트 허용 (`noEmit` 필수) |
+| `customConditions` | 5.0 | `package.json` exports의 커스텀 조건 해석 |
+| `resolvePackageJsonExports` | 5.0 | `package.json` exports 필드 해석 |
+| `resolvePackageJsonImports` | 5.0 | `package.json` imports 필드 해석 |
+| `allowArbitraryExtensions` | 5.0 | `.css.d.ts` 등 임의 확장자 선언 파일 허용 |
+| `erasableSyntaxOnly` | 5.8 | `enum`, `namespace` 등 런타임 코드 생성 구문 금지 (Node.js --strip-types 호환) |
+| `rewriteRelativeImportExtensions` | 5.7 | `.ts` → `.js` 자동 변환 |
 
 ### 5.x 권장 tsconfig (React + Vite)
 
@@ -475,16 +472,16 @@ function formatValue(value: unknown): string {
 
 ### Breaking Changes
 
-| 변경                                | 설명                                         | 대응                |
-| ----------------------------------- | -------------------------------------------- | ------------------- |
-| `target: ES3` 삭제                  | 5.0에서 ES3 타겟 제거                        | `ES5` 이상으로 변경 |
-| `moduleResolution: node` deprecated | `bundler` 또는 `node16`/`nodenext` 사용 권장 | tsconfig 업데이트   |
-| `importsNotUsedAsValues` 제거       | `verbatimModuleSyntax`로 대체                | 마이그레이션        |
-| `preserveValueImports` 제거         | `verbatimModuleSyntax`로 통합                | 마이그레이션        |
-| `keyofStringsOnly` 제거             | 5.0에서 삭제                                 | 해당 옵션 제거      |
-| `noImplicitUseStrict` 제거          | 5.0에서 삭제                                 | 해당 옵션 제거      |
-| `suppressExcessPropertyErrors` 제거 | 5.0에서 삭제                                 | 코드 수정           |
-| `out` 옵션 제거                     | `outDir` 사용                                | tsconfig 수정       |
+| 변경 | 설명 | 대응 |
+|------|------|------|
+| `target: ES3` 삭제 | 5.0에서 ES3 타겟 제거 | `ES5` 이상으로 변경 |
+| `moduleResolution: node` deprecated | `bundler` 또는 `node16`/`nodenext` 사용 권장 | tsconfig 업데이트 |
+| `importsNotUsedAsValues` 제거 | `verbatimModuleSyntax`로 대체 | 마이그레이션 |
+| `preserveValueImports` 제거 | `verbatimModuleSyntax`로 통합 | 마이그레이션 |
+| `keyofStringsOnly` 제거 | 5.0에서 삭제 | 해당 옵션 제거 |
+| `noImplicitUseStrict` 제거 | 5.0에서 삭제 | 해당 옵션 제거 |
+| `suppressExcessPropertyErrors` 제거 | 5.0에서 삭제 | 코드 수정 |
+| `out` 옵션 제거 | `outDir` 사용 | tsconfig 수정 |
 
 ### 타입 수준 변경
 
@@ -494,7 +491,7 @@ function formatValue(value: unknown): string {
 
 enum Status {
   Active = 1,
-  Inactive = 2,
+  Inactive = 2
 }
 
 function check(s: Status) {
@@ -512,19 +509,19 @@ function check(s: Status) {
 
 ```tsx
 // verbatimModuleSyntax: true 환경에서
-import type { FC, ReactNode } from 'react'; // 타입 전용 — import type 필수
-import { useState, useEffect } from 'react'; // 런타임 — 일반 import
+import type { FC, ReactNode } from "react"  // 타입 전용 — import type 필수
+import { useState, useEffect } from "react"  // 런타임 — 일반 import
 
 // 혼합 임포트 시
-import { useState, type Dispatch, type SetStateAction } from 'react';
+import { useState, type Dispatch, type SetStateAction } from "react"
 ```
 
 ### @types/react 19 + TS 5.x
 
 ```tsx
 // React 19 + TS 5.x에서 ref를 props로 직접 전달 (forwardRef 불필요)
-interface InputProps extends React.ComponentProps<'input'> {
-  label: string;
+interface InputProps extends React.ComponentProps<"input"> {
+  label: string
 }
 
 function Input({ label, ref, ...props }: InputProps) {
@@ -533,35 +530,35 @@ function Input({ label, ref, ...props }: InputProps) {
       <label>{label}</label>
       <input ref={ref} {...props} />
     </div>
-  );
+  )
 }
 
 // useActionState 타입
-import { useActionState } from 'react';
+import { useActionState } from "react"
 
 const [state, formAction, isPending] = useActionState(
   async (prevState: FormState, formData: FormData) => {
     // 서버 액션 로직
-    return { success: true };
+    return { success: true }
   },
-  { success: false },
-);
+  { success: false }
+)
 ```
 
 ### Inferred Type Predicates + React (5.5+)
 
 ```tsx
 interface Item {
-  id: string;
-  value: string | null;
+  id: string
+  value: string | null
 }
 
 // 5.5+: filter 콜백에서 타입 자동 추론
-const validItems = items.filter((item) => item.value != null);
+const validItems = items.filter(item => item.value != null)
 // 5.5+: Item[] (value가 non-null로 좁혀짐은 아님, 원소 자체의 존재 필터링)
 
 // null 원소 제거에서 효과적
-const values = [1, null, 2, undefined, 3].filter((v) => v != null);
+const values = [1, null, 2, undefined, 3].filter(v => v != null)
 // 5.5+: number[]
 ```
 
@@ -571,22 +568,22 @@ const values = [1, null, 2, undefined, 3].filter((v) => v != null);
 
 ### 즉시 도입 권장
 
-| 기능                          | 이유                             |
-| ----------------------------- | -------------------------------- |
-| `const` type parameters       | 호출 측 `as const` 제거, DX 향상 |
-| `NoInfer<T>`                  | 제네릭 추론 정확도 향상          |
-| `verbatimModuleSyntax`        | 임포트 정리 자동화               |
-| `moduleResolution: "bundler"` | 번들러 환경 정확한 해석          |
-| Inferred Type Predicates      | `.filter()` 타입 개선 (자동)     |
+| 기능 | 이유 |
+|------|------|
+| `const` type parameters | 호출 측 `as const` 제거, DX 향상 |
+| `NoInfer<T>` | 제네릭 추론 정확도 향상 |
+| `verbatimModuleSyntax` | 임포트 정리 자동화 |
+| `moduleResolution: "bundler"` | 번들러 환경 정확한 해석 |
+| Inferred Type Predicates | `.filter()` 타입 개선 (자동) |
 
 ### 점진적 도입 권장
 
-| 기능                    | 이유                                                    |
-| ----------------------- | ------------------------------------------------------- |
-| Stage 3 Decorators      | Angular/NestJS는 `experimentalDecorators` 필요          |
+| 기능 | 이유 |
+|------|------|
+| Stage 3 Decorators | Angular/NestJS는 `experimentalDecorators` 필요 |
 | `using` / `await using` | 런타임 폴리필 필요 (Symbol.dispose), 브라우저 지원 확인 |
-| Import Attributes       | 번들러 지원 확인 필요                                   |
-| `erasableSyntaxOnly`    | enum → union literal 마이그레이션 선행 필요             |
+| Import Attributes | 번들러 지원 확인 필요 |
+| `erasableSyntaxOnly` | enum → union literal 마이그레이션 선행 필요 |
 
 ---
 

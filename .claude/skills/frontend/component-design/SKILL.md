@@ -32,13 +32,13 @@ function Dropdown({ onSelect }: { onSelect: (value: string) => void }) {
 
 ### 캡슐화 체크리스트
 
-| 항목      | 기준                                                             |
-| --------- | ---------------------------------------------------------------- |
-| 내부 상태 | 외부에 노출하지 않는다                                           |
-| 스타일    | CSS Modules로 스코프 제한                                        |
-| 자식 접근 | ref 직접 접근 대신 callback prop                                 |
-| 이벤트    | DOM 이벤트 직접 노출 대신 의미있는 콜백 (`onChange`, `onSelect`) |
-| 데이터    | 내부 가공 데이터는 숨기고 결과만 노출                            |
+| 항목 | 기준 |
+|------|------|
+| 내부 상태 | 외부에 노출하지 않는다 |
+| 스타일 | CSS Modules로 스코프 제한 |
+| 자식 접근 | ref 직접 접근 대신 callback prop |
+| 이벤트 | DOM 이벤트 직접 노출 대신 의미있는 콜백 (`onChange`, `onSelect`) |
+| 데이터 | 내부 가공 데이터는 숨기고 결과만 노출 |
 
 ---
 
@@ -101,74 +101,74 @@ function Accordion({ open: controlledOpen, defaultOpen = false, onToggle }) {
 
 ```tsx
 // Select/index.tsx
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react'
 
 interface SelectContextValue {
-  value: string;
-  onChange: (v: string) => void;
-  isOpen: boolean;
-  toggle: () => void;
+  value: string
+  onChange: (v: string) => void
+  isOpen: boolean
+  toggle: () => void
 }
 
-const SelectContext = createContext<SelectContextValue | null>(null);
+const SelectContext = createContext<SelectContextValue | null>(null)
 
 function useSelectContext() {
-  const ctx = useContext(SelectContext);
-  if (!ctx) throw new Error('Select 컴포넌트 내부에서만 사용 가능');
-  return ctx;
+  const ctx = useContext(SelectContext)
+  if (!ctx) throw new Error('Select 컴포넌트 내부에서만 사용 가능')
+  return ctx
 }
 
 // Root
-function Select({
-  value,
-  onChange,
-  children,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  children: React.ReactNode;
+function Select({ value, onChange, children }: {
+  value: string
+  onChange: (v: string) => void
+  children: React.ReactNode
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   return (
-    <SelectContext.Provider value={{ value, onChange, isOpen, toggle: () => setIsOpen((p) => !p) }}>
+    <SelectContext.Provider value={{ value, onChange, isOpen, toggle: () => setIsOpen(p => !p) }}>
       <div className={styles.select}>{children}</div>
     </SelectContext.Provider>
-  );
+  )
 }
 
 // Trigger
 function Trigger({ children }: { children: React.ReactNode }) {
-  const { value, toggle } = useSelectContext();
+  const { value, toggle } = useSelectContext()
   return (
     <button onClick={toggle} aria-haspopup="listbox">
       {children ?? value}
     </button>
-  );
+  )
 }
 
 // Options
 function Options({ children }: { children: React.ReactNode }) {
-  const { isOpen } = useSelectContext();
-  if (!isOpen) return null;
-  return <ul role="listbox">{children}</ul>;
+  const { isOpen } = useSelectContext()
+  if (!isOpen) return null
+  return <ul role="listbox">{children}</ul>
 }
 
 // Option
 function Option({ value, children }: { value: string; children: React.ReactNode }) {
-  const { onChange, value: selected } = useSelectContext();
+  const { onChange, value: selected } = useSelectContext()
   return (
-    <li role="option" aria-selected={selected === value} onClick={() => onChange(value)}>
+    <li
+      role="option"
+      aria-selected={selected === value}
+      onClick={() => onChange(value)}
+    >
       {children}
     </li>
-  );
+  )
 }
 
 // 네임스페이스로 묶기
-Select.Trigger = Trigger;
-Select.Options = Options;
-Select.Option = Option;
+Select.Trigger = Trigger
+Select.Options = Options
+Select.Option = Option
 
-export { Select };
+export { Select }
 ```
 
 ```tsx
@@ -189,33 +189,29 @@ export { Select };
 ```tsx
 // useToggle.ts — 순수 로직, UI 없음
 function useToggle(defaultValue = false) {
-  const [isOn, setIsOn] = useState(defaultValue);
+  const [isOn, setIsOn] = useState(defaultValue)
   return {
     isOn,
-    toggle: () => setIsOn((p) => !p),
+    toggle: () => setIsOn(p => !p),
     on: () => setIsOn(true),
     off: () => setIsOn(false),
-  };
+  }
 }
 
 // 다양한 UI에 동일한 로직 재사용
 function Switch({ label }: { label: string }) {
-  const { isOn, toggle } = useToggle();
-  return (
-    <button role="switch" aria-checked={isOn} onClick={toggle}>
-      {label}
-    </button>
-  );
+  const { isOn, toggle } = useToggle()
+  return <button role="switch" aria-checked={isOn} onClick={toggle}>{label}</button>
 }
 
 function Accordion({ title, children }: { title: string; children: React.ReactNode }) {
-  const { isOn: isOpen, toggle } = useToggle();
+  const { isOn: isOpen, toggle } = useToggle()
   return (
     <div>
       <button onClick={toggle}>{title}</button>
       {isOpen && <div>{children}</div>}
     </div>
-  );
+  )
 }
 ```
 
@@ -235,8 +231,8 @@ components/
 
 ```ts
 // Select/index.ts — 외부에서 접근 가능한 것만 명시
-export { Select } from './Select';
-export type { SelectProps } from './Select';
+export { Select } from './Select'
+export type { SelectProps } from './Select'
 // useSelect는 export하지 않음 — 내부 구현
 ```
 
@@ -266,15 +262,15 @@ import * as Dialog from '@radix-ui/react-dialog'
 라이브러리 없이 `asChild` 패턴을 직접 구현할 때 사용하는 `Slot` 컴포넌트.
 
 ```tsx
-import React from 'react';
+import React from 'react'
 
 interface SlotProps extends React.HTMLAttributes<HTMLElement> {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 // Slot: 부모 props를 자식 element에 병합
 function Slot({ children, ...slotProps }: SlotProps) {
-  if (!React.isValidElement(children)) return null;
+  if (!React.isValidElement(children)) return null
 
   return React.cloneElement(children, {
     ...slotProps,
@@ -282,31 +278,34 @@ function Slot({ children, ...slotProps }: SlotProps) {
     // 이벤트 핸들러 병합
     onClick: composeEventHandlers(slotProps.onClick, children.props.onClick),
     className: clsx(slotProps.className, children.props.className),
-  } as React.HTMLAttributes<HTMLElement>);
+  } as React.HTMLAttributes<HTMLElement>)
 }
 
-function composeEventHandlers<E>(parentHandler?: (e: E) => void, childHandler?: (e: E) => void) {
+function composeEventHandlers<E>(
+  parentHandler?: (e: E) => void,
+  childHandler?: (e: E) => void
+) {
   return (e: E) => {
-    parentHandler?.(e);
-    childHandler?.(e);
-  };
+    parentHandler?.(e)
+    childHandler?.(e)
+  }
 }
 
 // asChild prop을 지원하는 컴포넌트
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  asChild?: boolean;
-  children: React.ReactNode;
+  asChild?: boolean
+  children: React.ReactNode
 }
 
 function Button({ asChild, children, ...props }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button';
-  return <Comp {...props}>{children}</Comp>;
+  const Comp = asChild ? Slot : 'button'
+  return <Comp {...props}>{children}</Comp>
 }
 
 // 사용 — a 태그에 Button의 모든 props가 병합됨
 <Button asChild onClick={handleClick}>
   <a href="/path">링크 버튼</a>
-</Button>;
+</Button>
 ```
 
 ---
@@ -319,10 +318,13 @@ function Button({ asChild, children, ...props }: ButtonProps) {
 // ✅ data-attribute로 상태 노출 — 스타일 레이어와 결합 없음
 function Accordion({ open, children }: { open: boolean; children: React.ReactNode }) {
   return (
-    <div data-state={open ? 'open' : 'closed'} data-orientation="vertical">
+    <div
+      data-state={open ? 'open' : 'closed'}
+      data-orientation="vertical"
+    >
       {children}
     </div>
-  );
+  )
 }
 
 // SCSS에서 상태 선택 — JS 클래스 토글 없이
@@ -340,11 +342,11 @@ const AccordionItem = React.forwardRef<
   <div
     ref={ref}
     data-state={open ? 'open' : 'closed'}
-    data-disabled={disabled ? '' : undefined} // 속성 존재 여부로 판별
+    data-disabled={disabled ? '' : undefined}  // 속성 존재 여부로 판별
   >
     {children}
   </div>
-));
+))
 ```
 
 ---

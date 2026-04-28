@@ -17,14 +17,12 @@ tsup은 **esbuild** 기반의 TypeScript/JavaScript 라이브러리 번들러다
 **최신 안정 버전: 8.5.1** (2024-11-12 릴리즈)
 
 **적합한 경우:**
-
 - npm에 배포하는 라이브러리/패키지
 - 모노레포 내 공유 패키지 빌드
 - 단순한 CLI 도구 빌드
 - 설정 최소화를 원하는 TS/JS 라이브러리
 
 **부적합한 경우:**
-
 - SPA 애플리케이션 (Vite 사용)
 - Next.js 프로젝트 (Turbopack/Webpack 내장)
 - CSS-heavy 프로젝트에서 SCSS 빌드 (네이티브 SCSS 미지원)
@@ -59,25 +57,25 @@ export default defineConfig({
 
 ### 주요 옵션
 
-| 옵션             | 타입                                     | 설명                                   |
-| ---------------- | ---------------------------------------- | -------------------------------------- |
-| `entry`          | `string[]` 또는 `Record<string, string>` | 엔트리 포인트                          |
-| `format`         | `('cjs' \| 'esm' \| 'iife')[]`           | 출력 포맷                              |
-| `dts`            | `boolean \| DtsConfig`                   | TypeScript declaration 파일 생성       |
-| `clean`          | `boolean`                                | 빌드 전 출력 디렉토리 정리             |
-| `sourcemap`      | `boolean`                                | 소스맵 생성                            |
-| `splitting`      | `boolean`                                | 코드 스플리팅 (ESM에서만 유효)         |
-| `minify`         | `boolean`                                | 코드 압축                              |
-| `target`         | `string`                                 | 빌드 타겟 (예: `'es2022'`, `'node18'`) |
-| `outDir`         | `string`                                 | 출력 디렉토리 (기본: `'dist'`)         |
-| `external`       | `string[]`                               | 번들에서 제외할 패키지                 |
-| `noExternal`     | `string[]`                               | 번들에 강제 포함할 패키지              |
-| `treeshake`      | `boolean \| TreeshakingStrategy`         | Tree shaking 활성화 (Rollup 사용)      |
-| `onSuccess`      | `string \| (() => Promise<void>)`        | 빌드 성공 후 실행할 명령/함수          |
-| `bundle`         | `boolean`                                | 번들링 여부 (기본: true)               |
-| `banner`         | `{ js?: string; css?: string }`          | 출력 파일 상단에 추가할 텍스트         |
-| `define`         | `Record<string, string>`                 | 전역 상수 치환                         |
-| `esbuildPlugins` | `Plugin[]`                               | esbuild 플러그인                       |
+| 옵션 | 타입 | 설명 |
+|------|------|------|
+| `entry` | `string[]` 또는 `Record<string, string>` | 엔트리 포인트 |
+| `format` | `('cjs' \| 'esm' \| 'iife')[]` | 출력 포맷 |
+| `dts` | `boolean \| DtsConfig` | TypeScript declaration 파일 생성 |
+| `clean` | `boolean` | 빌드 전 출력 디렉토리 정리 |
+| `sourcemap` | `boolean` | 소스맵 생성 |
+| `splitting` | `boolean` | 코드 스플리팅 (ESM에서만 유효) |
+| `minify` | `boolean` | 코드 압축 |
+| `target` | `string` | 빌드 타겟 (예: `'es2022'`, `'node18'`) |
+| `outDir` | `string` | 출력 디렉토리 (기본: `'dist'`) |
+| `external` | `string[]` | 번들에서 제외할 패키지 |
+| `noExternal` | `string[]` | 번들에 강제 포함할 패키지 |
+| `treeshake` | `boolean \| TreeshakingStrategy` | Tree shaking 활성화 (Rollup 사용) |
+| `onSuccess` | `string \| (() => Promise<void>)` | 빌드 성공 후 실행할 명령/함수 |
+| `bundle` | `boolean` | 번들링 여부 (기본: true) |
+| `banner` | `{ js?: string; css?: string }` | 출력 파일 상단에 추가할 텍스트 |
+| `define` | `Record<string, string>` | 전역 상수 치환 |
+| `esbuildPlugins` | `Plugin[]` | esbuild 플러그인 |
 
 ---
 
@@ -133,7 +131,6 @@ export default defineConfig({
 ```
 
 출력 결과:
-
 ```
 dist/
 ├── index.js       # ESM
@@ -162,7 +159,7 @@ export default defineConfig({
 ```typescript
 export default defineConfig({
   dts: {
-    resolve: true, // 외부 타입도 인라인으로 포함
+    resolve: true,                // 외부 타입도 인라인으로 포함
     entry: 'src/index.ts',
     tsconfig: './tsconfig.lib.json', // 별도 tsconfig 지정
   },
@@ -290,7 +287,7 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/index.ts'],
-  format: ['esm'], // 모노레포 내부용이면 ESM만으로 충분
+  format: ['esm'],         // 모노레포 내부용이면 ESM만으로 충분
   dts: true,
   external: ['react', 'react-dom'], // peer dependencies
   clean: true,
@@ -431,16 +428,16 @@ export default defineConfig({
 └── SCSS/PostCSS 등 CSS 파이프라인 필요 → Vite lib mode
 ```
 
-| 기준              | tsup                                          | Rollup                 | Vite lib mode           |
-| ----------------- | --------------------------------------------- | ---------------------- | ----------------------- |
-| 설정 복잡도       | 매우 간단                                     | 복잡                   | 보통                    |
-| 빌드 속도         | 빠름 (esbuild 기반)                           | 느림                   | 보통 (esbuild + Rollup) |
-| CSS/SCSS          | 기본 CSS만                                    | 플러그인 필요          | SCSS/PostCSS 지원       |
-| Tree Shaking      | esbuild 기본, `treeshake: true`로 Rollup 강화 | 최고 수준              | Rollup 기반             |
-| 플러그인          | esbuild 플러그인                              | 풍부한 생태계          | Rollup + Vite 플러그인  |
-| DTS 생성          | `dts: true` 내장                              | rollup-plugin-dts 필요 | vite-plugin-dts 필요    |
-| 모노레포 사용성   | 좋음                                          | 보통                   | 좋음                    |
-| ESM/CJS 동시 출력 | 간단                                          | 설정 필요              | 설정 필요               |
+| 기준 | tsup | Rollup | Vite lib mode |
+|------|------|--------|---------------|
+| 설정 복잡도 | 매우 간단 | 복잡 | 보통 |
+| 빌드 속도 | 빠름 (esbuild 기반) | 느림 | 보통 (esbuild + Rollup) |
+| CSS/SCSS | 기본 CSS만 | 플러그인 필요 | SCSS/PostCSS 지원 |
+| Tree Shaking | esbuild 기본, `treeshake: true`로 Rollup 강화 | 최고 수준 | Rollup 기반 |
+| 플러그인 | esbuild 플러그인 | 풍부한 생태계 | Rollup + Vite 플러그인 |
+| DTS 생성 | `dts: true` 내장 | rollup-plugin-dts 필요 | vite-plugin-dts 필요 |
+| 모노레포 사용성 | 좋음 | 보통 | 좋음 |
+| ESM/CJS 동시 출력 | 간단 | 설정 필요 | 설정 필요 |
 
 ### 선택 가이드
 

@@ -13,11 +13,11 @@ description: Page Visibility API 핵심 패턴 2가지 - 탭 가시성 감지와
 
 ## 핵심 API
 
-| API                        | 타입                      | 설명                                          |
-| -------------------------- | ------------------------- | --------------------------------------------- |
-| `document.visibilityState` | `"visible"` \| `"hidden"` | 현재 탭 가시성 상태                           |
-| `document.hidden`          | `boolean`                 | `visibilityState === "hidden"`과 동일         |
-| `visibilitychange` 이벤트  | `Event`                   | `document`에서 발생, 탭 전환/최소화 시 트리거 |
+| API | 타입 | 설명 |
+|-----|------|------|
+| `document.visibilityState` | `"visible"` \| `"hidden"` | 현재 탭 가시성 상태 |
+| `document.hidden` | `boolean` | `visibilityState === "hidden"`과 동일 |
+| `visibilitychange` 이벤트 | `Event` | `document`에서 발생, 탭 전환/최소화 시 트리거 |
 
 > 주의: W3C Level 2 사양에서 `"prerender"` 상태는 제거되었다. `"visible"` 또는 `"hidden"` 두 값만 존재한다.
 
@@ -33,7 +33,7 @@ let intervalId: number | null = null;
 function startPolling() {
   if (intervalId) return;
   intervalId = window.setInterval(() => {
-    fetch('/api/data');
+    fetch("/api/data");
   }, 5000);
 }
 
@@ -44,8 +44,8 @@ function stopPolling() {
   }
 }
 
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') {
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
     stopPolling();
   } else {
     startPolling();
@@ -67,8 +67,8 @@ startPolling();
 let lastFetchTime = Date.now();
 const STALE_THRESHOLD = 60_000; // 1분
 
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') {
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
     const elapsed = Date.now() - lastFetchTime;
     if (elapsed >= STALE_THRESHOLD) {
       refreshData();
@@ -78,7 +78,7 @@ document.addEventListener('visibilitychange', () => {
 
 async function refreshData() {
   lastFetchTime = Date.now();
-  const res = await fetch('/api/data');
+  const res = await fetch("/api/data");
   // UI 업데이트
 }
 ```

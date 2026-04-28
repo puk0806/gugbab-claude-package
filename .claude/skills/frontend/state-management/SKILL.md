@@ -24,13 +24,13 @@ description: Zustand v5 전역 상태관리, TanStack Query v5 서버 상태/캐
    └─ useState / useReducer
 ```
 
-| 상태 유형    | 도구            | 예시                                |
-| ------------ | --------------- | ----------------------------------- |
-| 서버 데이터  | TanStack Query  | 유저 목록, 게시글, 프로필           |
-| 전역 UI 상태 | Zustand         | 사이드바 열림/닫힘, 선택된 탭, 모달 |
-| 인증 상태    | Zustand         | 로그인 유저 정보, 토큰              |
-| 폼 상태      | React Hook Form | 폼 입력값, 유효성                   |
-| 지역 상태    | useState        | 버튼 hover, 토글                    |
+| 상태 유형 | 도구 | 예시 |
+|----------|------|------|
+| 서버 데이터 | TanStack Query | 유저 목록, 게시글, 프로필 |
+| 전역 UI 상태 | Zustand | 사이드바 열림/닫힘, 선택된 탭, 모달 |
+| 인증 상태 | Zustand | 로그인 유저 정보, 토큰 |
+| 폼 상태 | React Hook Form | 폼 입력값, 유효성 |
+| 지역 상태 | useState | 버튼 hover, 토글 |
 
 **❌ 피해야 할 패턴:** 서버 데이터를 Zustand에 저장 → TanStack Query가 캐싱/동기화를 더 잘 처리함
 
@@ -42,13 +42,13 @@ description: Zustand v5 전역 상태관리, TanStack Query v5 서버 상태/캐
 
 ```typescript
 // store/ui.ts
-import { create } from 'zustand';
+import { create } from 'zustand'
 
 interface SidebarStore {
-  isOpen: boolean;
-  open: () => void;
-  close: () => void;
-  toggle: () => void;
+  isOpen: boolean
+  open: () => void
+  close: () => void
+  toggle: () => void
 }
 
 export const useSidebarStore = create<SidebarStore>((set) => ({
@@ -56,7 +56,7 @@ export const useSidebarStore = create<SidebarStore>((set) => ({
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
   toggle: () => set((state) => ({ isOpen: !state.isOpen })),
-}));
+}))
 ```
 
 ### Zustand v4 → v5 주요 변경사항
@@ -79,93 +79,92 @@ const { open, close } = useStore(useShallow((s) => ({ open: s.open, close: s.clo
 
 ```typescript
 // store/slices/auth.ts
-import { StateCreator } from 'zustand';
+import { StateCreator } from 'zustand'
 
 export interface AuthSlice {
-  user: User | null;
-  setUser: (user: User | null) => void;
-  clearUser: () => void;
+  user: User | null
+  setUser: (user: User | null) => void
+  clearUser: () => void
 }
 
 export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
   user: null,
   setUser: (user) => set({ user }),
   clearUser: () => set({ user: null }),
-});
+})
 
 // store/slices/ui.ts
 export interface UISlice {
-  sidebarOpen: boolean;
-  toggleSidebar: () => void;
+  sidebarOpen: boolean
+  toggleSidebar: () => void
 }
 
 export const createUISlice: StateCreator<UISlice> = (set) => ({
   sidebarOpen: false,
   toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
-});
+})
 
 // store/index.ts — 슬라이스 합치기
-import { create } from 'zustand';
-import { createAuthSlice, AuthSlice } from './slices/auth';
-import { createUISlice, UISlice } from './slices/ui';
+import { create } from 'zustand'
+import { createAuthSlice, AuthSlice } from './slices/auth'
+import { createUISlice, UISlice } from './slices/ui'
 
-type StoreState = AuthSlice & UISlice;
+type StoreState = AuthSlice & UISlice
 
 export const useStore = create<StoreState>((...args) => ({
   ...createAuthSlice(...args),
   ...createUISlice(...args),
-}));
+}))
 ```
 
 ### 미들웨어: devtools + persist
 
 ```typescript
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
+import { create } from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
 
 interface SettingsStore {
-  theme: 'light' | 'dark';
-  language: string;
-  setTheme: (theme: 'light' | 'dark') => void;
+  theme: 'light' | 'dark'
+  language: string
+  setTheme: (theme: 'light' | 'dark') => void
 }
 
 export const useSettingsStore = create<SettingsStore>()(
-  devtools(
-    // Redux DevTools 연동
-    persist(
-      // localStorage 영속화
+  devtools(                          // Redux DevTools 연동
+    persist(                         // localStorage 영속화
       (set) => ({
         theme: 'light',
         language: 'ko',
         setTheme: (theme) => set({ theme }),
       }),
       {
-        name: 'settings-storage', // localStorage 키
-        partialize: (state) => ({
-          // 저장할 필드만 선택
+        name: 'settings-storage',    // localStorage 키
+        partialize: (state) => ({    // 저장할 필드만 선택
           theme: state.theme,
           language: state.language,
         }),
-      },
+      }
     ),
-    { name: 'SettingsStore' }, // DevTools에 표시될 이름
-  ),
-);
+    { name: 'SettingsStore' }        // DevTools에 표시될 이름
+  )
+)
 ```
 
 ### 선택적 구독 (리렌더링 최적화)
 
 ```typescript
 // ❌ 스토어 전체를 구독 → 어떤 값이 바뀌어도 리렌더링
-const store = useStore();
+const store = useStore()
 
 // ✅ 필요한 값만 구독
-const user = useStore((s) => s.user);
-const isOpen = useSidebarStore((s) => s.isOpen);
+const user = useStore((s) => s.user)
+const isOpen = useSidebarStore((s) => s.isOpen)
 
 // ✅ 여러 값 구독 시 useShallow로 객체 비교
-import { useShallow } from 'zustand/react/shallow';
-const { open, close } = useStore(useShallow((s) => ({ open: s.open, close: s.close })));
+import { useShallow } from 'zustand/react/shallow'
+const { open, close } = useStore(
+  useShallow((s) => ({ open: s.open, close: s.close }))
+)
 ```
 
 ---
@@ -209,22 +208,22 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
 
 ```typescript
 // ❌ v4
-const { data, isLoading } = useQuery(['users'], fetchUsers);
+const { data, isLoading } = useQuery(['users'], fetchUsers)
 const { data } = useQuery(['user', id], () => fetchUser(id), {
-  onSuccess: (data) => console.log(data), // v5에서 제거됨
-  onError: (err) => console.error(err), // v5에서 제거됨
-});
+  onSuccess: (data) => console.log(data),  // v5에서 제거됨
+  onError: (err) => console.error(err),   // v5에서 제거됨
+})
 
 // ✅ v5
 const { data, isLoading } = useQuery({
   queryKey: ['users'],
   queryFn: fetchUsers,
-});
+})
 const { data } = useQuery({
   queryKey: ['user', id],
   queryFn: () => fetchUser(id),
   // onSuccess/onError 대신 useEffect나 useMutation callbacks 사용
-});
+})
 ```
 
 ### Query Key 관리 패턴
@@ -237,15 +236,15 @@ export const userKeys = {
   list: (filters: UserFilter) => [...userKeys.lists(), filters] as const,
   details: () => [...userKeys.all, 'detail'] as const,
   detail: (id: string) => [...userKeys.details(), id] as const,
-};
+}
 
 // 사용
-useQuery({ queryKey: userKeys.detail(userId), queryFn: () => fetchUser(userId) });
+useQuery({ queryKey: userKeys.detail(userId), queryFn: () => fetchUser(userId) })
 
 // 관련 캐시 전체 무효화
-queryClient.invalidateQueries({ queryKey: userKeys.all });
+queryClient.invalidateQueries({ queryKey: userKeys.all })
 // 목록만 무효화
-queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+queryClient.invalidateQueries({ queryKey: userKeys.lists() })
 ```
 
 ### useQuery 핵심 옵션
@@ -255,13 +254,13 @@ const { data, isPending, isError, error, isFetching, isStale } = useQuery({
   queryKey: ['posts', filters],
   queryFn: () => fetchPosts(filters),
 
-  staleTime: 5 * 60 * 1000, // 5분간 캐시 신선도 유지 (refetch 안 함)
-  gcTime: 10 * 60 * 1000, // 10분 후 캐시 가비지 컬렉션
-  enabled: !!userId, // userId 있을 때만 실행
-  placeholderData: keepPreviousData, // 페이지 전환 시 이전 데이터 유지
-  select: (data) => data.items, // 데이터 변환/선택
-  refetchInterval: 30 * 1000, // 30초마다 폴링
-});
+  staleTime: 5 * 60 * 1000,   // 5분간 캐시 신선도 유지 (refetch 안 함)
+  gcTime: 10 * 60 * 1000,     // 10분 후 캐시 가비지 컬렉션
+  enabled: !!userId,           // userId 있을 때만 실행
+  placeholderData: keepPreviousData,  // 페이지 전환 시 이전 데이터 유지
+  select: (data) => data.items,       // 데이터 변환/선택
+  refetchInterval: 30 * 1000,         // 30초마다 폴링
+})
 
 // isPending vs isLoading (v5 차이)
 // isPending: 캐시 데이터도 없고 fetching 중
@@ -272,58 +271,63 @@ const { data, isPending, isError, error, isFetching, isStale } = useQuery({
 
 ```typescript
 // queries/post.mutations.ts
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postKeys } from './post.keys';
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { postKeys } from './post.keys'
 
 export function useCreatePost() {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (data: CreatePostInput) => createPost(data),
 
     // 성공 후 관련 캐시 무효화
     onSuccess: (newPost) => {
-      queryClient.invalidateQueries({ queryKey: postKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: postKeys.lists() })
     },
 
     // 낙관적 업데이트
     onMutate: async (newData) => {
-      await queryClient.cancelQueries({ queryKey: postKeys.lists() });
-      const previous = queryClient.getQueryData(postKeys.lists());
+      await queryClient.cancelQueries({ queryKey: postKeys.lists() })
+      const previous = queryClient.getQueryData(postKeys.lists())
 
       queryClient.setQueryData(postKeys.lists(), (old: Post[]) => [
         ...old,
         { ...newData, id: 'temp', createdAt: new Date() },
-      ]);
+      ])
 
-      return { previous }; // rollback용 컨텍스트
+      return { previous }  // rollback용 컨텍스트
     },
 
     onError: (err, newData, context) => {
       // 실패 시 롤백
-      queryClient.setQueryData(postKeys.lists(), context?.previous);
+      queryClient.setQueryData(postKeys.lists(), context?.previous)
     },
 
     onSettled: () => {
       // 성공/실패 무관 최종 동기화
-      queryClient.invalidateQueries({ queryKey: postKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: postKeys.lists() })
     },
-  });
+  })
 }
 ```
 
 ### 무한 스크롤 (useInfiniteQuery)
 
 ```typescript
-const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+const {
+  data,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+} = useInfiniteQuery({
   queryKey: ['posts', 'infinite'],
   queryFn: ({ pageParam }) => fetchPosts({ cursor: pageParam, limit: 20 }),
   initialPageParam: undefined as string | undefined,
-  getNextPageParam: (lastPage) => lastPage.nextCursor, // undefined면 마지막 페이지
-});
+  getNextPageParam: (lastPage) => lastPage.nextCursor,  // undefined면 마지막 페이지
+})
 
 // 전체 아이템 flatten
-const posts = data?.pages.flatMap((page) => page.items) ?? [];
+const posts = data?.pages.flatMap((page) => page.items) ?? []
 ```
 
 ### Next.js App Router + Prefetching (SSR)

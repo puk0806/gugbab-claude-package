@@ -65,22 +65,19 @@ interface DragItem {
 import { useDrag } from 'react-dnd';
 
 function DraggableCard({ id, text, index }: CardProps) {
-  const [{ isDragging }, dragRef] = useDrag(
-    () => ({
-      type: ItemTypes.CARD,
-      item: { id, index },
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
-      end: (item, monitor) => {
-        const dropResult = monitor.getDropResult();
-        if (item && dropResult) {
-          // 드롭 완료 후 처리
-        }
-      },
+  const [{ isDragging }, dragRef] = useDrag(() => ({
+    type: ItemTypes.CARD,
+    item: { id, index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
     }),
-    [id, index],
-  );
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult();
+      if (item && dropResult) {
+        // 드롭 완료 후 처리
+      }
+    },
+  }), [id, index]);
 
   return (
     <div ref={dragRef} style={{ opacity: isDragging ? 0.5 : 1 }}>
@@ -92,14 +89,14 @@ function DraggableCard({ id, text, index }: CardProps) {
 
 ### useDrag spec 주요 옵션
 
-| 옵션         | 타입                      | 설명                                      |
-| ------------ | ------------------------- | ----------------------------------------- |
-| `type`       | `string`                  | 필수. 드래그 아이템 유형 식별자           |
-| `item`       | `object \| () => object`  | 드래그 데이터. 함수면 드래그 시작 시 호출 |
-| `collect`    | `(monitor) => object`     | monitor 상태를 컴포넌트 props로 매핑      |
-| `end`        | `(item, monitor) => void` | 드래그 종료 콜백                          |
-| `canDrag`    | `(monitor) => boolean`    | 드래그 가능 여부 제어                     |
-| `isDragging` | `(monitor) => boolean`    | 커스텀 isDragging 판별 로직               |
+| 옵션 | 타입 | 설명 |
+|------|------|------|
+| `type` | `string` | 필수. 드래그 아이템 유형 식별자 |
+| `item` | `object \| () => object` | 드래그 데이터. 함수면 드래그 시작 시 호출 |
+| `collect` | `(monitor) => object` | monitor 상태를 컴포넌트 props로 매핑 |
+| `end` | `(item, monitor) => void` | 드래그 종료 콜백 |
+| `canDrag` | `(monitor) => boolean` | 드래그 가능 여부 제어 |
+| `isDragging` | `(monitor) => boolean` | 커스텀 isDragging 판별 로직 |
 
 ### useDrag 반환값
 
@@ -118,26 +115,23 @@ const [collectedProps, dragRef, previewRef] = useDrag(spec, deps);
 import { useDrop } from 'react-dnd';
 
 function DropZone({ onDrop }: DropZoneProps) {
-  const [{ isOver, canDrop }, dropRef] = useDrop(
-    () => ({
-      accept: ItemTypes.CARD,
-      drop: (item: DragItem) => {
-        onDrop(item.id);
-        return { name: 'DropZone' }; // end()의 getDropResult()로 전달
-      },
-      canDrop: (item: DragItem) => {
-        return item.id !== 'locked';
-      },
-      hover: (item: DragItem, monitor) => {
-        // 드래그 아이템이 위에 있을 때 반복 호출
-      },
-      collect: (monitor) => ({
-        isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
-      }),
+  const [{ isOver, canDrop }, dropRef] = useDrop(() => ({
+    accept: ItemTypes.CARD,
+    drop: (item: DragItem) => {
+      onDrop(item.id);
+      return { name: 'DropZone' }; // end()의 getDropResult()로 전달
+    },
+    canDrop: (item: DragItem) => {
+      return item.id !== 'locked';
+    },
+    hover: (item: DragItem, monitor) => {
+      // 드래그 아이템이 위에 있을 때 반복 호출
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
     }),
-    [onDrop],
-  );
+  }), [onDrop]);
 
   return (
     <div
@@ -155,13 +149,13 @@ function DropZone({ onDrop }: DropZoneProps) {
 
 ### useDrop spec 주요 옵션
 
-| 옵션      | 타입                                | 설명                                   |
-| --------- | ----------------------------------- | -------------------------------------- |
-| `accept`  | `string \| string[]`                | 필수. 수락할 아이템 타입               |
-| `drop`    | `(item, monitor) => object \| void` | 드롭 시 호출. 반환값은 getDropResult() |
-| `hover`   | `(item, monitor) => void`           | 아이템이 위에 있을 때 반복 호출        |
-| `canDrop` | `(item, monitor) => boolean`        | 드롭 수락 여부                         |
-| `collect` | `(monitor) => object`               | monitor 상태 수집                      |
+| 옵션 | 타입 | 설명 |
+|------|------|------|
+| `accept` | `string \| string[]` | 필수. 수락할 아이템 타입 |
+| `drop` | `(item, monitor) => object \| void` | 드롭 시 호출. 반환값은 getDropResult() |
+| `hover` | `(item, monitor) => void` | 아이템이 위에 있을 때 반복 호출 |
+| `canDrop` | `(item, monitor) => boolean` | 드롭 수락 여부 |
+| `collect` | `(monitor) => object` | monitor 상태 수집 |
 
 ### 수락/거부 로직
 
@@ -194,48 +188,42 @@ interface SortableItemProps {
 function SortableItem({ id, index, text, moveItem }: SortableItemProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [{ isDragging }, dragRef] = useDrag(
-    () => ({
-      type: ItemTypes.CARD,
-      item: { id, index },
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
+  const [{ isDragging }, dragRef] = useDrag(() => ({
+    type: ItemTypes.CARD,
+    item: { id, index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
     }),
-    [id, index],
-  );
+  }), [id, index]);
 
-  const [{ isOver }, dropRef] = useDrop(
-    () => ({
-      accept: ItemTypes.CARD,
-      hover: (item: DragItem, monitor) => {
-        if (!ref.current) return;
+  const [{ isOver }, dropRef] = useDrop(() => ({
+    accept: ItemTypes.CARD,
+    hover: (item: DragItem, monitor) => {
+      if (!ref.current) return;
 
-        const dragIndex = item.index;
-        const hoverIndex = index;
-        if (dragIndex === hoverIndex) return;
+      const dragIndex = item.index;
+      const hoverIndex = index;
+      if (dragIndex === hoverIndex) return;
 
-        // 마우스 위치 기반 절반 판별
-        const hoverBoundingRect = ref.current.getBoundingClientRect();
-        const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-        const clientOffset = monitor.getClientOffset();
-        if (!clientOffset) return;
-        const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      // 마우스 위치 기반 절반 판별
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      if (!clientOffset) return;
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
-        // 위에서 아래로: 절반 이상 넘어야 이동
-        if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
-        // 아래에서 위로: 절반 이상 넘어야 이동
-        if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
+      // 위에서 아래로: 절반 이상 넘어야 이동
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
+      // 아래에서 위로: 절반 이상 넘어야 이동
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
 
-        moveItem(dragIndex, hoverIndex);
-        item.index = hoverIndex; // mutation으로 성능 최적화
-      },
-      collect: (monitor) => ({
-        isOver: monitor.isOver(),
-      }),
+      moveItem(dragIndex, hoverIndex);
+      item.index = hoverIndex; // mutation으로 성능 최적화
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
     }),
-    [index, moveItem],
-  );
+  }), [index, moveItem]);
 
   // drag와 drop ref 합성
   dragRef(dropRef(ref));
@@ -375,7 +363,7 @@ function OuterDropZone() {
       console.log('Outer zone handled the drop');
     },
     collect: (monitor) => ({
-      isOver: monitor.isOver(), // 자손 포함
+      isOver: monitor.isOver(),          // 자손 포함
       isOverCurrent: monitor.isOver({ shallow: true }), // 직접 위에만
     }),
   }));
@@ -430,7 +418,7 @@ const backend = isTouchDevice() ? TouchBackend : HTML5Backend;
 
 <DndProvider backend={backend}>
   <App />
-</DndProvider>;
+</DndProvider>
 ```
 
 ---
@@ -450,15 +438,20 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import type { ReactNode } from 'react';
 
 export function DndWrapper({ children }: { children: ReactNode }) {
-  return <DndProvider backend={HTML5Backend}>{children}</DndProvider>;
+  return (
+    <DndProvider backend={HTML5Backend}>
+      {children}
+    </DndProvider>
+  );
 }
 
 // page.tsx (Next.js App Router)
 import dynamic from 'next/dynamic';
 
-const DndWrapper = dynamic(() => import('@/components/DndWrapper').then((mod) => mod.DndWrapper), {
-  ssr: false,
-});
+const DndWrapper = dynamic(
+  () => import('@/components/DndWrapper').then((mod) => mod.DndWrapper),
+  { ssr: false }
+);
 
 export default function Page() {
   return (
@@ -475,16 +468,16 @@ export default function Page() {
 
 ## react-dnd vs @dnd-kit 선택 기준
 
-| 기준                   | react-dnd            | @dnd-kit                          |
-| ---------------------- | -------------------- | --------------------------------- |
-| 번들 크기              | ~40KB (gzip)         | ~20KB (gzip)                      |
-| 접근성 (a11y)          | 수동 구현 필요       | ARIA 내장, 키보드/스크린리더 지원 |
-| 터치 지원              | 별도 백엔드 필요     | 내장 센서                         |
-| 리스트 정렬            | 직접 구현            | @dnd-kit/sortable 제공            |
-| 복잡한 드래그 시나리오 | 강력한 모니터 시스템 | 센서 + 수정자 조합                |
-| 유지보수 상태          | 업데이트 빈도 낮음   | 활발한 유지보수                   |
-| React 18/19 호환       | 호환                 | 호환                              |
-| 학습 곡선              | 높음 (flux 아키텍처) | 보통                              |
+| 기준 | react-dnd | @dnd-kit |
+|------|-----------|----------|
+| 번들 크기 | ~40KB (gzip) | ~20KB (gzip) |
+| 접근성 (a11y) | 수동 구현 필요 | ARIA 내장, 키보드/스크린리더 지원 |
+| 터치 지원 | 별도 백엔드 필요 | 내장 센서 |
+| 리스트 정렬 | 직접 구현 | @dnd-kit/sortable 제공 |
+| 복잡한 드래그 시나리오 | 강력한 모니터 시스템 | 센서 + 수정자 조합 |
+| 유지보수 상태 | 업데이트 빈도 낮음 | 활발한 유지보수 |
+| React 18/19 호환 | 호환 | 호환 |
+| 학습 곡선 | 높음 (flux 아키텍처) | 보통 |
 
 ### 선택 가이드
 
@@ -507,13 +500,10 @@ const [, dragRef] = useDrag(() => ({
 }));
 
 // 올바르: 변경되는 값을 deps에 포함
-const [, dragRef] = useDrag(
-  () => ({
-    type: ItemTypes.CARD,
-    item: { id, index },
-  }),
-  [id, index],
-);
+const [, dragRef] = useDrag(() => ({
+  type: ItemTypes.CARD,
+  item: { id, index },
+}), [id, index]);
 ```
 
 ### 2. ref 합성 실패
@@ -522,12 +512,12 @@ const [, dragRef] = useDrag(
 // 잘못: 두 ref를 별도로 연결하면 하나만 적용
 <div ref={dragRef}>
   <div ref={dropRef}>...</div>
-</div>;
+</div>
 
 // 올바르: ref 합성
 const ref = useRef<HTMLDivElement>(null);
 dragRef(dropRef(ref));
-<div ref={ref}>...</div>;
+<div ref={ref}>...</div>
 ```
 
 ### 3. DndProvider 중첩
@@ -536,9 +526,7 @@ dragRef(dropRef(ref));
 // 잘못: 컴포넌트마다 DndProvider 감싸기
 function Card() {
   return (
-    <DndProvider backend={HTML5Backend}>
-      {' '}
-      {/* 에러 발생 */}
+    <DndProvider backend={HTML5Backend}> {/* 에러 발생 */}
       <DraggableContent />
     </DndProvider>
   );

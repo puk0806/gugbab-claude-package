@@ -54,18 +54,18 @@ module.exports = {
             priority: 20,
           },
         },
-      };
-      return webpackConfig;
+      }
+      return webpackConfig
     },
   },
-};
+}
 ```
 
 ### Vite manualChunks 대응 (vite.config.ts)
 
 ```typescript
 // vite.config.ts
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   build: {
@@ -81,7 +81,7 @@ export default defineConfig({
       },
     },
   },
-});
+})
 ```
 
 ### 함수형 manualChunks (패키지 자동 분할)
@@ -93,31 +93,31 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (!id.includes('node_modules')) return;
+          if (!id.includes('node_modules')) return
 
           // 패키지명 추출: /node_modules/패키지명/...
-          const pkg = id.split('/node_modules/').pop()?.split('/')[0] ?? '';
+          const pkg = id.split('/node_modules/').pop()?.split('/')[0] ?? ''
 
           // 특정 패키지 그룹화
           if (['react', 'react-dom', 'react-router-dom'].includes(pkg)) {
-            return 'common-react-dom';
+            return 'common-react-dom'
           }
           if (pkg.startsWith('@sentry')) {
-            return 'vendors-sentry';
+            return 'vendors-sentry'
           }
           if (pkg === 'swiper') {
-            return 'common-swiper';
+            return 'common-swiper'
           }
 
           // 내부 API 클라이언트 (예: lf-members-api-client)
           if (pkg.startsWith('lf-') && pkg.endsWith('-api-client')) {
-            return pkg; // 패키지명 그대로 청크명
+            return pkg  // 패키지명 그대로 청크명
           }
         },
       },
     },
   },
-});
+})
 ```
 
 > **주의:** `manualChunks` 객체 형식에서 존재하지 않는 패키지명을 넣으면 빌드 에러. 실제 설치된 패키지명으로 정확히 작성.
@@ -132,9 +132,11 @@ export default defineConfig({
 // craco.config.js (Before)
 module.exports = {
   babel: {
-    plugins: [isProd && ['transform-remove-console', { exclude: ['error'] }]].filter(Boolean),
+    plugins: [
+      isProd && ['transform-remove-console', { exclude: ['error'] }],
+    ].filter(Boolean),
   },
-};
+}
 ```
 
 ```typescript
@@ -155,7 +157,7 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-}));
+}))
 ```
 
 > **주의:** esbuild `drop: ['console']`은 `console.error`도 제거. 특정 메서드만 유지하려면 `pure` 옵션 사용.
@@ -164,14 +166,14 @@ export default defineConfig(({ mode }) => ({
 
 ## 3. Webpack 플러그인 → Vite 대응표
 
-| Webpack 플러그인                  | Vite 대응                                              |
-| --------------------------------- | ------------------------------------------------------ |
-| `webpack-retry-chunk-load-plugin` | `vite:preloadError` 이벤트 리스너 (아래 참조)          |
-| `HtmlWebpackPlugin`               | Vite 내장 (index.html 자동 처리)                       |
-| `MiniCssExtractPlugin`            | Vite 내장 (CSS 자동 추출)                              |
-| `CopyWebpackPlugin`               | Vite 내장 (`publicDir`) 또는 `vite-plugin-static-copy` |
-| `DefinePlugin`                    | `define` 옵션 또는 `import.meta.env`                   |
-| `BabelWebpackPlugin`              | `@vitejs/plugin-react` (babel 옵션 포함)               |
+| Webpack 플러그인 | Vite 대응 |
+|----------------|----------|
+| `webpack-retry-chunk-load-plugin` | `vite:preloadError` 이벤트 리스너 (아래 참조) |
+| `HtmlWebpackPlugin` | Vite 내장 (index.html 자동 처리) |
+| `MiniCssExtractPlugin` | Vite 내장 (CSS 자동 추출) |
+| `CopyWebpackPlugin` | Vite 내장 (`publicDir`) 또는 `vite-plugin-static-copy` |
+| `DefinePlugin` | `define` 옵션 또는 `import.meta.env` |
+| `BabelWebpackPlugin` | `@vitejs/plugin-react` (babel 옵션 포함) |
 
 ### 청크 로드 실패 재시도 (webpack-retry-chunk-load-plugin 대체)
 
@@ -192,16 +194,16 @@ function retryChunkPlugin(): Plugin {
               window.location.reload();
             }
           });
-        </script></head>`,
-      );
+        </script></head>`
+      )
     },
-  };
+  }
 }
 
 // vite.config.ts에서 사용
 export default defineConfig({
   plugins: [react(), retryChunkPlugin()],
-});
+})
 ```
 
 ---
@@ -210,7 +212,7 @@ export default defineConfig({
 
 ```javascript
 // craco.config.js (Before)
-webpackConfig.experiments = { topLevelAwait: true };
+webpackConfig.experiments = { topLevelAwait: true }
 ```
 
 ```typescript
@@ -236,12 +238,12 @@ module.exports = {
       },
     },
   },
-};
+}
 ```
 
 ```typescript
 // vite.config.ts (After)
-import fs from 'fs';
+import fs from 'fs'
 
 export default defineConfig({
   server: {
@@ -259,7 +261,7 @@ export default defineConfig({
       },
     },
   },
-});
+})
 ```
 
 > **주의:** `HTTPS=true`는 CRA 전용 환경 변수. Vite에서는 `server.https` 객체로 명시.
@@ -273,8 +275,8 @@ export default defineConfig({
 webpackConfig.plugins.push(
   new webpack.DefinePlugin({
     'process.env.BUILD_TIME': JSON.stringify(new Date().toISOString()),
-  }),
-);
+  })
+)
 ```
 
 ```typescript
@@ -285,7 +287,7 @@ export default defineConfig({
     // 또는 .env 파일에 VITE_BUILD_TIME=... 설정
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
   },
-});
+})
 ```
 
 ---
@@ -304,12 +306,12 @@ export default defineConfig({
 
 ```typescript
 // vite.config.ts — vite-tsconfig-paths 플러그인으로 자동 해석
-import tsconfigPaths from 'vite-tsconfig-paths';
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   // resolve.alias 별도 설정 불필요
-});
+})
 ```
 
 ```bash
@@ -344,8 +346,8 @@ webpackConfig.optimization.splitChunks = { ... }
 
 ```typescript
 // ❌ Vite에서 process.env는 undefined (Node 환경 아님)
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NODE_ENV === 'development'
 
 // ✅
-const isDev = import.meta.env.DEV; // Vite 내장 불리언
+const isDev = import.meta.env.DEV  // Vite 내장 불리언
 ```
