@@ -15,7 +15,7 @@
  *   5. 본문에 > 검증일: 줄 존재
  */
 
-const readline = require('readline');
+const readline = require('node:readline');
 
 const SKILL_MD_PATTERN = /\.claude\/skills\/.+\/SKILL\.md$/;
 
@@ -58,7 +58,7 @@ function validate(content) {
 async function main() {
   const rl = readline.createInterface({ input: process.stdin });
   let raw = '';
-  for await (const line of rl) raw += line + '\n';
+  for await (const line of rl) raw += `${line}\n`;
   raw = raw.trim();
 
   if (!raw) return process.exit(0);
@@ -92,7 +92,7 @@ async function main() {
     '위 항목을 추가한 뒤 SKILL.md를 재작성하세요.',
   ].join('\n');
 
-  process.stdout.write(JSON.stringify({ reason: message }) + '\n');
+  process.stdout.write(`${JSON.stringify({ reason: message })}\n`);
   process.exit(2);
 }
 

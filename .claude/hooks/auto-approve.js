@@ -16,7 +16,7 @@
  * 주의: Bash는 이 파일에서 승인하지 않는다. bash-guard.js가 전담한다.
  */
 
-const readline = require('readline');
+const readline = require('node:readline');
 
 // Bash 제외 — bash-guard.js가 담당
 const SAFE_TOOLS = new Set([
@@ -51,7 +51,7 @@ function handle(eventName, toolName) {
 async function main() {
   const rl = readline.createInterface({ input: process.stdin });
   let raw = '';
-  for await (const line of rl) raw += line + '\n';
+  for await (const line of rl) raw += `${line}\n`;
   raw = raw.trim();
 
   if (!raw) return process.exit(0);
@@ -67,7 +67,7 @@ async function main() {
   const eventName = hook_event_name || hookEventName;
 
   const result = handle(eventName, tool_name);
-  if (result) process.stdout.write(JSON.stringify(result) + '\n');
+  if (result) process.stdout.write(`${JSON.stringify(result)}\n`);
 
   process.exit(0);
 }

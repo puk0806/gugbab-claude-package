@@ -14,7 +14,7 @@
  * 조건: Write 도구로 docs/skills/{category}/{name}/verification.md 경로에 저장할 때만 동작
  */
 
-const readline = require('readline');
+const readline = require('node:readline');
 
 const VERIFICATION_PATH_PATTERN = /docs\/skills\/.+\/verification\.md$/;
 
@@ -74,7 +74,7 @@ function validate(content) {
 async function main() {
   const rl = readline.createInterface({ input: process.stdin });
   let raw = '';
-  for await (const line of rl) raw += line + '\n';
+  for await (const line of rl) raw += `${line}\n`;
   raw = raw.trim();
 
   if (!raw) return process.exit(0);
@@ -109,7 +109,7 @@ async function main() {
   ].join('\n');
 
   // PostToolUse: stdout 출력 → Claude에게 피드백으로 전달
-  process.stdout.write(JSON.stringify({ reason: message }) + '\n');
+  process.stdout.write(`${JSON.stringify({ reason: message })}\n`);
   process.exit(2); // exit 2 = 오류 신호, Claude가 수정 필요성 인식
 }
 

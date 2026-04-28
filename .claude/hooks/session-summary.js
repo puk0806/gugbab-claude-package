@@ -11,10 +11,10 @@
  *   - 파일 변경이 없으면 조용히 종료
  */
 
-const readline = require('readline');
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
+const readline = require('node:readline');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 
 // ── 세션 파일 경로 ──────────────────────────────────────────────
 function sessionFilePath(sessionId) {
@@ -92,7 +92,7 @@ function handleStop(sessionId) {
 async function main() {
   const rl = readline.createInterface({ input: process.stdin });
   let raw = '';
-  for await (const line of rl) raw += line + '\n';
+  for await (const line of rl) raw += `${line}\n`;
   raw = raw.trim();
 
   if (!raw) return process.exit(0);

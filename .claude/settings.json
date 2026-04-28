@@ -21,6 +21,7 @@
       "Bash(git stash*)",
       "Bash(git fetch*)",
       "Bash(ls*)",
+      "Bash(ll*)",
       "Bash(cat*)",
       "Bash(head*)",
       "Bash(tail*)",
@@ -30,10 +31,12 @@
       "Bash(pwd)",
       "Bash(which*)",
       "Bash(echo*)",
+      "Bash(printf*)",
       "Bash(mkdir*)",
       "Bash(touch*)",
       "Bash(cp*)",
       "Bash(mv*)",
+      "Bash(rm*)",
       "Bash(sed*)",
       "Bash(awk*)",
       "Bash(sort*)",
@@ -48,13 +51,20 @@
       "WebFetch",
       "Agent"
     ],
+    "additionalDirectories": ["/tmp", "/private/tmp", "/var/folders", "/private/var/folders"],
     "deny": [
       "Bash(git push --force*)",
       "Bash(git push -f*)",
       "Bash(git reset --hard HEAD~[2-9]*)",
       "Bash(rm -rf /bin*)",
       "Bash(rm -rf /etc*)",
+      "Bash(rm -rf /lib*)",
+      "Bash(rm -rf /sbin*)",
+      "Bash(rm -rf /sys*)",
       "Bash(rm -rf /usr*)",
+      "Bash(rm -rf /var*)",
+      "Bash(rm -rf /proc*)",
+      "Bash(rm -rf /dev*)",
       "Bash(chmod 777*)",
       "Bash(curl*|*bash)",
       "Bash(wget*|*sh)"
@@ -89,7 +99,12 @@
       }
     ],
     "Stop": [
-      { "hooks": [{ "type": "command", "command": "node .claude/hooks/session-summary.js" }] }
+      {
+        "hooks": [
+          { "type": "command", "command": "node .claude/hooks/pending-test-guard.js" },
+          { "type": "command", "command": "node .claude/hooks/session-summary.js" }
+        ]
+      }
     ],
     "PermissionRequest": [
       {
