@@ -6,14 +6,14 @@
 
 ```yaml
 ---
-name: { 에이전트-이름 } # kebab-case
+name: {에이전트-이름}           # kebab-case
 description: >
   {핵심 역할 1-3줄}
   <example>사용자: "{예시 요청}"</example>
   <example>사용자: "{예시 요청}"</example>
 tools:
-  - { 필요한 도구만 }
-model: { opus|sonnet|haiku }
+  - {필요한 도구만}
+model: {opus|sonnet|haiku}
 ---
 ```
 

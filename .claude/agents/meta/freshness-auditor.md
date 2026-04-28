@@ -31,32 +31,29 @@ model: sonnet
 ## 단계 1: 에이전트 감사
 
 ### 1-1. 전체 에이전트 파일 수집
-
 ```
 Glob: .claude/agents/**/*.md
 ```
-
 CLAUDE.md 파일은 제외하고 처리한다.
 
 ### 1-2. 각 에이전트 frontmatter 확인
 
 각 파일에서 다음을 추출한다:
-
 - `model:` 필드 값
 - `tools:` 목록
 - `name:`, `description:` 존재 여부
 
 **모델 ID deprecated 판정 기준 (2026-04 기준):**
 
-| 모델 ID                            | 상태                            |
-| ---------------------------------- | ------------------------------- |
-| `claude-sonnet-4-6`                | ✅ 최신                         |
-| `claude-opus-4-6`                  | ✅ 최신                         |
-| `claude-haiku-4-5`                 | ✅ 최신                         |
-| `claude-sonnet-4-20250514`         | ⚠️ deprecated 예정 (2026-06-15) |
-| `claude-opus-4-20250514`           | ⚠️ deprecated 예정 (2026-06-15) |
-| `opus` / `sonnet` / `haiku` (별칭) | ✅ 허용                         |
-| 그 외 구버전 ID                    | ❌ deprecated                   |
+| 모델 ID | 상태 |
+|---------|------|
+| `claude-sonnet-4-6` | ✅ 최신 |
+| `claude-opus-4-6` | ✅ 최신 |
+| `claude-haiku-4-5` | ✅ 최신 |
+| `claude-sonnet-4-20250514` | ⚠️ deprecated 예정 (2026-06-15) |
+| `claude-opus-4-20250514` | ⚠️ deprecated 예정 (2026-06-15) |
+| `opus` / `sonnet` / `haiku` (별칭) | ✅ 허용 |
+| 그 외 구버전 ID | ❌ deprecated |
 
 **도구 유효성:** Claude Code 공식 도구 목록 기준
 `Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch, Agent, TodoRead, TodoWrite, NotebookRead, NotebookEdit`
@@ -73,7 +70,6 @@ CLAUDE.md 파일은 제외하고 처리한다.
 ## 단계 2: 스킬 감사
 
 ### 2-1. 전체 스킬 파일 수집
-
 ```
 Glob: .claude/skills/**/SKILL.md
 ```
@@ -81,14 +77,12 @@ Glob: .claude/skills/**/SKILL.md
 ### 2-2. 각 SKILL.md 확인
 
 각 파일에서 추출:
-
 - `> 검증일:` — 마지막 검증 날짜
 - `> 소스:` — 공식 문서 URL
 - frontmatter `name:`, `description:` 존재 여부
 - 본문에서 버전 번호 (예: `v18`, `^5.0`, `0.8.x` 등)
 
 **검증일 기준:**
-
 - 6개월 이내: ✅ 최신
 - 6~12개월: ⚠️ 재검증 권장
 - 12개월 이상: ❌ 재검증 필요
@@ -96,17 +90,14 @@ Glob: .claude/skills/**/SKILL.md
 ### 2-3. verification.md 존재 확인
 
 각 스킬에 대응하는 `docs/skills/{category}/{name}/verification.md` 존재 여부 확인.
-
 ```
 Glob: docs/skills/**/verification.md
 ```
-
 누락된 스킬 목록을 기록한다.
 
 ### 2-4. verification.md status 확인
 
 존재하는 verification.md의 frontmatter `status:` 값 확인:
-
 - `APPROVED` / `PENDING_TEST` — ✅
 - `NEEDS_REVISION` — ❌ 즉시 수정 필요
 - `UNVERIFIED` / 누락 — ❌

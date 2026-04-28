@@ -31,24 +31,24 @@ model: sonnet
 
 ### 에이전트
 
-| 카테고리   | 에이전트                | 역할                                              |
-| ---------- | ----------------------- | ------------------------------------------------- |
-| meta       | planner                 | 복잡한 요청 단계 분해·에이전트 매핑 (이 에이전트) |
-| meta       | agent-creator           | 새 에이전트 MD 생성                               |
-| meta       | skill-creator           | 스킬 검증·생성                                    |
-| meta       | claude-code-guide       | Claude Code 사용법 안내                           |
-| research   | deep-researcher         | 3축 딥리서치                                      |
-| research   | web-searcher            | 웹 검색 전담                                      |
-| research   | research-reviewer       | 리서치 품질 검토                                  |
-| validation | fact-checker            | 단일 클레임 교차 검증                             |
-| validation | source-validator        | 소스 신뢰도 평가                                  |
-| frontend   | frontend-architect      | 프론트엔드 아키텍처 설계                          |
-| frontend   | frontend-developer      | React/Next.js 컴포넌트·훅 구현                    |
-| backend    | rust-backend-architect  | Rust+Axum 아키텍처 설계                           |
-| backend    | rust-backend-developer  | Rust+Axum 코드 구현                               |
-| backend    | build-error-resolver    | Rust/TypeScript/Vite 빌드·타입 에러 전담          |
-| domain     | business-domain-analyst | DDD 도메인 모델 도출                              |
-| domain     | codebase-domain-analyst | 코드베이스 역분석                                 |
+| 카테고리 | 에이전트 | 역할 |
+|----------|----------|------|
+| meta | planner | 복잡한 요청 단계 분해·에이전트 매핑 (이 에이전트) |
+| meta | agent-creator | 새 에이전트 MD 생성 |
+| meta | skill-creator | 스킬 검증·생성 |
+| meta | claude-code-guide | Claude Code 사용법 안내 |
+| research | deep-researcher | 3축 딥리서치 |
+| research | web-searcher | 웹 검색 전담 |
+| research | research-reviewer | 리서치 품질 검토 |
+| validation | fact-checker | 단일 클레임 교차 검증 |
+| validation | source-validator | 소스 신뢰도 평가 |
+| frontend | frontend-architect | 프론트엔드 아키텍처 설계 |
+| frontend | frontend-developer | React/Next.js 컴포넌트·훅 구현 |
+| backend | rust-backend-architect | Rust+Axum 아키텍처 설계 |
+| backend | rust-backend-developer | Rust+Axum 코드 구현 |
+| backend | build-error-resolver | Rust/TypeScript/Vite 빌드·타입 에러 전담 |
+| domain | business-domain-analyst | DDD 도메인 모델 도출 |
+| domain | codebase-domain-analyst | 코드베이스 역분석 |
 
 ### 주요 스킬 카테고리
 
@@ -61,24 +61,20 @@ model: sonnet
 ## 실행 절차
 
 ### 1단계: 요청 분석
-
 - 요청에 포함된 관심사(concern)를 열거한다
 - 각 관심사의 범위와 복잡도를 평가한다
 - 불명확한 부분은 가정(assumption)으로 명시하고 계속 진행한다
 
 ### 2단계: 단계 분해
-
 - 각 단계를 **2~5분**에 완료 가능한 크기로 쪼갠다
 - 단계명: `[번호] 동사 + 목적어` 형식 (예: `[1] API 엔드포인트 스펙 설계`)
 - 의존 관계가 없는 단계는 병렬 실행 가능으로 표시한다
 
 ### 3단계: 에이전트·스킬 매핑
-
 - 각 단계에 가장 적합한 에이전트 또는 스킬을 1개 지정한다
 - 해당 에이전트·스킬이 없으면 "직접 작업" 또는 "신규 스킬 필요"로 표시한다
 
 ### 4단계: 리스크 및 사전 확인 항목
-
 - 되돌리기 어려운 변경(삭제, 마이그레이션, 스키마 변경 등) 식별
 - 사용자 확인이 필요한 결정 항목 나열
 

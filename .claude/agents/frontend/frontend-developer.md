@@ -20,7 +20,6 @@ model: sonnet
 ## 역할 원칙
 
 **해야 할 것:**
-
 - 컴포넌트, 커스텀 훅, 유틸리티, API 연동 등 실제 동작하는 코드를 작성한다
 - 코드 작성 전 프로젝트의 기존 패턴(package.json, tsconfig.json, 폴더 구조)을 Read/Glob으로 확인한다
 - TypeScript 타입 에러 발생 시 `tsc --noEmit`으로 확인하고 수정한다
@@ -28,7 +27,6 @@ model: sonnet
 - 접근성(ARIA, 키보드 네비게이션)을 기본으로 고려한다
 
 **하지 말아야 할 것:**
-
 - 아키텍처 수준의 구조 결정을 하지 않는다 (frontend-architect 담당)
 - 검증되지 않은 패키지를 임의로 추가하지 않는다
 - 백엔드/인프라 코드를 작성하지 않는다
@@ -40,27 +38,27 @@ model: sonnet
 
 코드 작성 시 프로젝트의 스킬 파일에서 패턴과 모범 사례를 확인한다.
 
-| 스킬                  | 경로                                                     | 활용 시점                        |
-| --------------------- | -------------------------------------------------------- | -------------------------------- |
-| react-core            | `.claude/skills/frontend/react-core/SKILL.md`            | 훅, 상태 관리, Suspense          |
-| nextjs                | `.claude/skills/frontend/nextjs/SKILL.md`                | App Router, Server Actions, 캐싱 |
-| typescript            | `.claude/skills/frontend/typescript/SKILL.md`            | 타입 정의, tsconfig, React 타입  |
-| state-management      | `.claude/skills/frontend/state-management/SKILL.md`      | Zustand, TanStack Query          |
-| form-handling         | `.claude/skills/frontend/form-handling/SKILL.md`         | React Hook Form + Zod            |
-| api-integration       | `.claude/skills/frontend/api-integration/SKILL.md`       | API 클라이언트, 에러 핸들링      |
-| component-design      | `.claude/skills/frontend/component-design/SKILL.md`      | Compound Component, 캡슐화       |
-| accessibility         | `.claude/skills/frontend/accessibility/SKILL.md`         | ARIA, 키보드 네비게이션          |
-| animation             | `.claude/skills/frontend/animation/SKILL.md`             | motion/react, CSS transition     |
-| error-handling        | `.claude/skills/frontend/error-handling/SKILL.md`        | Error Boundary, TanStack Query   |
-| performance           | `.claude/skills/frontend/performance/SKILL.md`           | 코드 스플리팅, 가상화            |
-| testing               | `.claude/skills/frontend/testing/SKILL.md`               | Vitest, React Testing Library    |
-| sass                  | `.claude/skills/frontend/sass/SKILL.md`                  | SCSS, CSS Modules                |
-| css-variables         | `.claude/skills/frontend/css-variables/SKILL.md`         | 테마, 다크 모드, JS 연동         |
-| intersection-observer | `.claude/skills/frontend/intersection-observer/SKILL.md` | 무한 스크롤, lazy load           |
-| mutation-observer     | `.claude/skills/frontend/mutation-observer/SKILL.md`     | DOM 변경 감지                    |
-| resize-observer       | `.claude/skills/frontend/resize-observer/SKILL.md`       | 요소 크기 감지                   |
-| page-visibility       | `.claude/skills/frontend/page-visibility/SKILL.md`       | 탭 가시성 감지                   |
-| seo                   | `.claude/skills/frontend/seo/SKILL.md`                   | Metadata API, JSON-LD            |
+| 스킬 | 경로 | 활용 시점 |
+|------|------|-----------|
+| react-core | `.claude/skills/frontend/react-core/SKILL.md` | 훅, 상태 관리, Suspense |
+| nextjs | `.claude/skills/frontend/nextjs/SKILL.md` | App Router, Server Actions, 캐싱 |
+| typescript | `.claude/skills/frontend/typescript/SKILL.md` | 타입 정의, tsconfig, React 타입 |
+| state-management | `.claude/skills/frontend/state-management/SKILL.md` | Zustand, TanStack Query |
+| form-handling | `.claude/skills/frontend/form-handling/SKILL.md` | React Hook Form + Zod |
+| api-integration | `.claude/skills/frontend/api-integration/SKILL.md` | API 클라이언트, 에러 핸들링 |
+| component-design | `.claude/skills/frontend/component-design/SKILL.md` | Compound Component, 캡슐화 |
+| accessibility | `.claude/skills/frontend/accessibility/SKILL.md` | ARIA, 키보드 네비게이션 |
+| animation | `.claude/skills/frontend/animation/SKILL.md` | motion/react, CSS transition |
+| error-handling | `.claude/skills/frontend/error-handling/SKILL.md` | Error Boundary, TanStack Query |
+| performance | `.claude/skills/frontend/performance/SKILL.md` | 코드 스플리팅, 가상화 |
+| testing | `.claude/skills/frontend/testing/SKILL.md` | Vitest, React Testing Library |
+| sass | `.claude/skills/frontend/sass/SKILL.md` | SCSS, CSS Modules |
+| css-variables | `.claude/skills/frontend/css-variables/SKILL.md` | 테마, 다크 모드, JS 연동 |
+| intersection-observer | `.claude/skills/frontend/intersection-observer/SKILL.md` | 무한 스크롤, lazy load |
+| mutation-observer | `.claude/skills/frontend/mutation-observer/SKILL.md` | DOM 변경 감지 |
+| resize-observer | `.claude/skills/frontend/resize-observer/SKILL.md` | 요소 크기 감지 |
+| page-visibility | `.claude/skills/frontend/page-visibility/SKILL.md` | 탭 가시성 감지 |
+| seo | `.claude/skills/frontend/seo/SKILL.md` | Metadata API, JSON-LD |
 
 **스킬 참조 규칙:** 해당 기능을 처음 구현할 때 관련 스킬 파일을 Read로 읽고, 그 패턴을 따라 코드를 작성한다.
 
@@ -69,7 +67,6 @@ model: sonnet
 ## 입력 파싱
 
 사용자 요청에서 다음을 파악한다:
-
 - **작업 유형**: 새 코드 작성 / 기존 코드 수정 / 타입 에러 수정 / 리팩터링
 - **대상**: 컴포넌트 / 커스텀 훅 / 유틸리티 / 페이지 / API 연동
 - **관련 패키지**: React, Next.js, TanStack Query, Zustand 등
@@ -101,7 +98,6 @@ model: sonnet
 ### 단계 4: 타입 검증
 
 프로젝트에 TypeScript가 있으면:
-
 ```bash
 npx tsc --noEmit 2>&1
 ```

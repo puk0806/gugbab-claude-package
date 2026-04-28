@@ -39,7 +39,6 @@ model: opus
 작업 시작 직후 반드시 아래 두 가지를 먼저 수행한다.
 
 1. **VERIFICATION_TEMPLATE.md Read** — verification.md 작성 시 이 템플릿만 사용한다.
-
    ```
    Read: docs/skills/VERIFICATION_TEMPLATE.md
    ```
@@ -55,14 +54,14 @@ model: opus
 
 사용자 입력에서 다음을 파악한다:
 
-| 항목                 | 파악 방법                                              |
-| -------------------- | ------------------------------------------------------ |
-| 스킬 주제            | 사용자 설명에서 추출                                   |
-| 대상 버전            | 명시 없으면 최신 안정 버전 기준                        |
-| 카테고리             | frontend / backend / architecture / tooling 등         |
-| SKILL.md 저장 경로   | `.claude/skills/{category}/{name}/SKILL.md`            |
-| verification.md 경로 | `docs/skills/{category}/{name}/verification.md`        |
-| 소스 유형            | 라이브러리(공식 URL 있음) / 방법론(공식 URL 없음) 구분 |
+| 항목 | 파악 방법 |
+|------|-----------|
+| 스킬 주제 | 사용자 설명에서 추출 |
+| 대상 버전 | 명시 없으면 최신 안정 버전 기준 |
+| 카테고리 | frontend / backend / architecture / tooling 등 |
+| SKILL.md 저장 경로 | `.claude/skills/{category}/{name}/SKILL.md` |
+| verification.md 경로 | `docs/skills/{category}/{name}/verification.md` |
+| 소스 유형 | 라이브러리(공식 URL 있음) / 방법론(공식 URL 없음) 구분 |
 
 ---
 
@@ -70,14 +69,13 @@ model: opus
 
 **소스 유형별 조사 방법:**
 
-| 소스 유형             | 검색 대상                                                           |
-| --------------------- | ------------------------------------------------------------------- |
-| 라이브러리/프레임워크 | 공식 문서 사이트, 공식 GitHub, 최신 안정 버전 changelog             |
-| 방법론(DDD, TDD 등)   | 원저 서적 정보, 공인 커뮤니티(예: dddcommunity.org), 저자 공식 자료 |
-| 표준/스펙             | MDN, WHATWG, TC39, IETF RFC 등 공인 표준 문서                       |
+| 소스 유형 | 검색 대상 |
+|-----------|-----------|
+| 라이브러리/프레임워크 | 공식 문서 사이트, 공식 GitHub, 최신 안정 버전 changelog |
+| 방법론(DDD, TDD 등) | 원저 서적 정보, 공인 커뮤니티(예: dddcommunity.org), 저자 공식 자료 |
+| 표준/스펙 | MDN, WHATWG, TC39, IETF RFC 등 공인 표준 문서 |
 
 **조사 시 반드시 수집할 정보:**
-
 - 1순위 소스 URL (공식 사이트, 공식 GitHub, 공인 커뮤니티)
 - 현재 최신 안정 버전 번호
 - 핵심 API·패턴·개념 정의
@@ -97,7 +95,6 @@ WebFetch로 공식 문서 페이지 내용을 직접 확인한다. 검색 결과
 **검증 절차:**
 
 1. 검증할 핵심 클레임 목록을 작성한다:
-
    ```
    - "{라이브러리} {버전}에서 {API명}의 시그니처는 {형태}이다"
    - "{기능}은 {버전}부터 deprecated되었다"
@@ -119,8 +116,8 @@ WebFetch로 공식 문서 페이지 내용을 직접 확인한다. 검색 결과
 
 ```markdown
 ---
-name: { 스킬명 }
-description: { 한 줄 설명 }
+name: {스킬명}
+description: {한 줄 설명}
 ---
 
 # {스킬 제목}
@@ -144,20 +141,18 @@ description: { 한 줄 설명 }
 단계 0에서 Read한 `docs/skills/VERIFICATION_TEMPLATE.md` 구조를 그대로 사용해 채워 저장한다.
 
 **작성 규칙:**
-
 - 템플릿의 8개 섹션을 모두 포함한다 (작업 목록, 에이전트 로그, 조사 소스, 검증 체크리스트, 테스트 기록, 검증 결과 요약, 개선 필요 사항, 변경 이력).
 - 에이전트 로그 섹션에는 실제 사용한 도구(WebSearch, WebFetch)와 조사한 소스를 기록한다. "내장 지식" 표기는 금지다.
 - 검증 체크리스트는 완료 항목 `[✅]`, 미완료 항목 `[❌]`로 정확히 표기한다.
 - 최종 판정은 `PENDING_TEST`로 설정한다 (실제 에이전트 활용 테스트 전).
 
 **frontmatter 필수 포함:**
-
 ```yaml
 ---
-skill: { name }
-category: { category }
+skill: {name}
+category: {category}
 version: v1
-date: { YYYY-MM-DD }
+date: {YYYY-MM-DD}
 status: PENDING_TEST
 ---
 ```
@@ -184,10 +179,10 @@ Glob: .gugbab-source
 
 ## 에러 핸들링
 
-| 상황                           | 처리 방법                                                        |
-| ------------------------------ | ---------------------------------------------------------------- |
-| 공식 URL 없는 방법론           | 원저 서적 정보·공인 커뮤니티로 WebSearch 실행                    |
-| 공식 문서 접근 실패            | 다른 공신력 있는 소스(GitHub, MDN 등)로 대체 후 사용자에게 알림  |
-| 클레임 DISPUTED                | 올바른 내용으로 수정 후 `> 주의:` 표기, verification.md에도 기록 |
-| 카테고리 폴더 없음             | 새 폴더로 생성 진행                                              |
-| verification.md 상위 폴더 없음 | 폴더 생성 후 저장                                                |
+| 상황 | 처리 방법 |
+|------|-----------|
+| 공식 URL 없는 방법론 | 원저 서적 정보·공인 커뮤니티로 WebSearch 실행 |
+| 공식 문서 접근 실패 | 다른 공신력 있는 소스(GitHub, MDN 등)로 대체 후 사용자에게 알림 |
+| 클레임 DISPUTED | 올바른 내용으로 수정 후 `> 주의:` 표기, verification.md에도 기록 |
+| 카테고리 폴더 없음 | 새 폴더로 생성 진행 |
+| verification.md 상위 폴더 없음 | 폴더 생성 후 저장 |
