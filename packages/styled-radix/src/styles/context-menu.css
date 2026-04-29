@@ -1,0 +1,7 @@
+/* ContextMenu — grx-* tokens, Radix Themes-style (minimal panel)
+   Shares grx-menu__* class names with dropdown-menu.css. */
+
+/* ContextMenu trigger zone */
+.grx-context-menu__trigger {
+  display: contents;
+}

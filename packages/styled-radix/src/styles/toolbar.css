@@ -1,0 +1,99 @@
+.grx-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--gugbab-space-1);
+  padding: var(--gugbab-space-1);
+  border-radius: var(--gugbab-radius-md);
+  background: var(--gugbab-color-bg-inset);
+  font-family: var(--gugbab-font-family-sans);
+}
+
+.grx-toolbar[data-orientation="vertical"] {
+  flex-direction: column;
+}
+
+.grx-toolbar__button,
+.grx-toolbar__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gugbab-space-1);
+  min-width: 28px;
+  height: 28px;
+  padding: 0 var(--gugbab-space-2);
+  border: none;
+  border-radius: var(--gugbab-radius-sm);
+  background: transparent;
+  color: var(--gugbab-color-fg-primary);
+  font-size: var(--gugbab-font-size-sm);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--gugbab-duration-fast) ease;
+  user-select: none;
+}
+
+.grx-toolbar__button:hover:not([disabled]),
+.grx-toolbar__link:hover {
+  background: var(--gugbab-color-bg-inset);
+}
+
+.grx-toolbar__button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.grx-toolbar__button:focus-visible,
+.grx-toolbar__link:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-subtle);
+  outline-offset: 2px;
+}
+
+.grx-toolbar__separator {
+  width: 1px;
+  height: 16px;
+  background: var(--gugbab-color-border-base);
+  margin: 0 var(--gugbab-space-1);
+  flex-shrink: 0;
+}
+
+.grx-toolbar[data-orientation="vertical"] .grx-toolbar__separator {
+  width: 100%;
+  height: 1px;
+  margin: var(--gugbab-space-1) 0;
+}
+
+.grx-toolbar__toggle-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.grx-toolbar__toggle-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 var(--gugbab-space-2);
+  border: none;
+  border-radius: var(--gugbab-radius-sm);
+  background: transparent;
+  color: var(--gugbab-color-fg-primary);
+  font-size: var(--gugbab-font-size-sm);
+  cursor: pointer;
+  transition: background var(--gugbab-duration-fast) ease;
+}
+
+.grx-toolbar__toggle-item[data-state="on"] {
+  background: var(--gugbab-color-accent-subtle);
+  color: var(--gugbab-color-accent-active);
+}
+
+.grx-toolbar__toggle-item:hover:not([data-state="on"]) {
+  background: var(--gugbab-color-bg-inset);
+}
+
+.grx-toolbar__toggle-item:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-subtle);
+  outline-offset: 2px;
+}

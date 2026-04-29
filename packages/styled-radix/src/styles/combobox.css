@@ -1,0 +1,163 @@
+/* ─── Combobox (Radix Themes style) ─────────────────────────────────────── */
+
+/* ─── Anchor ────────────────────────────────────────────────────────────── */
+
+.grx-combobox__anchor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* ─── Input ─────────────────────────────────────────────────────────────── */
+
+.grx-combobox__input {
+  width: 100%;
+  border-radius: var(--gugbab-radius-md);
+  border: 1px solid var(--gugbab-color-border-base);
+  background: var(--gugbab-color-bg-surface);
+  color: var(--gugbab-color-fg-primary);
+  font-family: var(--gugbab-font-family-sans);
+  transition:
+    border-color var(--gugbab-duration-fast) ease,
+    box-shadow var(--gugbab-duration-fast) ease;
+}
+
+.grx-combobox__input--sm {
+  height: 28px;
+  padding: 0 var(--gugbab-space-2);
+  font-size: var(--gugbab-font-size-xs);
+  border-radius: var(--gugbab-radius-sm);
+}
+
+.grx-combobox__input--md {
+  height: 36px;
+  padding: 0 var(--gugbab-space-3);
+  font-size: var(--gugbab-font-size-sm);
+}
+
+.grx-combobox__input:hover {
+  border-color: var(--gugbab-color-border-strong);
+}
+
+.grx-combobox__input:focus {
+  outline: none;
+  border-color: var(--gugbab-color-accent-subtle);
+  box-shadow: 0 0 0 2px var(--gugbab-color-accent-subtle);
+}
+
+.grx-combobox__input:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+/* ─── Trigger ────────────────────────────────────────────────────────────── */
+
+.grx-combobox__trigger {
+  position: absolute;
+  right: var(--gugbab-space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  color: var(--gugbab-color-fg-secondary);
+  cursor: pointer;
+  border-radius: var(--gugbab-radius-sm);
+  transition: background var(--gugbab-duration-fast) ease;
+}
+
+.grx-combobox__trigger:hover {
+  background: var(--gugbab-color-accent-subtle);
+  color: var(--gugbab-color-accent-active);
+}
+
+.grx-combobox__trigger:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-subtle);
+  outline-offset: 1px;
+}
+
+/* ─── Content ────────────────────────────────────────────────────────────── */
+
+.grx-combobox__content {
+  z-index: var(--gugbab-z-dropdown, 200);
+  min-width: 160px;
+  max-height: 260px;
+  overflow-y: auto;
+  border-radius: var(--gugbab-radius-lg);
+  border: 1px solid var(--gugbab-color-border-subtle);
+  background: var(--gugbab-color-bg-surface);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 8px 16px rgba(0, 0, 0, 0.08);
+  padding: var(--gugbab-space-1) 0;
+}
+
+.grx-combobox__content[data-state="open"] {
+  animation: grx-combobox-open var(--gugbab-duration-normal) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.grx-combobox__content[data-state="closed"] {
+  animation: grx-combobox-close var(--gugbab-duration-fast) ease;
+}
+
+@keyframes grx-combobox-open {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes grx-combobox-close {
+  from {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  to {
+    opacity: 0;
+    transform: scaleY(0.95);
+  }
+}
+
+/* ─── Item ─────────────────────────────────────────────────────────────── */
+
+.grx-combobox__item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--gugbab-space-1) var(--gugbab-space-3);
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  color: var(--gugbab-color-fg-primary);
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--gugbab-radius-sm);
+  margin: 0 var(--gugbab-space-1);
+  transition: background var(--gugbab-duration-fast) ease;
+}
+
+.grx-combobox__item:hover,
+.grx-combobox__item:focus {
+  background: var(--gugbab-color-accent-subtle);
+  color: var(--gugbab-color-accent-active);
+  outline: none;
+}
+
+.grx-combobox__item[aria-selected="true"] {
+  color: var(--gugbab-color-accent-active);
+  font-weight: var(--gugbab-font-weight-medium);
+}
+
+.grx-combobox__item:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}

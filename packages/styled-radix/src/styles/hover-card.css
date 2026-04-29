@@ -1,0 +1,18 @@
+/* ── HoverCard (Radix panel style) ── */
+
+.grx-hover-card__content {
+  z-index: var(--gugbab-z-popover);
+  background: var(--gugbab-color-bg-elevated);
+  border: 1px solid var(--gugbab-color-border-base);
+  border-radius: var(--gugbab-radius-md);
+  box-shadow: var(--gugbab-shadow-lg);
+  padding: var(--gugbab-space-3);
+  outline: none;
+  min-width: 200px;
+}
+
+.grx-hover-card__trigger {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+}

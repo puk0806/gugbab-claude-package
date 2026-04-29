@@ -1,0 +1,127 @@
+/* DropdownMenu — grx-* tokens, Radix Themes-style (minimal panel) */
+
+/* Content panel */
+.grx-menu__content {
+  position: fixed;
+  z-index: var(--gugbab-z-popover, 1400);
+  min-width: 160px;
+  padding: 4px;
+  background: var(--gugbab-color-bg-surface);
+  border: 1px solid var(--gugbab-color-border-subtle);
+  border-radius: var(--gugbab-radius-md);
+  box-shadow: var(--gugbab-shadow-sm);
+  outline: none;
+  animation: grx-menu-enter 100ms ease;
+}
+
+.grx-menu__content[data-state="closed"] {
+  animation: grx-menu-exit 80ms ease forwards;
+}
+
+@keyframes grx-menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes grx-menu-exit {
+  to {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+}
+
+/* Sub content inherits panel styles */
+.grx-menu__sub-content {
+  min-width: 148px;
+}
+
+/* Item */
+.grx-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  color: var(--gugbab-color-fg-primary);
+  background: transparent;
+  border: none;
+  border-radius: var(--gugbab-radius-sm);
+  cursor: pointer;
+  text-align: left;
+  user-select: none;
+  transition: background 80ms;
+}
+
+.grx-menu__item:hover,
+.grx-menu__item[data-highlighted] {
+  background: var(--gugbab-color-bg-inset);
+}
+
+.grx-menu__item[data-disabled],
+.grx-menu__item:disabled {
+  color: var(--gugbab-color-fg-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Sub-trigger arrow */
+.grx-menu__item--sub-trigger::after {
+  content: "›";
+  margin-left: auto;
+  font-size: 1.1em;
+  line-height: 1;
+  color: var(--gugbab-color-fg-secondary);
+}
+
+.grx-menu__item--sub-trigger[data-state="open"] {
+  background: var(--gugbab-color-bg-inset);
+}
+
+/* Checkbox / Radio indent */
+.grx-menu__item--checkbox,
+.grx-menu__item--radio {
+  padding-left: 28px;
+  position: relative;
+}
+
+/* ItemIndicator */
+.grx-menu__item-indicator {
+  position: absolute;
+  left: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--gugbab-color-accent-base);
+}
+
+/* Separator */
+.grx-menu__separator {
+  height: 1px;
+  margin: 4px -4px;
+  background: var(--gugbab-color-border-subtle);
+}
+
+/* Label */
+.grx-menu__label {
+  padding: 4px 8px 2px;
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-xs);
+  font-weight: var(--gugbab-font-weight-medium);
+  color: var(--gugbab-color-fg-secondary);
+}
+
+/* Radio group */
+.grx-menu__radio-group {
+  display: flex;
+  flex-direction: column;
+}

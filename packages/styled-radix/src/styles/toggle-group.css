@@ -1,0 +1,84 @@
+/* ToggleGroup — Radix Themes style */
+
+.grx-toggle-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gugbab-space-1);
+}
+
+.grx-toggle-group[data-orientation="vertical"] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* variant: default (ghost hover) */
+.grx-toggle-group--default {
+  background: transparent;
+}
+
+/* variant: outline (surface card with border) */
+.grx-toggle-group--outline {
+  background: var(--gugbab-color-bg-surface);
+  border: 1px solid var(--gugbab-color-border-base);
+  border-radius: var(--gugbab-radius-md);
+  padding: var(--gugbab-space-1);
+  gap: 2px;
+}
+
+/* size */
+.grx-toggle-group--sm .grx-toggle-group__item {
+  height: 26px;
+  padding: 0 var(--gugbab-space-2);
+  font-size: var(--gugbab-font-size-xs);
+  border-radius: var(--gugbab-radius-sm);
+}
+.grx-toggle-group--md .grx-toggle-group__item {
+  height: 32px;
+  padding: 0 var(--gugbab-space-3);
+  font-size: var(--gugbab-font-size-sm);
+  border-radius: var(--gugbab-radius-md);
+}
+
+/* Item */
+.grx-toggle-group__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--gugbab-color-fg-secondary);
+  font-family: var(--gugbab-font-family-sans);
+  font-weight: var(--gugbab-font-weight-medium);
+  cursor: pointer;
+  transition:
+    background 100ms ease,
+    color 100ms ease;
+  white-space: nowrap;
+}
+
+.grx-toggle-group__item:hover:not([disabled]) {
+  background: var(--gugbab-color-bg-inset);
+  color: var(--gugbab-color-fg-primary);
+}
+
+.grx-toggle-group__item:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: 2px;
+}
+
+/* active state: accent surface (Radix Themes look) */
+.grx-toggle-group__item[data-state="on"] {
+  background: var(--gugbab-color-accent-subtle);
+  color: var(--gugbab-color-accent-base);
+}
+
+.grx-toggle-group--outline .grx-toggle-group__item[data-state="on"] {
+  background: var(--gugbab-color-accent-base);
+  color: var(--gugbab-color-fg-on-accent);
+}
+
+.grx-toggle-group__item[data-disabled] {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}

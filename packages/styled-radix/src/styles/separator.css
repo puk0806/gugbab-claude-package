@@ -1,0 +1,18 @@
+.grx-separator {
+  background-color: var(--gugbab-color-border-subtle);
+  flex-shrink: 0;
+}
+
+.grx-separator--horizontal {
+  display: block;
+  height: 1px;
+  width: 100%;
+  margin-block: var(--gugbab-space-2);
+}
+
+.grx-separator--vertical {
+  display: inline-block;
+  width: 1px;
+  height: 100%;
+  margin-inline: var(--gugbab-space-2);
+}

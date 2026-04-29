@@ -1,0 +1,5 @@
+/* AspectRatio uses inline styles for ratio calculation — minimal wrapper class. */
+.grx-aspect-ratio {
+  overflow: hidden;
+  border-radius: var(--gugbab-radius-sm);
+}

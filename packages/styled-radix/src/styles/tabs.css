@@ -1,0 +1,127 @@
+/* Tabs — Radix Themes style (default: pills variant) */
+
+.grx-tabs {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--gugbab-font-family-sans);
+}
+
+/* List */
+.grx-tabs__list {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* pills variant (Radix default) — surface card */
+.grx-tabs--pills .grx-tabs__list {
+  background: var(--gugbab-color-bg-inset);
+  border-radius: var(--gugbab-radius-md);
+  padding: 3px;
+  gap: 2px;
+}
+
+/* underline variant */
+.grx-tabs--underline .grx-tabs__list {
+  border-bottom: 1px solid var(--gugbab-color-border-base);
+  align-items: flex-end;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  gap: 0;
+}
+
+/* Trigger */
+.grx-tabs__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: var(--gugbab-font-weight-medium);
+  color: var(--gugbab-color-fg-secondary);
+  transition:
+    color 100ms ease,
+    background 100ms ease;
+  white-space: nowrap;
+}
+
+/* size */
+.grx-tabs--sm .grx-tabs__trigger {
+  height: 28px;
+  padding: 0 var(--gugbab-space-2);
+  font-size: var(--gugbab-font-size-xs);
+}
+.grx-tabs--md .grx-tabs__trigger {
+  height: 36px;
+  padding: 0 var(--gugbab-space-4);
+  font-size: var(--gugbab-font-size-sm);
+}
+
+/* pills: rounded trigger */
+.grx-tabs--pills .grx-tabs__trigger {
+  border-radius: calc(var(--gugbab-radius-md) - 3px);
+}
+
+.grx-tabs--pills .grx-tabs__trigger[data-state="active"] {
+  background: var(--gugbab-color-bg-surface);
+  color: var(--gugbab-color-fg-primary);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* underline: bottom indicator */
+.grx-tabs--underline .grx-tabs__trigger {
+  border-radius: 0;
+  position: relative;
+}
+
+.grx-tabs--underline .grx-tabs__trigger::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gugbab-color-accent-base);
+  transform: scaleX(0);
+  transition: transform 150ms ease;
+  border-radius: var(--gugbab-radius-full);
+}
+
+.grx-tabs--underline .grx-tabs__trigger[data-state="active"]::after {
+  transform: scaleX(1);
+}
+
+.grx-tabs--underline .grx-tabs__trigger[data-state="active"] {
+  color: var(--gugbab-color-accent-base);
+}
+
+.grx-tabs__trigger:hover:not([disabled]):not([data-state="active"]) {
+  color: var(--gugbab-color-fg-primary);
+  background: var(--gugbab-color-bg-inset);
+}
+
+.grx-tabs__trigger:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: 2px;
+}
+
+.grx-tabs__trigger[data-disabled] {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Content */
+.grx-tabs__content {
+  padding: var(--gugbab-space-4) 0;
+  outline: none;
+}
+
+.grx-tabs__content[hidden] {
+  display: none;
+}

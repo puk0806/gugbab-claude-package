@@ -1,0 +1,174 @@
+/* ─── Select (Radix Themes style) ────────────────────────────────────────── */
+
+/* ─── Trigger ──────────────────────────────────────────────────────────── */
+
+.grx-select__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gugbab-space-2);
+  border-radius: var(--gugbab-radius-md);
+  border: 1px solid var(--gugbab-color-border-base);
+  background: var(--gugbab-color-bg-surface);
+  color: var(--gugbab-color-fg-primary);
+  font-family: var(--gugbab-font-family-sans);
+  cursor: pointer;
+  transition:
+    border-color var(--gugbab-duration-fast) ease,
+    box-shadow var(--gugbab-duration-fast) ease;
+}
+
+.grx-select__trigger--sm {
+  height: 28px;
+  padding: 0 var(--gugbab-space-2);
+  font-size: var(--gugbab-font-size-xs);
+  border-radius: var(--gugbab-radius-sm);
+}
+
+.grx-select__trigger--md {
+  height: 36px;
+  padding: 0 var(--gugbab-space-3);
+  font-size: var(--gugbab-font-size-sm);
+}
+
+.grx-select__trigger:hover {
+  border-color: var(--gugbab-color-border-strong);
+}
+
+.grx-select__trigger:focus-visible {
+  outline: none;
+  border-color: var(--gugbab-color-accent-subtle);
+  box-shadow: 0 0 0 2px var(--gugbab-color-accent-subtle);
+}
+
+.grx-select__trigger[data-state="open"] {
+  border-color: var(--gugbab-color-accent-subtle);
+}
+
+.grx-select__trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+/* ─── Value ─────────────────────────────────────────────────────────────── */
+
+.grx-select__value {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Content ────────────────────────────────────────────────────────────── */
+
+.grx-select__content {
+  z-index: var(--gugbab-z-dropdown, 200);
+  min-width: 140px;
+  max-height: 300px;
+  overflow-y: auto;
+  border-radius: var(--gugbab-radius-lg);
+  border: 1px solid var(--gugbab-color-border-subtle);
+  background: var(--gugbab-color-bg-surface);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 8px 16px rgba(0, 0, 0, 0.08);
+  padding: var(--gugbab-space-1) 0;
+}
+
+.grx-select__content[data-state="open"] {
+  animation: grx-select-open var(--gugbab-duration-normal) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.grx-select__content[data-state="closed"] {
+  animation: grx-select-close var(--gugbab-duration-fast) ease;
+}
+
+@keyframes grx-select-open {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes grx-select-close {
+  from {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  to {
+    opacity: 0;
+    transform: scaleY(0.95);
+  }
+}
+
+/* ─── Viewport ─────────────────────────────────────────────────────────── */
+
+.grx-select__viewport {
+  padding: var(--gugbab-space-1) 0;
+}
+
+/* ─── Scroll buttons ────────────────────────────────────────────────────── */
+
+.grx-select__scroll-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  background: var(--gugbab-color-bg-surface);
+  color: var(--gugbab-color-fg-secondary);
+  cursor: default;
+  font-size: 10px;
+}
+
+/* ─── Item ─────────────────────────────────────────────────────────────── */
+
+.grx-select__item {
+  display: flex;
+  align-items: center;
+  gap: var(--gugbab-space-2);
+  width: 100%;
+  padding: var(--gugbab-space-1) var(--gugbab-space-3);
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  color: var(--gugbab-color-fg-primary);
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--gugbab-radius-sm);
+  margin: 0 var(--gugbab-space-1);
+  transition: background var(--gugbab-duration-fast) ease;
+}
+
+.grx-select__item:hover,
+.grx-select__item:focus {
+  background: var(--gugbab-color-accent-subtle);
+  color: var(--gugbab-color-accent-active);
+  outline: none;
+}
+
+.grx-select__item[data-state="checked"] {
+  color: var(--gugbab-color-accent-active);
+  font-weight: var(--gugbab-font-weight-medium);
+}
+
+.grx-select__item[data-disabled] {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Group label ───────────────────────────────────────────────────────── */
+
+.grx-select__label {
+  padding: var(--gugbab-space-1) var(--gugbab-space-3);
+  font-size: var(--gugbab-font-size-xs);
+  font-weight: var(--gugbab-font-weight-medium);
+  color: var(--gugbab-color-fg-secondary);
+  letter-spacing: 0.03em;
+}

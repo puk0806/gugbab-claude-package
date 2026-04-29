@@ -1,0 +1,38 @@
+/* Menubar — grx-* tokens, Radix Themes-style (minimal bar) */
+
+/* Bar container */
+.grx-menubar {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  background: var(--gugbab-color-bg-surface);
+  border: 1px solid var(--gugbab-color-border-subtle);
+  border-radius: var(--gugbab-radius-md);
+  font-family: var(--gugbab-font-family-sans);
+}
+
+/* Menubar trigger button */
+.grx-menubar__trigger {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: var(--gugbab-font-size-sm);
+  color: var(--gugbab-color-fg-primary);
+  background: transparent;
+  border: none;
+  border-radius: var(--gugbab-radius-sm);
+  cursor: pointer;
+  transition: background 80ms;
+}
+
+.grx-menubar__trigger:hover,
+.grx-menubar__trigger[data-state="open"] {
+  background: var(--gugbab-color-bg-inset);
+}
+
+.grx-menubar__trigger:disabled {
+  color: var(--gugbab-color-fg-disabled);
+  cursor: not-allowed;
+}

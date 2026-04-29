@@ -1,0 +1,20 @@
+/* ── Tooltip (Radix panel style) ── */
+
+.grx-tooltip__content {
+  z-index: var(--gugbab-z-tooltip);
+  background: var(--gugbab-color-fg-primary);
+  color: var(--gugbab-color-bg-app);
+  border-radius: var(--gugbab-radius-sm);
+  box-shadow: var(--gugbab-shadow-lg);
+  padding: var(--gugbab-space-1) var(--gugbab-space-2);
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-xs);
+  line-height: 1.4;
+  max-width: 220px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.grx-tooltip__trigger {
+  cursor: default;
+}

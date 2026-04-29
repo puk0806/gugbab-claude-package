@@ -1,0 +1,11 @@
+.grx-label {
+  display: inline-block;
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  font-weight: var(--gugbab-font-weight-medium);
+  line-height: var(--gugbab-line-height-tight);
+  color: var(--gugbab-color-fg-primary);
+  cursor: default;
+  user-select: none;
+  letter-spacing: 0.01em;
+}

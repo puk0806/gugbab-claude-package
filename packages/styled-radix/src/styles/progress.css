@@ -1,0 +1,35 @@
+.grx-progress {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--gugbab-radius-full);
+  background-color: var(--gugbab-color-border-base);
+  width: 100%;
+}
+
+.grx-progress--sm {
+  height: 3px;
+}
+.grx-progress--md {
+  height: 6px;
+}
+
+.grx-progress__indicator {
+  height: 100%;
+  background-color: var(--gugbab-color-accent-base);
+  border-radius: var(--gugbab-radius-full);
+  transition: width 250ms ease;
+}
+
+.grx-progress[data-state="indeterminate"] .grx-progress__indicator {
+  width: 40%;
+  animation: grx-progress-indeterminate 1.6s ease infinite;
+}
+
+@keyframes grx-progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}

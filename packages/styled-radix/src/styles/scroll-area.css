@@ -1,0 +1,68 @@
+.grx-scroll-area {
+  position: relative;
+  overflow: hidden;
+}
+
+.grx-scroll-area__viewport {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  /* hide native scrollbars */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.grx-scroll-area__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.grx-scroll-area__scrollbar {
+  display: flex;
+  user-select: none;
+  touch-action: none;
+  transition: opacity var(--gugbab-duration-fast) ease;
+  background: transparent;
+}
+
+.grx-scroll-area__scrollbar[data-orientation="vertical"] {
+  width: 6px;
+  padding: 2px;
+}
+
+.grx-scroll-area__scrollbar[data-orientation="horizontal"] {
+  height: 6px;
+  flex-direction: column;
+  padding: 2px;
+}
+
+.grx-scroll-area__scrollbar[data-state="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.grx-scroll-area__scrollbar[data-state="visible"] {
+  opacity: 1;
+}
+
+.grx-scroll-area__thumb {
+  flex: 1;
+  border-radius: var(--gugbab-radius-full);
+  background: var(--gugbab-color-border-base);
+  position: relative;
+  transition: background var(--gugbab-duration-fast) ease;
+}
+
+.grx-scroll-area__thumb::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+
+.grx-scroll-area__thumb:hover,
+.grx-scroll-area__thumb:active {
+  background: var(--gugbab-color-border-strong);
+}
+
+.grx-scroll-area__corner {
+  background: transparent;
+}

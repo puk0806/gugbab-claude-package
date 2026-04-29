@@ -1,0 +1,151 @@
+/* ─── Form (Radix Themes style) ──────────────────────────────────────────── */
+
+.grx-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gugbab-space-3);
+}
+
+/* ─── Field ─────────────────────────────────────────────────────────────── */
+
+.grx-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gugbab-space-1);
+}
+
+/* ─── Label ─────────────────────────────────────────────────────────────── */
+
+.grx-form__label {
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  font-weight: var(--gugbab-font-weight-medium);
+  color: var(--gugbab-color-fg-primary);
+  line-height: 1.4;
+}
+
+.grx-form__field--error .grx-form__label,
+.grx-form__field--serverInvalid .grx-form__label {
+  color: var(--gugbab-color-danger-fg, #c62828);
+}
+
+.grx-form__field--success .grx-form__label {
+  color: var(--gugbab-color-success-fg, #1b5e20);
+}
+
+.grx-form__field--warning .grx-form__label {
+  color: var(--gugbab-color-warning-fg, #b45309);
+}
+
+/* ─── Control ────────────────────────────────────────────────────────────── */
+
+.grx-form__control {
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--gugbab-space-3);
+  border-radius: var(--gugbab-radius-md);
+  border: 1px solid var(--gugbab-color-border-base);
+  background: var(--gugbab-color-bg-surface);
+  color: var(--gugbab-color-fg-primary);
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  transition:
+    border-color var(--gugbab-duration-fast) ease,
+    box-shadow var(--gugbab-duration-fast) ease;
+}
+
+.grx-form__control:hover {
+  border-color: var(--gugbab-color-border-strong);
+}
+
+.grx-form__control:focus {
+  outline: none;
+  border-color: var(--gugbab-color-accent-subtle);
+  box-shadow: 0 0 0 2px var(--gugbab-color-accent-subtle);
+}
+
+.grx-form__control:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.grx-form__field--error .grx-form__control,
+.grx-form__field--serverInvalid .grx-form__control {
+  border-color: var(--gugbab-color-danger-base, #ef9a9a);
+}
+
+.grx-form__field--error .grx-form__control:focus,
+.grx-form__field--serverInvalid .grx-form__control:focus {
+  box-shadow: 0 0 0 2px var(--gugbab-color-danger-subtle, #ffcdd2);
+}
+
+.grx-form__field--success .grx-form__control {
+  border-color: var(--gugbab-color-success-base, #a5d6a7);
+}
+
+.grx-form__field--success .grx-form__control:focus {
+  box-shadow: 0 0 0 2px var(--gugbab-color-success-subtle, #c8e6c9);
+}
+
+.grx-form__field--warning .grx-form__control {
+  border-color: var(--gugbab-color-warning-base, #ffe082);
+}
+
+.grx-form__field--warning .grx-form__control:focus {
+  box-shadow: 0 0 0 2px var(--gugbab-color-warning-subtle, #fff8e1);
+}
+
+/* ─── Message ────────────────────────────────────────────────────────────── */
+
+.grx-form__message {
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-xs);
+  color: var(--gugbab-color-fg-secondary);
+  line-height: 1.4;
+}
+
+.grx-form__field--error .grx-form__message,
+.grx-form__field--serverInvalid .grx-form__message {
+  color: var(--gugbab-color-danger-fg, #c62828);
+}
+
+.grx-form__field--success .grx-form__message {
+  color: var(--gugbab-color-success-fg, #1b5e20);
+}
+
+.grx-form__field--warning .grx-form__message {
+  color: var(--gugbab-color-warning-fg, #b45309);
+}
+
+/* ─── Submit ─────────────────────────────────────────────────────────────── */
+
+.grx-form__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 var(--gugbab-space-4);
+  border-radius: var(--gugbab-radius-md);
+  border: none;
+  background: var(--gugbab-color-accent-base);
+  color: var(--gugbab-color-fg-on-accent, #fff);
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  font-weight: var(--gugbab-font-weight-medium);
+  cursor: pointer;
+  transition: background var(--gugbab-duration-fast) ease;
+}
+
+.grx-form__submit:hover {
+  background: var(--gugbab-color-accent-hover);
+}
+
+.grx-form__submit:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-subtle);
+  outline-offset: 2px;
+}
+
+.grx-form__submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}

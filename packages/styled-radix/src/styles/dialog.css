@@ -1,0 +1,85 @@
+/* ── Dialog (Radix panel style) ── */
+
+.grx-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--gugbab-z-modal);
+  background: var(--gugbab-color-overlay);
+}
+
+.grx-dialog__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: var(--gugbab-z-modal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gugbab-space-3);
+  width: 100%;
+  max-height: calc(100vh - var(--gugbab-space-12));
+  overflow-y: auto;
+  background: var(--gugbab-color-bg-elevated);
+  border: 1px solid var(--gugbab-color-border-base);
+  border-radius: var(--gugbab-radius-md);
+  box-shadow: var(--gugbab-shadow-lg);
+  padding: var(--gugbab-space-5);
+  outline: none;
+}
+
+/* size variants */
+.grx-dialog__content--sm {
+  max-width: 340px;
+}
+.grx-dialog__content--md {
+  max-width: 460px;
+}
+.grx-dialog__content--lg {
+  max-width: 620px;
+}
+.grx-dialog__content--xl {
+  max-width: 760px;
+}
+
+.grx-dialog__title {
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-base);
+  font-weight: var(--gugbab-font-weight-semibold);
+  color: var(--gugbab-color-fg-primary);
+  margin: 0;
+}
+
+.grx-dialog__description {
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  color: var(--gugbab-color-fg-secondary);
+  margin: 0;
+}
+
+.grx-dialog__close {
+  position: absolute;
+  top: var(--gugbab-space-3);
+  right: var(--gugbab-space-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: var(--gugbab-radius-sm);
+  background: transparent;
+  color: var(--gugbab-color-fg-secondary);
+  cursor: pointer;
+  transition:
+    background 0.1s ease,
+    color 0.1s ease;
+}
+
+.grx-dialog__close:hover {
+  background: var(--gugbab-color-bg-inset);
+  color: var(--gugbab-color-fg-primary);
+}
+
+.grx-dialog__trigger {
+  cursor: pointer;
+}
