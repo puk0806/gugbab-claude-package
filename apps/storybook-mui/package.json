@@ -1,0 +1,32 @@
+{
+  "name": "@gugbab-ui/storybook-mui",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Storybook showcase for @gugbab-ui/styled-mui (MUI lookalike, gmui-* classes)",
+  "type": "module",
+  "scripts": {
+    "dev": "storybook dev -p 6006 --no-open",
+    "build": "storybook build --output-dir storybook-static",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf storybook-static .turbo node_modules/.cache"
+  },
+  "dependencies": {
+    "@gugbab-ui/headless": "workspace:*",
+    "@gugbab-ui/styled-mui": "workspace:*",
+    "@gugbab-ui/tokens": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@gugbab-ui/tsconfig": "workspace:*",
+    "@storybook/addon-a11y": "^10.3.5",
+    "@storybook/addon-docs": "^10.3.5",
+    "@storybook/addon-themes": "^10.3.5",
+    "@storybook/react-vite": "^10.3.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "storybook": "^10.3.5",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  }
+}
