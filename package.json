@@ -18,6 +18,10 @@
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "clean": "turbo run clean",
+    "sb:dev:mui": "bash scripts/storybook-dev.sh mui",
+    "sb:dev:radix": "bash scripts/storybook-dev.sh radix",
+    "sb:build:mui": "bash scripts/storybook-build.sh mui",
+    "sb:build:radix": "bash scripts/storybook-build.sh radix",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
@@ -30,6 +34,7 @@
     "@gugbab-ui/biome-config": "workspace:*",
     "@gugbab-ui/commitlint-config": "workspace:*",
     "@gugbab-ui/tsconfig": "workspace:*",
+    "@playwright/test": "^1.59.1",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "turbo": "^2.2.3"
