@@ -1,0 +1,77 @@
+.gmui-scroll-area {
+  position: relative;
+  overflow: hidden;
+}
+
+.gmui-scroll-area__viewport {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  /* hide native scrollbars */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.gmui-scroll-area__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.gmui-scroll-area__scrollbar {
+  display: flex;
+  user-select: none;
+  touch-action: none;
+  transition: opacity var(--gugbab-duration-fast) ease;
+  background: transparent;
+}
+
+.gmui-scroll-area__scrollbar[data-orientation="vertical"] {
+  width: 8px;
+  padding: 2px;
+}
+
+.gmui-scroll-area__scrollbar[data-orientation="horizontal"] {
+  height: 8px;
+  flex-direction: column;
+  padding: 2px;
+}
+
+.gmui-scroll-area__scrollbar[data-state="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gmui-scroll-area__scrollbar[data-state="visible"] {
+  opacity: 1;
+}
+
+.gmui-scroll-area__scrollbar:hover {
+  width: 10px;
+}
+
+.gmui-scroll-area__scrollbar[data-orientation="horizontal"]:hover {
+  width: auto;
+  height: 10px;
+}
+
+.gmui-scroll-area__thumb {
+  flex: 1;
+  border-radius: var(--gugbab-radius-full);
+  background: var(--gugbab-color-fg-muted);
+  position: relative;
+  transition: background var(--gugbab-duration-fast) ease;
+}
+
+.gmui-scroll-area__thumb::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+
+.gmui-scroll-area__thumb:hover,
+.gmui-scroll-area__thumb:active {
+  background: var(--gugbab-color-fg-secondary);
+}
+
+.gmui-scroll-area__corner {
+  background: var(--gugbab-color-bg-inset);
+}

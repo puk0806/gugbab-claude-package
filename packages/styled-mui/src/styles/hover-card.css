@@ -1,0 +1,17 @@
+/* ── HoverCard ── */
+
+.gmui-hover-card__content {
+  z-index: var(--gugbab-z-popover);
+  background: var(--gugbab-color-bg-elevated);
+  border-radius: var(--gugbab-radius-md);
+  box-shadow: var(--gugbab-shadow-lg);
+  padding: var(--gugbab-space-4);
+  outline: none;
+  min-width: 220px;
+}
+
+.gmui-hover-card__trigger {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+}

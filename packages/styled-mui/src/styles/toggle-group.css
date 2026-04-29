@@ -1,0 +1,97 @@
+/* ToggleGroup — MUI style */
+
+.gmui-toggle-group {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--gugbab-radius-sm);
+  gap: 0;
+}
+
+.gmui-toggle-group[data-orientation="vertical"] {
+  flex-direction: column;
+}
+
+/* variant: default (filled active) */
+.gmui-toggle-group--default {
+  background: var(--gugbab-color-bg-inset);
+  padding: 2px;
+  border-radius: var(--gugbab-radius-sm);
+}
+
+/* variant: outline (bordered items) */
+.gmui-toggle-group--outline {
+  background: transparent;
+  border: 1px solid var(--gugbab-color-border-base);
+  border-radius: var(--gugbab-radius-sm);
+}
+
+/* size */
+.gmui-toggle-group--sm .gmui-toggle-group__item {
+  height: 28px;
+  padding: 0 var(--gugbab-space-2);
+  font-size: var(--gugbab-font-size-xs);
+}
+.gmui-toggle-group--md .gmui-toggle-group__item {
+  height: 36px;
+  padding: 0 var(--gugbab-space-3);
+  font-size: var(--gugbab-font-size-sm);
+}
+
+/* Item */
+.gmui-toggle-group__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--gugbab-color-fg-secondary);
+  font-family: var(--gugbab-font-family-sans);
+  font-weight: var(--gugbab-font-weight-medium);
+  cursor: pointer;
+  border-radius: calc(var(--gugbab-radius-sm) - 2px);
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+  white-space: nowrap;
+}
+
+/* outline variant: dividers between items */
+.gmui-toggle-group--outline .gmui-toggle-group__item + .gmui-toggle-group__item {
+  border-left: 1px solid var(--gugbab-color-border-base);
+  border-radius: 0;
+}
+
+.gmui-toggle-group--outline[data-orientation="vertical"]
+  .gmui-toggle-group__item
+  + .gmui-toggle-group__item {
+  border-left: none;
+  border-top: 1px solid var(--gugbab-color-border-base);
+}
+
+.gmui-toggle-group__item:hover:not([disabled]) {
+  background: var(--gugbab-color-bg-inset);
+  color: var(--gugbab-color-fg-primary);
+}
+
+.gmui-toggle-group__item:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: -2px;
+}
+
+.gmui-toggle-group__item[data-state="on"] {
+  background: var(--gugbab-color-bg-surface);
+  color: var(--gugbab-color-fg-primary);
+  box-shadow: var(--gugbab-shadow-sm);
+}
+
+.gmui-toggle-group--outline .gmui-toggle-group__item[data-state="on"] {
+  background: var(--gugbab-color-accent-subtle);
+  color: var(--gugbab-color-accent-base);
+  box-shadow: none;
+}
+
+.gmui-toggle-group__item[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}

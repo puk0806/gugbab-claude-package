@@ -1,0 +1,112 @@
+/* ── AlertDialog ── */
+
+.gmui-alert-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--gugbab-z-modal);
+  background: var(--gugbab-color-overlay);
+}
+
+.gmui-alert-dialog__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: var(--gugbab-z-modal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gugbab-space-4);
+  width: 100%;
+  max-height: calc(100vh - var(--gugbab-space-16));
+  overflow-y: auto;
+  background: var(--gugbab-color-bg-elevated);
+  border-radius: var(--gugbab-radius-md);
+  box-shadow: var(--gugbab-shadow-lg);
+  padding: var(--gugbab-space-6);
+  outline: none;
+}
+
+/* size variants */
+.gmui-alert-dialog__content--sm {
+  max-width: 360px;
+}
+.gmui-alert-dialog__content--md {
+  max-width: 480px;
+}
+.gmui-alert-dialog__content--lg {
+  max-width: 640px;
+}
+.gmui-alert-dialog__content--xl {
+  max-width: 800px;
+}
+
+.gmui-alert-dialog__title {
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-lg);
+  font-weight: var(--gugbab-font-weight-semibold);
+  color: var(--gugbab-color-fg-primary);
+  margin: 0;
+}
+
+.gmui-alert-dialog__description {
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  color: var(--gugbab-color-fg-secondary);
+  margin: 0;
+}
+
+.gmui-alert-dialog__trigger {
+  cursor: pointer;
+}
+
+.gmui-alert-dialog__cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gugbab-space-2) var(--gugbab-space-4);
+  border: 1px solid var(--gugbab-color-border-base);
+  border-radius: var(--gugbab-radius-sm);
+  background: transparent;
+  color: var(--gugbab-color-fg-primary);
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  font-weight: var(--gugbab-font-weight-medium);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.gmui-alert-dialog__cancel:hover {
+  background: var(--gugbab-color-bg-inset);
+}
+
+.gmui-alert-dialog__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gugbab-space-2) var(--gugbab-space-4);
+  border: none;
+  border-radius: var(--gugbab-radius-sm);
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  font-weight: var(--gugbab-font-weight-medium);
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.gmui-alert-dialog__action--accent {
+  background: var(--gugbab-color-accent-base);
+  color: var(--gugbab-color-fg-on-accent);
+}
+
+.gmui-alert-dialog__action--accent:hover {
+  opacity: 0.88;
+}
+
+.gmui-alert-dialog__action--danger {
+  background: var(--gugbab-color-danger-base);
+  color: var(--gugbab-color-danger-fg);
+}
+
+.gmui-alert-dialog__action--danger:hover {
+  opacity: 0.88;
+}

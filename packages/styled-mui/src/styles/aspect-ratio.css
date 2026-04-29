@@ -1,0 +1,7 @@
+/* AspectRatio uses inline styles for the ratio calculation — no custom class needed.
+   This file reserves the gmui-aspect-ratio class for consumer overrides. */
+.gmui-aspect-ratio {
+  overflow: hidden;
+  border-radius: var(--gugbab-radius-md);
+  box-shadow: var(--gugbab-shadow-sm);
+}

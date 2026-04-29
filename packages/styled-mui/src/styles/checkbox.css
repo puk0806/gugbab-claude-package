@@ -1,0 +1,90 @@
+.gmui-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid var(--gugbab-color-border-base);
+  border-radius: var(--gugbab-radius-sm);
+  background-color: var(--gugbab-color-bg-app);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.gmui-checkbox:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: 2px;
+}
+
+.gmui-checkbox[data-state="checked"],
+.gmui-checkbox[data-state="indeterminate"] {
+  background-color: var(--gugbab-color-accent-base);
+  border-color: var(--gugbab-color-accent-base);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.gmui-checkbox[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gmui-checkbox--sm {
+  width: 16px;
+  height: 16px;
+}
+.gmui-checkbox--md {
+  width: 20px;
+  height: 20px;
+}
+.gmui-checkbox--lg {
+  width: 24px;
+  height: 24px;
+}
+
+.gmui-checkbox__indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gugbab-color-fg-on-accent);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Default check / indeterminate glyphs — rendered when consumer doesn't
+   provide their own children. We use SVG via mask-image so the glyph
+   inherits the on-accent text color set above. */
+.gmui-checkbox[data-state="checked"] .gmui-checkbox__indicator::after,
+.gmui-checkbox[data-state="indeterminate"] .gmui-checkbox__indicator::after {
+  content: "";
+  width: 70%;
+  height: 70%;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.gmui-checkbox[data-state="checked"] .gmui-checkbox__indicator::after {
+  /* Material-style check (12 6 → 5 16 → 19 1, weight 3) */
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='5,12 10,17 19,7'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='5,12 10,17 19,7'/></svg>");
+}
+
+.gmui-checkbox[data-state="indeterminate"] .gmui-checkbox__indicator::after {
+  /* Solid horizontal bar */
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='5' y='10' width='14' height='4' rx='2' fill='black'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='5' y='10' width='14' height='4' rx='2' fill='black'/></svg>");
+}
+
+/* If consumer provides explicit children inside Indicator, hide the auto glyph */
+.gmui-checkbox__indicator:not(:empty)::after {
+  display: none;
+}

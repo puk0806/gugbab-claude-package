@@ -1,0 +1,37 @@
+/* ── Popover ── */
+
+.gmui-popover__content {
+  z-index: var(--gugbab-z-popover);
+  background: var(--gugbab-color-bg-elevated);
+  border-radius: var(--gugbab-radius-md);
+  box-shadow: var(--gugbab-shadow-lg);
+  padding: var(--gugbab-space-3);
+  outline: none;
+}
+
+.gmui-popover__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: var(--gugbab-radius-sm);
+  background: transparent;
+  color: var(--gugbab-color-fg-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.gmui-popover__close:hover {
+  background: var(--gugbab-color-bg-inset);
+  color: var(--gugbab-color-fg-primary);
+}
+
+.gmui-popover__trigger {
+  cursor: pointer;
+}
+
+.gmui-popover__anchor {
+  display: inline-block;
+}

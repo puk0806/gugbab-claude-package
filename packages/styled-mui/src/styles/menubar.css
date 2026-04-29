@@ -1,0 +1,39 @@
+/* Menubar — gmui-* tokens, MUI-style */
+
+/* Bar container */
+.gmui-menubar {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  background: var(--gugbab-color-bg-surface);
+  border: 1px solid var(--gugbab-color-border-subtle);
+  border-radius: var(--gugbab-radius-md);
+  box-shadow: var(--gugbab-shadow-sm);
+  font-family: var(--gugbab-font-family-sans);
+}
+
+/* Menubar trigger button */
+.gmui-menubar__trigger {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-family: inherit;
+  font-size: var(--gugbab-font-size-sm);
+  color: var(--gugbab-color-fg-primary);
+  background: transparent;
+  border: none;
+  border-radius: var(--gugbab-radius-sm);
+  cursor: pointer;
+  transition: background 80ms;
+}
+
+.gmui-menubar__trigger:hover,
+.gmui-menubar__trigger[data-state="open"] {
+  background: var(--gugbab-color-bg-inset);
+}
+
+.gmui-menubar__trigger:disabled {
+  color: var(--gugbab-color-fg-disabled);
+  cursor: not-allowed;
+}

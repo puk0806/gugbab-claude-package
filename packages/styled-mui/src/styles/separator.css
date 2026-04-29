@@ -1,0 +1,20 @@
+.gmui-separator {
+  background-color: var(--gugbab-color-border-base);
+  flex-shrink: 0;
+}
+
+.gmui-separator--horizontal {
+  display: block;
+  height: 1px;
+  width: 100%;
+  margin-block: var(--gugbab-space-2);
+  box-shadow: 0 1px 0 var(--gugbab-color-border-subtle);
+}
+
+.gmui-separator--vertical {
+  display: inline-block;
+  width: 1px;
+  height: 100%;
+  margin-inline: var(--gugbab-space-2);
+  box-shadow: 1px 0 0 var(--gugbab-color-border-subtle);
+}

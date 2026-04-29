@@ -1,0 +1,98 @@
+.gmui-navigation-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-family: var(--gugbab-font-family-sans);
+}
+
+.gmui-navigation-menu__list {
+  display: flex;
+  align-items: center;
+  gap: var(--gugbab-space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gmui-navigation-menu__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gmui-navigation-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gugbab-space-1);
+  padding: var(--gugbab-space-1) var(--gugbab-space-3);
+  border: none;
+  border-radius: var(--gugbab-radius-sm);
+  background: transparent;
+  color: var(--gugbab-color-fg-primary);
+  font-size: var(--gugbab-font-size-sm);
+  font-weight: var(--gugbab-font-weight-medium);
+  cursor: pointer;
+  transition: background var(--gugbab-duration-fast) ease;
+  user-select: none;
+  height: 36px;
+}
+
+.gmui-navigation-menu__trigger:hover {
+  background: var(--gugbab-color-bg-inset);
+}
+
+.gmui-navigation-menu__trigger[data-state="open"] {
+  background: var(--gugbab-color-bg-inset);
+  color: var(--gugbab-color-accent-base);
+}
+
+.gmui-navigation-menu__trigger:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: 2px;
+}
+
+.gmui-navigation-menu__content {
+  position: absolute;
+  top: calc(100% + var(--gugbab-space-2));
+  left: 0;
+  min-width: 200px;
+  border: 1px solid var(--gugbab-color-border-base);
+  border-radius: var(--gugbab-radius-md);
+  background: var(--gugbab-color-bg-surface);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: var(--gugbab-space-2);
+  z-index: 50;
+  animation: gmui-nav-content-in var(--gugbab-duration-fast) ease;
+}
+
+@keyframes gmui-nav-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gmui-navigation-menu__link {
+  display: flex;
+  align-items: center;
+  padding: var(--gugbab-space-2) var(--gugbab-space-3);
+  border-radius: var(--gugbab-radius-sm);
+  color: var(--gugbab-color-fg-primary);
+  text-decoration: none;
+  font-size: var(--gugbab-font-size-sm);
+  transition: background var(--gugbab-duration-fast) ease;
+}
+
+.gmui-navigation-menu__link:hover {
+  background: var(--gugbab-color-bg-inset);
+  color: var(--gugbab-color-accent-base);
+}
+
+.gmui-navigation-menu__link:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: 2px;
+}

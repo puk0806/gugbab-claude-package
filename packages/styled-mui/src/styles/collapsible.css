@@ -1,0 +1,63 @@
+/* Collapsible — MUI style */
+
+.gmui-collapsible {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--gugbab-font-family-sans);
+}
+
+/* Trigger */
+.gmui-collapsible__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--gugbab-space-3) var(--gugbab-space-4);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--gugbab-color-border-base);
+  color: var(--gugbab-color-fg-primary);
+  font-family: inherit;
+  font-size: var(--gugbab-font-size-sm);
+  font-weight: var(--gugbab-font-weight-medium);
+  cursor: pointer;
+  text-align: left;
+  transition: background 150ms ease;
+  border-radius: var(--gugbab-radius-sm) var(--gugbab-radius-sm) 0 0;
+}
+
+.gmui-collapsible__trigger:hover:not([disabled]) {
+  background: var(--gugbab-color-bg-inset);
+}
+
+.gmui-collapsible__trigger:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: -2px;
+}
+
+.gmui-collapsible__trigger[data-state="closed"] {
+  border-radius: var(--gugbab-radius-sm);
+  border-bottom: 1px solid var(--gugbab-color-border-base);
+}
+
+.gmui-collapsible__trigger[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Content */
+.gmui-collapsible__content {
+  overflow: hidden;
+  padding: var(--gugbab-space-3) var(--gugbab-space-4);
+  font-size: var(--gugbab-font-size-sm);
+  color: var(--gugbab-color-fg-secondary);
+  border: 1px solid var(--gugbab-color-border-base);
+  border-top: none;
+  border-radius: 0 0 var(--gugbab-radius-sm) var(--gugbab-radius-sm);
+}
+
+.gmui-collapsible__content[data-state="closed"],
+.gmui-collapsible__content[hidden] {
+  display: none;
+}

@@ -1,0 +1,98 @@
+.gmui-pagination {
+  display: flex;
+  align-items: center;
+}
+
+.gmui-pagination__list {
+  display: flex;
+  align-items: center;
+  gap: var(--gugbab-space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gmui-pagination__item {
+  display: contents;
+}
+
+.gmui-pagination__page,
+.gmui-pagination__prev,
+.gmui-pagination__next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gugbab-color-border-base);
+  border-radius: var(--gugbab-radius-sm);
+  background: var(--gugbab-color-bg-surface);
+  color: var(--gugbab-color-fg-primary);
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+  font-weight: var(--gugbab-font-weight-medium);
+  cursor: pointer;
+  transition:
+    background var(--gugbab-duration-fast) ease,
+    border-color var(--gugbab-duration-fast) ease;
+  user-select: none;
+}
+
+.gmui-pagination--sm .gmui-pagination__page,
+.gmui-pagination--sm .gmui-pagination__prev,
+.gmui-pagination--sm .gmui-pagination__next {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 var(--gugbab-space-1);
+  font-size: var(--gugbab-font-size-xs);
+}
+
+.gmui-pagination--md .gmui-pagination__page,
+.gmui-pagination--md .gmui-pagination__prev,
+.gmui-pagination--md .gmui-pagination__next {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 var(--gugbab-space-2);
+}
+
+.gmui-pagination__page:hover:not([disabled]),
+.gmui-pagination__prev:hover:not([disabled]),
+.gmui-pagination__next:hover:not([disabled]) {
+  background: var(--gugbab-color-bg-inset);
+  border-color: var(--gugbab-color-border-strong);
+}
+
+.gmui-pagination__page[aria-current="page"] {
+  background: var(--gugbab-color-accent-base);
+  border-color: var(--gugbab-color-accent-base);
+  color: #fff;
+}
+
+.gmui-pagination__page:disabled,
+.gmui-pagination__prev:disabled,
+.gmui-pagination__next:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.gmui-pagination__page:focus-visible,
+.gmui-pagination__prev:focus-visible,
+.gmui-pagination__next:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: 2px;
+}
+
+.gmui-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  color: var(--gugbab-color-fg-secondary);
+  font-size: var(--gugbab-font-size-sm);
+  user-select: none;
+}
+
+.gmui-pagination--sm .gmui-pagination__ellipsis {
+  min-width: 28px;
+  height: 28px;
+  font-size: var(--gugbab-font-size-xs);
+}

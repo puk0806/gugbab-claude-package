@@ -1,0 +1,117 @@
+/* Tabs — MUI style (default: underline variant) */
+
+.gmui-tabs {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--gugbab-font-family-sans);
+}
+
+/* List */
+.gmui-tabs__list {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+}
+
+/* underline variant: bottom border on list */
+.gmui-tabs--underline .gmui-tabs__list {
+  border-bottom: 1px solid var(--gugbab-color-border-base);
+}
+
+/* pills variant: contained row */
+.gmui-tabs--pills .gmui-tabs__list {
+  background: var(--gugbab-color-bg-inset);
+  border-radius: var(--gugbab-radius-sm);
+  padding: 2px;
+  gap: 2px;
+  align-items: center;
+  border-bottom: none;
+}
+
+/* Trigger */
+.gmui-tabs__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: var(--gugbab-font-weight-medium);
+  color: var(--gugbab-color-fg-secondary);
+  transition:
+    color 150ms ease,
+    background 150ms ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+/* size */
+.gmui-tabs--sm .gmui-tabs__trigger {
+  height: 32px;
+  padding: 0 var(--gugbab-space-2);
+  font-size: var(--gugbab-font-size-xs);
+}
+.gmui-tabs--md .gmui-tabs__trigger {
+  height: 42px;
+  padding: 0 var(--gugbab-space-4);
+  font-size: var(--gugbab-font-size-sm);
+}
+
+/* underline — active indicator */
+.gmui-tabs--underline .gmui-tabs__trigger::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gugbab-color-accent-base);
+  transform: scaleX(0);
+  transition: transform 150ms ease;
+}
+
+.gmui-tabs--underline .gmui-tabs__trigger[data-state="active"]::after {
+  transform: scaleX(1);
+}
+
+.gmui-tabs--underline .gmui-tabs__trigger[data-state="active"] {
+  color: var(--gugbab-color-accent-base);
+}
+
+/* pills — active item */
+.gmui-tabs--pills .gmui-tabs__trigger {
+  border-radius: calc(var(--gugbab-radius-sm) - 2px);
+}
+
+.gmui-tabs--pills .gmui-tabs__trigger[data-state="active"] {
+  background: var(--gugbab-color-bg-surface);
+  color: var(--gugbab-color-fg-primary);
+  box-shadow: var(--gugbab-shadow-sm);
+}
+
+.gmui-tabs__trigger:hover:not([disabled]):not([data-state="active"]) {
+  color: var(--gugbab-color-fg-primary);
+  background: var(--gugbab-color-bg-inset);
+}
+
+.gmui-tabs__trigger:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: -2px;
+}
+
+.gmui-tabs__trigger[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Content */
+.gmui-tabs__content {
+  padding: var(--gugbab-space-4) 0;
+  outline: none;
+}
+
+.gmui-tabs__content[hidden] {
+  display: none;
+}

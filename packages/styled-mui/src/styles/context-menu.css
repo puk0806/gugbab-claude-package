@@ -1,0 +1,8 @@
+/* ContextMenu — gmui-* tokens, MUI-style (elevated shadow)
+   Shares gmui-menu__* class names with dropdown-menu.css.
+   No additional rules needed unless visual divergence is required. */
+
+/* ContextMenu trigger zone */
+.gmui-context-menu__trigger {
+  display: contents;
+}

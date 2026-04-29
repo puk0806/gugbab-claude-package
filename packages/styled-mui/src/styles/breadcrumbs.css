@@ -1,0 +1,59 @@
+.gmui-breadcrumbs {
+  font-family: var(--gugbab-font-family-sans);
+  font-size: var(--gugbab-font-size-sm);
+}
+
+.gmui-breadcrumbs__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--gugbab-space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gmui-breadcrumbs__item {
+  display: flex;
+  align-items: center;
+}
+
+.gmui-breadcrumbs__link {
+  color: var(--gugbab-color-accent-base);
+  text-decoration: none;
+  transition: color var(--gugbab-duration-fast) ease;
+}
+
+.gmui-breadcrumbs__link:hover {
+  color: var(--gugbab-color-accent-hover);
+  text-decoration: underline;
+}
+
+.gmui-breadcrumbs__link:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: 2px;
+  border-radius: var(--gugbab-radius-sm);
+}
+
+.gmui-breadcrumbs__separator {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 var(--gugbab-space-1);
+  color: var(--gugbab-color-fg-muted);
+  font-size: var(--gugbab-font-size-xs);
+}
+
+/* Chevron variant: auto-insert "›" when separator has no children */
+.gmui-breadcrumbs--chevron .gmui-breadcrumbs__separator:empty::before {
+  content: "›";
+}
+
+/* Slash variant */
+.gmui-breadcrumbs--slash .gmui-breadcrumbs__separator:empty::before {
+  content: "/";
+}
+
+.gmui-breadcrumbs__page {
+  color: var(--gugbab-color-fg-primary);
+  font-weight: var(--gugbab-font-weight-medium);
+}

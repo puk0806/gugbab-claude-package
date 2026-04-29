@@ -1,0 +1,84 @@
+/* RadioGroup — MUI style */
+
+.gmui-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gugbab-space-2);
+}
+
+.gmui-radio-group[aria-orientation="horizontal"] {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+/* size */
+.gmui-radio-group--sm {
+  gap: var(--gugbab-space-1);
+}
+.gmui-radio-group--md {
+  gap: var(--gugbab-space-2);
+}
+
+/* Item */
+.gmui-radio-group__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--gugbab-radius-full);
+  border: 2px solid var(--gugbab-color-border-base);
+  background: var(--gugbab-color-bg-surface);
+  color: transparent;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.gmui-radio-group--sm .gmui-radio-group__item {
+  width: 16px;
+  height: 16px;
+}
+
+.gmui-radio-group__item:hover:not([disabled]) {
+  border-color: var(--gugbab-color-accent-base);
+}
+
+.gmui-radio-group__item:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: 2px;
+}
+
+.gmui-radio-group__item[data-state="checked"] {
+  border-color: var(--gugbab-color-accent-base);
+  background: var(--gugbab-color-accent-base);
+}
+
+.gmui-radio-group__item[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Indicator (inner dot) */
+.gmui-radio-group__indicator {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--gugbab-radius-full);
+  background: var(--gugbab-color-fg-on-accent);
+  transform: scale(0);
+  transition: transform 150ms ease;
+}
+
+.gmui-radio-group--sm .gmui-radio-group__indicator {
+  width: 6px;
+  height: 6px;
+}
+
+.gmui-radio-group__item[data-state="checked"] .gmui-radio-group__indicator {
+  transform: scale(1);
+}
