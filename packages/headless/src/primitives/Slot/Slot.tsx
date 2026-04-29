@@ -20,7 +20,7 @@ export interface SlotProps extends HTMLAttributes<HTMLElement> {
 
 /**
  * Merges the passed props/ref onto its single child. Powers the `asChild`
- * pattern used across `@gugbab-ui/react`. Event handlers from the slot and
+ * pattern used across `@gugbab-ui/headless`. Event handlers from the slot and
  * the child are chained; the child handler runs first and may call
  * `event.preventDefault()` to skip the slot handler.
  *

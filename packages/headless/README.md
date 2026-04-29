@@ -1,4 +1,4 @@
-# @gugbab-ui/react
+# @gugbab-ui/headless
 
 Headless, accessible React components for `@gugbab-ui/*` — behavior only, bring your own styles.
 
@@ -29,13 +29,13 @@ Pagination · Breadcrumbs · NavigationMenu
 ## 설치
 
 ```sh
-pnpm add @gugbab-ui/react @floating-ui/react
+pnpm add @gugbab-ui/headless @floating-ui/react
 ```
 
 ## 사용 예
 
 ```tsx
-import { Dialog } from '@gugbab-ui/react';
+import { Dialog } from '@gugbab-ui/headless';
 
 function Example() {
   return (
