@@ -22,12 +22,20 @@
     "sb:dev:radix": "bash scripts/storybook-dev.sh radix",
     "sb:build:mui": "bash scripts/storybook-build.sh mui",
     "sb:build:radix": "bash scripts/storybook-build.sh radix",
+    "vr": "bash scripts/storybook-vr.sh",
+    "vr:mui": "bash scripts/storybook-vr.sh --project=mui",
+    "vr:radix": "bash scripts/storybook-vr.sh --project=radix",
+    "vr:update": "bash scripts/storybook-vr.sh --update",
+    "vr:update:mui": "bash scripts/storybook-vr.sh --project=mui --update",
+    "vr:update:radix": "bash scripts/storybook-vr.sh --project=radix --update",
+    "vr:report": "playwright show-report",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.2",
     "@biomejs/biome": "^2.4.12",
     "@changesets/cli": "^2.27.9",
     "@commitlint/cli": "^19.5.0",
@@ -35,8 +43,13 @@
     "@gugbab-ui/commitlint-config": "workspace:*",
     "@gugbab-ui/tsconfig": "workspace:*",
     "@playwright/test": "^1.59.1",
+    "@storybook/test-runner": "^0.24.3",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "http-server": "^14.1.1",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
-    "turbo": "^2.2.3"
+    "turbo": "^2.2.3",
+    "wait-on": "^9.0.5"
   }
 }
