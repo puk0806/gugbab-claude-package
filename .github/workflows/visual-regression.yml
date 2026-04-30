@@ -1,35 +1,14 @@
 name: visual-regression
 
 on:
+  # paths-filter 를 workflow 레벨에서 제거 — branch protection 의 required status check
+  # 가 PR 마다 항상 visual-regression check 를 기대하도록. 시각 영향 없는 PR 은 잡 안의
+  # detect step 에서 빠르게 skip 처리하지만 status check 는 success 로 끝나 머지 가능.
   pull_request:
     branches: [main]
-    # labeled 이벤트는 'accept-baseline' 라벨이 붙었을 때 baseline 갱신 모드로 진입.
     types: [opened, synchronize, reopened, labeled]
-    paths:
-      - 'apps/storybook-mui/**'
-      - 'apps/storybook-radix/**'
-      - 'packages/headless/**'
-      - 'packages/styled-mui/**'
-      - 'packages/styled-radix/**'
-      - 'packages/tokens/**'
-      - 'packages/utils/**'
-      - 'packages/hooks/**'
-      - 'e2e/visual/**'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/visual-regression.yml'
   push:
     branches: [main]
-    paths:
-      - 'apps/storybook-mui/**'
-      - 'apps/storybook-radix/**'
-      - 'packages/headless/**'
-      - 'packages/styled-mui/**'
-      - 'packages/styled-radix/**'
-      - 'packages/tokens/**'
-      - 'packages/utils/**'
-      - 'packages/hooks/**'
-      - 'e2e/visual/**'
-      - 'pnpm-lock.yaml'
 
 permissions:
   contents: write
@@ -51,31 +30,28 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
+          # dorny/paths-filter 가 base ↔ head diff 검사 위해 fetch-depth=2 필요.
+          fetch-depth: 2
           ref: ${{ github.event.pull_request.head.ref || github.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: pnpm/action-setup@v4
+      - name: Detect visual paths
+        id: changes
+        uses: dorny/paths-filter@v3
         with:
-          version: 9.9.0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.13.1
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build workspace packages
-        run: pnpm build
-
-      - name: Build Storybook (mui + radix)
-        run: |
-          pnpm sb:build:mui
-          pnpm sb:build:radix
-
-      - name: Install Playwright (chromium only)
-        run: pnpm exec playwright install --with-deps chromium
+          filters: |
+            visual:
+              - 'apps/storybook-mui/**'
+              - 'apps/storybook-radix/**'
+              - 'packages/headless/**'
+              - 'packages/styled-mui/**'
+              - 'packages/styled-radix/**'
+              - 'packages/tokens/**'
+              - 'packages/utils/**'
+              - 'packages/hooks/**'
+              - 'e2e/visual/**'
+              - 'pnpm-lock.yaml'
+              - '.github/workflows/visual-regression.yml'
 
       - name: Detect mode
         id: mode
@@ -85,10 +61,46 @@ jobs:
               && [ "${{ github.event.label.name }}" = "accept-baseline" ]; then
             echo "mode=accept" >> $GITHUB_OUTPUT
             echo "→ accept-baseline 라벨 감지 — baseline 갱신 모드"
+          elif [ "${{ steps.changes.outputs.visual }}" != "true" ]; then
+            echo "mode=skip" >> $GITHUB_OUTPUT
+            echo "→ 시각 영향 paths 변경 없음 — visual regression 검증 skip (status check 는 success)"
           else
             echo "mode=compare" >> $GITHUB_OUTPUT
             echo "→ 시각 회귀 비교 모드"
           fi
+
+      - name: Skip notice
+        if: steps.mode.outputs.mode == 'skip'
+        run: echo "✅ 시각 영향 없는 PR — 검증 skip. 머지 차단되지 않음."
+
+      - uses: pnpm/action-setup@v4
+        if: steps.mode.outputs.mode != 'skip'
+        with:
+          version: 9.9.0
+
+      - uses: actions/setup-node@v4
+        if: steps.mode.outputs.mode != 'skip'
+        with:
+          node-version: 22.13.1
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        if: steps.mode.outputs.mode != 'skip'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build workspace packages
+        if: steps.mode.outputs.mode != 'skip'
+        run: pnpm build
+
+      - name: Build Storybook (mui + radix)
+        if: steps.mode.outputs.mode != 'skip'
+        run: |
+          pnpm sb:build:mui
+          pnpm sb:build:radix
+
+      - name: Install Playwright (chromium only)
+        if: steps.mode.outputs.mode != 'skip'
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Detect baseline existence
         id: baseline
