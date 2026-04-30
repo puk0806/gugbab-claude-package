@@ -1,6 +1,8 @@
 name: visual-regression-baseline
 
 on:
+  # 일반 baseline 갱신은 PR 의 'accept-baseline' 라벨로 visual-regression.yml 안에서
+  # 처리한다 (코드 + 새 baseline 한 PR 머지). 본 워크플로우는 긴급 수동 갱신 전용.
   workflow_dispatch:
     inputs:
       project:
@@ -12,23 +14,6 @@ on:
           - mui
           - radix
           - both
-  # main 에 시각 영향 PR 이 머지되면 자동으로 baseline 갱신 PR 발급.
-  # 사용자가 PR 단계에서 인라인 이미지 코멘트로 시각 검수했다는 가정.
-  # baseline PR 자체의 머지(__screenshots__ 변경) 는 commit-message [skip ci] 로
-  # 무한 루프를 회피한다.
-  push:
-    branches: [main]
-    paths:
-      - 'apps/storybook-mui/**'
-      - 'apps/storybook-radix/**'
-      - 'packages/headless/**'
-      - 'packages/styled-mui/**'
-      - 'packages/styled-radix/**'
-      - 'packages/tokens/**'
-      - 'packages/utils/**'
-      - 'packages/hooks/**'
-      - 'e2e/visual/**'
-      - '.github/workflows/visual-regression-baseline.yml'
 
 permissions:
   contents: write
