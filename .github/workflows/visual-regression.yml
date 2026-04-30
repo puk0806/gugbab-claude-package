@@ -30,7 +30,7 @@ on:
       - 'pnpm-lock.yaml'
 
 permissions:
-  contents: read
+  contents: write           # PR 브랜치에 baseline auto-bootstrap commit 위해
   pull-requests: write
   actions: read
 
@@ -43,6 +43,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          # PR 이벤트에서 head 를 정확히 체크아웃해야 push 가능 (detached HEAD 회피).
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: pnpm/action-setup@v4
         with:
@@ -67,8 +71,40 @@ jobs:
       - name: Install Playwright (chromium only)
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Run visual regression
+      - name: Detect baseline existence
+        id: baseline
+        run: |
+          shopt -s nullglob globstar
+          files=(e2e/visual/__screenshots__/**/*-linux.png)
+          if [ ${#files[@]} -gt 0 ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "→ baseline 존재: ${#files[@]} files"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "→ baseline 미존재 (auto-bootstrap 진행)"
+          fi
+
+      - name: Run visual regression (compare)
+        if: steps.baseline.outputs.exists == 'true'
         run: pnpm exec playwright test --config e2e/visual/playwright.config.ts
+
+      - name: Bootstrap baseline (first PR — baseline 없을 때 자동 생성)
+        if: steps.baseline.outputs.exists == 'false' && github.event_name == 'pull_request'
+        run: pnpm exec playwright test --config e2e/visual/playwright.config.ts --update-snapshots
+
+      - name: Commit baseline to PR branch
+        if: steps.baseline.outputs.exists == 'false' && github.event_name == 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add e2e/visual/__screenshots__
+          if git diff --cached --quiet; then
+            echo "No baseline changes to commit"
+            exit 0
+          fi
+          git commit -m "[scripts] Add: bootstrap visual baseline (auto by GitHub Actions)"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          echo "→ baseline 222장 PR 브랜치에 commit 완료. PR Files changed 탭에서 시각 검수 가능."
 
       - name: Upload Playwright report
         if: always()
@@ -104,7 +140,7 @@ jobs:
 
             **Status:** `${{ needs.visual-regression.result }}`
 
-            ${{ needs.visual-regression.result == 'failure' && '시각 회귀 발견. Actions run에서 `vrt-test-results` artifact를 다운받아 diff PNG를 확인하거나, `playwright-report`의 HTML 리포트를 보세요.' || '모든 시각 검사 통과.' }}
+            ${{ needs.visual-regression.result == 'failure' && '시각 회귀 발견. Actions run에서 `vrt-test-results` artifact를 다운받아 diff PNG를 확인하거나, `playwright-report`의 HTML 리포트를 보세요.' || '모든 시각 검사 통과 (또는 baseline auto-bootstrap 완료 — PR Files changed 탭에서 PNG 시각 검수).' }}
 
             [Run details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
           comment-tag: vrt-comment
