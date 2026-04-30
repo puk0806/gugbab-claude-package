@@ -1,0 +1,3 @@
+# Local non-CI snapshots (e.g. macOS darwin variants) — only commit linux snapshots from CI.
+__screenshots__/**/*-darwin.png
+__screenshots__/**/*-darwin-*.png

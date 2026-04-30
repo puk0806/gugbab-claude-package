@@ -69,6 +69,10 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 | `pnpm sb:dev:radix`      | Radix 쇼케이스 dev 서버 — http://localhost:6007                       |
 | `pnpm sb:build:mui`      | 정적 빌드 → `apps/storybook-mui/storybook-static/`                    |
 | `pnpm sb:build:radix`    | 정적 빌드 → `apps/storybook-radix/storybook-static/`                  |
+| `pnpm vr`                | 양쪽 Storybook 시각 회귀 — Playwright + `toHaveScreenshot`            |
+| `pnpm vr:mui` / `vr:radix` | 단일 시스템만 시각 회귀                                            |
+| `pnpm vr:update`         | baseline 갱신 (양쪽). CI에서 자동 생성된 baseline만 commit한다        |
+| `pnpm vr:report`         | 마지막 실행 HTML 리포트 열기 (`playwright-report/`)                   |
 
 추가 인자는 그대로 전달된다 (`bash scripts/storybook-build.sh mui --skip-deps` 로 deps 빌드 생략 등).
 
@@ -139,3 +143,4 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-04-28 | Phase 6.3.2 — Playwright 시각 검수 (`scripts/visual-check.{mjs,sh}`)로 18 페이지 캡처, 토큰 30+개 추가 mismatch(`accent-9/-1~12`, `spacing-N`, `radius-1/2/3` 등) 일괄 정리. Slider/Progress 가시성 회복. |
 | 2026-04-28 | Phase 6.3.3 — `packages/react` → `packages/headless` (`@gugbab-ui/headless`) 리네이밍 — 헤드리스 의도가 패키지명에서 즉시 드러나도록. 82 파일 import + 4 workspace dep 일괄 갱신. |
 | 2026-04-28 | Phase 6.3.4 — `@gugbab-ui/tokens` 정적 토큰화. `@mui/material`·`@radix-ui/colors`·`@emotion/*` devDep 전부 제거. `createTheme()` 어댑터 → 정적 객체. dist/{mui,radix}.css는 byte-identical, 번들은 234KB → 15KB (16배 감소). 외부 디자인 라이브러리 변화에 휘둘리지 않는 자기완결 패키지로 전환. |
+| 2026-04-29 | Phase 6.4 — Visual Regression 인프라. Playwright `toHaveScreenshot` + `e2e/visual/` 셋업 (임계치 `maxDiffPixelRatio: 0.001` = 0.1%, 디자인 시스템 기준). 인터랙티브 stories(Toast/Dialog/Popover/Menu/Select 등)는 trigger 클릭 후 캡처 + portal 컴포넌트는 viewport 전체 캡처. `pnpm vr` 명령군 추가. GitHub Actions 워크플로우 2종(`visual-regression.yml` PR 게이트 + `visual-regression-baseline.yml` workflow_dispatch baseline 자동 PR). 양쪽 Storybook 222개 stories 픽셀 회귀 잠금. baseline은 CI(Linux)에서만 생성·commit, macOS 로컬 PNG는 `.gitignore`. |
