@@ -47,6 +47,20 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 8. `packages/styled-mui` / `packages/styled-radix` — 헤드리스 위에 얹는 스타일 패키지 (각각 35종, `gmui-*` / `grx-*` 클래스)
 9. `apps/storybook-mui` / `apps/storybook-radix` — 시스템별 독립 쇼케이스 (Storybook 10)
 
+### 새 패키지 추가 시 체크리스트
+
+새 `packages/*` 디렉토리를 추가할 때 다음을 점검한다.
+
+| 패키지 종류 | 시각 회귀 워크플로우 처리 |
+|------------|---------------------------|
+| 시각 영향 (스타일·토큰·UI 컴포넌트·hooks·utils 등) | **추가 작업 없음** — `.github/workflows/visual-regression.yml` 의 `packages/**` 패턴이 자동으로 매치해서 시각 회귀 CI 가 동작한다 |
+| 시각 무관 설정 패키지 (예: 새 `*-config`, lint preset, codegen 등) | `.github/workflows/visual-regression.yml` 의 `Detect visual paths` step `filters.visual` 에 `- '!packages/{이름}/**'` 제외 라인 추가 |
+
+공통 점검:
+- `pnpm-workspace.yaml` 의 `packages/*` 패턴이 자동 인식 (별도 등록 불필요)
+- README.md "배포 패키지" 표 항목 추가
+- 패키지명 의도가 즉시 드러나는지(모호한 `react`/`core` 같은 이름 회피 — `feedback_package_naming_clarity`)
+
 ---
 
 ## 컨텍스트 관리

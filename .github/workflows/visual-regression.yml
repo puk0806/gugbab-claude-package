@@ -34,16 +34,18 @@ jobs:
         id: changes
         uses: dorny/paths-filter@v3
         with:
+          # packages/** 전체를 시각 영향으로 간주하고 비-시각 패키지(설정 전용)만 제외.
+          # 새 시각 영향 패키지가 추가돼도 자동 매치되어 paths 누락 위험 차단.
+          # 시각 무관 패키지(예: 새 *-config 패키지) 추가 시에만 아래 ! 제외 목록에 추가.
+          # 체크리스트는 CLAUDE.md 의 "새 패키지 추가 시" 섹션 참조.
           filters: |
             visual:
               - 'apps/storybook-mui/**'
               - 'apps/storybook-radix/**'
-              - 'packages/headless/**'
-              - 'packages/styled-mui/**'
-              - 'packages/styled-radix/**'
-              - 'packages/tokens/**'
-              - 'packages/utils/**'
-              - 'packages/hooks/**'
+              - 'packages/**'
+              - '!packages/biome-config/**'
+              - '!packages/tsconfig/**'
+              - '!packages/commitlint-config/**'
               - 'e2e/visual/**'
               - 'pnpm-lock.yaml'
               - '.github/workflows/visual-regression.yml'
