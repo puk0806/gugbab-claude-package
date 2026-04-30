@@ -6,7 +6,8 @@ on:
   # detect step 에서 빠르게 skip 처리하지만 status check 는 success 로 끝나 머지 가능.
   pull_request:
     branches: [main]
-    types: [opened, synchronize, reopened]
+    # labeled 이벤트는 'accept-baseline' 라벨일 때만 baseline 갱신 모드 진입.
+    types: [opened, synchronize, reopened, labeled]
   push:
     branches: [main]
 
@@ -21,6 +22,11 @@ concurrency:
 
 jobs:
   visual-regression:
+    # labeled 이벤트는 'accept-baseline' 라벨일 때만 처리, 그 외 라벨 부여는 잡 자체 skip.
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.action != 'labeled' ||
+      github.event.label.name == 'accept-baseline'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -53,9 +59,14 @@ jobs:
       - name: Detect mode
         id: mode
         run: |
-          if [ "${{ steps.changes.outputs.visual }}" != "true" ]; then
+          if [ "${{ github.event_name }}" = "pull_request" ] \
+              && [ "${{ github.event.action }}" = "labeled" ] \
+              && [ "${{ github.event.label.name }}" = "accept-baseline" ]; then
+            echo "mode=accept" >> $GITHUB_OUTPUT
+            echo "→ accept-baseline 라벨 감지 — baseline 갱신 모드 (사람 게이트)"
+          elif [ "${{ steps.changes.outputs.visual }}" != "true" ]; then
             echo "mode=skip" >> $GITHUB_OUTPUT
-            echo "→ 시각 영향 paths 변경 없음 — visual regression 검증 skip (status check 는 success)"
+            echo "→ 시각 영향 paths 변경 없음 — 검증 skip (status check 는 success)"
           else
             echo "mode=compare" >> $GITHUB_OUTPUT
             echo "→ 시각 회귀 비교 모드"
@@ -108,33 +119,18 @@ jobs:
           fi
 
       # ─────────────────────────────────────────────────────────────
-      # COMPARE 모드: baseline ↔ 현재 캡처 비교. 차이 발견 시 자동으로
-      # baseline 을 갱신해서 PR 브랜치에 commit + push. 사용자는 인라인
-      # 이미지 코멘트로 시각 검수 후 머지 버튼만 누르면 끝.
+      # ACCEPT 모드: 'accept-baseline' 라벨 감지 시 baseline 갱신 + PR 브랜치 commit.
+      # 사용자가 PR conversations 탭에서 인라인 이미지 검수 → 라벨 부여 → 자동 갱신 →
+      # CI 자동 재실행(synchronize) → compare 통과 → 머지 활성.
+      # 인라인 이미지 코멘트(vrt-diff-images)는 별도 태그라 라벨 부여 후에도 영구 보존.
       # ─────────────────────────────────────────────────────────────
 
-      - name: Run visual regression (compare)
-        id: vr_compare
-        if: steps.mode.outputs.mode == 'compare' && steps.baseline.outputs.exists == 'true'
-        run: pnpm exec playwright test --config e2e/visual/playwright.config.ts
-        continue-on-error: true
-
-      # 시각 차이 발견 시 자동으로 baseline 갱신 + PR 브랜치 commit.
-      # 사용자가 라벨 부여 같은 추가 액션 없이 인라인 이미지만 검수 후 머지.
-      - name: Auto-update baseline on diff
-        if: |
-          steps.mode.outputs.mode == 'compare' &&
-          steps.baseline.outputs.exists == 'true' &&
-          steps.vr_compare.outcome == 'failure' &&
-          github.event_name == 'pull_request'
+      - name: Generate accepted baseline
+        if: steps.mode.outputs.mode == 'accept'
         run: pnpm exec playwright test --config e2e/visual/playwright.config.ts --update-snapshots
 
-      - name: Commit auto-updated baseline to PR branch
-        if: |
-          steps.mode.outputs.mode == 'compare' &&
-          steps.baseline.outputs.exists == 'true' &&
-          steps.vr_compare.outcome == 'failure' &&
-          github.event_name == 'pull_request'
+      - name: Commit accepted baseline to PR branch
+        if: steps.mode.outputs.mode == 'accept'
         env:
           HUSKY: '0'
         run: |
@@ -145,9 +141,36 @@ jobs:
             echo "No baseline changes to commit"
             exit 0
           fi
-          git commit -m "[scripts] Modify: auto-update baseline (visual diff detected)"
+          git commit -m "[scripts] Modify: accepted baseline via accept-baseline label"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          echo "→ baseline 자동 갱신 commit push 완료. CI 자동 재실행 후 통과 예상."
+          echo "→ baseline 갱신 commit 을 PR 브랜치에 push 완료. CI 자동 재실행 후 통과 예상."
+
+      - name: Comment PR — baseline accepted (status)
+        if: steps.mode.outputs.mode == 'accept'
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          message: |
+            ## ✅ Baseline Accepted
+
+            `accept-baseline` 라벨 감지 — baseline 을 PR 의 시각 변경으로 갱신 + PR 브랜치에 commit 했습니다.
+
+            - CI 가 자동 재실행되어 통과 예상 (baseline = 현재 코드 캡처)
+            - 머지하면 코드 + 새 baseline 이 한 번에 main 에 박제
+            - 위쪽의 인라인 이미지 자료(`vrt-diff-images` 코멘트)는 영구 보존됩니다.
+          comment-tag: vrt-status
+          mode: upsert
+
+      # ─────────────────────────────────────────────────────────────
+      # COMPARE 모드: baseline ↔ 현재 캡처 비교.
+      # 차이 발견 시 인라인 이미지 코멘트 등록(vrt-diff-images, 영구 보존).
+      # 머지 차단 유지 — 사람이 라벨 부여로 명시적 동의해야 baseline 갱신.
+      # ─────────────────────────────────────────────────────────────
+
+      - name: Run visual regression (compare)
+        id: vr_compare
+        if: steps.mode.outputs.mode == 'compare' && steps.baseline.outputs.exists == 'true'
+        run: pnpm exec playwright test --config e2e/visual/playwright.config.ts
+        continue-on-error: true
 
       - name: Bootstrap baseline (first PR — baseline 없을 때 자동 생성)
         if: |
@@ -266,9 +289,12 @@ jobs:
           {
             echo "## 🔍 Visual Regression — ${FAILED_COUNT} stories 시각 차이 감지"
             echo ""
-            echo "**baseline 이 자동으로 갱신되어 PR 브랜치에 commit 되었습니다** (다음 CI 재실행 후 통과)."
-            echo "아래 이미지로 시각 변경 의도를 확인하시고 머지하시면 코드 + 새 baseline 이 한 번에 main 에 박제됩니다."
-            echo "의도하지 않은 변경이 발견되면 PR 머지 대신 close + 코드 수정."
+            echo "**아래 이미지로 시각 변경 의도를 검수하세요.**"
+            echo ""
+            echo "- 의도된 변경이면 PR 에 \`accept-baseline\` 라벨 부여 → workflow 가 자동으로 baseline 갱신 + commit + CI 재실행 → 머지 활성"
+            echo "- 의도하지 않은 회귀면 PR 코드 수정 또는 close"
+            echo ""
+            echo "이 코멘트의 인라인 이미지 자료는 baseline 갱신 후에도 그대로 보존됩니다."
             echo ""
 
             shown=0
@@ -303,6 +329,9 @@ jobs:
             echo "COMMENT_EOF"
           } >> "$GITHUB_OUTPUT"
 
+      # 인라인 이미지 코멘트 — vrt-diff-images 태그. 한 번 등록되면 같은 PR 안에서
+       # 갱신 가능하지만, baseline 갱신/통과 메시지는 별도 태그(vrt-status)라 덮어쓰지
+       # 않음 → 시각 자료는 PR conversations 에 영구 보존.
       - name: Comment PR with inline images (failure)
         if: |
           steps.mode.outputs.mode == 'compare' &&
@@ -313,10 +342,10 @@ jobs:
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: ${{ steps.comment_body.outputs.body }}
-          comment-tag: vrt-inline
+          comment-tag: vrt-diff-images
           mode: upsert
 
-      - name: Comment PR — passed (no diff)
+      - name: Comment PR — passed (no diff, status)
         if: |
           steps.mode.outputs.mode == 'compare' &&
           steps.baseline.outputs.exists == 'true' &&
@@ -327,10 +356,10 @@ jobs:
           message: |
             ## ✅ Visual Regression — 모든 시각 검사 통과
 
-            baseline 과 시각 차이 없음.
+            baseline 과 시각 차이 없음 — 머지 가능.
 
             [Run details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-          comment-tag: vrt-inline
+          comment-tag: vrt-status
           mode: upsert
 
       - name: Upload Playwright report
@@ -351,14 +380,12 @@ jobs:
           retention-days: 14
           if-no-files-found: warn
 
-      # 자동 baseline commit + push 후 새 CI(synchronize)가 통과로 status check 갱신.
-      # 1차 CI 자체는 success 로 끝남(compare fail 했지만 자동 보정). 머지 차단은 새 CI
-      # 진행 동안 'Required check in progress' 로 유지됨.
-      - name: Note about auto-recovery
-        if: |
-          steps.mode.outputs.mode == 'compare' &&
-          steps.baseline.outputs.exists == 'true' &&
-          steps.vr_compare.outcome == 'failure'
+      # 시각 차이 발견 시 status check 를 fail 로 종료해 머지 차단.
+      # 사용자가 인라인 이미지 검수 후 'accept-baseline' 라벨 부여하면 accept 모드 잡이
+      # baseline 을 갱신해 다음 CI(synchronize)에서 통과 → 머지 활성.
+      - name: Propagate compare failure to job status
+        if: steps.mode.outputs.mode == 'compare' && steps.vr_compare.outcome == 'failure'
         run: |
-          echo "Visual diff detected. Baseline auto-updated and pushed."
-          echo "새 commit 으로 CI 재실행 후 통과 예상. 머지는 새 CI 통과 후 활성."
+          echo "Visual regression detected — see PR comment 'vrt-diff-images' for inline diff."
+          echo "의도된 변경이면 PR 에 'accept-baseline' 라벨 부여 → baseline 자동 갱신."
+          exit 1
