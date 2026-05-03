@@ -140,21 +140,20 @@ jobs:
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
           echo "→ baseline 갱신 commit 을 PR 브랜치에 push 완료. CI 자동 재실행 후 통과 예상."
 
-      - name: Comment PR — baseline accepted
+      - name: Comment PR — baseline accepted (status)
         if: steps.mode.outputs.mode == 'accept'
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
             ## ✅ Baseline Accepted
 
-            `accept-baseline` 라벨이 감지되어 baseline 을 이 PR 의 시각 변경으로 갱신했습니다.
+            `accept-baseline` 라벨이 감지되어 baseline 을 이 PR 의 시각 변경으로 갱신 + PR 브랜치에 commit 했습니다.
 
             - 새 baseline PNG 가 PR 브랜치에 commit 됨 — Files changed 탭에서 갱신된 PNG 시각 검수 가능
             - CI 가 자동 재실행되어 통과 예상 (baseline = 현재 코드 캡처)
             - 머지하면 코드 + 새 baseline 이 한 번에 main 에 박제됨
-
-            의도하지 않은 변경이 baseline 으로 흡수되지 않도록, 머지 전 새 PNG 도 한 번 시각 확인해주세요.
-          comment-tag: vrt-inline
+            - 위쪽의 인라인 이미지 자료(`vrt-diff-images` 태그) 는 영구 보존됩니다.
+          comment-tag: vrt-status
           mode: upsert
 
       # ─────────────────────────────────────────────────────────────
@@ -320,6 +319,9 @@ jobs:
             echo "COMMENT_EOF"
           } >> "$GITHUB_OUTPUT"
 
+      # 인라인 이미지 코멘트 — vrt-diff-images 태그.
+      # accept 모드의 status 메시지(vrt-status)와 분리되어 있어 라벨 부여/통과 후에도
+      # PR conversations 탭에 영구 보존됨.
       - name: Comment PR with inline images (failure)
         if: |
           steps.mode.outputs.mode == 'compare' &&
@@ -330,10 +332,10 @@ jobs:
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: ${{ steps.comment_body.outputs.body }}
-          comment-tag: vrt-inline
+          comment-tag: vrt-diff-images
           mode: upsert
 
-      - name: Comment PR — passed (no diff)
+      - name: Comment PR — passed (no diff, status)
         if: |
           steps.mode.outputs.mode == 'compare' &&
           steps.baseline.outputs.exists == 'true' &&
@@ -344,10 +346,10 @@ jobs:
           message: |
             ## ✅ Visual Regression — 모든 시각 검사 통과
 
-            baseline 과 시각 차이 없음.
+            baseline 과 시각 차이 없음 — 머지 가능.
 
             [Run details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-          comment-tag: vrt-inline
+          comment-tag: vrt-status
           mode: upsert
 
       - name: Upload Playwright report
