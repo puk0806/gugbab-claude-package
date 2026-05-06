@@ -28,10 +28,10 @@ export const muiTheme: ThemeTokens = {
         onAccent: '#fff',
       },
       accent: {
-        base: '#d50000',
-        hover: 'rgb(189, 0, 0)',
-        active: 'rgb(170, 0, 0)',
-        subtle: 'rgba(213, 0, 0, 0.08)',
+        base: '#1976d2',
+        hover: 'rgb(21, 101, 192)',
+        active: 'rgb(13, 71, 161)',
+        subtle: 'rgba(25, 118, 210, 0.08)',
         fg: '#fff',
       },
       accent2: {
