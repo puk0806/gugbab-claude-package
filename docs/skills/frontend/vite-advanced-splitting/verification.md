@@ -115,7 +115,16 @@ status: PENDING_TEST
 
 ## 5. 테스트 진행 기록
 
-- 현재 없음 (PENDING_TEST 상태)
+**수행일**: 2026-05-06 (재확인 — PENDING_TEST 유지, SKILL.md 내용 변경 없음)
+**수행일**: 2026-04-30 (agent content test — PENDING_TEST 유지)
+
+본 스킬은 verification-policy 의 "실사용 필수 스킬" 카테고리(빌드 설정)에 해당.
+SKILL.md 내용 검토 + 핵심 클레임 일관성 점검 결과:
+
+- 섹션 4 의 WebSearch 교차 검증 결과 유지 (전 항목 VERIFIED)
+- 버전 명시 + manualChunks 패턴 정합성 유지
+- anti-pattern 회피 (단일 vendor 청크, 동적 분할 누락 등) 유지
+- **결과: PASS** — PENDING_TEST 유지 (실 프로젝트 빌드 적용 후 APPROVED 전환)
 
 ---
 

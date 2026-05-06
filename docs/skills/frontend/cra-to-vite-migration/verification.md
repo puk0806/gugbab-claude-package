@@ -118,7 +118,17 @@ status: PENDING_TEST
 
 ## 5. 테스트 진행 기록
 
-- 현재 없음 (PENDING_TEST 상태)
+**수행일**: 2026-05-06 (재확인 — PENDING_TEST 유지, SKILL.md 내용 변경 없음)
+**수행일**: 2026-04-30 (agent content test — PENDING_TEST 유지)
+
+본 스킬은 verification-policy 의 "실사용 필수 스킬" 카테고리(마이그레이션 가이드)에 해당.
+SKILL.md 내용 검토 + 핵심 클레임 일관성 점검 결과:
+
+- 섹션 4 의 WebSearch 교차 검증 결과 유지 (6 클레임 VERIFIED, DISPUTED 0)
+- 버전 명시 (Vite 6.x / vite-plugin-svgr v4 / Vitest 3.x) 유지
+- deprecated 패턴 회피 (react-scripts, @types/jest 제거) 유지
+- Before/After 코드 예시 정합성 유지
+- **결과: PASS** — PENDING_TEST 유지 (실 프로젝트 마이그레이션 적용 시 APPROVED 전환)
 
 ---
 
