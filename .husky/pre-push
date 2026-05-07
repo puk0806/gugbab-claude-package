@@ -1,5 +1,24 @@
 echo "🔍 pre-push: typecheck → biome ci → codex review (advisory)"
 
+# delete-only push (예: 머지된 브랜치 정리) 는 검증할 변경이 없으므로 skip.
+# stdin 으로 들어오는 ref 정보의 local_sha 가 모두 zero-sha 면 delete-only.
+zero_sha="0000000000000000000000000000000000000000"
+all_deletes=true
+has_input=false
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ -z "$local_ref" ] && continue
+  has_input=true
+  if [ "$local_sha" != "$zero_sha" ]; then
+    all_deletes=false
+    break
+  fi
+done
+
+if [ "$has_input" = "true" ] && [ "$all_deletes" = "true" ]; then
+  echo "⏭️  delete-only push — 검증 skip"
+  exit 0
+fi
+
 # 1) 필수 검증 — 실패 시 push 차단
 pnpm typecheck || exit 1
 pnpm exec biome ci . || exit 1

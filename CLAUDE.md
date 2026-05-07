@@ -19,7 +19,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 | 플러그인                                                                     | 역할                                                                                                       | 주요 커맨드                                  |
 | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | [`codex@openai-codex`](https://github.com/openai/codex-plugin-cc)            | **2차 코드 리뷰** (Claude 외부의 Codex가 독립 검토)                                                        | `/codex:review`, `/codex:adversarial-review` |
-| [`superpowers@superpowers-marketplace`](https://github.com/obra/superpowers) | **TDD 강제**(RED→GREEN→REFACTOR) + 7단계 워크플로우(브레인스토밍→워크트리→계획→서브에이전트→TDD→리뷰→완료) | 스킬·에이전트 자동 로드                      |
+| [`superpowers@superpowers-marketplace`](https://github.com/obra/superpowers) | **TDD 강제**(RED→GREEN→REFACTOR) + 워크플로우 스킬(브레인스토밍→계획→서브에이전트→TDD→리뷰→완료). **워크트리 단계는 제외** — `feature/*` 브랜치 사용 (`@.claude/rules/git-workflow.md` 참조) | 스킬·에이전트 자동 로드                      |
 
 사전 요구사항: Node.js 18.18+, `npm install -g @openai/codex`, ChatGPT 구독 또는 OpenAI API 키. 초기 설정은 `/codex:setup`.
 
@@ -71,12 +71,15 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 
 ## 상황별 규칙 참조
 
-| 상황                    | 참조 파일                             |
-| ----------------------- | ------------------------------------- |
-| Git 커밋 컨벤션         | @.claude/rules/git.md                 |
-| 외부 정보 조사·검증     | @.claude/rules/info-verification.md   |
-| 에이전트 설계·작성      | @.claude/rules/agent-design.md        |
-| 스킬·에이전트 생성 절차 | @.claude/rules/creation-workflow.md   |
-| README 업데이트         | @.claude/rules/readme-update.md       |
-| 검증 정책·APPROVED 전환 | @.claude/rules/verification-policy.md |
-| TypeScript / React 코딩 | @.claude/rules/typescript.md          |
+| 상황                          | 참조 파일                             |
+| ----------------------------- | ------------------------------------- |
+| **모든 코드 변경 작업 흐름**  | @.claude/rules/git-workflow.md        |
+| Git 커밋 컨벤션               | @.claude/rules/git.md                 |
+| 외부 정보 조사·검증           | @.claude/rules/info-verification.md   |
+| 에이전트 설계·작성            | @.claude/rules/agent-design.md        |
+| 스킬·에이전트 생성 절차       | @.claude/rules/creation-workflow.md   |
+| README 업데이트               | @.claude/rules/readme-update.md       |
+| 검증 정책·APPROVED 전환       | @.claude/rules/verification-policy.md |
+| TypeScript / React 코딩       | @.claude/rules/typescript.md          |
+
+> **워크트리 사용 금지** — 모든 작업(시각화 테스트 포함)은 `feature/{설명}` 피처 브랜치로 진행하고 PR로 머지한다. 머지는 사용자가 직접 수행한다. `superpowers:using-git-worktrees` 스킬보다 우선 적용.

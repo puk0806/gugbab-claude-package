@@ -45,6 +45,14 @@ function findVerificationFiles(rootDir) {
       return;
     }
     for (const entry of entries) {
+      // worktree 안의 docs/skills 는 origin 기반 스냅샷이라 mtime 만 오늘이고
+      // 내용은 옛 버전인 false-positive 발생. 또한 nested docs/docs/skills 같은
+      // 실수 디렉토리도 main worktree 의 docs/skills 와 분리해 처리.
+      if (
+        entry.isDirectory() &&
+        (entry.name === '.claude' || entry.name === 'node_modules' || entry.name === 'dist')
+      )
+        continue;
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) walk(full);
       else if (entry.name === 'verification.md') results.push(full);
@@ -102,7 +110,11 @@ async function main() {
   if (event && event !== 'Stop') return process.exit(0);
 
   const today = todayStr();
-  const cwd = payload.cwd || process.cwd();
+  let cwd = payload.cwd || process.cwd();
+  // cwd 가 worktree 안 (.claude/worktrees/<name>/...) 이면 main worktree 로 normalize.
+  // worktree 의 docs/skills 는 origin 기반 옛 verification.md 라 false-positive 차단을 일으킴.
+  const wtMatch = cwd.match(/^(.+?)\/\.claude\/worktrees\/[^/]+(?:\/|$)/);
+  if (wtMatch) cwd = wtMatch[1];
   const docsDir = path.join(cwd, 'docs', 'skills');
   if (!fs.existsSync(docsDir)) return process.exit(0);
 
@@ -116,8 +128,9 @@ async function main() {
     } catch {
       continue;
     }
-    const mtimeLocal = new Date(stat.mtime.getTime() - stat.mtime.getTimezoneOffset() * 60000);
-    const mtimeStr = mtimeLocal.toISOString().slice(0, 10);
+    // 로컬 TZ 기준 YYYY-MM-DD 추출. en-CA locale 은 ISO 형식(YYYY-MM-DD)을 보장하며
+    // toLocaleDateString 은 시스템 TZ 를 사용하므로 별도 offset 계산 불필요.
+    const mtimeStr = stat.mtime.toLocaleDateString('en-CA');
     if (mtimeStr !== today) continue;
 
     let content;
