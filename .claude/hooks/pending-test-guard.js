@@ -21,9 +21,9 @@
  * 안전장치: 에러 발생 시 exit 0 (차단 않음)
  */
 
-const fs = require('fs');
-const path = require('path');
-const readline = require('readline');
+const fs = require('node:fs');
+const path = require('node:path');
+const readline = require('node:readline');
 
 function todayStr() {
   // 로컬 날짜 기준 (Asia/Seoul 등 사용자 TZ)
@@ -91,7 +91,7 @@ function hasAnyTestRecord(content) {
 async function readStdin() {
   const rl = readline.createInterface({ input: process.stdin, terminal: false });
   let raw = '';
-  for await (const line of rl) raw += line + '\n';
+  for await (const line of rl) raw += `${line}\n`;
   return raw.trim();
 }
 
@@ -172,7 +172,7 @@ async function main() {
     '       답변 확인 + verification.md 업데이트까지 자동 수행',
     '',
     '  B. 수동으로 section 5에 테스트 기록 작성',
-    '     → "**수행일**: ' + today + '" 라인 + 테스트 결과(PASS/FAIL) 기록',
+    `     → "**수행일**: ${today}" 라인 + 테스트 결과(PASS/FAIL) 기록`,
     '',
     '  C. 해당 스킬이 verification-policy의 "실사용 필수 스킬" 카테고리면',
     '     section 5에 agent content test 기록만 있어도 PENDING_TEST 유지 가능',
