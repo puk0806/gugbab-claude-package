@@ -82,37 +82,40 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 
 ## Claude 자산 현황
 
-### 에이전트 (19개)
+### 에이전트 (22개)
 
-| 카테고리       | 항목                                                                               |
-| -------------- | ---------------------------------------------------------------------------------- |
-| devops (1)     | devops-engineer                                                                    |
-| domain (3)     | codebase-domain-analyst, product-planner, ui-ux-designer                           |
-| frontend (2)   | frontend-architect, frontend-developer                                             |
-| meta (5)       | agent-creator, claude-code-guide, freshness-auditor, planner, skill-creator        |
-| research (5)   | competitor-analyst, data-analyst, deep-researcher, research-reviewer, web-searcher |
-| validation (3) | fact-checker, qa-engineer, source-validator                                        |
+| 카테고리       | 항목                                                                                          |
+| -------------- | --------------------------------------------------------------------------------------------- |
+| devops (1)     | devops-engineer                                                                               |
+| domain (5)     | api-spec-designer, business-domain-analyst, codebase-domain-analyst, product-planner, ui-ux-designer |
+| frontend (2)   | frontend-architect, frontend-developer                                                        |
+| meta (6)       | agent-creator, claude-code-guide, freshness-auditor, planner, skill-creator, skill-tester     |
+| research (5)   | competitor-analyst, data-analyst, deep-researcher, research-reviewer, web-searcher            |
+| validation (3) | fact-checker, qa-engineer, source-validator                                                   |
 
-### 스킬 (41개)
+### 스킬 (46개)
 
-| 카테고리 | 수  | 항목                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| -------- | :-: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| devops   |  2  | docker-deployment, github-actions                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| frontend | 38  | accessibility, animation, api-integration, bundling-compiler, code-convention, component-design, cra-to-vite-migration, css-variables, dayjs, design-patterns, design-token-scss, e2e-testing, error-handling, form-handling, intersection-observer, monorepo-turborepo, mui-v5, mutation-observer, nextjs, page-visibility, performance, radix-ui, react-core, react-dnd, react-virtuoso, resize-observer, sass, seo, state-management, storybook, swiper, testing, tsup, typescript-v4, typescript-v5, vite-advanced-splitting, vite-pwa-service-worker, webpack-vite-config-mapping |
-| meta     |  1  | continuous-learning                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| 카테고리       | 수  | 항목                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------- | :-: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| architecture   |  1  | ddd                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| devops         |  3  | docker-deployment, github-actions, github-actions-visual-regression                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| frontend       | 40  | accessibility, animation, api-integration, bundling-compiler, code-convention, component-design, cra-to-vite-migration, css-variables, dayjs, design-patterns, design-token-scss, e2e-testing, error-handling, form-handling, intersection-observer, monorepo-turborepo, mui-v5, mutation-observer, nextjs, page-visibility, performance, radix-ui, react-core, react-dnd, react-virtuoso, resize-observer, rsbuild, sass, seo, state-management, storybook, storybook-visual-testing, swiper, testing, tsup, typescript-v4, typescript-v5, vite-advanced-splitting, vite-pwa-service-worker, webpack-vite-config-mapping |
+| meta           |  2  | continuous-learning, ralph-loop                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 
-### 훅 (5개)
+### 훅 (6개)
 
 - `auto-approve.js` — 안전 커맨드 자동 승인
 - `bash-guard.js` — Bash 명령 실행 전/후 가드
+- `pending-test-guard.js` — PENDING_TEST 스킬 세션 종료 차단
 - `session-summary.js` — 세션 종료 요약
 - `skill-md-guard.js` — SKILL.md 편집 가드
 - `verification-guard.js` — verification.md 편집 가드
 
-### 규칙 (7개)
+### 규칙 (8개)
 
 - `agent-design.md` — 에이전트 설계 기준
-- `creation-workflow.md` — 스킬·에이전트 생성 4단계 워크플로우
+- `creation-workflow.md` — 스킬·에이전트 생성 5단계 워크플로우
+- `git-workflow.md` — feature 브랜치 + PR 워크플로우 (워크트리 금지)
 - `git.md` — Git 커밋 컨벤션
 - `info-verification.md` — 외부 정보 검증 원칙
 - `readme-update.md` — README 동기화 규칙
@@ -144,3 +147,4 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-04-28 | Phase 6.3.3 — `packages/react` → `packages/headless` (`@gugbab-ui/headless`) 리네이밍 — 헤드리스 의도가 패키지명에서 즉시 드러나도록. 82 파일 import + 4 workspace dep 일괄 갱신. |
 | 2026-04-28 | Phase 6.3.4 — `@gugbab-ui/tokens` 정적 토큰화. `@mui/material`·`@radix-ui/colors`·`@emotion/*` devDep 전부 제거. `createTheme()` 어댑터 → 정적 객체. dist/{mui,radix}.css는 byte-identical, 번들은 234KB → 15KB (16배 감소). 외부 디자인 라이브러리 변화에 휘둘리지 않는 자기완결 패키지로 전환. |
 | 2026-04-29 | Phase 6.4 — Visual Regression 인프라. Playwright `toHaveScreenshot` + `e2e/visual/` 셋업 (임계치 `maxDiffPixelRatio: 0.001` = 0.1%, 디자인 시스템 기준). 인터랙티브 stories(Toast/Dialog/Popover/Menu/Select 등)는 trigger 클릭 후 캡처 + portal 컴포넌트는 viewport 전체 캡처. `pnpm vr` 명령군 추가. GitHub Actions 워크플로우 2종(`visual-regression.yml` PR 게이트 + `visual-regression-baseline.yml` workflow_dispatch baseline 자동 PR). 양쪽 Storybook 222개 stories 픽셀 회귀 잠금. baseline은 CI(Linux)에서만 생성·commit, macOS 로컬 PNG는 `.gitignore`. |
+| 2026-05-07 | feature 브랜치 + PR 워크플로우 도입 (`.claude/rules/git-workflow.md`) — 워크트리 사용 중단. 다른 프로젝트(인문학·도덕교육 학위논문, Java/Rust 백엔드)에서 임포트된 외래 자산 정리: skills 74개(`backend` 41 / `humanities` 12 / `education` 5 / `research` 4 / `writing` 12) + agents 16개(`backend` 5 / `education` 1 / academic `research` 6 / academic `validation` 4) + rules 2개(`java`, `rust`) 제거. 결과: 스킬 46 / 에이전트 22 / 훅 6 / 규칙 8 — 헤드리스 React 패키지 모노레포에 부합하도록 정합성 회복. |

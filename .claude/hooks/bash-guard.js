@@ -648,7 +648,11 @@ function extractCommandSubstitutions(line) {
   // 중첩 미지원 (간단한 $(cmd) 만)
   const matches = [];
   const re = /\$\(([^()]+)\)/g;
-  for (const m of line.matchAll(re)) matches.push(m[1]);
+  let m = re.exec(line);
+  while (m !== null) {
+    matches.push(m[1]);
+    m = re.exec(line);
+  }
   return matches;
 }
 
