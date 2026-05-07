@@ -14,6 +14,7 @@ permissions:
   contents: write
   pull-requests: write
   actions: read
+  statuses: write
 
 concurrency:
   group: vrt-${{ github.workflow }}-${{ github.ref }}
@@ -125,6 +126,7 @@ jobs:
         run: pnpm exec playwright test --config e2e/visual/playwright.config.ts --update-snapshots
 
       - name: Commit accepted baseline to PR branch
+        id: accept_commit
         if: steps.mode.outputs.mode == 'accept'
         env:
           HUSKY: '0'
@@ -133,12 +135,44 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add e2e/visual/__screenshots__
           if git diff --cached --quiet; then
+            echo "pushed=false" >> $GITHUB_OUTPUT
+            echo "target_sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
             echo "No baseline changes to commit"
             exit 0
           fi
           git commit -m "[scripts] Modify: accepted baseline via accept-baseline label"
+          NEW_SHA=$(git rev-parse HEAD)
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
-          echo "→ baseline 갱신 commit 을 PR 브랜치에 push 완료. CI 자동 재실행 후 통과 예상."
+          echo "pushed=true" >> $GITHUB_OUTPUT
+          echo "target_sha=$NEW_SHA" >> $GITHUB_OUTPUT
+          echo "→ baseline 갱신 commit 을 PR 브랜치에 push 완료 (SHA=$NEW_SHA)."
+
+      # ─────────────────────────────────────────────────────────────
+      # GITHUB_TOKEN 으로 push 한 commit 은 새 워크플로우를 트리거하지
+      # 못하므로 (GitHub Actions 보안 정책) 새 SHA 에 visual-regression
+      # status 를 직접 등록해야 ruleset(strict required check) 통과.
+      # ─────────────────────────────────────────────────────────────
+      - name: Register visual-regression status on baseline SHA
+        if: steps.mode.outputs.mode == 'accept'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_SHA: ${{ steps.accept_commit.outputs.target_sha }}
+          PUSHED: ${{ steps.accept_commit.outputs.pushed }}
+          RUN_ID: ${{ github.run_id }}
+          REPO: ${{ github.repository }}
+          SERVER: ${{ github.server_url }}
+        run: |
+          if [ "$PUSHED" = "true" ]; then
+            DESC="baseline accepted via accept-baseline label"
+          else
+            DESC="accept-baseline label re-applied — no baseline diff"
+          fi
+          gh api -X POST "repos/${REPO}/statuses/${TARGET_SHA}" \
+            -f state=success \
+            -f context=visual-regression \
+            -f description="${DESC}" \
+            -f target_url="${SERVER}/${REPO}/actions/runs/${RUN_ID}"
+          echo "→ visual-regression status 등록 완료 on ${TARGET_SHA}"
 
       - name: Comment PR — baseline accepted (status)
         if: steps.mode.outputs.mode == 'accept'
