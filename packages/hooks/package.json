@@ -3,6 +3,18 @@
   "version": "0.0.1",
   "description": "Framework-agnostic React hooks for @gugbab-ui/* (headless 빌딩블록)",
   "license": "MIT",
+  "author": "gugbab",
+  "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/hooks#readme",
+  "bugs": {
+    "url": "https://github.com/puk0806/gugbab-claude-package/issues"
+  },
+  "keywords": [
+    "react",
+    "react-hooks",
+    "hooks",
+    "headless",
+    "framework-agnostic"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/puk0806/gugbab-claude-package.git",

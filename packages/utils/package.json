@@ -3,6 +3,18 @@
   "version": "0.0.1",
   "description": "Framework-agnostic utilities for @gugbab-ui/*",
   "license": "MIT",
+  "author": "gugbab",
+  "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/utils#readme",
+  "bugs": {
+    "url": "https://github.com/puk0806/gugbab-claude-package/issues"
+  },
+  "keywords": [
+    "utility",
+    "utils",
+    "typescript",
+    "framework-agnostic",
+    "monorepo"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/puk0806/gugbab-claude-package.git",
