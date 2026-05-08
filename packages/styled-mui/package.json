@@ -3,6 +3,20 @@
   "version": "0.0.1",
   "description": "MUI lookalike styled wrappers over @gugbab-ui/headless headless components",
   "license": "MIT",
+  "author": "gugbab",
+  "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/styled-mui#readme",
+  "bugs": {
+    "url": "https://github.com/puk0806/gugbab-claude-package/issues"
+  },
+  "keywords": [
+    "react",
+    "ui",
+    "components",
+    "material",
+    "mui",
+    "design-system",
+    "headless"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/puk0806/gugbab-claude-package.git",

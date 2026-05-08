@@ -3,6 +3,18 @@
   "version": "0.0.1",
   "description": "Design tokens for @gugbab-ui/* — static token snapshots (MUI / Radix lookalike) → CSS variables. No external library dependencies.",
   "license": "MIT",
+  "author": "gugbab",
+  "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/tokens#readme",
+  "bugs": {
+    "url": "https://github.com/puk0806/gugbab-claude-package/issues"
+  },
+  "keywords": [
+    "design-tokens",
+    "css-variables",
+    "design-system",
+    "theme",
+    "react"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/puk0806/gugbab-claude-package.git",
