@@ -107,3 +107,23 @@ export const Sizes: Story = {
     </div>
   ),
 };
+
+export const Disabled: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`ToggleGroup.Item`에 `disabled` prop 적용. 비활성 항목은 포커스·클릭이 차단되며 Arrow 키 네비에서도 자동으로 건너뛴다.',
+      },
+    },
+  },
+  render: () => (
+    <ToggleGroup.Root type="single" aria-label="text formatting">
+      <ToggleGroup.Item value="bold">Bold</ToggleGroup.Item>
+      <ToggleGroup.Item value="italic" disabled>
+        Italic
+      </ToggleGroup.Item>
+      <ToggleGroup.Item value="underline">Underline</ToggleGroup.Item>
+    </ToggleGroup.Root>
+  ),
+};

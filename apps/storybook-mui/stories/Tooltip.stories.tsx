@@ -27,6 +27,7 @@ const meta = {
 - **Escape** 키로 즉시 닫힘
 - \`Tooltip.Trigger\`의 자식이 \`<button>\`이 아닐 경우 \`asChild\`로 포커스 가능 요소로 교체 권장
 - 툴팁 텍스트는 트리거의 \`aria-describedby\`에 자동 연결
+- \`disabled\` 버튼 자체는 hover/focus 이벤트가 발생하지 않는다. \`<span>\`으로 감싼 뒤 \`asChild\`와 함께 쓰면 비활성 버튼에도 안내가 노출된다.
 
 ### 주요 prop
 
