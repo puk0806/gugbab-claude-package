@@ -94,7 +94,7 @@ export const WithAction: Story = {
     docs: {
       description: {
         story:
-          '`Toast.Action`을 추가한 케이스. Undo처럼 직전 동작을 되돌릴 수 있는 버튼을 토스트 내부에 배치한다.',
+          '`Toast.Action`을 추가한 케이스. Undo처럼 직전 동작을 되돌릴 수 있는 버튼을 토스트 내부에 배치한다. `altText`는 스크린 리더 전용 대체 텍스트로, 키보드·스크린 리더 사용자에게 동일한 동작에 도달할 다른 경로를 안내한다.',
       },
     },
   },

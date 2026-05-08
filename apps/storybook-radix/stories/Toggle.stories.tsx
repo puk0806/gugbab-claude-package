@@ -27,6 +27,7 @@ const meta = {
 
 ### 사용 가이드
 - \`aria-pressed\`가 자동으로 관리되므로 스크린 리더가 on/off 상태를 인식한다.
+- 비제어 모드는 \`defaultPressed\`, 제어 모드는 \`pressed\` + \`onPressedChange\` 콜백으로 외부 상태와 동기.
 - 여러 Toggle을 그룹으로 묶을 때는 \`ToggleGroup\` 컴포넌트를 사용한다.
 - 스페이스·엔터 키로 토글 가능.
         `.trim(),
