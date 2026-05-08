@@ -204,7 +204,8 @@ jobs:
           OUTDIR=vr-snapshots
           rm -rf "$OUTDIR" && mkdir -p "$OUTDIR"
 
-          failed=0
+          changed=0
+          new=0
           if [ -d test-results ]; then
             for dir in test-results/*/; do
               [ -d "$dir" ] || continue
@@ -215,17 +216,28 @@ jobs:
               diff=$(ls "$dir"*-diff.png 2>/dev/null | head -n1 || true)
 
               if [ -n "$expected" ] && [ -n "$actual" ] && [ -n "$diff" ]; then
+                # 시각 변경 — baseline 있고 차이 발견
                 mkdir -p "$OUTDIR/$name"
                 cp "$expected" "$OUTDIR/$name/expected.png"
                 cp "$actual"   "$OUTDIR/$name/actual.png"
                 cp "$diff"     "$OUTDIR/$name/diff.png"
-                failed=$((failed + 1))
+                echo "changed" > "$OUTDIR/$name/.type"
+                changed=$((changed + 1))
+              elif [ -n "$actual" ]; then
+                # 신규 story — baseline 없음, actual만 존재
+                mkdir -p "$OUTDIR/$name"
+                cp "$actual" "$OUTDIR/$name/actual.png"
+                echo "new" > "$OUTDIR/$name/.type"
+                new=$((new + 1))
               fi
             done
           fi
 
-          echo "failed_count=$failed" >> $GITHUB_OUTPUT
-          echo "→ inline preview 대상: $failed stories"
+          total=$((changed + new))
+          echo "changed_count=$changed" >> $GITHUB_OUTPUT
+          echo "new_count=$new" >> $GITHUB_OUTPUT
+          echo "total_count=$total" >> $GITHUB_OUTPUT
+          echo "→ inline preview 대상: changed=$changed / new=$new (total=$total)"
 
       - name: Push snapshots to vrt-snapshots branch
         if: |
@@ -233,7 +245,7 @@ jobs:
           steps.baseline.outputs.exists == 'true' &&
           steps.vr_compare.outcome == 'failure' &&
           github.event_name == 'pull_request' &&
-          steps.collect.outputs.failed_count != '0'
+          steps.collect.outputs.total_count != '0'
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           RUN_ID: ${{ github.run_id }}
@@ -267,13 +279,15 @@ jobs:
           steps.baseline.outputs.exists == 'true' &&
           steps.vr_compare.outcome == 'failure' &&
           github.event_name == 'pull_request' &&
-          steps.collect.outputs.failed_count != '0'
+          steps.collect.outputs.total_count != '0'
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           RUN_ID: ${{ github.run_id }}
           REPO: ${{ github.repository }}
           SERVER: ${{ github.server_url }}
-          FAILED_COUNT: ${{ steps.collect.outputs.failed_count }}
+          CHANGED_COUNT: ${{ steps.collect.outputs.changed_count }}
+          NEW_COUNT: ${{ steps.collect.outputs.new_count }}
+          TOTAL_COUNT: ${{ steps.collect.outputs.total_count }}
         run: |
           set -euo pipefail
           SNAPBRANCH="vrt-snapshots/pr-${PR_NUMBER}"
@@ -281,9 +295,15 @@ jobs:
           LIMIT=20
 
           {
-            echo "## ❌ Visual Regression — ${FAILED_COUNT} stories 시각 차이 감지"
+            if [ "$CHANGED_COUNT" -gt 0 ] && [ "$NEW_COUNT" -gt 0 ]; then
+              echo "## ❌ Visual Regression — ${CHANGED_COUNT} stories 시각 차이 + ${NEW_COUNT} 신규 story baseline 후보"
+            elif [ "$CHANGED_COUNT" -gt 0 ]; then
+              echo "## ❌ Visual Regression — ${CHANGED_COUNT} stories 시각 차이 감지"
+            else
+              echo "## 🆕 Visual Regression — ${NEW_COUNT} 신규 story baseline 후보 (시각 차이 없음)"
+            fi
             echo ""
-            echo "의도된 변경이면 PR 에 \`accept-baseline\` 라벨을 붙여주세요. baseline 이 자동 갱신되어"
+            echo "의도된 변경/추가이면 PR 에 \`accept-baseline\` 라벨을 붙여주세요. baseline 이 자동 갱신/추가되어"
             echo "PR 브랜치에 commit 됩니다 (코드 + 새 baseline 한 번에 머지)."
             echo ""
 
@@ -291,20 +311,30 @@ jobs:
             for storydir in vr-snapshots/*/; do
               [ -d "$storydir" ] || continue
               if [ "$shown" -ge "$LIMIT" ]; then
-                remain=$((FAILED_COUNT - LIMIT))
+                remain=$((TOTAL_COUNT - LIMIT))
                 echo ""
                 echo "_… and ${remain} more. 전체는 [Run details](${SERVER}/${REPO}/actions/runs/${RUN_ID}) 의 \`playwright-report\` artifact 참고._"
                 break
               fi
               story=$(basename "$storydir")
+              type=$(cat "$storydir.type" 2>/dev/null || echo changed)
               echo ""
-              echo "### \`${story}\`"
-              echo ""
-              echo "<table><tr>"
-              echo "<td align=\"center\"><b>Expected</b><br><img src=\"${BASE_URL}/${story}/expected.png\" width=\"320\"></td>"
-              echo "<td align=\"center\"><b>Actual</b><br><img src=\"${BASE_URL}/${story}/actual.png\" width=\"320\"></td>"
-              echo "<td align=\"center\"><b>Diff</b><br><img src=\"${BASE_URL}/${story}/diff.png\" width=\"320\"></td>"
-              echo "</tr></table>"
+              if [ "$type" = "new" ]; then
+                echo "### \`${story}\` 🆕 신규"
+                echo ""
+                echo "<table><tr>"
+                echo "<td align=\"center\" width=\"320\"><b>Expected</b><br><i>(없음 — 신규 story)</i></td>"
+                echo "<td align=\"center\"><b>Actual</b><br><img src=\"${BASE_URL}/${story}/actual.png\" width=\"320\"></td>"
+                echo "</tr></table>"
+              else
+                echo "### \`${story}\`"
+                echo ""
+                echo "<table><tr>"
+                echo "<td align=\"center\"><b>Expected</b><br><img src=\"${BASE_URL}/${story}/expected.png\" width=\"320\"></td>"
+                echo "<td align=\"center\"><b>Actual</b><br><img src=\"${BASE_URL}/${story}/actual.png\" width=\"320\"></td>"
+                echo "<td align=\"center\"><b>Diff</b><br><img src=\"${BASE_URL}/${story}/diff.png\" width=\"320\"></td>"
+                echo "</tr></table>"
+              fi
               shown=$((shown + 1))
             done
 
@@ -328,7 +358,7 @@ jobs:
           steps.baseline.outputs.exists == 'true' &&
           steps.vr_compare.outcome == 'failure' &&
           github.event_name == 'pull_request' &&
-          steps.collect.outputs.failed_count != '0'
+          steps.collect.outputs.total_count != '0'
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: ${{ steps.comment_body.outputs.body }}
