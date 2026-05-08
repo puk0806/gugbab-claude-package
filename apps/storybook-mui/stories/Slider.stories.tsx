@@ -1,4 +1,4 @@
-import { Slider, type SliderSize } from '@gugbab-ui/styled-mui';
+import { Slider, type SliderSize } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

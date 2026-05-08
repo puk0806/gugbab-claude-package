@@ -1,7 +1,7 @@
 {
-  "name": "@gugbab-ui/hooks",
-  "version": "0.0.1",
-  "description": "Framework-agnostic React hooks for @gugbab-ui/* (headless 빌딩블록)",
+  "name": "@gugbab/hooks",
+  "version": "1.0.0",
+  "description": "Framework-agnostic React hooks for @gugbab/* (headless 빌딩블록)",
   "license": "MIT",
   "author": "gugbab",
   "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/hooks#readme",
@@ -56,13 +56,13 @@
     "clean": "rm -rf dist .turbo coverage"
   },
   "dependencies": {
-    "@gugbab-ui/utils": "workspace:*"
+    "@gugbab/utils": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18"
   },
   "devDependencies": {
-    "@gugbab-ui/tsconfig": "workspace:*",
+    "@gugbab/tsconfig": "workspace:*",
     "@testing-library/react": "^16.3.0",
     "@types/react": "^19.0.0",
     "@vitest/coverage-v8": "^2.1.9",

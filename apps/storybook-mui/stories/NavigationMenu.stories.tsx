@@ -1,4 +1,4 @@
-import { NavigationMenu } from '@gugbab-ui/styled-mui';
+import { NavigationMenu } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

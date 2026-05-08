@@ -1,4 +1,4 @@
-import { Separator } from '@gugbab-ui/styled-radix';
+import { Separator } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

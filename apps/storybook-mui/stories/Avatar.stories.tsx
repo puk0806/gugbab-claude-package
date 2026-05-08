@@ -1,4 +1,4 @@
-import { Avatar, type AvatarSize } from '@gugbab-ui/styled-mui';
+import { Avatar, type AvatarSize } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

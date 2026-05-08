@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Concatenates all `src/styles/*.css` into a single `dist/styles.css`,
- * prepending the `@gugbab-ui/tokens/dist/mui.css` so consumers can import
+ * prepending the `@gugbab/tokens/dist/mui.css` so consumers can import
  * a single stylesheet for both tokens and component styles.
  *
  * Order matters: tokens first (so component CSS can reference --gugbab-* vars).
@@ -19,7 +19,7 @@ const tokensCss = resolve(pkgDir, '..', 'tokens', 'dist', 'mui.css');
 if (!existsSync(distDir)) mkdirSync(distDir, { recursive: true });
 
 const parts = [];
-parts.push('/* @gugbab-ui/styled-mui — bundled styles (tokens + components) */');
+parts.push('/* @gugbab/styled-mui — bundled styles (tokens + components) */');
 parts.push('');
 
 if (existsSync(tokensCss)) {

@@ -3,7 +3,7 @@ import {
   type OTPFieldHiddenInputProps,
   type OTPFieldInputProps,
   type OTPFieldRootProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

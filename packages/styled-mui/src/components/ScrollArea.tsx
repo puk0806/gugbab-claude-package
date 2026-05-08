@@ -5,7 +5,7 @@ import {
   type ScrollAreaScrollbarProps,
   type ScrollAreaThumbProps,
   type ScrollAreaViewportProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

@@ -1,4 +1,4 @@
-import { Portal } from '@gugbab-ui/styled-radix';
+import { Portal } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

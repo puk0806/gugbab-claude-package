@@ -1,4 +1,4 @@
-import { Tooltip as Headless, type TooltipRootProps } from '@gugbab-ui/headless';
+import { Tooltip as Headless, type TooltipRootProps } from '@gugbab/headless';
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

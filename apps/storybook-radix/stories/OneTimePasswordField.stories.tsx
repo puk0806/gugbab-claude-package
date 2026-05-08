@@ -1,4 +1,4 @@
-import { OneTimePasswordField } from '@gugbab-ui/styled-radix';
+import { OneTimePasswordField } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

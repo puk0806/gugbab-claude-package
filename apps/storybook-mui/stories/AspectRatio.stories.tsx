@@ -1,4 +1,4 @@
-import { AspectRatio } from '@gugbab-ui/styled-mui';
+import { AspectRatio } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

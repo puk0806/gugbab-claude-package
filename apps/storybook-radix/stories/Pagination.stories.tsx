@@ -1,4 +1,4 @@
-import { Pagination, type PaginationSize } from '@gugbab-ui/styled-radix';
+import { Pagination, type PaginationSize } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

@@ -1,6 +1,6 @@
-# @gugbab-ui/tokens
+# @gugbab/tokens
 
-`@gugbab-ui/*`에서 쓰이는 디자인 토큰 모음. **외부 디자인 라이브러리 의존성 0** — MUI / Radix Themes 형태의 토큰을 정적 객체로 박제해 제공합니다.
+`@gugbab/*`에서 쓰이는 디자인 토큰 모음. **외부 디자인 라이브러리 의존성 0** — MUI / Radix Themes 형태의 토큰을 정적 객체로 박제해 제공합니다.
 
 - 추상 `ThemeTokens` 타입 + 두 가지 정적 스냅샷 (MUI, Radix)
 - light / dark 변종 동시 제공
@@ -10,7 +10,7 @@
 ## 설치
 
 ```sh
-pnpm add @gugbab-ui/tokens
+pnpm add @gugbab/tokens
 ```
 
 ## 사용 — CSS 변수 import
@@ -19,8 +19,8 @@ pnpm add @gugbab-ui/tokens
 
 ```ts
 // 앱 entrypoint (예: main.tsx, _app.tsx)
-import '@gugbab-ui/tokens/mui.css';   // 또는
-import '@gugbab-ui/tokens/radix.css';
+import '@gugbab/tokens/mui.css';   // 또는
+import '@gugbab/tokens/radix.css';
 ```
 
 dark 모드는 `<html data-theme="dark">`로 토글합니다.
@@ -40,7 +40,7 @@ dark 모드는 `<html data-theme="dark">`로 토글합니다.
 `ThemeTokens` 타입과 정적 스냅샷이 필요하면 직접 import.
 
 ```ts
-import { muiTokensLight, muiTokensDark, radixTokensLight, type ThemeTokens } from '@gugbab-ui/tokens';
+import { muiTokensLight, muiTokensDark, radixTokensLight, type ThemeTokens } from '@gugbab/tokens';
 
 const accent = muiTokensLight.color.accent.base;
 ```

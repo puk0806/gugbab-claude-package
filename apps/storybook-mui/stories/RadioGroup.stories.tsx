@@ -1,4 +1,4 @@
-import { RadioGroup, type RadioGroupSize } from '@gugbab-ui/styled-mui';
+import { RadioGroup, type RadioGroupSize } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

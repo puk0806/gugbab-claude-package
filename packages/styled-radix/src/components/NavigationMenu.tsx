@@ -2,7 +2,7 @@ import {
   NavigationMenu as Headless,
   type NavigationMenuItemProps,
   type NavigationMenuRootProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

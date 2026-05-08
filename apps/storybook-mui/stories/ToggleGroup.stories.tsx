@@ -1,4 +1,4 @@
-import { ToggleGroup, type ToggleGroupSize, type ToggleGroupVariant } from '@gugbab-ui/styled-mui';
+import { ToggleGroup, type ToggleGroupSize, type ToggleGroupVariant } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

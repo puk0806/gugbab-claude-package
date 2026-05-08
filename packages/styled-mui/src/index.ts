@@ -1,14 +1,14 @@
 /**
- * @gugbab-ui/styled-mui — MUI lookalike styled wrappers over the @gugbab-ui/headless
+ * @gugbab/styled-mui — MUI lookalike styled wrappers over the @gugbab/headless
  * headless primitives. Visual styling lives in `src/styles/*.css` and is
- * concatenated (with `@gugbab-ui/tokens/dist/mui.css` prepended) into a single
+ * concatenated (with `@gugbab/tokens/dist/mui.css` prepended) into a single
  * `dist/styles.css` at build time.
  *
  * Consumers import the stylesheet once at app entry:
  *
- *   import '@gugbab-ui/styled-mui/styles.css';
+ *   import '@gugbab/styled-mui/styles.css';
  *
- * Components re-export from `@gugbab-ui/headless` with a styled wrapper that
+ * Components re-export from `@gugbab/headless` with a styled wrapper that
  * applies the `gmui-*` class names defined in the bundled CSS.
  */
 

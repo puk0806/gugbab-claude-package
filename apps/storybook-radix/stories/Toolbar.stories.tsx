@@ -1,4 +1,4 @@
-import { Toolbar } from '@gugbab-ui/styled-radix';
+import { Toolbar } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

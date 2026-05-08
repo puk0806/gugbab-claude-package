@@ -1,6 +1,6 @@
-# @gugbab-ui/biome-config
+# @gugbab/biome-config
 
-`@gugbab-ui/*` 모노레포에서 사용하는 공용 [Biome](https://biomejs.dev) 설정.
+`@gugbab/*` 모노레포에서 사용하는 공용 [Biome](https://biomejs.dev) 설정.
 
 - ESLint + Prettier 대신 Biome 단일 도구 사용
 - TypeScript / React 친화 규칙 활성화
@@ -9,7 +9,7 @@
 ## 설치
 
 ```sh
-pnpm add -D @gugbab-ui/biome-config @biomejs/biome
+pnpm add -D @gugbab/biome-config @biomejs/biome
 ```
 
 `@biomejs/biome ≥ 2.0`을 peer dependency로 요구합니다.
@@ -21,7 +21,7 @@ pnpm add -D @gugbab-ui/biome-config @biomejs/biome
 ```json
 {
   "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
-  "extends": ["@gugbab-ui/biome-config/base.json"]
+  "extends": ["@gugbab/biome-config/base.json"]
 }
 ```
 
@@ -30,7 +30,7 @@ pnpm add -D @gugbab-ui/biome-config @biomejs/biome
 ```json
 {
   "$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
-  "extends": ["@gugbab-ui/biome-config/base.json"],
+  "extends": ["@gugbab/biome-config/base.json"],
   "linter": {
     "rules": {
       "suspicious": {

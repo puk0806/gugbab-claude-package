@@ -1,11 +1,11 @@
-# @gugbab-ui/tsconfig
+# @gugbab/tsconfig
 
-`@gugbab-ui/*` 모노레포에서 사용하는 공용 TypeScript 설정 프리셋.
+`@gugbab/*` 모노레포에서 사용하는 공용 TypeScript 설정 프리셋.
 
 ## 설치
 
 ```sh
-pnpm add -D @gugbab-ui/tsconfig typescript
+pnpm add -D @gugbab/tsconfig typescript
 ```
 
 ## 프리셋 3종
@@ -24,7 +24,7 @@ pnpm add -D @gugbab-ui/tsconfig typescript
 
 ```json
 {
-  "extends": "@gugbab-ui/tsconfig/react-library.json",
+  "extends": "@gugbab/tsconfig/react-library.json",
   "include": ["src"],
   "compilerOptions": {
     "outDir": "dist"
@@ -36,7 +36,7 @@ pnpm add -D @gugbab-ui/tsconfig typescript
 
 ```json
 {
-  "extends": "@gugbab-ui/tsconfig/node-library.json",
+  "extends": "@gugbab/tsconfig/node-library.json",
   "include": ["src"]
 }
 ```
@@ -45,7 +45,7 @@ pnpm add -D @gugbab-ui/tsconfig typescript
 
 ```json
 {
-  "extends": "@gugbab-ui/tsconfig/base.json"
+  "extends": "@gugbab/tsconfig/base.json"
 }
 ```
 

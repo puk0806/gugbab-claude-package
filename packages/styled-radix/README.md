@@ -1,15 +1,15 @@
-# @gugbab-ui/styled-radix
+# @gugbab/styled-radix
 
-`@gugbab-ui/headless`(헤드리스 동작) 위에 **Radix Themes lookalike** 스타일을 입힌 React 컴포넌트 35종. CSS 클래스명은 모두 `grx-*` prefix.
+`@gugbab/headless`(헤드리스 동작) 위에 **Radix Themes lookalike** 스타일을 입힌 React 컴포넌트 35종. CSS 클래스명은 모두 `grx-*` prefix.
 
-- 35 컴포넌트 — `@gugbab-ui/headless` 35종과 1:1 대응
-- 디자인 토큰: `@gugbab-ui/tokens` (Radix 스냅샷)
+- 35 컴포넌트 — `@gugbab/headless` 35종과 1:1 대응
+- 디자인 토큰: `@gugbab/tokens` (Radix 스냅샷)
 - React 18 / 19 지원, dual ESM / CJS, RSC 호환 (`"use client"` banner)
 
 ## 설치
 
 ```sh
-pnpm add @gugbab-ui/styled-radix @gugbab-ui/headless @gugbab-ui/tokens @floating-ui/react
+pnpm add @gugbab/styled-radix @gugbab/headless @gugbab/tokens @floating-ui/react
 ```
 
 ## 사용
@@ -18,12 +18,12 @@ pnpm add @gugbab-ui/styled-radix @gugbab-ui/headless @gugbab-ui/tokens @floating
 
 ```tsx
 // app entry
-import '@gugbab-ui/tokens/radix.css';
-import '@gugbab-ui/styled-radix/styles.css';
+import '@gugbab/tokens/radix.css';
+import '@gugbab/styled-radix/styles.css';
 ```
 
 ```tsx
-import { Button, Dialog } from '@gugbab-ui/styled-radix';
+import { Button, Dialog } from '@gugbab/styled-radix';
 
 export function Example() {
   return (

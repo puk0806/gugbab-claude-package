@@ -1,4 +1,4 @@
-import { Progress as Headless, type ProgressRootProps } from '@gugbab-ui/headless';
+import { Progress as Headless, type ProgressRootProps } from '@gugbab/headless';
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

@@ -1,7 +1,7 @@
 {
-  "name": "@gugbab-ui/headless",
-  "version": "0.0.1",
-  "description": "Headless React components for @gugbab-ui/* — accessible behavior, unstyled (Radix + MUI 기본 세트)",
+  "name": "@gugbab/headless",
+  "version": "1.0.0",
+  "description": "Headless React components for @gugbab/* — accessible behavior, unstyled (Radix + MUI 기본 세트)",
   "license": "MIT",
   "author": "gugbab",
   "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/headless#readme",
@@ -61,15 +61,15 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.0",
-    "@gugbab-ui/hooks": "workspace:*",
-    "@gugbab-ui/utils": "workspace:*"
+    "@gugbab/hooks": "workspace:*",
+    "@gugbab/utils": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@gugbab-ui/tsconfig": "workspace:*",
+    "@gugbab/tsconfig": "workspace:*",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.5.2",

@@ -1,4 +1,4 @@
-import { useControllableState } from '@gugbab-ui/hooks';
+import { useControllableState } from '@gugbab/hooks';
 import {
   type ChangeEvent,
   type ClipboardEvent,

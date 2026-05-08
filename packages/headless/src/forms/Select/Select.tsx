@@ -11,7 +11,7 @@ import {
   useRole,
   useTypeahead,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab-ui/hooks';
+import { useControllableState } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,

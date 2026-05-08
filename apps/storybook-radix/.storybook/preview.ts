@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react-vite';
 
-import '@gugbab-ui/styled-radix/styles.css';
+import '@gugbab/styled-radix/styles.css';
 
 type ColorScheme = 'light' | 'dark';
 

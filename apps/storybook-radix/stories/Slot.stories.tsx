@@ -1,4 +1,4 @@
-import { Slot } from '@gugbab-ui/styled-radix';
+import { Slot } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

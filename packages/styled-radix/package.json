@@ -1,7 +1,7 @@
 {
-  "name": "@gugbab-ui/styled-radix",
-  "version": "0.0.1",
-  "description": "Radix Themes lookalike styled wrappers over @gugbab-ui/headless headless components",
+  "name": "@gugbab/styled-radix",
+  "version": "1.0.0",
+  "description": "Radix Themes lookalike styled wrappers over @gugbab/headless headless components",
   "license": "MIT",
   "author": "gugbab",
   "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/styled-radix#readme",
@@ -61,15 +61,15 @@
     "clean": "rm -rf dist .turbo coverage"
   },
   "dependencies": {
-    "@gugbab-ui/headless": "workspace:*",
-    "@gugbab-ui/tokens": "workspace:*"
+    "@gugbab/headless": "workspace:*",
+    "@gugbab/tokens": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18"
   },
   "devDependencies": {
-    "@gugbab-ui/tsconfig": "workspace:*",
+    "@gugbab/tsconfig": "workspace:*",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/react": "^19.0.0",

@@ -1,4 +1,4 @@
-import { ContextMenu } from '@gugbab-ui/styled-radix';
+import { ContextMenu } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type React from 'react';
 

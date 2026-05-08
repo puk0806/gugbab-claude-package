@@ -2,7 +2,7 @@ import {
   ToggleGroup as Headless,
   type ToggleGroupItemProps,
   type ToggleGroupRootProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

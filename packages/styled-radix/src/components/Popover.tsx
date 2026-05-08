@@ -2,7 +2,7 @@ import {
   Popover as Headless,
   type PopoverContentProps,
   type PopoverRootProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

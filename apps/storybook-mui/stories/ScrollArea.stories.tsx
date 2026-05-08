@@ -1,4 +1,4 @@
-import { ScrollArea } from '@gugbab-ui/styled-mui';
+import { ScrollArea } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

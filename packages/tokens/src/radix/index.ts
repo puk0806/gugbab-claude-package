@@ -1,5 +1,5 @@
 /**
- * @gugbab-ui/tokens — Radix Themes lookalike theme.
+ * @gugbab/tokens — Radix Themes lookalike theme.
  *
  * Static token snapshot inspired by Radix Themes (slate gray + blue accent,
  * Inter font). Values are baked in here so this package has no runtime *or*

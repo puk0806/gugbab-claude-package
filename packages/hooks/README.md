@@ -1,9 +1,9 @@
-# @gugbab-ui/hooks
+# @gugbab/hooks
 
-`@gugbab-ui/*` 헤드리스 React 컴포넌트의 빌딩블록이 되는 프레임워크 독립 공용 훅 모음.
+`@gugbab/*` 헤드리스 React 컴포넌트의 빌딩블록이 되는 프레임워크 독립 공용 훅 모음.
 
 - React 18 / 19 지원 (`peerDependencies: react >=18`)
-- 순수 계산이 필요한 경우 `@gugbab-ui/utils`를 내부에서 사용
+- 순수 계산이 필요한 경우 `@gugbab/utils`를 내부에서 사용
 - Dual ESM / CJS 빌드 + 타입 정의
 
 ## 카테고리
@@ -15,7 +15,7 @@
 | ref | `useLatestRef` | 최신 값을 가리키는 ref (렌더마다 업데이트) |
 | ref | `useEventCallback` | 렌더 간 안정적 identity를 유지하는 이벤트 핸들러 |
 | ref | `useMergedRefs` | 여러 ref를 하나로 합치는 콜백 ref |
-| binding | `useDebouncedValue` | 디바운스된 값 (`@gugbab-ui/utils/debounce` 기반) |
+| binding | `useDebouncedValue` | 디바운스된 값 (`@gugbab/utils/debounce` 기반) |
 | binding | `useDebouncedCallback` | 디바운스된 콜백 (cleanup 자동 처리) |
 | binding | `useThrottledCallback` | 쓰로틀된 콜백 (cleanup 자동 처리) |
 | state | `useControllableState` | controlled / uncontrolled 자동 전환 (headless 패턴) |
@@ -25,13 +25,13 @@
 ## 설치
 
 ```sh
-pnpm add @gugbab-ui/hooks
+pnpm add @gugbab/hooks
 ```
 
 ## 사용 예
 
 ```tsx
-import { useControllableState, useOnClickOutside } from '@gugbab-ui/hooks';
+import { useControllableState, useOnClickOutside } from '@gugbab/hooks';
 
 function Popover(props: { open?: boolean; defaultOpen?: boolean; onOpenChange?: (v: boolean) => void }) {
   const [open, setOpen] = useControllableState({

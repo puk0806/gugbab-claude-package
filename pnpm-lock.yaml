@@ -20,13 +20,13 @@ importers:
       '@commitlint/cli':
         specifier: ^19.5.0
         version: 19.8.1(@types/node@25.6.0)(typescript@6.0.3)
-      '@gugbab-ui/biome-config':
+      '@gugbab/biome-config':
         specifier: workspace:*
         version: link:packages/biome-config
-      '@gugbab-ui/commitlint-config':
+      '@gugbab/commitlint-config':
         specifier: workspace:*
         version: link:packages/commitlint-config
-      '@gugbab-ui/tsconfig':
+      '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:packages/tsconfig
       '@playwright/test':
@@ -59,13 +59,13 @@ importers:
 
   apps/storybook-mui:
     dependencies:
-      '@gugbab-ui/headless':
+      '@gugbab/headless':
         specifier: workspace:*
         version: link:../../packages/headless
-      '@gugbab-ui/styled-mui':
+      '@gugbab/styled-mui':
         specifier: workspace:*
         version: link:../../packages/styled-mui
-      '@gugbab-ui/tokens':
+      '@gugbab/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
       react:
@@ -75,7 +75,7 @@ importers:
         specifier: ^19.0.0
         version: 19.2.5(react@19.2.5)
     devDependencies:
-      '@gugbab-ui/tsconfig':
+      '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
       '@storybook/addon-a11y':
@@ -108,13 +108,13 @@ importers:
 
   apps/storybook-radix:
     dependencies:
-      '@gugbab-ui/headless':
+      '@gugbab/headless':
         specifier: workspace:*
         version: link:../../packages/headless
-      '@gugbab-ui/styled-radix':
+      '@gugbab/styled-radix':
         specifier: workspace:*
         version: link:../../packages/styled-radix
-      '@gugbab-ui/tokens':
+      '@gugbab/tokens':
         specifier: workspace:*
         version: link:../../packages/tokens
       react:
@@ -124,7 +124,7 @@ importers:
         specifier: ^19.0.0
         version: 19.2.5(react@19.2.5)
     devDependencies:
-      '@gugbab-ui/tsconfig':
+      '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../../packages/tsconfig
       '@storybook/addon-a11y':
@@ -172,14 +172,14 @@ importers:
       '@floating-ui/react':
         specifier: ^0.27.0
         version: 0.27.19(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@gugbab-ui/hooks':
+      '@gugbab/hooks':
         specifier: workspace:*
         version: link:../hooks
-      '@gugbab-ui/utils':
+      '@gugbab/utils':
         specifier: workspace:*
         version: link:../utils
     devDependencies:
-      '@gugbab-ui/tsconfig':
+      '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
@@ -227,11 +227,11 @@ importers:
 
   packages/hooks:
     dependencies:
-      '@gugbab-ui/utils':
+      '@gugbab/utils':
         specifier: workspace:*
         version: link:../utils
     devDependencies:
-      '@gugbab-ui/tsconfig':
+      '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/react':
@@ -264,14 +264,14 @@ importers:
 
   packages/styled-mui:
     dependencies:
-      '@gugbab-ui/headless':
+      '@gugbab/headless':
         specifier: workspace:*
         version: link:../headless
-      '@gugbab-ui/tokens':
+      '@gugbab/tokens':
         specifier: workspace:*
         version: link:../tokens
     devDependencies:
-      '@gugbab-ui/tsconfig':
+      '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
@@ -307,14 +307,14 @@ importers:
 
   packages/styled-radix:
     dependencies:
-      '@gugbab-ui/headless':
+      '@gugbab/headless':
         specifier: workspace:*
         version: link:../headless
-      '@gugbab-ui/tokens':
+      '@gugbab/tokens':
         specifier: workspace:*
         version: link:../tokens
     devDependencies:
-      '@gugbab-ui/tsconfig':
+      '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
@@ -350,7 +350,7 @@ importers:
 
   packages/tokens:
     devDependencies:
-      '@gugbab-ui/tsconfig':
+      '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       tsup:
@@ -367,7 +367,7 @@ importers:
 
   packages/utils:
     devDependencies:
-      '@gugbab-ui/tsconfig':
+      '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@vitest/coverage-v8':

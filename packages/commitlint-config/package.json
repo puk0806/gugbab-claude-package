@@ -1,7 +1,7 @@
 {
-  "name": "@gugbab-ui/commitlint-config",
-  "version": "0.0.1",
-  "description": "Shared commitlint configuration for @gugbab-ui/* packages (gugbab git.md 컨벤션)",
+  "name": "@gugbab/commitlint-config",
+  "version": "1.0.0",
+  "description": "Shared commitlint configuration for @gugbab/* packages (gugbab git.md 컨벤션)",
   "license": "MIT",
   "author": "gugbab",
   "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/commitlint-config#readme",

@@ -1,8 +1,8 @@
 {
-  "name": "@gugbab-ui/storybook-radix",
+  "name": "@gugbab/storybook-radix",
   "version": "0.0.0",
   "private": true,
-  "description": "Storybook showcase for @gugbab-ui/styled-radix (Radix Themes lookalike, grx-* classes)",
+  "description": "Storybook showcase for @gugbab/styled-radix (Radix Themes lookalike, grx-* classes)",
   "type": "module",
   "scripts": {
     "dev": "storybook dev -p 6007 --no-open",
@@ -11,14 +11,14 @@
     "clean": "rm -rf storybook-static .turbo node_modules/.cache"
   },
   "dependencies": {
-    "@gugbab-ui/headless": "workspace:*",
-    "@gugbab-ui/styled-radix": "workspace:*",
-    "@gugbab-ui/tokens": "workspace:*",
+    "@gugbab/headless": "workspace:*",
+    "@gugbab/styled-radix": "workspace:*",
+    "@gugbab/tokens": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@gugbab-ui/tsconfig": "workspace:*",
+    "@gugbab/tsconfig": "workspace:*",
     "@storybook/addon-a11y": "^10.3.5",
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/addon-themes": "^10.3.5",

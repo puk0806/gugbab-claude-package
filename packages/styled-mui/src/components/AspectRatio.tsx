@@ -1,4 +1,4 @@
-import { type AspectRatioProps, AspectRatio as HeadlessAspectRatio } from '@gugbab-ui/headless';
+import { type AspectRatioProps, AspectRatio as HeadlessAspectRatio } from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

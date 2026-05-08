@@ -2,7 +2,7 @@ import {
   type AlertDialogRootProps,
   type DialogContentProps,
   AlertDialog as Headless,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { type ComponentPropsWithoutRef, forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

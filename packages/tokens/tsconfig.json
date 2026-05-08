@@ -1,5 +1,5 @@
 {
-  "extends": "@gugbab-ui/tsconfig/base.json",
+  "extends": "@gugbab/tsconfig/base.json",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",

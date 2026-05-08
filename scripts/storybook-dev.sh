@@ -14,8 +14,8 @@ cd "$repo_root"
 system="${1:-}"
 shift || true
 case "$system" in
-  mui)   pkg="@gugbab-ui/storybook-mui" ;;
-  radix) pkg="@gugbab-ui/storybook-radix" ;;
+  mui)   pkg="@gugbab/storybook-mui" ;;
+  radix) pkg="@gugbab/storybook-radix" ;;
   *)
     echo "✘ Usage: $0 <mui|radix> [-- <storybook args>]"
     exit 1

@@ -13,7 +13,7 @@ import {
   type MenubarSubProps,
   type MenubarSubTriggerProps,
   type MenubarTriggerProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

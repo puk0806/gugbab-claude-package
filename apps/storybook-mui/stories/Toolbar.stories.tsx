@@ -1,4 +1,4 @@
-import { Toolbar } from '@gugbab-ui/styled-mui';
+import { Toolbar } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

@@ -2,7 +2,7 @@ import {
   RadioGroup as Headless,
   type RadioGroupItemProps,
   type RadioGroupRootProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

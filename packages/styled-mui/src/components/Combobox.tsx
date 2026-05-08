@@ -2,7 +2,7 @@ import {
   type ComboboxItemProps,
   type ComboboxRootProps,
   Combobox as Headless,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import {
   type ButtonHTMLAttributes,
   forwardRef,

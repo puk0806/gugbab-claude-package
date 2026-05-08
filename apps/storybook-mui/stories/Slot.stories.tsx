@@ -1,4 +1,4 @@
-import { Slot } from '@gugbab-ui/styled-mui';
+import { Slot } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

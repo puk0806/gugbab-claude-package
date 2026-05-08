@@ -1,4 +1,4 @@
-import { Portal } from '@gugbab-ui/styled-mui';
+import { Portal } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

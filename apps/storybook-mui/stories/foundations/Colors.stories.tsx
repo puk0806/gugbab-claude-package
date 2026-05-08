@@ -1,4 +1,4 @@
-import { muiTheme } from '@gugbab-ui/tokens';
+import { muiTheme } from '@gugbab/tokens';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PageWrapper, Section, Swatch } from './_helpers';
 
