@@ -1,6 +1,6 @@
-# @gugbab-ui/commitlint-config
+# @gugbab/commitlint-config
 
-`@gugbab-ui/*` 모노레포의 커밋 메시지 컨벤션을 강제하는 [commitlint](https://commitlint.js.org) 설정.
+`@gugbab/*` 모노레포의 커밋 메시지 컨벤션을 강제하는 [commitlint](https://commitlint.js.org) 설정.
 
 ## 컨벤션
 
@@ -19,7 +19,7 @@ footer (선택)
 
 예시:
 ```
-[pkg] Add: @gugbab-ui/headless 컴포넌트 35종
+[pkg] Add: @gugbab/headless 컴포넌트 35종
 [docs] Modify: README 자산 현황 갱신
 [config] Modify: Husky pre-commit 훅 추가
 ```
@@ -27,7 +27,7 @@ footer (선택)
 ## 설치
 
 ```sh
-pnpm add -D @gugbab-ui/commitlint-config @commitlint/cli
+pnpm add -D @gugbab/commitlint-config @commitlint/cli
 ```
 
 `@commitlint/cli ≥ 19`을 peer dependency로 요구합니다.
@@ -38,7 +38,7 @@ pnpm add -D @gugbab-ui/commitlint-config @commitlint/cli
 
 ```js
 export default {
-  extends: ['@gugbab-ui/commitlint-config'],
+  extends: ['@gugbab/commitlint-config'],
 };
 ```
 

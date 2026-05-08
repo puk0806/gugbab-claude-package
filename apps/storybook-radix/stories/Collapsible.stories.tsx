@@ -1,4 +1,4 @@
-import { Collapsible } from '@gugbab-ui/styled-radix';
+import { Collapsible } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

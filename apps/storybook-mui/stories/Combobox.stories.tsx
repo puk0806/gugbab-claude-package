@@ -1,4 +1,4 @@
-import { Combobox, type ComboboxSize } from '@gugbab-ui/styled-mui';
+import { Combobox, type ComboboxSize } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

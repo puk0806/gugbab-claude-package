@@ -1,4 +1,4 @@
-import { AspectRatio } from '@gugbab-ui/styled-radix';
+import { AspectRatio } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

@@ -6,7 +6,7 @@ import {
   type ToolbarSeparatorProps,
   type ToolbarToggleGroupProps,
   type ToolbarToggleItemProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

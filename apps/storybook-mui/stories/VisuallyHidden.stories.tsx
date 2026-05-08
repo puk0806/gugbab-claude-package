@@ -1,4 +1,4 @@
-import { VisuallyHidden } from '@gugbab-ui/styled-mui';
+import { VisuallyHidden } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

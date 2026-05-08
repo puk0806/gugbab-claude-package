@@ -1,4 +1,4 @@
-import { useMergedRefs } from '@gugbab-ui/hooks';
+import { useMergedRefs } from '@gugbab/hooks';
 import React, {
   type AnchorHTMLAttributes,
   type ButtonHTMLAttributes,

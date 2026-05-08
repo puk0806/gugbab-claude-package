@@ -1,4 +1,4 @@
-import { DropdownMenu } from '@gugbab-ui/styled-radix';
+import { DropdownMenu } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

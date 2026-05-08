@@ -6,7 +6,7 @@ import {
   type FormRootProps,
   type FormSubmitProps,
   Form as Headless,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

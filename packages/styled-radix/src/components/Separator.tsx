@@ -1,4 +1,4 @@
-import { Separator as HeadlessSeparator, type SeparatorProps } from '@gugbab-ui/headless';
+import { Separator as HeadlessSeparator, type SeparatorProps } from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

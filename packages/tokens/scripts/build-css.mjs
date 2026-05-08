@@ -18,13 +18,13 @@ const { muiTheme, radixTheme, renderThemeCss } = tokens;
 
 writeFileSync(
   resolve(distDir, 'mui.css'),
-  renderThemeCss(muiTheme, '@gugbab-ui/tokens — MUI default theme'),
+  renderThemeCss(muiTheme, '@gugbab/tokens — MUI default theme'),
   'utf8',
 );
 
 writeFileSync(
   resolve(distDir, 'radix.css'),
-  renderThemeCss(radixTheme, '@gugbab-ui/tokens — Radix Themes (slate + blue)'),
+  renderThemeCss(radixTheme, '@gugbab/tokens — Radix Themes (slate + blue)'),
   'utf8',
 );
 

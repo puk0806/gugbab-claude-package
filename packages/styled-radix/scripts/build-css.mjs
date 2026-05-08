@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Concatenates all `src/styles/*.css` into a single `dist/styles.css`,
- * prepending the `@gugbab-ui/tokens/dist/radix.css` so consumers can import
+ * prepending the `@gugbab/tokens/dist/radix.css` so consumers can import
  * a single stylesheet for both tokens and component styles.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -17,7 +17,7 @@ const tokensCss = resolve(pkgDir, '..', 'tokens', 'dist', 'radix.css');
 if (!existsSync(distDir)) mkdirSync(distDir, { recursive: true });
 
 const parts = [];
-parts.push('/* @gugbab-ui/styled-radix — bundled styles (tokens + components) */');
+parts.push('/* @gugbab/styled-radix — bundled styles (tokens + components) */');
 parts.push('');
 
 if (existsSync(tokensCss)) {

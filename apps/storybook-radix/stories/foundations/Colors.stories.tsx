@@ -1,4 +1,4 @@
-import { radixTheme } from '@gugbab-ui/tokens';
+import { radixTheme } from '@gugbab/tokens';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PageWrapper, Section, Swatch } from './_helpers';
 

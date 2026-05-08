@@ -1,4 +1,4 @@
-import { Checkbox, type CheckboxSize, type CheckedState } from '@gugbab-ui/styled-radix';
+import { Checkbox, type CheckboxSize, type CheckedState } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

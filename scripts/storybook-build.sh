@@ -21,8 +21,8 @@ cd "$repo_root"
 system="${1:-}"
 shift || true
 case "$system" in
-  mui)   pkg="@gugbab-ui/storybook-mui";   styled_pkg="@gugbab-ui/styled-mui"   ;;
-  radix) pkg="@gugbab-ui/storybook-radix"; styled_pkg="@gugbab-ui/styled-radix" ;;
+  mui)   pkg="@gugbab/storybook-mui";   styled_pkg="@gugbab/styled-mui"   ;;
+  radix) pkg="@gugbab/storybook-radix"; styled_pkg="@gugbab/styled-radix" ;;
   *)
     echo "✘ Usage: $0 <mui|radix> [--skip-deps] [<storybook args>]"
     exit 1
@@ -43,8 +43,8 @@ done
 
 if [ "$skip_deps" -eq 0 ]; then
   echo "→ Building workspace dependencies (tokens, react, $styled_pkg)"
-  pnpm -F @gugbab-ui/tokens \
-       -F @gugbab-ui/react \
+  pnpm -F @gugbab/tokens \
+       -F @gugbab/react \
        -F "$styled_pkg" \
        build
 fi

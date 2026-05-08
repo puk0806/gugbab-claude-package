@@ -1,4 +1,4 @@
-import { Breadcrumbs, type BreadcrumbsSeparatorVariant } from '@gugbab-ui/styled-mui';
+import { Breadcrumbs, type BreadcrumbsSeparatorVariant } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

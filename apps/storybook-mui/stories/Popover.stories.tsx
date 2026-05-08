@@ -1,4 +1,4 @@
-import { Popover } from '@gugbab-ui/styled-mui';
+import { Popover } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

@@ -1,7 +1,7 @@
 {
-  "name": "@gugbab-ui/tsconfig",
-  "version": "0.0.1",
-  "description": "Shared TypeScript configurations for @gugbab-ui/* packages",
+  "name": "@gugbab/tsconfig",
+  "version": "1.0.0",
+  "description": "Shared TypeScript configurations for @gugbab/* packages",
   "license": "MIT",
   "author": "gugbab",
   "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/tsconfig#readme",

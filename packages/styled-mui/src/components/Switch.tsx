@@ -1,4 +1,4 @@
-import { Switch as Headless, type SwitchRootProps } from '@gugbab-ui/headless';
+import { Switch as Headless, type SwitchRootProps } from '@gugbab/headless';
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

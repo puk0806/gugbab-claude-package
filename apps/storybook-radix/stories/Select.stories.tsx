@@ -1,4 +1,4 @@
-import { Select, type SelectSize } from '@gugbab-ui/styled-radix';
+import { Select, type SelectSize } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

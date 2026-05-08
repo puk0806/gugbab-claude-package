@@ -2,7 +2,7 @@ import {
   Pagination as Headless,
   type PaginationPageProps,
   type PaginationRootProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef, type HTMLAttributes, type LiHTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

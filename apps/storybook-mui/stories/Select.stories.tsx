@@ -1,4 +1,4 @@
-import { Select, type SelectSize } from '@gugbab-ui/styled-mui';
+import { Select, type SelectSize } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

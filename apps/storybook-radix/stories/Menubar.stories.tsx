@@ -1,4 +1,4 @@
-import { Menubar } from '@gugbab-ui/styled-radix';
+import { Menubar } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

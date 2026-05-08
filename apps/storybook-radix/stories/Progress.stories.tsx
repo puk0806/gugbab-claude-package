@@ -1,4 +1,4 @@
-import { Progress, type ProgressSize } from '@gugbab-ui/styled-radix';
+import { Progress, type ProgressSize } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

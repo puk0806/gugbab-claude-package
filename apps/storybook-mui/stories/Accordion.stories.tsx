@@ -1,4 +1,4 @@
-import { Accordion, type AccordionVariant } from '@gugbab-ui/styled-mui';
+import { Accordion, type AccordionVariant } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
@@ -48,7 +48,7 @@ const FAQ_ITEMS = [
     value: 'q2',
     question: 'How do I apply custom styles?',
     answer:
-      'You can wrap the headless primitives with your own CSS classes or a styled variant package like @gugbab-ui/styled-mui.',
+      'You can wrap the headless primitives with your own CSS classes or a styled variant package like @gugbab/styled-mui.',
   },
   {
     value: 'q3',

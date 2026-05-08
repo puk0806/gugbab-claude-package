@@ -1,4 +1,4 @@
-import { Tabs, type TabsSize, type TabsVariant } from '@gugbab-ui/styled-radix';
+import { Tabs, type TabsSize, type TabsVariant } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

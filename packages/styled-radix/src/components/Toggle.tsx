@@ -1,4 +1,4 @@
-import { Toggle as HeadlessToggle, type ToggleProps } from '@gugbab-ui/headless';
+import { Toggle as HeadlessToggle, type ToggleProps } from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

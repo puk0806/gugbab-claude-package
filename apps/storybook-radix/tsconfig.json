@@ -1,5 +1,5 @@
 {
-  "extends": "@gugbab-ui/tsconfig/react-library.json",
+  "extends": "@gugbab/tsconfig/react-library.json",
   "compilerOptions": {
     "noEmit": true,
     "declaration": false,

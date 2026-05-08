@@ -1,4 +1,4 @@
-import { Pagination, type PaginationSize } from '@gugbab-ui/styled-mui';
+import { Pagination, type PaginationSize } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

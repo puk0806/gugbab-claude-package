@@ -1,1 +1,1 @@
-export { Slot, Slottable } from '@gugbab-ui/headless';
+export { Slot, Slottable } from '@gugbab/headless';

@@ -1,4 +1,4 @@
-import { Form, type FormFieldStatus } from '@gugbab-ui/styled-mui';
+import { Form, type FormFieldStatus } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

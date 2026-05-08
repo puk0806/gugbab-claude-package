@@ -1,4 +1,4 @@
-import { HoverCard } from '@gugbab-ui/styled-radix';
+import { HoverCard } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
@@ -56,7 +56,7 @@ function Demo({ openDelay, closeDelay }: DemoProps) {
         rel="noopener noreferrer"
         style={{ color: '#1976d2', textDecoration: 'underline', cursor: 'pointer' }}
       >
-        @gugbab-ui
+        @gugbab
       </HoverCard.Trigger>
       <HoverCard.Portal>
         <HoverCard.Content style={{ padding: 16, minWidth: 240 }}>
@@ -79,7 +79,7 @@ function Demo({ openDelay, closeDelay }: DemoProps) {
             </div>
             <div>
               <div style={{ fontWeight: 600 }}>Gugbab UI</div>
-              <div style={{ fontSize: 12, color: '#666' }}>@gugbab-ui</div>
+              <div style={{ fontSize: 12, color: '#666' }}>@gugbab</div>
             </div>
           </div>
           <p style={{ margin: 0, fontSize: 13, color: '#444', lineHeight: 1.5 }}>

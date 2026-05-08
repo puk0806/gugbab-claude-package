@@ -1,7 +1,7 @@
 {
-  "name": "@gugbab-ui/tokens",
-  "version": "0.0.1",
-  "description": "Design tokens for @gugbab-ui/* — static token snapshots (MUI / Radix lookalike) → CSS variables. No external library dependencies.",
+  "name": "@gugbab/tokens",
+  "version": "1.0.0",
+  "description": "Design tokens for @gugbab/* — static token snapshots (MUI / Radix lookalike) → CSS variables. No external library dependencies.",
   "license": "MIT",
   "author": "gugbab",
   "homepage": "https://github.com/puk0806/gugbab-claude-package/tree/main/packages/tokens#readme",
@@ -60,7 +60,7 @@
     "clean": "rm -rf dist .turbo coverage"
   },
   "devDependencies": {
-    "@gugbab-ui/tsconfig": "workspace:*",
+    "@gugbab/tsconfig": "workspace:*",
     "tsup": "^8.3.6",
     "typescript": "^5.7.2",
     "vitest": "^2.1.9"

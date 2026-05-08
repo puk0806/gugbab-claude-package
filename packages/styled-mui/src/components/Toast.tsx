@@ -7,7 +7,7 @@ import {
   type ToastRootProps,
   type ToastTitleProps,
   type ToastViewportProps,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

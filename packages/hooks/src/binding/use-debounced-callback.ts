@@ -1,9 +1,9 @@
-import { type DebouncedFunction, debounce } from '@gugbab-ui/utils';
+import { type DebouncedFunction, debounce } from '@gugbab/utils';
 import { useEffect, useMemo } from 'react';
 import { useLatestRef } from '../ref/use-latest-ref';
 
 /**
- * Wraps `@gugbab-ui/utils/debounce` with React ergonomics: the returned
+ * Wraps `@gugbab/utils/debounce` with React ergonomics: the returned
  * function has a stable identity across renders (so effects and memoized
  * children aren't churned), always calls the latest `fn`, and cancels the
  * pending invocation on unmount.

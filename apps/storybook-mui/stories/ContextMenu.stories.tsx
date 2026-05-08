@@ -1,4 +1,4 @@
-import { ContextMenu } from '@gugbab-ui/styled-mui';
+import { ContextMenu } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type React from 'react';
 

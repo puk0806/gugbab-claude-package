@@ -1,5 +1,5 @@
 /**
- * @gugbab-ui 팀 커밋 컨벤션: [category] Type: Subject
+ * @gugbab 팀 커밋 컨벤션: [category] Type: Subject
  * - category: agent | skill | docs | config | pkg | apps | scripts | deps
  *   · agent / skill — .claude/agents, .claude/skills 작업
  *   · docs / config — README, rules, hooks, settings 등 메타·문서

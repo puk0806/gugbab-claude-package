@@ -1,4 +1,4 @@
-import { useControllableState, useMergedRefs } from '@gugbab-ui/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,

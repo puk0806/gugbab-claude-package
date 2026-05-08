@@ -1,8 +1,4 @@
-import {
-  ToggleGroup,
-  type ToggleGroupSize,
-  type ToggleGroupVariant,
-} from '@gugbab-ui/styled-radix';
+import { ToggleGroup, type ToggleGroupSize, type ToggleGroupVariant } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

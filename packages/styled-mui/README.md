@@ -1,15 +1,15 @@
-# @gugbab-ui/styled-mui
+# @gugbab/styled-mui
 
-`@gugbab-ui/headless`(헤드리스 동작) 위에 **Material Design lookalike** 스타일을 입힌 React 컴포넌트 35종. CSS 클래스명은 모두 `gmui-*` prefix.
+`@gugbab/headless`(헤드리스 동작) 위에 **Material Design lookalike** 스타일을 입힌 React 컴포넌트 35종. CSS 클래스명은 모두 `gmui-*` prefix.
 
-- 35 컴포넌트 — `@gugbab-ui/headless` 35종과 1:1 대응
-- 디자인 토큰: `@gugbab-ui/tokens` (MUI 스냅샷)
+- 35 컴포넌트 — `@gugbab/headless` 35종과 1:1 대응
+- 디자인 토큰: `@gugbab/tokens` (MUI 스냅샷)
 - React 18 / 19 지원, dual ESM / CJS, RSC 호환 (`"use client"` banner)
 
 ## 설치
 
 ```sh
-pnpm add @gugbab-ui/styled-mui @gugbab-ui/headless @gugbab-ui/tokens @floating-ui/react
+pnpm add @gugbab/styled-mui @gugbab/headless @gugbab/tokens @floating-ui/react
 ```
 
 ## 사용
@@ -18,12 +18,12 @@ pnpm add @gugbab-ui/styled-mui @gugbab-ui/headless @gugbab-ui/tokens @floating-u
 
 ```tsx
 // app entry
-import '@gugbab-ui/tokens/mui.css';
-import '@gugbab-ui/styled-mui/styles.css';
+import '@gugbab/tokens/mui.css';
+import '@gugbab/styled-mui/styles.css';
 ```
 
 ```tsx
-import { Button, Dialog } from '@gugbab-ui/styled-mui';
+import { Button, Dialog } from '@gugbab/styled-mui';
 
 export function Example() {
   return (

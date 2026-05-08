@@ -6,7 +6,7 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab-ui/hooks';
+import { useControllableState } from '@gugbab/hooks';
 import {
   type AnchorHTMLAttributes,
   createContext,

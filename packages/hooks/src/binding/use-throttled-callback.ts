@@ -1,9 +1,9 @@
-import { type ThrottledFunction, throttle } from '@gugbab-ui/utils';
+import { type ThrottledFunction, throttle } from '@gugbab/utils';
 import { useEffect, useMemo } from 'react';
 import { useLatestRef } from '../ref/use-latest-ref';
 
 /**
- * Wraps `@gugbab-ui/utils/throttle` with React ergonomics: stable identity,
+ * Wraps `@gugbab/utils/throttle` with React ergonomics: stable identity,
  * always-latest callback, unmount-time cancel.
  */
 export function useThrottledCallback<TArgs extends unknown[]>(

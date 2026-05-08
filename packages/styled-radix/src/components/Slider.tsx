@@ -1,8 +1,4 @@
-import {
-  Slider as Headless,
-  type SliderRootProps,
-  type SliderThumbProps,
-} from '@gugbab-ui/headless';
+import { Slider as Headless, type SliderRootProps, type SliderThumbProps } from '@gugbab/headless';
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

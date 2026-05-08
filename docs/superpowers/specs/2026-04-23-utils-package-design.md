@@ -1,4 +1,4 @@
-# @gugbab-ui/utils 패키지 설계
+# @gugbab/utils 패키지 설계
 
 **작성일**: 2026-04-23
 **상태**: Draft
@@ -11,12 +11,12 @@
 
 ### 1.1 목적
 
-`@gugbab-ui/utils`는 `@gugbab-ui/*` 모노레포 전반(특히 앞으로 구축할 `packages/react`)에서 공통으로 사용할, **프레임워크 독립·순수 함수 기반** 유틸리티 모음이다. 공개 배포 대상이며, 외부 프론트엔드 개발자도 소비자로 가정한다.
+`@gugbab/utils`는 `@gugbab/*` 모노레포 전반(특히 앞으로 구축할 `packages/react`)에서 공통으로 사용할, **프레임워크 독립·순수 함수 기반** 유틸리티 모음이다. 공개 배포 대상이며, 외부 프론트엔드 개발자도 소비자로 가정한다.
 
 ### 1.2 타깃 환경
 
 - 브라우저 + Node.js 듀얼 지원 (순수 JS만 사용, DOM API 직접 호출 없음)
-- TypeScript strict 모드 (`@gugbab-ui/tsconfig/base.json` 상속)
+- TypeScript strict 모드 (`@gugbab/tsconfig/base.json` 상속)
 - Node.js `>=20.17.0`
 
 ### 1.3 제공 카테고리
@@ -37,8 +37,8 @@
 ### 1.4 비목표 (Non-goals)
 
 - **날짜 처리** — 소비자가 필요 시 `dayjs` 등을 직접 사용. utils에 포함하지 않는다.
-- **DOM·브라우저 전용 API** — clipboard, scroll lock 등은 별도 `@gugbab-ui/dom` 패키지로 분리 (필요해질 때).
-- **React 훅** — 별도 `@gugbab-ui/hooks` 패키지로 분리 (필요해질 때).
+- **DOM·브라우저 전용 API** — clipboard, scroll lock 등은 별도 `@gugbab/dom` 패키지로 분리 (필요해질 때).
+- **React 훅** — 별도 `@gugbab/hooks` 패키지로 분리 (필요해질 때).
 - **로다시 전체 API 복제** — 실무에서 실제로 반복 등장하는 것만 선별한다.
 
 ---
@@ -64,7 +64,7 @@
 ### 3.1 단일 엔트리 채택
 
 ```ts
-import { chunk, debounce, isNil } from '@gugbab-ui/utils';
+import { chunk, debounce, isNil } from '@gugbab/utils';
 ```
 
 ### 3.2 근거 (업계 관행 조사)
@@ -210,9 +210,9 @@ superpowers 플러그인의 TDD 강제 워크플로우를 따른다.
 
 ```jsonc
 {
-  "name": "@gugbab-ui/utils",
+  "name": "@gugbab/utils",
   "version": "0.0.1",
-  "description": "Framework-agnostic utilities for @gugbab-ui/*",
+  "description": "Framework-agnostic utilities for @gugbab/*",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
@@ -232,8 +232,8 @@ superpowers 플러그인의 TDD 강제 워크플로우를 따른다.
     "clean": "rm -rf dist .turbo"
   },
   "devDependencies": {
-    "@gugbab-ui/tsconfig": "workspace:*",
-    "@gugbab-ui/biome-config": "workspace:*",
+    "@gugbab/tsconfig": "workspace:*",
+    "@gugbab/biome-config": "workspace:*",
     "type-fest": "^4.x",
     "tsup": "^8.x",
     "vitest": "^2.x",
@@ -254,7 +254,7 @@ superpowers 플러그인의 TDD 강제 워크플로우를 따른다.
 ```jsonc
 // packages/utils/tsconfig.json
 {
-  "extends": "@gugbab-ui/tsconfig/node-library.json",
+  "extends": "@gugbab/tsconfig/node-library.json",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src"
@@ -276,7 +276,7 @@ React/DOM 타입을 참조하지 않는 순수 JS이므로 `node-library` 프리
 
 | 항목 | 결정 |
 | ------------ | ------------------------------------------------- |
-| 스코프       | `@gugbab-ui/utils` · 6 카테고리 · 30~50 함수 출발 |
+| 스코프       | `@gugbab/utils` · 6 카테고리 · 30~50 함수 출발 |
 | 의존성       | 런타임 0개, devDep에 `type-fest` |
 | Exports      | 단일 엔트리 |
 | 빌드         | tsup, ESM+CJS 듀얼, `sideEffects: false` |

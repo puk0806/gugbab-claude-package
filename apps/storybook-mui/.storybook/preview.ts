@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react-vite';
 
-import '@gugbab-ui/styled-mui/styles.css';
+import '@gugbab/styled-mui/styles.css';
 
 type ColorScheme = 'light' | 'dark';
 

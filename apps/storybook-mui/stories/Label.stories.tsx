@@ -1,4 +1,4 @@
-import { Label } from '@gugbab-ui/styled-mui';
+import { Label } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
@@ -13,7 +13,7 @@ const meta = {
 
 ### 구조
 
-단일 컴포넌트 (컴파운드 없음). 내부적으로 \`@gugbab-ui/headless\`의 \`Label\` 헤드리스 컴포넌트를 래핑한다.
+단일 컴포넌트 (컴파운드 없음). 내부적으로 \`@gugbab/headless\`의 \`Label\` 헤드리스 컴포넌트를 래핑한다.
 
 | Prop | 타입 | 설명 |
 | ---- | ---- | ---- |

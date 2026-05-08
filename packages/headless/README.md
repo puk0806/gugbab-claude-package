@@ -1,6 +1,6 @@
-# @gugbab-ui/headless
+# @gugbab/headless
 
-Headless, accessible React components for `@gugbab-ui/*` — behavior only, bring your own styles.
+Headless, accessible React components for `@gugbab/*` — behavior only, bring your own styles.
 
 - Compound component API with `asChild` prop (Radix style)
 - Full keyboard navigation + ARIA compliance
@@ -12,10 +12,10 @@ Headless, accessible React components for `@gugbab-ui/*` — behavior only, brin
 ## 설치
 
 ```sh
-pnpm add @gugbab-ui/headless @floating-ui/react
+pnpm add @gugbab/headless @floating-ui/react
 ```
 
-스타일이 입혀진 형태가 필요하다면 `@gugbab-ui/styled-mui` 또는 `@gugbab-ui/styled-radix`를 함께 설치합니다.
+스타일이 입혀진 형태가 필요하다면 `@gugbab/styled-mui` 또는 `@gugbab/styled-radix`를 함께 설치합니다.
 
 ## 범위 (35 컴포넌트)
 
@@ -40,7 +40,7 @@ ScrollArea
 ## 사용 예
 
 ```tsx
-import { Dialog } from '@gugbab-ui/headless';
+import { Dialog } from '@gugbab/headless';
 
 function Example() {
   return (

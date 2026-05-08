@@ -1,4 +1,4 @@
-import { Toggle, type ToggleSize, type ToggleVariant } from '@gugbab-ui/styled-mui';
+import { Toggle, type ToggleSize, type ToggleVariant } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
 

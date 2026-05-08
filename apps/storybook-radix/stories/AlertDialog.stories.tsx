@@ -1,4 +1,4 @@
-import { AlertDialog, type AlertDialogActionVariant } from '@gugbab-ui/styled-radix';
+import { AlertDialog, type AlertDialogActionVariant } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

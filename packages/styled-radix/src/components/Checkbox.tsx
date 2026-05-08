@@ -1,8 +1,4 @@
-import {
-  type CheckboxRootProps,
-  type CheckedState,
-  Checkbox as Headless,
-} from '@gugbab-ui/headless';
+import { type CheckboxRootProps, type CheckedState, Checkbox as Headless } from '@gugbab/headless';
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

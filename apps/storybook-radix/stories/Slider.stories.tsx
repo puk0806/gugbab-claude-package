@@ -1,4 +1,4 @@
-import { Slider, type SliderSize } from '@gugbab-ui/styled-radix';
+import { Slider, type SliderSize } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

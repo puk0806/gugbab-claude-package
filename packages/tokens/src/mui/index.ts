@@ -1,5 +1,5 @@
 /**
- * @gugbab-ui/tokens — MUI lookalike theme.
+ * @gugbab/tokens — MUI lookalike theme.
  *
  * Static token snapshot derived from MUI v6 default theme (Roboto + indigo
  * primary, Material Design 3 inspired palette). Values are baked in here so

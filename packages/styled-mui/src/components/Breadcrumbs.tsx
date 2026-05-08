@@ -2,7 +2,7 @@ import {
   type BreadcrumbsItemProps,
   type BreadcrumbsRootProps,
   Breadcrumbs as Headless,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

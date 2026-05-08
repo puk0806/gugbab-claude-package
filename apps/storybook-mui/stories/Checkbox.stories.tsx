@@ -1,4 +1,4 @@
-import { Checkbox, type CheckboxSize, type CheckedState } from '@gugbab-ui/styled-mui';
+import { Checkbox, type CheckboxSize, type CheckedState } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

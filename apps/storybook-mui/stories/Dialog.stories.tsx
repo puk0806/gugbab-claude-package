@@ -1,4 +1,4 @@
-import { Dialog, type DialogSize } from '@gugbab-ui/styled-mui';
+import { Dialog, type DialogSize } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

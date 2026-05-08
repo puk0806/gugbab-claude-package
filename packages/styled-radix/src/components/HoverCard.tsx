@@ -1,4 +1,4 @@
-import { HoverCard as Headless, type HoverCardRootProps } from '@gugbab-ui/headless';
+import { HoverCard as Headless, type HoverCardRootProps } from '@gugbab/headless';
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import { cn } from '../utils/cn';
 

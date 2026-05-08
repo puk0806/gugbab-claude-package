@@ -1,4 +1,4 @@
-import { Toast } from '@gugbab-ui/styled-mui';
+import { Toast } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

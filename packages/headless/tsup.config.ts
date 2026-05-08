@@ -13,8 +13,8 @@ export default defineConfig({
     'react-dom',
     'react/jsx-runtime',
     '@floating-ui/react',
-    '@gugbab-ui/hooks',
-    '@gugbab-ui/utils',
+    '@gugbab/hooks',
+    '@gugbab/utils',
   ],
   banner: {
     js: '"use client";',

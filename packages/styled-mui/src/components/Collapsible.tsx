@@ -1,4 +1,4 @@
-import { type CollapsibleRootProps, Collapsible as Headless } from '@gugbab-ui/headless';
+import { type CollapsibleRootProps, Collapsible as Headless } from '@gugbab/headless';
 import { type ButtonHTMLAttributes, forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

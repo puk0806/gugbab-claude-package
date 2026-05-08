@@ -1,11 +1,11 @@
-# @gugbab-ui/utils
+# @gugbab/utils
 
 프레임워크 독립적인 순수 유틸리티 모음. 브라우저와 Node.js 양쪽에서 동작합니다.
 
 ## 설치
 
 ```bash
-pnpm add @gugbab-ui/utils
+pnpm add @gugbab/utils
 ```
 
 ## 특징
@@ -20,7 +20,7 @@ pnpm add @gugbab-ui/utils
 단일 엔트리에서 모든 함수를 import합니다.
 
 ```ts
-import { camelCase, chunk, debounce, isNil, formatBytes } from '@gugbab-ui/utils';
+import { camelCase, chunk, debounce, isNil, formatBytes } from '@gugbab/utils';
 ```
 
 ### guard

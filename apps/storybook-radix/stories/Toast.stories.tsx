@@ -1,4 +1,4 @@
-import { Toast } from '@gugbab-ui/styled-radix';
+import { Toast } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 

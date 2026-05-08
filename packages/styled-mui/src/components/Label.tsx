@@ -1,4 +1,4 @@
-import { Label as HeadlessLabel } from '@gugbab-ui/headless';
+import { Label as HeadlessLabel } from '@gugbab/headless';
 import { forwardRef, type LabelHTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 

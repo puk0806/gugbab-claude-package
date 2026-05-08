@@ -1,4 +1,4 @@
-import { Tooltip } from '@gugbab-ui/styled-mui';
+import { Tooltip } from '@gugbab/styled-mui';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {

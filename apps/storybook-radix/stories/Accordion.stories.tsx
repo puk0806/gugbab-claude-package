@@ -1,4 +1,4 @@
-import { Accordion, type AccordionVariant } from '@gugbab-ui/styled-radix';
+import { Accordion, type AccordionVariant } from '@gugbab/styled-radix';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
@@ -48,7 +48,7 @@ const FAQ_ITEMS = [
     value: 'q2',
     question: 'How do I apply custom styles?',
     answer:
-      'You can wrap the headless primitives with your own CSS classes or a styled variant package like @gugbab-ui/styled-radix.',
+      'You can wrap the headless primitives with your own CSS classes or a styled variant package like @gugbab/styled-radix.',
   },
   {
     value: 'q3',

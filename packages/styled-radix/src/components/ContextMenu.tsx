@@ -7,7 +7,7 @@ import {
   type ContextMenuSubProps,
   type ContextMenuSubTriggerProps,
   ContextMenu as Headless,
-} from '@gugbab-ui/headless';
+} from '@gugbab/headless';
 import { forwardRef } from 'react';
 import { cn } from '../utils/cn';
 
