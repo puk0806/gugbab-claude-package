@@ -1,0 +1,95 @@
+name: release
+
+# 두 가지 흐름:
+# 1. push: main → changesets/action → Version PR 자동 생성 또는 publish
+# 2. workflow_dispatch (mode=initial) → 첫 v1.0.0 publish (changeset 우회)
+#
+# 첫 v1.0.0 publish 직전에 npm.com Org + NPM_TOKEN secret 등록이 선행되어야 한다.
+# 자세한 설계는 docs/superpowers/specs/2026-05-08-npm-v1-publishing-design.md 참조.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: '발행 모드'
+        required: true
+        type: choice
+        default: changeset
+        options:
+          - changeset    # 표준: changesets/action — Version PR 또는 publish
+          - initial      # 첫 v1.0.0: changeset 없이 직접 publish
+
+permissions:
+  contents: write       # changesets/action 의 Version PR / 태그 생성용
+  pull-requests: write  # Version PR 생성용
+  id-token: write       # provenance (sigstore) 인증
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.9.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.1
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm test
+
+      # ─────────────────────────────────────────────────────────────
+      # 표준 흐름 — push:main 또는 workflow_dispatch(mode=changeset)
+      # changesets/action 이 새 changeset 감지 시 Version PR 생성,
+      # changeset 0개면 publish 단계 직접 실행.
+      # ─────────────────────────────────────────────────────────────
+      - name: Create Release Pull Request or Publish
+        if: |
+          github.event_name == 'push' ||
+          (github.event_name == 'workflow_dispatch' && inputs.mode == 'changeset')
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset publish
+          version: pnpm changeset version
+          commit: '[scripts] Modify: version packages [skip ci]'
+          title: '[scripts] Modify: version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'
+
+      # ─────────────────────────────────────────────────────────────
+      # 첫 v1.0.0 publish — workflow_dispatch(mode=initial)
+      # 9 packages/*/package.json 의 version 이 이미 "1.0.0" 으로 셋업되어
+      # 있는 상태에서 changeset 우회로 직접 publish.
+      # ─────────────────────────────────────────────────────────────
+      - name: Initial v1.0.0 publish (manual trigger only)
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'initial'
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'
+        run: |
+          # registry-url + NPM_TOKEN 으로 .npmrc 자동 셋업됨 (actions/setup-node)
+          # pnpm -r 은 의존 토폴로지 정렬 publish
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+          pnpm -r publish --provenance --no-git-checks --access public

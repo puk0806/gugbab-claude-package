@@ -1,0 +1,45 @@
+name: publish-dry-run
+
+# PR 단계에서 publish 가능성 사전 검증.
+# pnpm publish --dry-run 으로 실제 publish 없이 tarball 생성 시뮬레이션 + 메타데이터 검증.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/**'
+      - '.changeset/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/release.yml'
+      - '.github/workflows/publish-dry-run.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-dry-run-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.9.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.1
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm build
+
+      - name: Publish dry-run (recursive, all 9 packages)
+        run: pnpm -r publish --dry-run --no-git-checks --access public
