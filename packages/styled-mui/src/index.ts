@@ -107,6 +107,8 @@ export type {
 export { Select } from './components/Select';
 export type { StyledSeparatorProps } from './components/Separator';
 export { Separator } from './components/Separator';
+export type { StyledSkeletonProps } from './components/Skeleton';
+export { Skeleton } from './components/Skeleton';
 export type { SliderSize, SliderStyledRootProps } from './components/Slider';
 export { Slider } from './components/Slider';
 export { Slot, Slottable } from './components/Slot';

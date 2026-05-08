@@ -1,0 +1,53 @@
+.grx-skeleton {
+  display: block;
+  background-color: var(--gugbab-color-bg-elevated);
+  position: relative;
+  overflow: hidden;
+}
+
+.grx-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gugbab-color-bg-app) 50%,
+    transparent 100%
+  );
+  animation: grx-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes grx-skeleton-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grx-skeleton::after {
+    animation: none;
+  }
+}
+
+.grx-skeleton--rectangular {
+  border-radius: var(--gugbab-radius-sm);
+  width: 100%;
+  height: 1em;
+}
+
+.grx-skeleton--circular {
+  border-radius: var(--gugbab-radius-full);
+  width: 40px;
+  height: 40px;
+}
+
+.grx-skeleton--text {
+  border-radius: var(--gugbab-radius-sm);
+  width: 100%;
+  height: 0.875em;
+}
