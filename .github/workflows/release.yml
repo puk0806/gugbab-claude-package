@@ -76,6 +76,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # actions/setup-node 가 만든 .npmrc 의 ${NODE_AUTH_TOKEN} placeholder 치환용.
+          # NPM_TOKEN 만 있으면 NPM_CONFIG_USERCONFIG 의 placeholder 가 빈 값이 되어 PUT 404 발생.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
 
       # ─────────────────────────────────────────────────────────────
@@ -86,10 +89,11 @@ jobs:
       - name: Initial v1.0.0 publish (manual trigger only)
         if: github.event_name == 'workflow_dispatch' && inputs.mode == 'initial'
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # actions/setup-node 가 NPM_CONFIG_USERCONFIG 로 가리키는 .npmrc 에
+          # `_authToken=${NODE_AUTH_TOKEN}` 형태로 적어두므로, 이 env 가 없으면
+          # placeholder 가 빈 값으로 치환되어 PUT 요청이 익명 호출이 된다.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
         run: |
-          # registry-url + NPM_TOKEN 으로 .npmrc 자동 셋업됨 (actions/setup-node)
-          # pnpm -r 은 의존 토폴로지 정렬 publish
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+          # 의존 토폴로지 자동 정렬 publish. 인증은 setup-node 의 .npmrc 로 처리.
           pnpm -r publish --provenance --no-git-checks --access public
