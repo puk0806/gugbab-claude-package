@@ -1,6 +1,6 @@
 {
   "name": "@gugbab/headless",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Headless React components for @gugbab/* — accessible behavior, unstyled (Radix + MUI 기본 세트)",
   "license": "MIT",
   "author": "gugbab",
