@@ -64,6 +64,7 @@ jobs:
       # changeset 0개면 publish 단계 직접 실행.
       # ─────────────────────────────────────────────────────────────
       - name: Create Release Pull Request or Publish
+        id: changesets
         if: |
           github.event_name == 'push' ||
           (github.event_name == 'workflow_dispatch' && inputs.mode == 'changeset')
@@ -80,6 +81,19 @@ jobs:
           # NPM_TOKEN 만 있으면 NPM_CONFIG_USERCONFIG 의 placeholder 가 빈 값이 되어 PUT 404 발생.
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
+
+      # changesets/action 이 Version PR 을 새로 만들었거나 업데이트한 경우,
+      # GitHub 의 auto-merge 를 활성화해 다른 PR 검사 통과 즉시 자동 머지되도록 한다.
+      # 이로써 사용자는 feature PR 한 번만 머지하면 npm publish 까지 자동 진행된다.
+      # (publish 모드로 실행된 경우 pullRequestNumber 가 비어 있어 이 step 은 skip.)
+      - name: Enable auto-merge on Version PR
+        if: steps.changesets.outputs.pullRequestNumber != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge --auto --squash \
+            --repo ${{ github.repository }} \
+            ${{ steps.changesets.outputs.pullRequestNumber }}
 
       # ─────────────────────────────────────────────────────────────
       # 첫 v1.0.0 publish — workflow_dispatch(mode=initial)
