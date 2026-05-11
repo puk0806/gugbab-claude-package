@@ -1,6 +1,6 @@
 {
   "name": "@gugbab/styled-radix",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Radix Themes lookalike styled wrappers over @gugbab/headless headless components",
   "license": "MIT",
   "author": "gugbab",

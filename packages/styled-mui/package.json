@@ -1,6 +1,6 @@
 {
   "name": "@gugbab/styled-mui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MUI lookalike styled wrappers over @gugbab/headless headless components",
   "license": "MIT",
   "author": "gugbab",
