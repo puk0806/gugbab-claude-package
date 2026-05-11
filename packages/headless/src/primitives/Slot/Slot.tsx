@@ -14,6 +14,10 @@ import {
 
 type AnyProps = Record<string, unknown>;
 
+// Hoisted module-level constant — the Symbol registry lookup happens once on
+// module init instead of on every SlotClone render.
+const REACT_LAZY_SYMBOL = Symbol.for('react.lazy');
+
 export interface SlotProps extends HTMLAttributes<HTMLElement> {
   children?: ReactNode;
 }
@@ -76,12 +80,11 @@ const SlotClone = forwardRef<HTMLElement, SlotProps>(function SlotClone(props, f
 
   const element = isValidElement(children) ? (children as ReactElement<AnyProps>) : null;
 
-  const REACT_LAZY = Symbol.for('react.lazy');
   const isLazy =
     element !== null &&
     typeof element.type === 'object' &&
     element.type !== null &&
-    (element.type as { $$typeof?: symbol }).$$typeof === REACT_LAZY;
+    (element.type as { $$typeof?: symbol }).$$typeof === REACT_LAZY_SYMBOL;
 
   const childRef = element ? getElementRef(element) : null;
   const mergedRef = useMergedRefs(forwardedRef, childRef);
@@ -113,6 +116,11 @@ interface SlottableProps {
 }
 
 interface SlottableComponent extends FC<SlottableProps> {
+  /**
+   * Unique brand symbol used by the parent Slot to recognize this component.
+   * Not part of the public API — do not read or modify in user code.
+   * @internal
+   */
   __slottableId: symbol;
 }
 
@@ -125,7 +133,6 @@ export const Slottable: SlottableComponent = ({ children }) => {
   // children are returned via Fragment so they don't introduce a wrapper
   return <>{children}</>;
 };
-Slottable.displayName = 'Slottable';
 Slottable.__slottableId = SLOTTABLE_IDENTIFIER;
 
 function isSlottable(child: ReactNode): child is ReactElement<SlottableProps> {
@@ -147,13 +154,14 @@ function mergeProps(slotProps: AnyProps, childProps: AnyProps): AnyProps {
 
     if (isHandler) {
       if (typeof slotValue === 'function' && typeof childValue === 'function') {
+        type Handler = (...a: unknown[]) => unknown;
+        const childFn = childValue as Handler;
+        const slotFn = slotValue as Handler;
         merged[prop] = (...args: unknown[]) => {
-          // biome-ignore lint/suspicious/noExplicitAny: variadic handler chain
-          (childValue as (...a: any[]) => unknown)(...args);
+          childFn(...args);
           const first = args[0] as { defaultPrevented?: boolean } | undefined;
           if (first?.defaultPrevented) return;
-          // biome-ignore lint/suspicious/noExplicitAny: variadic handler chain
-          (slotValue as (...a: any[]) => unknown)(...args);
+          slotFn(...args);
         };
       } else if (typeof slotValue === 'function') {
         merged[prop] = slotValue;

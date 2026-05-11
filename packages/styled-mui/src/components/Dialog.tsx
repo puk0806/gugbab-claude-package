@@ -4,8 +4,8 @@ import {
   type DialogTriggerProps,
   Dialog as Headless,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { type ComponentPropsWithoutRef, forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type DialogSize = 'sm' | 'md' | 'lg' | 'xl';
 

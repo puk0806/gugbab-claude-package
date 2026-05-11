@@ -1,3 +1,4 @@
+import { useIsomorphicLayoutEffect } from '@gugbab/hooks';
 import {
   createContext,
   forwardRef,
@@ -5,7 +6,6 @@ import {
   type ImgHTMLAttributes,
   useContext,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -55,7 +55,7 @@ const AvatarImage = forwardRef<HTMLImageElement, AvatarImageProps>(function Avat
   const onChangeRef = useRef(onLoadingStatusChange);
   onChangeRef.current = onLoadingStatusChange;
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (status !== 'idle') {
       onChangeRef.current?.(status);
       ctx.onImageLoadingStatusChange(status);
@@ -120,11 +120,11 @@ function useImageLoadingStatus(
     resolveLoadingStatus(image, src),
   );
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setLoadingStatus(resolveLoadingStatus(image, src));
   }, [image, src]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!image) return;
     const handleLoad = () => setLoadingStatus('loaded');
     const handleError = () => setLoadingStatus('error');

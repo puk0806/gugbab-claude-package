@@ -8,8 +8,8 @@ import {
   type ContextMenuSubTriggerProps,
   ContextMenu as Headless,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 const Content = forwardRef<HTMLDivElement, ContextMenuContentProps>(function ContextMenuContent(
   { className, ...rest },

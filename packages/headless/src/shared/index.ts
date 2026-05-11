@@ -35,12 +35,4 @@ export {
   type UseRovingFocusGroupItemOptions,
   useRovingFocusGroupItem,
 } from './RovingFocusGroup';
-export {
-  ScrollArea,
-  type ScrollAreaCornerProps,
-  type ScrollAreaRootProps,
-  type ScrollAreaScrollbarProps,
-  type ScrollAreaThumbProps,
-  type ScrollAreaViewportProps,
-} from './ScrollArea';
 export { usePresence } from './usePresence';

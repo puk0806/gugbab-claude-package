@@ -133,8 +133,6 @@ export const RovingFocusGroup = forwardRef<HTMLDivElement, RovingFocusGroupProps
   },
 );
 
-RovingFocusGroup.displayName = 'RovingFocusGroup';
-
 /* -------------------------------------------------------------------------- */
 /* Item                                                                        */
 /* -------------------------------------------------------------------------- */
@@ -196,6 +194,16 @@ export function useRovingFocusGroupItem(options: UseRovingFocusGroupItemOptions 
     };
   }, [ctx, id]);
 
+  // Timer ref for the deferred focus in onKeyDown — kept here so we can cancel
+  // it on unmount. Otherwise a quick unmount after key press would call
+  // focusFirst on stale (possibly disconnected) nodes.
+  const focusTimerRef = useRef<number | null>(null);
+  useEffect(() => {
+    return () => {
+      if (focusTimerRef.current !== null) window.clearTimeout(focusTimerRef.current);
+    };
+  }, []);
+
   const isCurrent = ctx.effectiveTabStopId === id;
   const tabIndex = isCurrent && focusable ? 0 : -1;
 
@@ -238,9 +246,12 @@ export function useRovingFocusGroupItem(options: UseRovingFocusGroupItemOptions 
         candidates = ctx.loop ? wrapArray(candidates, startIndex) : candidates.slice(startIndex);
       }
 
-      // Defer focus to escape React's keydown batching.
-      window.setTimeout(() => {
+      // Defer focus to escape React's keydown batching. Track the timer so
+      // unmount cleanup can cancel it (avoids focusing detached nodes).
+      if (focusTimerRef.current !== null) window.clearTimeout(focusTimerRef.current);
+      focusTimerRef.current = window.setTimeout(() => {
         focusFirst(candidates);
+        focusTimerRef.current = null;
       }, 0);
     },
     [ctx],
@@ -292,8 +303,6 @@ export const RovingFocusGroupItem = forwardRef<HTMLElement, RovingFocusGroupItem
     );
   },
 );
-
-RovingFocusGroupItem.displayName = 'RovingFocusGroupItem';
 
 /* -------------------------------------------------------------------------- */
 /* utils                                                                       */

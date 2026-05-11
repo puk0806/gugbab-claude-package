@@ -8,8 +8,8 @@ import {
   type ToastTitleProps,
   type ToastViewportProps,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 const Provider = function ToastProvider(props: ToastProviderProps) {
   return <Headless.Provider {...props} />;

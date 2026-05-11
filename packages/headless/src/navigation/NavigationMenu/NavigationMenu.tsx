@@ -7,6 +7,7 @@ import {
   type ReactNode,
   useContext,
   useId,
+  useMemo,
 } from 'react';
 
 interface NavigationMenuContextValue {
@@ -50,8 +51,12 @@ const Root = forwardRef<HTMLElement, NavigationMenuRootProps>(function Navigatio
     defaultValue: defaultValue ?? '',
     onChange: onValueChange,
   });
+  const ctxValue = useMemo(
+    () => ({ value: current, setValue, orientation }),
+    [current, setValue, orientation],
+  );
   return (
-    <Ctx.Provider value={{ value: current, setValue: (v) => setValue(v), orientation }}>
+    <Ctx.Provider value={ctxValue}>
       <nav ref={ref} aria-label="Main" data-orientation={orientation} {...rest} />
     </Ctx.Provider>
   );
@@ -77,8 +82,12 @@ const Item = forwardRef<HTMLLIElement, NavigationMenuItemProps>(function Navigat
   const open = ctx.value === value;
   const triggerId = useId();
   const contentId = useId();
+  const itemCtxValue = useMemo(
+    () => ({ value, triggerId, contentId, open }),
+    [value, triggerId, contentId, open],
+  );
   return (
-    <ItemCtx.Provider value={{ value, triggerId, contentId, open }}>
+    <ItemCtx.Provider value={itemCtxValue}>
       <li ref={ref} data-state={open ? 'open' : 'closed'} {...rest}>
         {children}
       </li>

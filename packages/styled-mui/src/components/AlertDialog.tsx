@@ -3,8 +3,8 @@ import {
   type DialogContentProps,
   AlertDialog as Headless,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { type ComponentPropsWithoutRef, forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type AlertDialogSize = 'sm' | 'md' | 'lg' | 'xl';
 export type AlertDialogActionVariant = 'accent' | 'danger';

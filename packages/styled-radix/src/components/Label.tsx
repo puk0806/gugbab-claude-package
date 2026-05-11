@@ -1,6 +1,6 @@
 import { Label as HeadlessLabel } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type LabelHTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {}
 

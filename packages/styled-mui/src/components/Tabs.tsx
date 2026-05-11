@@ -4,8 +4,8 @@ import {
   type TabsRootProps,
   type TabsTriggerProps,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type TabsVariant = 'underline' | 'pills';
 export type TabsSize = 'sm' | 'md';

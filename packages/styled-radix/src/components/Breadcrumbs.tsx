@@ -3,8 +3,8 @@ import {
   type BreadcrumbsRootProps,
   Breadcrumbs as Headless,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type BreadcrumbsSeparatorVariant = 'chevron' | 'slash';
 

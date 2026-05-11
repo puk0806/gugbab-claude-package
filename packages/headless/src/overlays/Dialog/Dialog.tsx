@@ -231,14 +231,14 @@ const Content = forwardRef<HTMLDivElement, DialogContentProps>(function DialogCo
     const node = contentNodeRef.current;
     if (!node) return;
     const titleEl = ctx.titleId ? node.ownerDocument?.getElementById(ctx.titleId) : null;
-    if (!titleEl) {
+    if (!titleEl && process.env.NODE_ENV !== 'production') {
       console.error(
         '[gugbab-ui/Dialog] Missing accessible title. ' +
           'Add a <Dialog.Title> inside <Dialog.Content>, ' +
           'or use a visually hidden title: <Dialog.Title asChild><VisuallyHidden>…</VisuallyHidden></Dialog.Title>.',
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // biome-ignore lint/correctness/useExhaustiveDependencies: dev warning runs only on title binding change; including all deps would re-fire on every render
   }, [mounted, ctx.titleId]);
 
   // modal: hide siblings from assistive technology

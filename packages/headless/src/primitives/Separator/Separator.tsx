@@ -21,4 +21,3 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(function Sep
 
   return <div ref={ref} data-orientation={orientation} {...semanticProps} {...rest} />;
 });
-Separator.displayName = 'Separator';

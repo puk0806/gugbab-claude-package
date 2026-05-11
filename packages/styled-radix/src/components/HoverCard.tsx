@@ -1,6 +1,6 @@
 import { HoverCard as Headless, type HoverCardRootProps } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 const Trigger = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<typeof Headless.Trigger>>(
   function HoverCardTrigger({ className, ...rest }, ref) {

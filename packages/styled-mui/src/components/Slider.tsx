@@ -1,6 +1,6 @@
 import { Slider as Headless, type SliderRootProps, type SliderThumbProps } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type SliderSize = 'sm' | 'md';
 

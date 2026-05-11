@@ -7,6 +7,7 @@ import {
   type KeyboardEvent,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -81,8 +82,9 @@ const Root = forwardRef<HTMLButtonElement, CheckboxRootProps>(function CheckboxR
 
   const Comp = asChild ? Slot : 'button';
 
+  const ctxValue = useMemo(() => ({ state, disabled: !!disabled }), [state, disabled]);
   return (
-    <Ctx.Provider value={{ state, disabled: !!disabled }}>
+    <Ctx.Provider value={ctxValue}>
       <Comp
         ref={(node: HTMLButtonElement | null) => {
           setButton(node);

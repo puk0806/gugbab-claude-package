@@ -1,4 +1,4 @@
-import { useMergedRefs } from '@gugbab/hooks';
+import { useLatestRef, useMergedRefs } from '@gugbab/hooks';
 import {
   createContext,
   forwardRef,
@@ -85,7 +85,12 @@ function useDismissableLayerContext(): DismissableLayerContextValue {
 
 const moduleLayerContext: DismissableLayerContextValue = createContextValue();
 
-let originalBodyPointerEvents: string | null = null;
+// 원래 body.pointerEvents 값을 *Document 단위* 로 보존한다. 이전엔 모듈-레벨
+// `let` 변수였는데, SSR 환경에서 같은 Node 프로세스가 여러 request 를 동시
+// 처리할 때 cross-request leak 가능성이 있었다 (DismissableLayer 자체는
+// "use client" 라 effect 는 안 돌지만 모듈 평가는 공유). WeakMap<Document>
+// 으로 격리하면 document 가 GC 되면 자동 정리되고 multi-tenant 안전.
+const originalBodyPointerEventsByDoc = new WeakMap<Document, string | null>();
 
 export const DismissableLayer = forwardRef<HTMLDivElement, DismissableLayerProps>(
   function DismissableLayer(props, forwardedRef) {
@@ -248,8 +253,9 @@ export const DismissableLayer = forwardRef<HTMLDivElement, DismissableLayerProps
       context.layers.add(node);
       if (disableOutsidePointerEvents) {
         if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
-          originalBodyPointerEvents = node.ownerDocument.body.style.pointerEvents;
-          node.ownerDocument.body.style.pointerEvents = 'none';
+          const doc = node.ownerDocument;
+          originalBodyPointerEventsByDoc.set(doc, doc.body.style.pointerEvents);
+          doc.body.style.pointerEvents = 'none';
         }
         context.layersWithOutsidePointerEventsDisabled.add(node);
       }
@@ -259,8 +265,9 @@ export const DismissableLayer = forwardRef<HTMLDivElement, DismissableLayerProps
         if (context.layersWithOutsidePointerEventsDisabled.has(node)) {
           context.layersWithOutsidePointerEventsDisabled.delete(node);
           if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
-            node.ownerDocument.body.style.pointerEvents = originalBodyPointerEvents ?? '';
-            originalBodyPointerEvents = null;
+            const doc = node.ownerDocument;
+            doc.body.style.pointerEvents = originalBodyPointerEventsByDoc.get(doc) ?? '';
+            originalBodyPointerEventsByDoc.delete(doc);
           }
         }
         context.notify();
@@ -293,8 +300,6 @@ export const DismissableLayer = forwardRef<HTMLDivElement, DismissableLayerProps
     );
   },
 );
-
-DismissableLayer.displayName = 'DismissableLayer';
 
 /**
  * Top-most = the layer with no descendant layer in the DOM. If multiple
@@ -354,13 +359,3 @@ export const DismissableLayerBranch = forwardRef<HTMLDivElement, DismissableLaye
     );
   },
 );
-
-DismissableLayerBranch.displayName = 'DismissableLayerBranch';
-
-function useLatestRef<T>(value: T) {
-  const ref = useRef(value);
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref;
-}

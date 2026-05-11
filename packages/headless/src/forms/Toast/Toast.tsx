@@ -1,3 +1,4 @@
+import { useIsomorphicLayoutEffect, useLatestRef } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -9,7 +10,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -184,19 +184,23 @@ const Viewport = forwardRef<HTMLOListElement, ToastViewportProps>(function Toast
     [ctx.onViewportChange],
   );
 
-  // Hotkey: focus viewport when key combo is pressed
+  // Hotkey: focus viewport when key combo is pressed.
+  // Use a latestRef so an inline `hotkey={[...]}` prop doesn't churn the effect
+  // (re-attach the document listener on every render).
+  const hotkeyRef = useLatestRef(hotkey);
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const keys = hotkeyRef.current;
       const pressed =
-        hotkey.length > 0 &&
-        hotkey.every(
+        keys.length > 0 &&
+        keys.every(
           (key) => (e as unknown as Record<string, unknown>)[key] === true || e.code === key,
         );
       if (pressed) internalRef.current?.focus();
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [hotkey]);
+  }, [hotkeyRef]);
 
   // Pause/resume on hover/focus within the wrapper region
   useEffect(() => {
@@ -446,8 +450,19 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
     return () => onToastRemove();
   }, [onToastAdd, onToastRemove]);
 
+  // Cleanup the auto-close timer when the toast unmounts so that pending
+  // setTimeout callbacks don't fire on a stale component (race / leak).
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
+  }, []);
+
   // Announcer text (derived from rendered node)
   const announceText = useMemo(() => (node ? getAnnounceTextContent(node) : null), [node]);
+  // Memoized stable context value for InteractiveCtx — kept *before* the early
+  // returns so the hook order stays consistent across renders.
+  const interactiveCtxValue = useMemo(() => ({ onClose: handleClose }), [handleClose]);
 
   if (!ctx.viewport) return null;
   if (!open && !forceMount) return null;
@@ -505,7 +520,7 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
   };
 
   const li = (
-    <InteractiveCtx.Provider value={{ onClose: handleClose }}>
+    <InteractiveCtx.Provider value={interactiveCtxValue}>
       <li
         tabIndex={0}
         role="status"
@@ -558,7 +573,7 @@ function Announcer({ label, type, texts }: AnnouncerProps) {
   const [done, setDone] = useState(false);
 
   // Render text in next animation frame so NVDA picks it up
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     let raf1 = 0;
     let raf2 = 0;
     raf1 = requestAnimationFrame(() => {
@@ -598,7 +613,6 @@ export interface ToastTitleProps extends HTMLAttributes<HTMLDivElement> {}
 const Title = forwardRef<HTMLDivElement, ToastTitleProps>(function ToastTitle(props, ref) {
   return <div {...props} ref={ref} />;
 });
-Title.displayName = 'ToastTitle';
 
 /* -------------------------------------------------------------------------------------------------
  * ToastDescription
@@ -611,7 +625,6 @@ const Description = forwardRef<HTMLDivElement, ToastDescriptionProps>(
     return <div {...props} ref={ref} />;
   },
 );
-Description.displayName = 'ToastDescription';
 
 /* -------------------------------------------------------------------------------------------------
  * ToastAction
@@ -647,7 +660,6 @@ const Action = forwardRef<HTMLButtonElement, ToastActionProps>(function ToastAct
     </div>
   );
 });
-Action.displayName = 'ToastAction';
 
 /* -------------------------------------------------------------------------------------------------
  * ToastClose
@@ -677,7 +689,6 @@ const Close = forwardRef<HTMLButtonElement, ToastCloseProps>(function ToastClose
     </div>
   );
 });
-Close.displayName = 'ToastClose';
 
 /* -------------------------------------------------------------------------------------------------
  * useToast — imperative API (kept for backward compat, optional)

@@ -19,9 +19,11 @@ import {
   type HTMLAttributes,
   type KeyboardEvent,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -70,8 +72,13 @@ const Root = forwardRef<HTMLDivElement, MenubarRootProps>(function MenubarRoot(
     defaultValue: defaultValue ?? '',
     onChange: onValueChange,
   });
+  const setMenubarValueStable = useCallback((v: string) => setCurrent(v), [setCurrent]);
+  const menubarCtxValue = useMemo(
+    () => ({ value: current, setValue: setMenubarValueStable }),
+    [current, setMenubarValueStable],
+  );
   return (
-    <MenubarContext.Provider value={{ value: current, setValue: (v) => setCurrent(v) }}>
+    <MenubarContext.Provider value={menubarCtxValue}>
       <div ref={ref} role="menubar" {...rest} />
     </MenubarContext.Provider>
   );
@@ -409,8 +416,9 @@ const CheckboxItem = forwardRef<HTMLButtonElement, MenubarCheckboxItemProps>(
         }
       },
     }) as ButtonHTMLAttributes<HTMLButtonElement>;
+    const checkboxIndicatorCtxValue = useMemo(() => ({ checked: isChecked }), [isChecked]);
     return (
-      <ItemIndicatorContext.Provider value={{ checked: isChecked }}>
+      <ItemIndicatorContext.Provider value={checkboxIndicatorCtxValue}>
         <Comp
           ref={setRef}
           type={asChild ? undefined : type}
@@ -454,8 +462,13 @@ const RadioGroup = forwardRef<HTMLDivElement, MenubarRadioGroupProps>(function M
     defaultValue: defaultValue ?? '',
     onChange: onValueChange,
   });
+  const setRadioValueStable = useCallback((v: string) => setCurrent(v), [setCurrent]);
+  const radioGroupCtxValue = useMemo(
+    () => ({ value: current, setValue: setRadioValueStable }),
+    [current, setRadioValueStable],
+  );
   return (
-    <RadioGroupContext.Provider value={{ value: current, setValue: (v) => setCurrent(v) }}>
+    <RadioGroupContext.Provider value={radioGroupCtxValue}>
       <div ref={ref} role="group" {...rest}>
         {children}
       </div>
@@ -508,8 +521,9 @@ const RadioItem = forwardRef<HTMLButtonElement, MenubarRadioItemProps>(function 
       }
     },
   }) as ButtonHTMLAttributes<HTMLButtonElement>;
+  const radioIndicatorCtxValue = useMemo(() => ({ checked }), [checked]);
   return (
-    <ItemIndicatorContext.Provider value={{ checked }}>
+    <ItemIndicatorContext.Provider value={radioIndicatorCtxValue}>
       <Comp
         ref={setRef}
         type={asChild ? undefined : type}

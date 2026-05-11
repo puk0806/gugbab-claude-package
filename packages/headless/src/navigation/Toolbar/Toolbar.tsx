@@ -7,6 +7,7 @@ import React, {
   type HTMLAttributes,
   type KeyboardEvent,
   useContext,
+  useMemo,
 } from 'react';
 import { Separator, type SeparatorProps } from '../../primitives/Separator/Separator';
 import { Slot } from '../../primitives/Slot/Slot';
@@ -44,9 +45,10 @@ const Root = forwardRef<HTMLDivElement, ToolbarRootProps>(function ToolbarRoot(
 ) {
   const direction = useDirection(dir);
   const Comp = asChild ? Slot : 'div';
+  const ctxValue = useMemo(() => ({ orientation, dir: direction }), [orientation, direction]);
 
   return (
-    <ToolbarContext.Provider value={{ orientation, dir: direction }}>
+    <ToolbarContext.Provider value={ctxValue}>
       <RovingFocusGroup asChild orientation={orientation} dir={direction} loop={loop}>
         <Comp
           ref={ref}
@@ -165,14 +167,26 @@ const ToolbarToggleGroup = forwardRef<HTMLDivElement, ToolbarToggleGroupProps>(
   function ToolbarToggleGroup(props, ref) {
     const ctx = useToolbarContext('Toolbar.ToggleGroup');
     // ToolbarRoot owns the keyboard navigation via RovingFocusGroup; the group must defer.
+    // ToggleGroupRootProps is a discriminated union on `type`. We branch on the
+    // discriminator so TypeScript can narrow each leg and spread without `any`.
+    if (props.type === 'single') {
+      return (
+        <ToggleGroup.Root
+          ref={ref}
+          rovingFocus={false}
+          orientation={ctx.orientation}
+          dir={ctx.dir}
+          {...props}
+        />
+      );
+    }
     return (
       <ToggleGroup.Root
         ref={ref}
         rovingFocus={false}
         orientation={ctx.orientation}
         dir={ctx.dir}
-        // biome-ignore lint/suspicious/noExplicitAny: union expansion from ToggleGroupRootProps
-        {...(props as any)}
+        {...props}
       />
     );
   },

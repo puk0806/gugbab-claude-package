@@ -270,6 +270,9 @@ importers:
       '@gugbab/tokens':
         specifier: workspace:*
         version: link:../tokens
+      '@gugbab/utils':
+        specifier: workspace:*
+        version: link:../utils
     devDependencies:
       '@gugbab/tsconfig':
         specifier: workspace:*
@@ -313,6 +316,9 @@ importers:
       '@gugbab/tokens':
         specifier: workspace:*
         version: link:../tokens
+      '@gugbab/utils':
+        specifier: workspace:*
+        version: link:../utils
     devDependencies:
       '@gugbab/tsconfig':
         specifier: workspace:*
