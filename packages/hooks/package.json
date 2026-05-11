@@ -45,10 +45,10 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && node ../../scripts/inject-use-client.mjs dist/index.mjs dist/index.cjs",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
