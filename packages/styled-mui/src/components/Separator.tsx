@@ -1,6 +1,6 @@
 import { Separator as HeadlessSeparator, type SeparatorProps } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 export interface StyledSeparatorProps extends SeparatorProps {}
 

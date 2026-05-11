@@ -3,13 +3,13 @@ import {
   type ComboboxRootProps,
   Combobox as Headless,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import {
   type ButtonHTMLAttributes,
   forwardRef,
   type HTMLAttributes,
   type InputHTMLAttributes,
 } from 'react';
-import { cn } from '../utils/cn';
 
 export type ComboboxSize = 'sm' | 'md';
 

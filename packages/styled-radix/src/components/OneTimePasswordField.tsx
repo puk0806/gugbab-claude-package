@@ -4,8 +4,8 @@ import {
   type OTPFieldInputProps,
   type OTPFieldRootProps,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 const Root = forwardRef<HTMLDivElement, OTPFieldRootProps>(function OTPFieldRoot(
   { className, ...rest },

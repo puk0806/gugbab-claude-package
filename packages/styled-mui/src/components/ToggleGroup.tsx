@@ -3,8 +3,8 @@ import {
   type ToggleGroupItemProps,
   type ToggleGroupRootProps,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 export type ToggleGroupSize = 'sm' | 'md';
 export type ToggleGroupVariant = 'default' | 'outline';

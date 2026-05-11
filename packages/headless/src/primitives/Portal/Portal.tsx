@@ -1,4 +1,5 @@
-import { forwardRef, type HTMLAttributes, useLayoutEffect, useState } from 'react';
+import { useIsomorphicLayoutEffect } from '@gugbab/hooks';
+import { forwardRef, type HTMLAttributes, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 export interface PortalProps extends HTMLAttributes<HTMLDivElement> {
@@ -14,7 +15,7 @@ export interface PortalProps extends HTMLAttributes<HTMLDivElement> {
 export const Portal = forwardRef<HTMLDivElement, PortalProps>(function Portal(props, ref) {
   const { container: containerProp, ...portalProps } = props;
   const [mounted, setMounted] = useState(false);
-  useLayoutEffect(() => setMounted(true), []);
+  useIsomorphicLayoutEffect(() => setMounted(true), []);
   const container =
     containerProp ?? (mounted && typeof document !== 'undefined' ? document.body : null);
   if (!container) return null;

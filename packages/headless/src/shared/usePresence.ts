@@ -1,4 +1,5 @@
-import { type RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useIsomorphicLayoutEffect } from '@gugbab/hooks';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 
 /**
  * Defers unmount until any CSS animation/transition on the rendered element
@@ -21,7 +22,7 @@ export function usePresence<T extends HTMLElement = HTMLElement>(
   const [mounted, setMounted] = useState(present);
   const presenceRef = useRef<T | null>(null);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (present) setMounted(true);
   }, [present]);
 

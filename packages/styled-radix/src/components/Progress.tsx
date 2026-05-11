@@ -1,6 +1,6 @@
 import { Progress as Headless, type ProgressRootProps } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type ProgressSize = 'sm' | 'md';
 

@@ -3,8 +3,8 @@ import {
   type PopoverContentProps,
   type PopoverRootProps,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 const Trigger = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<typeof Headless.Trigger>>(
   function PopoverTrigger({ className, ...rest }, ref) {

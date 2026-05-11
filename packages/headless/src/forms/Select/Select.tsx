@@ -22,6 +22,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -405,7 +406,7 @@ const ScrollDownButton = forwardRef<HTMLDivElement, SelectScrollButtonProps>(
         data-scroll-button="down"
         onPointerEnter={(e) => {
           startScroll();
-          onPointerLeave?.(e);
+          onPointerEnter?.(e);
         }}
         onPointerLeave={(e) => {
           stopScroll();
@@ -488,8 +489,9 @@ const Group = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(functio
   ref,
 ) {
   const labelId = useId();
+  const groupCtxValue = useMemo(() => ({ labelId }), [labelId]);
   return (
-    <GroupCtx.Provider value={{ labelId }}>
+    <GroupCtx.Provider value={groupCtxValue}>
       <div ref={ref} role="group" aria-labelledby={labelId} {...props}>
         {children}
       </div>

@@ -13,10 +13,13 @@ import {
   forwardRef,
   type HTMLAttributes,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
+  useState,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import {
@@ -35,7 +38,13 @@ import { useFloatingBase } from '../_floatingBase';
 interface TooltipProviderContextValue {
   delayDuration: number;
   skipDelayDuration: number;
-  isOpenDelayedRef: React.RefObject<boolean>;
+  /**
+   * State (not ref) so that consumer subscribers re-render when this flips.
+   * Reading the previous ref-based value during render produced a stale
+   * capture: the TooltipRoot computed its `delay` on first render and never
+   * picked up subsequent toggles by `onOpen` / `onClose`.
+   */
+  isOpenDelayed: boolean;
   onOpen: () => void;
   onClose: () => void;
   disableHoverableContent: boolean;
@@ -58,7 +67,7 @@ const TooltipProvider = ({
   skipDelayDuration = 300,
   disableHoverableContent = false,
 }: TooltipProviderProps) => {
-  const isOpenDelayedRef = useRef(true);
+  const [isOpenDelayed, setIsOpenDelayed] = useState(true);
   const skipDelayTimerRef = useRef<number | null>(null);
 
   useEffect(
@@ -68,31 +77,30 @@ const TooltipProvider = ({
     [],
   );
 
-  const onOpen = () => {
+  const onOpen = useCallback(() => {
     if (skipDelayTimerRef.current) window.clearTimeout(skipDelayTimerRef.current);
-    isOpenDelayedRef.current = false;
-  };
-  const onClose = () => {
+    setIsOpenDelayed(false);
+  }, []);
+  const onClose = useCallback(() => {
     if (skipDelayTimerRef.current) window.clearTimeout(skipDelayTimerRef.current);
     skipDelayTimerRef.current = window.setTimeout(() => {
-      isOpenDelayedRef.current = true;
+      setIsOpenDelayed(true);
     }, skipDelayDuration);
-  };
+  }, [skipDelayDuration]);
 
-  return (
-    <ProviderCtx.Provider
-      value={{
-        delayDuration,
-        skipDelayDuration,
-        isOpenDelayedRef,
-        onOpen,
-        onClose,
-        disableHoverableContent,
-      }}
-    >
-      {children}
-    </ProviderCtx.Provider>
+  const value = useMemo(
+    () => ({
+      delayDuration,
+      skipDelayDuration,
+      isOpenDelayed,
+      onOpen,
+      onClose,
+      disableHoverableContent,
+    }),
+    [delayDuration, skipDelayDuration, isOpenDelayed, onOpen, onClose, disableHoverableContent],
   );
+
+  return <ProviderCtx.Provider value={value}>{children}</ProviderCtx.Provider>;
 };
 
 /* -----------------------------------------------------------------------------------------------*/
@@ -157,8 +165,7 @@ function TooltipRoot({
 }: TooltipRootProps) {
   const provider = useContext(ProviderCtx);
   const delay =
-    localDelay ??
-    (provider ? (provider.isOpenDelayedRef.current ? provider.delayDuration : 0) : 700);
+    localDelay ?? (provider ? (provider.isOpenDelayed ? provider.delayDuration : 0) : 700);
   const disableHoverable = localDisableHover ?? provider?.disableHoverableContent ?? false;
 
   const [isOpen, setOpen] = useControllableState<boolean>({

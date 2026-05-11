@@ -6,8 +6,8 @@ import {
   type ScrollAreaThumbProps,
   type ScrollAreaViewportProps,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 const Root = forwardRef<HTMLDivElement, ScrollAreaRootProps>(function ScrollAreaRoot(
   { className, ...rest },

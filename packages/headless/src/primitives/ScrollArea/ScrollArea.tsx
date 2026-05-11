@@ -1,3 +1,4 @@
+import { useIsomorphicLayoutEffect } from '@gugbab/hooks';
 import {
   createContext,
   forwardRef,
@@ -7,12 +8,11 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
-import { Slot } from '../../primitives/Slot/Slot';
-import { type Direction, useDirection } from '../DirectionProvider';
+import { type Direction, useDirection } from '../../shared/DirectionProvider';
+import { Slot } from '../Slot/Slot';
 
 /**
  * Headless ScrollArea — equivalent to Radix Scroll Area.
@@ -115,7 +115,7 @@ const Root = forwardRef<HTMLDivElement, ScrollAreaRootProps>(function ScrollArea
   }, [viewport]);
 
   // initial + ResizeObserver
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!viewport) return;
     recompute();
     if (typeof ResizeObserver === 'undefined') return;

@@ -1,4 +1,4 @@
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useIsomorphicLayoutEffect } from '@gugbab/hooks';
 import {
   createContext,
   forwardRef,
@@ -8,7 +8,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from 'react';
@@ -35,7 +34,12 @@ interface SliderContextValue {
   trackRef: React.RefObject<HTMLElement | null>;
   activeThumbRef: React.RefObject<number | null>;
   thumbCount: number;
-  registerThumb: () => number;
+  /**
+   * Register a Thumb. Returns the assigned index plus an `unregister` callback
+   * that the Thumb must call on unmount so the counter stays in sync if
+   * Thumbs are dynamically added/removed.
+   */
+  registerThumb: () => { index: number; unregister: () => void };
 }
 
 const Ctx = createContext<SliderContextValue | null>(null);
@@ -239,7 +243,13 @@ const Root = forwardRef<HTMLDivElement, SliderRootProps>(function SliderRoot(
   const registerThumb = useCallback(() => {
     const idx = thumbCounterRef.current++;
     setThumbCount(thumbCounterRef.current);
-    return idx;
+    return {
+      index: idx,
+      unregister: () => {
+        thumbCounterRef.current = Math.max(0, thumbCounterRef.current - 1);
+        setThumbCount(thumbCounterRef.current);
+      },
+    };
   }, []);
 
   const setValue = useCallback(
@@ -434,12 +444,19 @@ const Thumb = forwardRef<HTMLSpanElement, SliderThumbProps>(function SliderThumb
   const ctx = useCtx('Slider.Thumb');
 
   // Auto-register to get a stable index when `index` prop is not provided.
+  // Returns an unregister callback so the parent counter is kept in sync if
+  // the Thumb unmounts (dynamic Thumb add/remove case).
   const autoIndexRef = useRef<number | null>(null);
   // biome-ignore lint/correctness/useExhaustiveDependencies: register-once-on-mount pattern; re-registering on every dep change would corrupt the thumb index
-  useLayoutEffect(() => {
-    if (explicitIndex === undefined && autoIndexRef.current === null) {
-      autoIndexRef.current = ctx.registerThumb();
-    }
+  useIsomorphicLayoutEffect(() => {
+    if (explicitIndex !== undefined) return;
+    if (autoIndexRef.current !== null) return;
+    const reg = ctx.registerThumb();
+    autoIndexRef.current = reg.index;
+    return () => {
+      reg.unregister();
+      autoIndexRef.current = null;
+    };
   }, []);
 
   const index = explicitIndex ?? autoIndexRef.current ?? 0;

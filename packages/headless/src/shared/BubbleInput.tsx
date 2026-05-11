@@ -1,11 +1,5 @@
-import {
-  forwardRef,
-  type InputHTMLAttributes,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useIsomorphicLayoutEffect } from '@gugbab/hooks';
+import { forwardRef, type InputHTMLAttributes, useEffect, useRef, useState } from 'react';
 
 /**
  * Hidden form-bubbling input — sits absolutely positioned over a button
@@ -93,7 +87,7 @@ interface Size {
 function useSize(element: HTMLElement | null): Size | undefined {
   const [size, setSize] = useState<Size | undefined>(undefined);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!element) {
       setSize(undefined);
       return;

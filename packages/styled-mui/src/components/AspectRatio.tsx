@@ -1,6 +1,6 @@
 import { type AspectRatioProps, AspectRatio as HeadlessAspectRatio } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 export interface StyledAspectRatioProps extends AspectRatioProps {}
 

@@ -1,6 +1,6 @@
 import { type CollapsibleRootProps, Collapsible as Headless } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { type ButtonHTMLAttributes, forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 const Root = forwardRef<HTMLDivElement, CollapsibleRootProps>(function CollapsibleRoot(
   { className, ...rest },

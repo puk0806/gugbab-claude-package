@@ -5,7 +5,7 @@
   "description": "gugbab 공용 프론트엔드 패키지 모노레포 (@gugbab/*)",
   "packageManager": "pnpm@9.9.0",
   "engines": {
-    "node": ">=20.17.0",
+    "node": ">=20.19.0",
     "pnpm": ">=9.9.0"
   },
   "scripts": {

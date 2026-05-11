@@ -3,8 +3,8 @@ import {
   type AccordionRootProps,
   Accordion as Headless,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { type ButtonHTMLAttributes, forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type AccordionVariant = 'default' | 'outline';
 

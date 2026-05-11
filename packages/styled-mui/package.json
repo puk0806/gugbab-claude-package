@@ -50,10 +50,10 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsup && node scripts/build-css.mjs",
+    "build": "tsup && node ../../scripts/build-styled-css.mjs mui && node ../../scripts/inject-use-client.mjs dist/index.mjs dist/index.cjs",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -62,7 +62,8 @@
   },
   "dependencies": {
     "@gugbab/headless": "workspace:*",
-    "@gugbab/tokens": "workspace:*"
+    "@gugbab/tokens": "workspace:*",
+    "@gugbab/utils": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18",

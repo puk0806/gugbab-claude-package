@@ -18,9 +18,11 @@ import {
   type HTMLAttributes,
   type KeyboardEvent,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -341,8 +343,9 @@ const CheckboxItem = forwardRef<HTMLButtonElement, DropdownMenuCheckboxItemProps
         }
       },
     }) as ButtonHTMLAttributes<HTMLButtonElement>;
+    const indicatorCtxValue = useMemo(() => ({ checked: isChecked }), [isChecked]);
     return (
-      <ItemIndicatorContext.Provider value={{ checked: isChecked }}>
+      <ItemIndicatorContext.Provider value={indicatorCtxValue}>
         <Comp
           ref={setRef}
           type={asChild ? undefined : type}
@@ -380,8 +383,13 @@ const RadioGroup = forwardRef<HTMLDivElement, DropdownMenuRadioGroupProps>(
       defaultValue: defaultValue ?? '',
       onChange: onValueChange,
     });
+    const setValueStable = useCallback((v: string) => setCurrent(v), [setCurrent]);
+    const radioGroupCtxValue = useMemo(
+      () => ({ value: current, setValue: setValueStable }),
+      [current, setValueStable],
+    );
     return (
-      <RadioGroupContext.Provider value={{ value: current, setValue: (v) => setCurrent(v) }}>
+      <RadioGroupContext.Provider value={radioGroupCtxValue}>
         <div ref={ref} role="group" {...rest}>
           {children}
         </div>
@@ -437,8 +445,9 @@ const RadioItem = forwardRef<HTMLButtonElement, DropdownMenuRadioItemProps>(
         }
       },
     }) as ButtonHTMLAttributes<HTMLButtonElement>;
+    const radioIndicatorCtxValue = useMemo(() => ({ checked }), [checked]);
     return (
-      <ItemIndicatorContext.Provider value={{ checked }}>
+      <ItemIndicatorContext.Provider value={radioIndicatorCtxValue}>
         <Comp
           ref={setRef}
           type={asChild ? undefined : type}

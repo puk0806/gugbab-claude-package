@@ -1,4 +1,4 @@
-import { createContext, forwardRef, type HTMLAttributes, useContext } from 'react';
+import { createContext, forwardRef, type HTMLAttributes, useContext, useMemo } from 'react';
 
 const DEFAULT_MAX = 100;
 
@@ -44,14 +44,22 @@ const Root = forwardRef<HTMLDivElement, ProgressRootProps>(function ProgressRoot
   { value: valueProp = null, max: maxProp, getValueLabel = defaultGetValueLabel, ...rest },
   ref,
 ) {
-  if ((maxProp || maxProp === 0) && !isValidMaxNumber(maxProp)) {
+  if (
+    (maxProp || maxProp === 0) &&
+    !isValidMaxNumber(maxProp) &&
+    process.env.NODE_ENV !== 'production'
+  ) {
     console.error(
       `Invalid prop \`max\` of value \`${maxProp}\` supplied to \`Progress\`. Only numbers greater than 0 are valid max values. Defaulting to \`${DEFAULT_MAX}\`.`,
     );
   }
   const max = isValidMaxNumber(maxProp) ? maxProp : DEFAULT_MAX;
 
-  if (valueProp !== null && !isValidValueNumber(valueProp, max)) {
+  if (
+    valueProp !== null &&
+    !isValidValueNumber(valueProp, max) &&
+    process.env.NODE_ENV !== 'production'
+  ) {
     console.error(
       `Invalid prop \`value\` of value \`${valueProp}\` supplied to \`Progress\`. The \`value\` prop must be a number between 0 and \`max\` (or null for indeterminate). Defaulting to \`null\`.`,
     );
@@ -60,8 +68,9 @@ const Root = forwardRef<HTMLDivElement, ProgressRootProps>(function ProgressRoot
   const valueLabel = isNumber(value) ? getValueLabel(value, max) : undefined;
   const state = getProgressState(value, max);
 
+  const ctxValue = useMemo(() => ({ value, max }), [value, max]);
   return (
-    <Ctx.Provider value={{ value, max }}>
+    <Ctx.Provider value={ctxValue}>
       <div
         ref={ref}
         role="progressbar"

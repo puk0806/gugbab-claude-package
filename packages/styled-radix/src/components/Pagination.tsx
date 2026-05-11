@@ -3,8 +3,8 @@ import {
   type PaginationPageProps,
   type PaginationRootProps,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes, type LiHTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type PaginationSize = 'sm' | 'md';
 

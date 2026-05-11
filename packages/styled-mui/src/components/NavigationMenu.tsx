@@ -3,8 +3,8 @@ import {
   type NavigationMenuItemProps,
   type NavigationMenuRootProps,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 const Root = forwardRef<HTMLElement, NavigationMenuRootProps>(function NavigationMenuRoot(
   { className, ...rest },

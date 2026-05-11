@@ -1,6 +1,6 @@
 import { Toggle as HeadlessToggle, type ToggleProps } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 export type ToggleSize = 'sm' | 'md';
 export type ToggleVariant = 'default' | 'outline';

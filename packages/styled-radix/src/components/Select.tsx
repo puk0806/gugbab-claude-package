@@ -6,8 +6,8 @@ import {
   type SelectScrollButtonProps,
   type SelectTriggerProps,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type SelectSize = 'sm' | 'md';
 

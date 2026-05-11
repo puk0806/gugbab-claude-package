@@ -1,6 +1,6 @@
 import { type CheckboxRootProps, type CheckedState, Checkbox as Headless } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type CheckboxSize = 'sm' | 'md' | 'lg';
 

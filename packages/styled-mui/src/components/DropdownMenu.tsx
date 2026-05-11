@@ -13,8 +13,8 @@ import {
   type DropdownMenuTriggerProps,
   DropdownMenu as Headless,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 const Content = forwardRef<HTMLDivElement, DropdownMenuContentProps>(function DropdownMenuContent(
   { className, ...rest },

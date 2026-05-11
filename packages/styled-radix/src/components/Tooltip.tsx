@@ -1,6 +1,6 @@
 import { Tooltip as Headless, type TooltipRootProps } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 const Trigger = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<typeof Headless.Trigger>>(
   function TooltipTrigger({ className, ...rest }, ref) {

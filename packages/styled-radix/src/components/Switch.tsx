@@ -1,6 +1,6 @@
 import { Switch as Headless, type SwitchRootProps } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../utils/cn';
 
 export type SwitchSize = 'sm' | 'md' | 'lg';
 

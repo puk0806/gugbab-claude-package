@@ -23,4 +23,3 @@ export const VisuallyHidden = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpa
     return <span ref={ref} {...rest} style={{ ...VISUALLY_HIDDEN_STYLES, ...style }} />;
   },
 );
-VisuallyHidden.displayName = 'VisuallyHidden';

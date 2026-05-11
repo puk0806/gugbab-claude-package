@@ -7,8 +7,8 @@ import {
   type FormSubmitProps,
   Form as Headless,
 } from '@gugbab/headless';
+import { cn } from '@gugbab/utils';
 import { forwardRef } from 'react';
-import { cn } from '../utils/cn';
 
 export type FormFieldStatus = 'default' | 'success' | 'warning' | 'error' | 'serverInvalid';
 

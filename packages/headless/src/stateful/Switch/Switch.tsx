@@ -6,6 +6,7 @@ import {
   type HTMLAttributes,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -74,8 +75,12 @@ const Root = forwardRef<HTMLButtonElement, SwitchRootProps>(function SwitchRoot(
 
   const Comp = asChild ? Slot : 'button';
 
+  const ctxValue = useMemo(
+    () => ({ checked: isChecked, disabled: !!disabled }),
+    [isChecked, disabled],
+  );
   return (
-    <Ctx.Provider value={{ checked: isChecked, disabled: !!disabled }}>
+    <Ctx.Provider value={ctxValue}>
       <Comp
         ref={(node: HTMLButtonElement | null) => {
           setButton(node);

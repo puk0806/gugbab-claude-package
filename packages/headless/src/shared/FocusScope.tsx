@@ -1,4 +1,4 @@
-import { useMergedRefs } from '@gugbab/hooks';
+import { useLatestRef, useMergedRefs } from '@gugbab/hooks';
 import {
   forwardRef,
   type HTMLAttributes,
@@ -193,8 +193,6 @@ export const FocusScope = forwardRef<HTMLDivElement, FocusScopeProps>(
   },
 );
 
-FocusScope.displayName = 'FocusScope';
-
 /* -------------------------------------------------------------------------- */
 /* utils                                                                       */
 /* -------------------------------------------------------------------------- */
@@ -284,12 +282,4 @@ function createFocusScopesStack() {
       stack[0]?.resume();
     },
   };
-}
-
-function useLatestRef<T>(value: T) {
-  const ref = useRef(value);
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref;
 }
