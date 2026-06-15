@@ -1,1 +1,1 @@
-export { VISUALLY_HIDDEN_STYLES, VisuallyHidden } from '@gugbab/headless';
+export { VISUALLY_HIDDEN_STYLES, VisuallyHidden } from "@gugbab/headless";

@@ -1,14 +1,14 @@
-import { Tabs, type TabsSize, type TabsVariant } from '@gugbab/styled-mui';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Tabs, type TabsSize, type TabsVariant } from "@gugbab/styled-mui";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-  title: 'Stateful/Tabs',
-  component: Tabs.Root,
-  parameters: {
-    layout: 'centered',
-    docs: {
-      description: {
-        component: `
+    title: "Stateful/Tabs",
+    component: Tabs.Root,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: `
 **Tabs** — 여러 콘텐츠 패널을 탭으로 전환하는 컴포넌트. WAI-ARIA Tabs 패턴을 준수하며 수평·수직 방향과 두 가지 시각 스타일을 지원한다.
 
 ### 컴파운드 구조
@@ -27,86 +27,84 @@ const meta = {
 - \`variant\`: \`'underline'\`(밑줄 강조) | \`'pills'\`(알약형 배경).
 - \`size\`: \`'sm'\` | \`'md'\` (기본값 \`'md'\`).
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj;
 
 const TAB_ITEMS = [
-  { value: 'account', label: 'Account', content: 'Manage your account settings and preferences.' },
-  { value: 'password', label: 'Password', content: 'Change your password and security options.' },
-  {
-    value: 'notifications',
-    label: 'Notifications',
-    content: 'Configure how and when you receive notifications.',
-  },
+    { value: "account", label: "Account", content: "Manage your account settings and preferences." },
+    { value: "password", label: "Password", content: "Change your password and security options." },
+    {
+        value: "notifications",
+        label: "Notifications",
+        content: "Configure how and when you receive notifications.",
+    },
 ] as const;
 
 interface DemoProps {
-  orientation?: 'horizontal' | 'vertical';
-  variant?: TabsVariant;
-  size?: TabsSize;
+    orientation?: "horizontal" | "vertical";
+    variant?: TabsVariant;
+    size?: TabsSize;
 }
 
-function Demo({ orientation = 'horizontal', variant, size }: DemoProps) {
-  return (
-    <Tabs.Root defaultValue="account" orientation={orientation} variant={variant} size={size}>
-      <Tabs.List aria-label="tab navigation">
-        {TAB_ITEMS.map((tab) => (
-          <Tabs.Trigger key={tab.value} value={tab.value}>
-            {tab.label}
-          </Tabs.Trigger>
-        ))}
-      </Tabs.List>
-      {TAB_ITEMS.map((tab) => (
-        <Tabs.Content key={tab.value} value={tab.value}>
-          <p>{tab.content}</p>
-        </Tabs.Content>
-      ))}
-    </Tabs.Root>
-  );
+function Demo({ orientation = "horizontal", variant, size }: DemoProps) {
+    return (
+        <Tabs.Root defaultValue="account" orientation={orientation} variant={variant} size={size}>
+            <Tabs.List aria-label="tab navigation">
+                {TAB_ITEMS.map((tab) => (
+                    <Tabs.Trigger key={tab.value} value={tab.value}>
+                        {tab.label}
+                    </Tabs.Trigger>
+                ))}
+            </Tabs.List>
+            {TAB_ITEMS.map((tab) => (
+                <Tabs.Content key={tab.value} value={tab.value}>
+                    <p>{tab.content}</p>
+                </Tabs.Content>
+            ))}
+        </Tabs.Root>
+    );
 }
 
 export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`orientation="horizontal"` + `variant="underline"` 기본 상태. Account 탭이 초기 선택되어 콘텐츠가 노출된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: '`orientation="horizontal"` + `variant="underline"` 기본 상태. Account 탭이 초기 선택되어 콘텐츠가 노출된다.',
+            },
+        },
     },
-  },
-  render: () => <Demo />,
+    render: () => <Demo />,
 };
 
 export const Vertical: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`orientation="vertical"` — 탭 리스트가 세로로 배치되고 Arrow Up / Down 키로 이동한다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: '`orientation="vertical"` — 탭 리스트가 세로로 배치되고 Arrow Up / Down 키로 이동한다.',
+            },
+        },
     },
-  },
-  render: () => <Demo orientation="vertical" />,
+    render: () => <Demo orientation="vertical" />,
 };
 
 export const Variants: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '`underline`(하단 밑줄 강조)과 `pills`(선택 탭에 배경 채움) 두 스타일 비교.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`underline`(하단 밑줄 강조)과 `pills`(선택 탭에 배경 채움) 두 스타일 비교.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      <Demo variant="underline" />
-      <Demo variant="pills" />
-    </div>
-  ),
+    render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+            <Demo variant="underline" />
+            <Demo variant="pills" />
+        </div>
+    ),
 };

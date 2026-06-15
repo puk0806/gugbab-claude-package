@@ -1,15 +1,15 @@
-import { Toolbar } from '@gugbab/styled-mui';
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { Toolbar } from "@gugbab/styled-mui";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 
 const meta = {
-  title: 'Navigation/Toolbar',
-  component: Toolbar.Root,
-  parameters: {
-    layout: 'padded',
-    docs: {
-      description: {
-        component: `
+    title: "Navigation/Toolbar",
+    component: Toolbar.Root,
+    parameters: {
+        layout: "padded",
+        docs: {
+            description: {
+                component: `
 **Toolbar** — 관련 동작 버튼을 한 줄로 묶어 표시하는 컴포넌트. 텍스트 에디터, 이미지 편집기, 필터 패널 등 여러 동작이 밀집된 UI에 사용된다.
 
 ### 컴파운드 구조
@@ -33,118 +33,112 @@ const meta = {
 - \`orientation\` — \`'horizontal' | 'vertical'\` (기본값 \`'horizontal'\`)
 - \`ToggleGroup.type\` — \`'single' | 'multiple'\`
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj;
 
-function EditorToolbar({
-  orientation = 'horizontal',
-}: {
-  orientation?: 'horizontal' | 'vertical';
-}) {
-  const [alignment, setAlignment] = useState<string>('left');
+function EditorToolbar({ orientation = "horizontal" }: { orientation?: "horizontal" | "vertical" }) {
+    const [alignment, setAlignment] = useState<string>("left");
 
-  return (
-    <Toolbar.Root orientation={orientation} aria-label="Text editor toolbar">
-      <Toolbar.Button aria-label="Bold">B</Toolbar.Button>
-      <Toolbar.Button aria-label="Italic">I</Toolbar.Button>
-      <Toolbar.Button aria-label="Underline">U</Toolbar.Button>
+    return (
+        <Toolbar.Root orientation={orientation} aria-label="Text editor toolbar">
+            <Toolbar.Button aria-label="Bold">B</Toolbar.Button>
+            <Toolbar.Button aria-label="Italic">I</Toolbar.Button>
+            <Toolbar.Button aria-label="Underline">U</Toolbar.Button>
 
-      <Toolbar.Separator />
+            <Toolbar.Separator />
 
-      <Toolbar.ToggleGroup
-        type="single"
-        value={alignment}
-        onValueChange={(v) => {
-          if (v) setAlignment(v);
-        }}
-        aria-label="Text alignment"
-      >
-        <Toolbar.ToggleItem value="left" aria-label="Align left">
-          ←
-        </Toolbar.ToggleItem>
-        <Toolbar.ToggleItem value="center" aria-label="Align center">
-          ↔
-        </Toolbar.ToggleItem>
-        <Toolbar.ToggleItem value="right" aria-label="Align right">
-          →
-        </Toolbar.ToggleItem>
-      </Toolbar.ToggleGroup>
+            <Toolbar.ToggleGroup
+                type="single"
+                value={alignment}
+                onValueChange={(v) => {
+                    if (v) setAlignment(v);
+                }}
+                aria-label="Text alignment"
+            >
+                <Toolbar.ToggleItem value="left" aria-label="Align left">
+                    ←
+                </Toolbar.ToggleItem>
+                <Toolbar.ToggleItem value="center" aria-label="Align center">
+                    ↔
+                </Toolbar.ToggleItem>
+                <Toolbar.ToggleItem value="right" aria-label="Align right">
+                    →
+                </Toolbar.ToggleItem>
+            </Toolbar.ToggleGroup>
 
-      <Toolbar.Separator />
+            <Toolbar.Separator />
 
-      <Toolbar.Link href="#" aria-label="Open link">
-        Link
-      </Toolbar.Link>
-    </Toolbar.Root>
-  );
+            <Toolbar.Link href="#" aria-label="Open link">
+                Link
+            </Toolbar.Link>
+        </Toolbar.Root>
+    );
 }
 
 export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '텍스트 에디터 툴바 패턴. 단독 버튼, 단일 선택 토글 그룹, 구분선, 링크가 수평으로 배치된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "텍스트 에디터 툴바 패턴. 단독 버튼, 단일 선택 토글 그룹, 구분선, 링크가 수평으로 배치된다.",
+            },
+        },
     },
-  },
-  render: () => <EditorToolbar />,
+    render: () => <EditorToolbar />,
 };
 
 export const Vertical: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '`orientation="vertical"` 설정. 사이드 패널이나 세로 레이아웃에 적합한 수직 배치.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: '`orientation="vertical"` 설정. 사이드 패널이나 세로 레이아웃에 적합한 수직 배치.',
+            },
+        },
     },
-  },
-  render: () => <EditorToolbar orientation="vertical" />,
+    render: () => <EditorToolbar orientation="vertical" />,
 };
 
 export const MultiSelect: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`type="multiple"` ToggleGroup으로 굵게·기울임·밑줄을 동시에 선택할 수 있는 서식 툴바.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: '`type="multiple"` ToggleGroup으로 굵게·기울임·밑줄을 동시에 선택할 수 있는 서식 툴바.',
+            },
+        },
     },
-  },
-  render: () => {
-    const [formats, setFormats] = useState<string[]>([]);
-    return (
-      <Toolbar.Root aria-label="Text formatting toolbar">
-        <Toolbar.ToggleGroup
-          type="multiple"
-          value={formats}
-          onValueChange={setFormats}
-          aria-label="Text formatting"
-        >
-          <Toolbar.ToggleItem value="bold" aria-label="Bold">
-            B
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem value="italic" aria-label="Italic">
-            I
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem value="underline" aria-label="Underline">
-            U
-          </Toolbar.ToggleItem>
-          <Toolbar.ToggleItem value="strikethrough" aria-label="Strikethrough">
-            S
-          </Toolbar.ToggleItem>
-        </Toolbar.ToggleGroup>
+    render: () => {
+        const [formats, setFormats] = useState<string[]>([]);
+        return (
+            <Toolbar.Root aria-label="Text formatting toolbar">
+                <Toolbar.ToggleGroup
+                    type="multiple"
+                    value={formats}
+                    onValueChange={setFormats}
+                    aria-label="Text formatting"
+                >
+                    <Toolbar.ToggleItem value="bold" aria-label="Bold">
+                        B
+                    </Toolbar.ToggleItem>
+                    <Toolbar.ToggleItem value="italic" aria-label="Italic">
+                        I
+                    </Toolbar.ToggleItem>
+                    <Toolbar.ToggleItem value="underline" aria-label="Underline">
+                        U
+                    </Toolbar.ToggleItem>
+                    <Toolbar.ToggleItem value="strikethrough" aria-label="Strikethrough">
+                        S
+                    </Toolbar.ToggleItem>
+                </Toolbar.ToggleGroup>
 
-        <Toolbar.Separator />
+                <Toolbar.Separator />
 
-        <Toolbar.Button aria-label="Clear formatting">Clear</Toolbar.Button>
-      </Toolbar.Root>
-    );
-  },
+                <Toolbar.Button aria-label="Clear formatting">Clear</Toolbar.Button>
+            </Toolbar.Root>
+        );
+    },
 };

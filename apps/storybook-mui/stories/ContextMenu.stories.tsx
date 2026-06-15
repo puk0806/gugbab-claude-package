@@ -1,15 +1,15 @@
-import { ContextMenu } from '@gugbab/styled-mui';
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import type React from 'react';
+import { ContextMenu } from "@gugbab/styled-mui";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import type React from "react";
 
 const meta = {
-  title: 'Menus/ContextMenu',
-  component: ContextMenu.Root,
-  parameters: {
-    layout: 'padded',
-    docs: {
-      description: {
-        component: `
+    title: "Menus/ContextMenu",
+    component: ContextMenu.Root,
+    parameters: {
+        layout: "padded",
+        docs: {
+            description: {
+                component: `
 **ContextMenu** — 우클릭(또는 길게 누르기)으로 열리는 컨텍스트 메뉴 컴포넌트. Radix UI 기반의 headless 구조 위에 MUI 토큰이 적용된 스타일드 버전이다.
 
 ### 컴파운드 구조
@@ -41,127 +41,124 @@ const meta = {
 - \`ContextMenu.Content\` — \`alignOffset\` / \`avoidCollisions\`: 뷰포트 가장자리 충돌 방지
 - \`ContextMenu.Root\` — \`open\` / \`onOpenChange\`: 외부 제어 가능
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj;
 
 const TRIGGER_STYLE: React.CSSProperties = {
-  width: 320,
-  height: 160,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  border: '2px dashed currentColor',
-  borderRadius: 8,
-  cursor: 'context-menu',
-  userSelect: 'none',
+    width: 320,
+    height: 160,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "2px dashed currentColor",
+    borderRadius: 8,
+    cursor: "context-menu",
+    userSelect: "none",
 };
 
 function DefaultDemo() {
-  return (
-    <ContextMenu.Root>
-      <ContextMenu.Trigger style={TRIGGER_STYLE}>Right-click here</ContextMenu.Trigger>
-      <ContextMenu.Portal>
-        <ContextMenu.Content>
-          <ContextMenu.Item>Back</ContextMenu.Item>
-          <ContextMenu.Item>Forward</ContextMenu.Item>
-          <ContextMenu.Item>Reload</ContextMenu.Item>
-          <ContextMenu.Item disabled>Print… (disabled)</ContextMenu.Item>
-        </ContextMenu.Content>
-      </ContextMenu.Portal>
-    </ContextMenu.Root>
-  );
+    return (
+        <ContextMenu.Root>
+            <ContextMenu.Trigger style={TRIGGER_STYLE}>Right-click here</ContextMenu.Trigger>
+            <ContextMenu.Portal>
+                <ContextMenu.Content>
+                    <ContextMenu.Item>Back</ContextMenu.Item>
+                    <ContextMenu.Item>Forward</ContextMenu.Item>
+                    <ContextMenu.Item>Reload</ContextMenu.Item>
+                    <ContextMenu.Item disabled>Print… (disabled)</ContextMenu.Item>
+                </ContextMenu.Content>
+            </ContextMenu.Portal>
+        </ContextMenu.Root>
+    );
 }
 
 function WithSubmenuDemo() {
-  return (
-    <ContextMenu.Root>
-      <ContextMenu.Trigger style={TRIGGER_STYLE}>Right-click for share options</ContextMenu.Trigger>
-      <ContextMenu.Portal>
-        <ContextMenu.Content>
-          <ContextMenu.Item>Copy link</ContextMenu.Item>
-          <ContextMenu.Sub>
-            <ContextMenu.SubTrigger>Share via</ContextMenu.SubTrigger>
+    return (
+        <ContextMenu.Root>
+            <ContextMenu.Trigger style={TRIGGER_STYLE}>Right-click for share options</ContextMenu.Trigger>
             <ContextMenu.Portal>
-              <ContextMenu.SubContent>
-                <ContextMenu.Item>Email</ContextMenu.Item>
-                <ContextMenu.Item>Slack</ContextMenu.Item>
-                <ContextMenu.Item>Teams</ContextMenu.Item>
-              </ContextMenu.SubContent>
+                <ContextMenu.Content>
+                    <ContextMenu.Item>Copy link</ContextMenu.Item>
+                    <ContextMenu.Sub>
+                        <ContextMenu.SubTrigger>Share via</ContextMenu.SubTrigger>
+                        <ContextMenu.Portal>
+                            <ContextMenu.SubContent>
+                                <ContextMenu.Item>Email</ContextMenu.Item>
+                                <ContextMenu.Item>Slack</ContextMenu.Item>
+                                <ContextMenu.Item>Teams</ContextMenu.Item>
+                            </ContextMenu.SubContent>
+                        </ContextMenu.Portal>
+                    </ContextMenu.Sub>
+                    <ContextMenu.Item>Open in new tab</ContextMenu.Item>
+                </ContextMenu.Content>
             </ContextMenu.Portal>
-          </ContextMenu.Sub>
-          <ContextMenu.Item>Open in new tab</ContextMenu.Item>
-        </ContextMenu.Content>
-      </ContextMenu.Portal>
-    </ContextMenu.Root>
-  );
+        </ContextMenu.Root>
+    );
 }
 
 function LongMenuDemo() {
-  return (
-    <ContextMenu.Root>
-      <ContextMenu.Trigger style={TRIGGER_STYLE}>Right-click for full menu</ContextMenu.Trigger>
-      <ContextMenu.Portal>
-        <ContextMenu.Content>
-          <ContextMenu.Item>Cut</ContextMenu.Item>
-          <ContextMenu.Item>Copy</ContextMenu.Item>
-          <ContextMenu.Item>Paste</ContextMenu.Item>
-          <ContextMenu.Item>Paste and Match Style</ContextMenu.Item>
-          <ContextMenu.Item disabled>Delete (disabled)</ContextMenu.Item>
-          <ContextMenu.Item>Select All</ContextMenu.Item>
-          <ContextMenu.Sub>
-            <ContextMenu.SubTrigger>Find</ContextMenu.SubTrigger>
+    return (
+        <ContextMenu.Root>
+            <ContextMenu.Trigger style={TRIGGER_STYLE}>Right-click for full menu</ContextMenu.Trigger>
             <ContextMenu.Portal>
-              <ContextMenu.SubContent>
-                <ContextMenu.Item>Find…</ContextMenu.Item>
-                <ContextMenu.Item>Find Next</ContextMenu.Item>
-                <ContextMenu.Item>Find Previous</ContextMenu.Item>
-              </ContextMenu.SubContent>
+                <ContextMenu.Content>
+                    <ContextMenu.Item>Cut</ContextMenu.Item>
+                    <ContextMenu.Item>Copy</ContextMenu.Item>
+                    <ContextMenu.Item>Paste</ContextMenu.Item>
+                    <ContextMenu.Item>Paste and Match Style</ContextMenu.Item>
+                    <ContextMenu.Item disabled>Delete (disabled)</ContextMenu.Item>
+                    <ContextMenu.Item>Select All</ContextMenu.Item>
+                    <ContextMenu.Sub>
+                        <ContextMenu.SubTrigger>Find</ContextMenu.SubTrigger>
+                        <ContextMenu.Portal>
+                            <ContextMenu.SubContent>
+                                <ContextMenu.Item>Find…</ContextMenu.Item>
+                                <ContextMenu.Item>Find Next</ContextMenu.Item>
+                                <ContextMenu.Item>Find Previous</ContextMenu.Item>
+                            </ContextMenu.SubContent>
+                        </ContextMenu.Portal>
+                    </ContextMenu.Sub>
+                </ContextMenu.Content>
             </ContextMenu.Portal>
-          </ContextMenu.Sub>
-        </ContextMenu.Content>
-      </ContextMenu.Portal>
-    </ContextMenu.Root>
-  );
+        </ContextMenu.Root>
+    );
 }
 
 export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '기본 컨텍스트 메뉴. 점선 영역을 우클릭하면 열린다. `disabled` 항목과 기본 항목으로 구성된 가장 단순한 케이스.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "기본 컨텍스트 메뉴. 점선 영역을 우클릭하면 열린다. `disabled` 항목과 기본 항목으로 구성된 가장 단순한 케이스.",
+            },
+        },
     },
-  },
-  render: () => <DefaultDemo />,
+    render: () => <DefaultDemo />,
 };
 
 export const WithSubmenu: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`Sub` + `SubTrigger` + `SubContent`로 "Share via" 서브메뉴 구성. `ArrowRight`로 진입, `ArrowLeft`로 닫는다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: '`Sub` + `SubTrigger` + `SubContent`로 "Share via" 서브메뉴 구성. `ArrowRight`로 진입, `ArrowLeft`로 닫는다.',
+            },
+        },
     },
-  },
-  render: () => <WithSubmenuDemo />,
+    render: () => <WithSubmenuDemo />,
 };
 
 export const LongMenu: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '다수 항목과 서브메뉴를 함께 포함한 편집기 스타일 컨텍스트 메뉴. Typeahead로 빠른 항목 탐색이 가능하다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "다수 항목과 서브메뉴를 함께 포함한 편집기 스타일 컨텍스트 메뉴. Typeahead로 빠른 항목 탐색이 가능하다.",
+            },
+        },
     },
-  },
-  render: () => <LongMenuDemo />,
+    render: () => <LongMenuDemo />,
 };

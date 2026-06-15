@@ -1,14 +1,14 @@
-import { VisuallyHidden } from '@gugbab/styled-mui';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { VisuallyHidden } from "@gugbab/styled-mui";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-  title: 'Primitives/VisuallyHidden',
-  component: VisuallyHidden,
-  parameters: {
-    layout: 'centered',
-    docs: {
-      description: {
-        component: `
+    title: "Primitives/VisuallyHidden",
+    component: VisuallyHidden,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: `
 **VisuallyHidden** — 화면에서는 보이지 않지만 스크린 리더에는 정상적으로 읽히는 접근성 전용 컴포넌트.
 
 ### 구조
@@ -22,51 +22,45 @@ const meta = {
 - \`display: none\` 또는 \`opacity: 0\`으로는 절대 대체하지 않는다 — 스크린 리더가 읽지 못한다.
 - \`aria-label\`과 달리 텍스트가 DOM에 존재하므로 브라우저 검색·자동 번역·텍스트 복사가 정상 동작한다.
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta<typeof VisuallyHidden>;
 
 export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '아이콘 버튼에 숨겨진 텍스트 제공. 화면에는 ✕만 보이지만 스크린 리더는 "Close dialog"를 읽는다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: '아이콘 버튼에 숨겨진 텍스트 제공. 화면에는 ✕만 보이지만 스크린 리더는 "Close dialog"를 읽는다.',
+            },
+        },
     },
-  },
-  render: () => (
-    <button type="button" aria-label="Close dialog">
-      <VisuallyHidden>Close dialog</VisuallyHidden>
-      <span aria-hidden>✕</span>
-    </button>
-  ),
+    render: () => (
+        <button type="button" aria-label="Close dialog">
+            <VisuallyHidden>Close dialog</VisuallyHidden>
+            <span aria-hidden>✕</span>
+        </button>
+    ),
 };
 
 export const WithLabelledInput: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '검색창의 label을 시각적으로 숨김. placeholder가 있어 디자인을 깨지 않으면서 접근성을 유지한다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "검색창의 label을 시각적으로 숨김. placeholder가 있어 디자인을 깨지 않으면서 접근성을 유지한다.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div>
-      <label htmlFor="hidden-label-input">
-        <VisuallyHidden>Search query</VisuallyHidden>
-      </label>
-      <input
-        id="hidden-label-input"
-        type="search"
-        placeholder="Search… (label is visually hidden)"
-      />
-    </div>
-  ),
+    render: () => (
+        <div>
+            <label htmlFor="hidden-label-input">
+                <VisuallyHidden>Search query</VisuallyHidden>
+            </label>
+            <input id="hidden-label-input" type="search" placeholder="Search… (label is visually hidden)" />
+        </div>
+    ),
 };

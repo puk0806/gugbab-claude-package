@@ -1,79 +1,79 @@
-import { act, renderHook } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { useDebouncedCallback } from './use-debounced-callback';
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { useDebouncedCallback } from "./use-debounced-callback";
 
-describe('useDebouncedCallback', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-
-  it('returns a stable callback identity across renders', () => {
-    const fn = vi.fn();
-    const { result, rerender } = renderHook(() => useDebouncedCallback(fn, 100));
-    const first = result.current;
-    rerender();
-    expect(result.current).toBe(first);
-  });
-
-  it('invokes the underlying callback only once after the wait elapses', () => {
-    const fn = vi.fn();
-    const { result } = renderHook(() => useDebouncedCallback(fn, 100));
-
-    act(() => {
-      result.current('a');
-      result.current('b');
-      result.current('c');
+describe("useDebouncedCallback", () => {
+    beforeEach(() => {
+        vi.useFakeTimers();
+    });
+    afterEach(() => {
+        vi.useRealTimers();
     });
 
-    expect(fn).not.toHaveBeenCalled();
-
-    act(() => {
-      vi.advanceTimersByTime(100);
+    it("returns a stable callback identity across renders", () => {
+        const fn = vi.fn();
+        const { result, rerender } = renderHook(() => useDebouncedCallback(fn, 100));
+        const first = result.current;
+        rerender();
+        expect(result.current).toBe(first);
     });
 
-    expect(fn).toHaveBeenCalledTimes(1);
-    expect(fn).toHaveBeenCalledWith('c');
-  });
+    it("invokes the underlying callback only once after the wait elapses", () => {
+        const fn = vi.fn();
+        const { result } = renderHook(() => useDebouncedCallback(fn, 100));
 
-  it('calls the latest callback even if the prop changed while waiting', () => {
-    const first = vi.fn();
-    const second = vi.fn();
+        act(() => {
+            result.current("a");
+            result.current("b");
+            result.current("c");
+        });
 
-    const { result, rerender } = renderHook(({ cb }) => useDebouncedCallback(cb, 100), {
-      initialProps: { cb: first },
+        expect(fn).not.toHaveBeenCalled();
+
+        act(() => {
+            vi.advanceTimersByTime(100);
+        });
+
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenCalledWith("c");
     });
 
-    act(() => {
-      result.current('x');
+    it("calls the latest callback even if the prop changed while waiting", () => {
+        const first = vi.fn();
+        const second = vi.fn();
+
+        const { result, rerender } = renderHook(({ cb }) => useDebouncedCallback(cb, 100), {
+            initialProps: { cb: first },
+        });
+
+        act(() => {
+            result.current("x");
+        });
+
+        rerender({ cb: second });
+
+        act(() => {
+            vi.advanceTimersByTime(100);
+        });
+
+        expect(first).not.toHaveBeenCalled();
+        expect(second).toHaveBeenCalledWith("x");
     });
 
-    rerender({ cb: second });
+    it("cancels pending invocations when the component unmounts", () => {
+        const fn = vi.fn();
+        const { result, unmount } = renderHook(() => useDebouncedCallback(fn, 100));
 
-    act(() => {
-      vi.advanceTimersByTime(100);
+        act(() => {
+            result.current();
+        });
+
+        unmount();
+
+        act(() => {
+            vi.advanceTimersByTime(100);
+        });
+
+        expect(fn).not.toHaveBeenCalled();
     });
-
-    expect(first).not.toHaveBeenCalled();
-    expect(second).toHaveBeenCalledWith('x');
-  });
-
-  it('cancels pending invocations when the component unmounts', () => {
-    const fn = vi.fn();
-    const { result, unmount } = renderHook(() => useDebouncedCallback(fn, 100));
-
-    act(() => {
-      result.current();
-    });
-
-    unmount();
-
-    act(() => {
-      vi.advanceTimersByTime(100);
-    });
-
-    expect(fn).not.toHaveBeenCalled();
-  });
 });

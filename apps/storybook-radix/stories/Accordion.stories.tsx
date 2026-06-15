@@ -1,14 +1,14 @@
-import { Accordion, type AccordionVariant } from '@gugbab/styled-radix';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Accordion, type AccordionVariant } from "@gugbab/styled-radix";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-  title: 'Stateful/Accordion',
-  component: Accordion.Root,
-  parameters: {
-    layout: 'centered',
-    docs: {
-      description: {
-        component: `
+    title: "Stateful/Accordion",
+    component: Accordion.Root,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: `
 **Accordion** — 여러 패널을 펼치고 접을 수 있는 컴포넌트. FAQ, 설정 카테고리, 사이드바 메뉴 등에 적합하며 WAI-ARIA \`Disclosure\` 패턴을 준수한다.
 
 ### 컴파운드 구조
@@ -28,101 +28,97 @@ const meta = {
 - \`variant\`: \`'default'\`(구분선) | \`'outline'\`(테두리 박스).
 - 키보드: **Space / Enter** 트리거 활성화, **Arrow Up / Down** 이웃 트리거 이동, **Home / End** 첫·끝 트리거.
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj;
 
 const FAQ_ITEMS = [
-  {
-    value: 'q1',
-    question: 'What is a headless component?',
-    answer:
-      'A headless component provides behavior and accessibility without any visual styling, letting consumers apply their own design.',
-  },
-  {
-    value: 'q2',
-    question: 'How do I apply custom styles?',
-    answer:
-      'You can wrap the headless primitives with your own CSS classes or a styled variant package like @gugbab/styled-radix.',
-  },
-  {
-    value: 'q3',
-    question: 'Is keyboard navigation supported?',
-    answer:
-      'Yes. All components follow WAI-ARIA patterns and support full keyboard navigation out of the box.',
-  },
+    {
+        value: "q1",
+        question: "What is a headless component?",
+        answer: "A headless component provides behavior and accessibility without any visual styling, letting consumers apply their own design.",
+    },
+    {
+        value: "q2",
+        question: "How do I apply custom styles?",
+        answer: "You can wrap the headless primitives with your own CSS classes or a styled variant package like @gugbab/styled-radix.",
+    },
+    {
+        value: "q3",
+        question: "Is keyboard navigation supported?",
+        answer: "Yes. All components follow WAI-ARIA patterns and support full keyboard navigation out of the box.",
+    },
 ] as const;
 
 interface DemoProps {
-  type: 'single' | 'multiple';
-  collapsible?: boolean;
-  variant?: AccordionVariant;
+    type: "single" | "multiple";
+    collapsible?: boolean;
+    variant?: AccordionVariant;
 }
 
 function Demo({ type, collapsible = true, variant }: DemoProps) {
-  return (
-    <Accordion.Root
-      type={type}
-      collapsible={type === 'single' ? collapsible : undefined}
-      variant={variant}
-      style={{ width: 480 }}
-    >
-      {FAQ_ITEMS.map((item) => (
-        <Accordion.Item key={item.value} value={item.value}>
-          <Accordion.Header>
-            <Accordion.Trigger style={{ width: '100%', textAlign: 'left' }}>
-              {item.question}
-            </Accordion.Trigger>
-          </Accordion.Header>
-          <Accordion.Content>
-            <p style={{ margin: '8px 0' }}>{item.answer}</p>
-          </Accordion.Content>
-        </Accordion.Item>
-      ))}
-    </Accordion.Root>
-  );
+    return (
+        <Accordion.Root
+            type={type}
+            collapsible={type === "single" ? collapsible : undefined}
+            variant={variant}
+            style={{ width: 480 }}
+        >
+            {FAQ_ITEMS.map((item) => (
+                <Accordion.Item key={item.value} value={item.value}>
+                    <Accordion.Header>
+                        <Accordion.Trigger style={{ width: "100%", textAlign: "left" }}>
+                            {item.question}
+                        </Accordion.Trigger>
+                    </Accordion.Header>
+                    <Accordion.Content>
+                        <p style={{ margin: "8px 0" }}>{item.answer}</p>
+                    </Accordion.Content>
+                </Accordion.Item>
+            ))}
+        </Accordion.Root>
+    );
 }
 
 export const SingleCollapsible: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`type="single"` + `collapsible=true` — 하나의 패널만 열리고, 이미 열린 패널을 다시 클릭해 닫을 수 있다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: '`type="single"` + `collapsible=true` — 하나의 패널만 열리고, 이미 열린 패널을 다시 클릭해 닫을 수 있다.',
+            },
+        },
     },
-  },
-  render: () => <Demo type="single" collapsible />,
+    render: () => <Demo type="single" collapsible />,
 };
 
 export const Multiple: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '`type="multiple"` — 여러 패널을 동시에 열 수 있다. 독립적인 FAQ 항목 나열에 적합.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: '`type="multiple"` — 여러 패널을 동시에 열 수 있다. 독립적인 FAQ 항목 나열에 적합.',
+            },
+        },
     },
-  },
-  render: () => <Demo type="multiple" />,
+    render: () => <Demo type="multiple" />,
 };
 
 export const Variants: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '`default`(구분선 스타일)과 `outline`(테두리 박스 스타일) 두 가지 variant 비교.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`default`(구분선 스타일)과 `outline`(테두리 박스 스타일) 두 가지 variant 비교.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      <Demo type="single" variant="default" />
-      <Demo type="single" variant="outline" />
-    </div>
-  ),
+    render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+            <Demo type="single" variant="default" />
+            <Demo type="single" variant="outline" />
+        </div>
+    ),
 };

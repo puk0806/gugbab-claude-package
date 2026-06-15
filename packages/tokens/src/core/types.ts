@@ -9,14 +9,14 @@
  * render in either visual system by swapping the imported `.css` file.
  */
 export interface DesignTokens {
-  color: ColorTokens;
-  space: SpaceTokens;
-  radius: RadiusTokens;
-  font: FontTokens;
-  shadow: ShadowTokens;
-  zIndex: ZIndexTokens;
-  breakpoint: BreakpointTokens;
-  motion: MotionTokens;
+    color: ColorTokens;
+    space: SpaceTokens;
+    radius: RadiusTokens;
+    font: FontTokens;
+    shadow: ShadowTokens;
+    zIndex: ZIndexTokens;
+    breakpoint: BreakpointTokens;
+    motion: MotionTokens;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -24,51 +24,51 @@ export interface DesignTokens {
 /* -------------------------------------------------------------------------- */
 
 export interface ColorTokens {
-  /** Surfaces */
-  bg: {
-    app: string;
-    surface: string;
-    elevated: string;
-    inset: string;
-  };
-  /** Text colors */
-  fg: {
-    primary: string;
-    secondary: string;
-    muted: string;
-    disabled: string;
-    onAccent: string;
-  };
-  /** Brand accent (interactive primary) */
-  accent: {
-    base: string;
-    hover: string;
-    active: string;
-    subtle: string;
-    fg: string;
-  };
-  /** Optional secondary brand */
-  accent2?: {
-    base: string;
-    hover: string;
-    active: string;
-    subtle: string;
-    fg: string;
-  };
-  /** Status semantics */
-  success: { base: string; fg: string; subtle: string };
-  warning: { base: string; fg: string; subtle: string };
-  danger: { base: string; fg: string; subtle: string };
-  info: { base: string; fg: string; subtle: string };
-  /** Borders */
-  border: {
-    subtle: string;
-    base: string;
-    strong: string;
-    focus: string;
-  };
-  /** Overlay (modal scrim) */
-  overlay: string;
+    /** Surfaces */
+    bg: {
+        app: string;
+        surface: string;
+        elevated: string;
+        inset: string;
+    };
+    /** Text colors */
+    fg: {
+        primary: string;
+        secondary: string;
+        muted: string;
+        disabled: string;
+        onAccent: string;
+    };
+    /** Brand accent (interactive primary) */
+    accent: {
+        base: string;
+        hover: string;
+        active: string;
+        subtle: string;
+        fg: string;
+    };
+    /** Optional secondary brand */
+    accent2?: {
+        base: string;
+        hover: string;
+        active: string;
+        subtle: string;
+        fg: string;
+    };
+    /** Status semantics */
+    success: { base: string; fg: string; subtle: string };
+    warning: { base: string; fg: string; subtle: string };
+    danger: { base: string; fg: string; subtle: string };
+    info: { base: string; fg: string; subtle: string };
+    /** Borders */
+    border: {
+        subtle: string;
+        base: string;
+        strong: string;
+        focus: string;
+    };
+    /** Overlay (modal scrim) */
+    overlay: string;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -76,19 +76,19 @@ export interface ColorTokens {
 /* -------------------------------------------------------------------------- */
 
 export interface SpaceTokens {
-  0: string;
-  1: string;
-  2: string;
-  3: string;
-  4: string;
-  5: string;
-  6: string;
-  8: string;
-  10: string;
-  12: string;
-  16: string;
-  20: string;
-  24: string;
+    0: string;
+    1: string;
+    2: string;
+    3: string;
+    4: string;
+    5: string;
+    6: string;
+    8: string;
+    10: string;
+    12: string;
+    16: string;
+    20: string;
+    24: string;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -96,12 +96,12 @@ export interface SpaceTokens {
 /* -------------------------------------------------------------------------- */
 
 export interface RadiusTokens {
-  none: string;
-  sm: string;
-  md: string;
-  lg: string;
-  xl: string;
-  full: string;
+    none: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    full: string;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -109,31 +109,31 @@ export interface RadiusTokens {
 /* -------------------------------------------------------------------------- */
 
 export interface FontTokens {
-  family: {
-    sans: string;
-    mono: string;
-  };
-  size: {
-    xs: string;
-    sm: string;
-    base: string;
-    lg: string;
-    xl: string;
-    '2xl': string;
-    '3xl': string;
-    '4xl': string;
-  };
-  weight: {
-    normal: number;
-    medium: number;
-    semibold: number;
-    bold: number;
-  };
-  lineHeight: {
-    tight: number;
-    normal: number;
-    relaxed: number;
-  };
+    family: {
+        sans: string;
+        mono: string;
+    };
+    size: {
+        xs: string;
+        sm: string;
+        base: string;
+        lg: string;
+        xl: string;
+        "2xl": string;
+        "3xl": string;
+        "4xl": string;
+    };
+    weight: {
+        normal: number;
+        medium: number;
+        semibold: number;
+        bold: number;
+    };
+    lineHeight: {
+        tight: number;
+        normal: number;
+        relaxed: number;
+    };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -141,10 +141,10 @@ export interface FontTokens {
 /* -------------------------------------------------------------------------- */
 
 export interface ShadowTokens {
-  sm: string;
-  md: string;
-  lg: string;
-  xl: string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -152,12 +152,12 @@ export interface ShadowTokens {
 /* -------------------------------------------------------------------------- */
 
 export interface ZIndexTokens {
-  dropdown: number;
-  overlay: number;
-  modal: number;
-  popover: number;
-  tooltip: number;
-  toast: number;
+    dropdown: number;
+    overlay: number;
+    modal: number;
+    popover: number;
+    tooltip: number;
+    toast: number;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -165,11 +165,11 @@ export interface ZIndexTokens {
 /* -------------------------------------------------------------------------- */
 
 export interface BreakpointTokens {
-  sm: string;
-  md: string;
-  lg: string;
-  xl: string;
-  '2xl': string;
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    "2xl": string;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -177,17 +177,17 @@ export interface BreakpointTokens {
 /* -------------------------------------------------------------------------- */
 
 export interface MotionTokens {
-  duration: {
-    fast: string;
-    normal: string;
-    slow: string;
-  };
-  easing: {
-    default: string;
-    in: string;
-    out: string;
-    inOut: string;
-  };
+    duration: {
+        fast: string;
+        normal: string;
+        slow: string;
+    };
+    easing: {
+        default: string;
+        in: string;
+        out: string;
+        inOut: string;
+    };
 }
 
 /* -------------------------------------------------------------------------- */
@@ -195,6 +195,6 @@ export interface MotionTokens {
 /* -------------------------------------------------------------------------- */
 
 export interface ThemeTokens {
-  light: DesignTokens;
-  dark: DesignTokens;
+    light: DesignTokens;
+    dark: DesignTokens;
 }

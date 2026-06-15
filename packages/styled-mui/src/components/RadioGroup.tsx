@@ -1,41 +1,31 @@
-import {
-  RadioGroup as Headless,
-  type RadioGroupItemProps,
-  type RadioGroupRootProps,
-} from '@gugbab/headless';
-import { cn } from '@gugbab/utils';
-import { forwardRef, type HTMLAttributes } from 'react';
+import { RadioGroup as Headless, type RadioGroupItemProps, type RadioGroupRootProps } from "@gugbab/headless";
+import { cn } from "@gugbab/utils";
+import { forwardRef, type HTMLAttributes } from "react";
 
-export type RadioGroupSize = 'sm' | 'md';
+export type RadioGroupSize = "sm" | "md";
 
 export interface RadioGroupRootStyledProps extends RadioGroupRootProps {
-  size?: RadioGroupSize;
+    size?: RadioGroupSize;
 }
 
 const Root = forwardRef<HTMLDivElement, RadioGroupRootStyledProps>(function RadioGroupRoot(
-  { size = 'md', className, ...rest },
-  ref,
+    { size = "md", className, ...rest },
+    ref,
 ) {
-  return (
-    <Headless.Root
-      ref={ref}
-      className={cn('gmui-radio-group', `gmui-radio-group--${size}`, className)}
-      {...rest}
-    />
-  );
+    return (
+        <Headless.Root ref={ref} className={cn("gmui-radio-group", `gmui-radio-group--${size}`, className)} {...rest} />
+    );
 });
 
-const Item = forwardRef<HTMLButtonElement, RadioGroupItemProps>(function RadioGroupItem(
-  { className, ...rest },
-  ref,
-) {
-  return <Headless.Item ref={ref} className={cn('gmui-radio-group__item', className)} {...rest} />;
+const Item = forwardRef<HTMLButtonElement, RadioGroupItemProps>(function RadioGroupItem({ className, ...rest }, ref) {
+    return <Headless.Item ref={ref} className={cn("gmui-radio-group__item", className)} {...rest} />;
 });
 
-const Indicator = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(
-  function RadioGroupIndicator({ className, ...rest }, ref) {
-    return <span ref={ref} className={cn('gmui-radio-group__indicator', className)} {...rest} />;
-  },
-);
+const Indicator = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(function RadioGroupIndicator(
+    { className, ...rest },
+    ref,
+) {
+    return <span ref={ref} className={cn("gmui-radio-group__indicator", className)} {...rest} />;
+});
 
 export const RadioGroup = { Root, Item, Indicator };

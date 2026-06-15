@@ -1,14 +1,14 @@
-import { Progress, type ProgressSize } from '@gugbab/styled-radix';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Progress, type ProgressSize } from "@gugbab/styled-radix";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-  title: 'Stateful/Progress',
-  component: Progress.Root,
-  parameters: {
-    layout: 'centered',
-    docs: {
-      description: {
-        component: `
+    title: "Stateful/Progress",
+    component: Progress.Root,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: `
 **Progress** — 작업 진행률을 시각적으로 표시하는 진행 바 컴포넌트. determinate(수치 진행)와 indeterminate(불확정 진행) 두 모드를 지원한다.
 
 ### 컴파운드 구조
@@ -31,65 +31,64 @@ const meta = {
 - 내부적으로 \`role="progressbar"\`와 \`aria-valuenow\` / \`aria-valuemax\`가 자동 설정된다.
 - 파일 업로드, 단계별 온보딩, API 로딩 상태 표시에 활용한다.
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj;
 
 interface ProgressDemoProps {
-  size?: ProgressSize;
-  value?: number | null;
+    size?: ProgressSize;
+    value?: number | null;
 }
 
 function Demo({ size, value }: ProgressDemoProps) {
-  return (
-    <div style={{ width: 320 }}>
-      <Progress.Root size={size} value={value}>
-        <Progress.Indicator />
-      </Progress.Root>
-    </div>
-  );
+    return (
+        <div style={{ width: 320 }}>
+            <Progress.Root size={size} value={value}>
+                <Progress.Indicator />
+            </Progress.Root>
+        </div>
+    );
 }
 
 export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '`value={60}` — 60% 진행 상태. 기본 md 크기로 표시된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`value={60}` — 60% 진행 상태. 기본 md 크기로 표시된다.",
+            },
+        },
     },
-  },
-  render: () => <Demo value={60} />,
+    render: () => <Demo value={60} />,
 };
 
 export const Sizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '`size` prop으로 2단계 두께 선택. sm(얇음) / md(보통) 순으로 표시된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`size` prop으로 2단계 두께 선택. sm(얇음) / md(보통) 순으로 표시된다.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 320 }}>
-      <Demo size="sm" value={40} />
-      <Demo size="md" value={70} />
-    </div>
-  ),
+    render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, width: 320 }}>
+            <Demo size="sm" value={40} />
+            <Demo size="md" value={70} />
+        </div>
+    ),
 };
 
 export const Indeterminate: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`value={null}` — indeterminate 모드. 진행률을 알 수 없는 로딩 상태에서 CSS 애니메이션이 반복된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`value={null}` — indeterminate 모드. 진행률을 알 수 없는 로딩 상태에서 CSS 애니메이션이 반복된다.",
+            },
+        },
     },
-  },
-  render: () => <Demo value={null} />,
+    render: () => <Demo value={null} />,
 };

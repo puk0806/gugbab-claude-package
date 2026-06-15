@@ -61,9 +61,7 @@
   border-radius: 0;
 }
 
-.gmui-toggle-group--outline[data-orientation="vertical"]
-  .gmui-toggle-group__item
-  + .gmui-toggle-group__item {
+.gmui-toggle-group--outline[data-orientation="vertical"] .gmui-toggle-group__item + .gmui-toggle-group__item {
   border-left: none;
   border-top: 1px solid var(--gugbab-color-border-base);
 }
