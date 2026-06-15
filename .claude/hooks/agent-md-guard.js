@@ -107,8 +107,13 @@ async function main() {
   const filePath = (tool_input.file_path || '').replace(/\\/g, '/')
   if (!AGENT_MD_PATTERN.test(filePath)) return process.exit(0)
 
-  // Edit의 경우 content가 없으므로 간단히 경고만
-  const content = tool_input.content || tool_input.new_string || ''
+  // Edit 도구는 new_string이 스니펫(부분 교체)이므로 전체 파일을 직접 읽어 검증
+  let content
+  if (tool_name === 'Edit') {
+    try { content = require('fs').readFileSync(filePath, 'utf8') } catch { return process.exit(0) }
+  } else {
+    content = tool_input.content || ''
+  }
   if (!content) return process.exit(0)
 
   const errors = validate(content)

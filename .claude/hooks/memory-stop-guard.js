@@ -12,8 +12,25 @@ const uncommitted = spawnSync('git', ['-C', projectDir, 'status', '--porcelain',
 });
 
 if (uncommitted.stdout?.trim()) {
+  // non-memory staged 파일만 pathspec 지정 stash — memory/ 파일은 stash에서 제외
+  const stagedAll = spawnSync('git', ['-C', projectDir, 'diff', '--cached', '--name-only'], { encoding: 'utf8', stdio: 'pipe' });
+  const nonMemory = (stagedAll.stdout || '').trim().split('\n').filter(f => f && !f.startsWith('memory/'));
+  let stashed = false;
+  if (nonMemory.length > 0) {
+    const stashResult = spawnSync(
+      'git', ['-C', projectDir, 'stash', 'push', '--staged', '-m', 'memory-hook-temp', '--', ...nonMemory],
+      { stdio: 'pipe' }
+    );
+    stashed = stashResult.status === 0;
+  }
+
   spawnSync('git', ['-C', projectDir, 'add', 'memory/'], { stdio: 'pipe' });
   spawnSync('git', ['-C', projectDir, 'commit', '-m', '[memory] Modify: auto-sync on stop'], { stdio: 'pipe' });
+
+  // --index: staged 상태 그대로 복원 (partial staging 유지)
+  if (stashed) {
+    spawnSync('git', ['-C', projectDir, 'stash', 'pop', '--index'], { stdio: 'pipe' });
+  }
 }
 
 // 2. upstream 추적 브랜치 존재 여부 확인 (@{u} 사용 전 필수)

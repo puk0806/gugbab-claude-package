@@ -99,6 +99,18 @@ const behind = spawnSync(
 );
 if (!behind.stdout?.trim()) process.exit(0);
 
+// non-memory staged 파일만 pathspec 지정 stash — memory/ 파일은 stash에서 제외
+const stagedBefore = spawnSync('git', ['-C', projectDir, 'diff', '--cached', '--name-only'], { encoding: 'utf8', stdio: 'pipe' });
+const nonMemory = (stagedBefore.stdout || '').trim().split('\n').filter(f => f && !f.startsWith('memory/'));
+let stashed = false;
+if (nonMemory.length > 0) {
+  const stashResult = spawnSync(
+    'git', ['-C', projectDir, 'stash', 'push', '--staged', '-m', 'memory-hook-temp', '--', ...nonMemory],
+    { stdio: 'pipe' }
+  );
+  stashed = stashResult.status === 0;
+}
+
 spawnSync('git', ['-C', projectDir, 'checkout', upstreamRef, '--', 'memory/'], { stdio: 'pipe' });
 
 const afterStatus = spawnSync('git', ['-C', projectDir, 'status', '--porcelain', 'memory/'], {
@@ -106,6 +118,11 @@ const afterStatus = spawnSync('git', ['-C', projectDir, 'status', '--porcelain',
 });
 if (afterStatus.stdout?.trim()) {
   spawnSync('git', ['-C', projectDir, 'commit', '-m', '[memory] Modify: sync from remote'], { stdio: 'pipe' });
+}
+
+// --index: staged 상태 그대로 복원 (partial staging 유지)
+if (stashed) {
+  spawnSync('git', ['-C', projectDir, 'stash', 'pop', '--index'], { stdio: 'pipe' });
 }
 
 process.exit(0);
