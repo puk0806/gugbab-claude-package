@@ -14,9 +14,9 @@
  * 조건: Write 도구로 docs/skills/{category}/{name}/verification.md 경로에 저장할 때만 동작
  */
 
-const readline = require('node:readline');
+const readline = require('readline')
 
-const VERIFICATION_PATH_PATTERN = /docs\/skills\/.+\/verification\.md$/;
+const VERIFICATION_PATH_PATTERN = /docs\/skills\/.+\/verification\.md$/
 
 // verification.md 필수 섹션 (VERIFICATION_TEMPLATE.md 기준)
 const REQUIRED_SECTIONS = [
@@ -28,77 +28,85 @@ const REQUIRED_SECTIONS = [
   { key: '검증 결과 요약', pattern: /##\s+6\.\s+검증\s+결과\s+요약/i },
   { key: '개선 필요 사항', pattern: /##\s+7\.\s+개선\s+필요\s+사항/i },
   { key: '변경 이력', pattern: /##\s+8\.\s+변경\s+이력/i },
-];
+]
 
 function validate(content) {
-  const errors = [];
+  const errors = []
 
   // 1. frontmatter status 필드 확인
   if (!/^---[\s\S]+?status:\s*\S+[\s\S]+?---/m.test(content)) {
-    errors.push('frontmatter에 status 필드가 없습니다.');
+    errors.push('frontmatter에 status 필드가 없습니다.')
   }
 
   // 2. 에이전트 로그 "내장" 키워드 감지
-  const agentLogMatch = content.match(
-    /##\s+2\.\s+실행\s+에이전트\s+로그([\s\S]*?)(?=\n##\s+|\n---\s*$|$)/i,
-  );
+  const agentLogMatch = content.match(/##\s+2\.\s+실행\s+에이전트\s+로그([\s\S]*?)(?=\n##\s+|\n---\s*$|$)/i)
   if (agentLogMatch && /내장/.test(agentLogMatch[1])) {
     errors.push(
       '에이전트 로그에 "내장" 키워드가 감지됐습니다.\n' +
-        '  → skill-creator는 반드시 WebSearch/WebFetch로 공식 문서를 직접 조사·교차 검증해야 합니다.\n' +
-        '  → 내장 지식으로 대체하는 것은 금지입니다. 실제 조사를 수행한 뒤 verification.md를 재작성하세요.',
-    );
+      '  → skill-creator는 반드시 WebSearch/WebFetch로 공식 문서를 직접 조사·교차 검증해야 합니다.\n' +
+      '  → 내장 지식으로 대체하는 것은 금지입니다. 실제 조사를 수행한 뒤 verification.md를 재작성하세요.'
+    )
   }
 
   // 3. 필수 섹션 누락 확인
-  const missingSections = REQUIRED_SECTIONS.filter(({ pattern }) => !pattern.test(content));
+  const missingSections = REQUIRED_SECTIONS.filter(({ pattern }) => !pattern.test(content))
   if (missingSections.length > 0) {
     errors.push(
-      `필수 섹션 ${missingSections.length}개가 누락됐습니다: ${missingSections.map((s) => s.key).join(', ')}\n` +
-        '  → docs/skills/VERIFICATION_TEMPLATE.md의 8개 섹션 구조를 그대로 사용하세요.',
-    );
+      `필수 섹션 ${missingSections.length}개가 누락됐습니다: ${missingSections.map(s => s.key).join(', ')}\n` +
+      '  → docs/skills/VERIFICATION_TEMPLATE.md의 8개 섹션 구조를 그대로 사용하세요.'
+    )
   }
 
   // 4. 검증 체크박스 전부 [❌] 확인 (최소 1개는 ✅ 이어야 함)
-  const checkboxes = content.match(/\[([✅❌])\]/g) || [];
-  const allUnchecked = checkboxes.length > 0 && checkboxes.every((c) => c.includes('❌'));
+  const checkboxes = content.match(/\[([✅❌])\]/g) || []
+  const allUnchecked = checkboxes.length > 0 && checkboxes.every(c => c.includes('❌'))
   if (allUnchecked) {
     errors.push(
-      '검증 체크리스트가 전부 [❌] 상태입니다.\n' + '  → 완료된 항목은 [✅]로 표기하세요.',
-    );
+      '검증 체크리스트가 전부 [❌] 상태입니다.\n' +
+      '  → 완료된 항목은 [✅]로 표기하세요.'
+    )
   }
 
-  return errors;
+  // 5. UNVERIFIED 상태 저장 차단
+  const fmBlock = content.match(/^---\n([\s\S]*?)\n---/m)
+  if (fmBlock) {
+    const statusMatch = fmBlock[1].match(/^\s*status\s*:\s*(\S+)/m)
+    if (statusMatch && statusMatch[1] === 'UNVERIFIED') {
+      errors.push(
+        'status: UNVERIFIED 상태로 저장할 수 없습니다.\n' +
+        '  → verification.md는 최소 PENDING_TEST 이상이어야 합니다.\n' +
+        '  → 교차 검증을 완료한 뒤 status: PENDING_TEST로 변경하세요.'
+      )
+    }
+  }
+
+  return errors
 }
 
 async function main() {
-  const rl = readline.createInterface({ input: process.stdin });
-  let raw = '';
-  for await (const line of rl) raw += `${line}\n`;
-  raw = raw.trim();
+  const rl = readline.createInterface({ input: process.stdin })
+  let raw = ''
+  for await (const line of rl) raw += line + '\n'
+  raw = raw.trim()
 
-  if (!raw) return process.exit(0);
+  if (!raw) return process.exit(0)
 
-  let input;
-  try {
-    input = JSON.parse(raw);
-  } catch {
-    return process.exit(0);
-  }
+  let input
+  try { input = JSON.parse(raw) } catch { return process.exit(0) }
 
-  const { hook_event_name, hookEventName, tool_name, tool_input = {} } = input;
-  const eventName = hook_event_name || hookEventName;
+  const { hook_event_name, hookEventName, tool_name, tool_input = {} } = input
+  const eventName = hook_event_name || hookEventName
 
   // PostToolUse + Write 도구만 처리
-  if (eventName !== 'PostToolUse' || tool_name !== 'Write') return process.exit(0);
+  if (eventName !== 'PostToolUse' || tool_name !== 'Write') return process.exit(0)
 
-  const filePath = (tool_input.file_path || '').replace(/\\/g, '/');
-  if (!VERIFICATION_PATH_PATTERN.test(filePath)) return process.exit(0);
+  const filePath = (tool_input.file_path || '').replace(/\\/g, '/')
+  if (!VERIFICATION_PATH_PATTERN.test(filePath)) return process.exit(0)
 
-  const content = tool_input.content || '';
-  const errors = validate(content);
+  const content = tool_input.content || ''
+  const errors = validate(content)
 
-  if (errors.length === 0) return process.exit(0);
+  if (errors.length === 0) return process.exit(0)
 
   const message = [
     `[verification-guard] ❌ verification.md 검증 실패: ${filePath}`,
@@ -106,11 +114,11 @@ async function main() {
     ...errors.map((e, i) => `${i + 1}. ${e}`),
     '',
     '위 문제를 수정한 뒤 verification.md를 재작성하세요.',
-  ].join('\n');
+  ].join('\n')
 
   // PostToolUse: stdout 출력 → Claude에게 피드백으로 전달
-  process.stdout.write(`${JSON.stringify({ reason: message })}\n`);
-  process.exit(2); // exit 2 = 오류 신호, Claude가 수정 필요성 인식
+  process.stdout.write(JSON.stringify({ reason: message }) + '\n')
+  process.exit(2) // exit 2 = 오류 신호, Claude가 수정 필요성 인식
 }
 
-main().catch(() => process.exit(0));
+main().catch(() => process.exit(0))
