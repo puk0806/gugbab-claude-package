@@ -1,6 +1,6 @@
 {
   "name": "@gugbab/storybook-radix",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "Storybook showcase for @gugbab/styled-radix (Radix Themes lookalike, grx-* classes)",
   "type": "module",
