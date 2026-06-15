@@ -13,7 +13,7 @@ const uncommitted = spawnSync('git', ['-C', projectDir, 'status', '--porcelain',
 
 if (uncommitted.stdout?.trim()) {
   spawnSync('git', ['-C', projectDir, 'add', 'memory/'], { stdio: 'pipe' });
-  spawnSync('git', ['-C', projectDir, 'commit', '-m', '[memory] auto-sync on stop'], { stdio: 'pipe' });
+  spawnSync('git', ['-C', projectDir, 'commit', '-m', '[memory] Modify: auto-sync on stop'], { stdio: 'pipe' });
 }
 
 // 2. upstream 추적 브랜치 존재 여부 확인 (@{u} 사용 전 필수)

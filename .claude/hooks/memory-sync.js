@@ -59,7 +59,7 @@ process.stdin.on('end', () => {
     }
 
     const fileName = path.basename(filePath);
-    spawnSync('git', ['-C', repoRoot, 'commit', '-m', `[memory] sync: ${fileName}`], { stdio: 'pipe' });
+    spawnSync('git', ['-C', repoRoot, 'commit', '-m', `[memory] Modify: ${fileName}`], { stdio: 'pipe' });
 
     // 이전 staged 상태를 patch로 정확히 복원 (partial staging 보존)
     if (stagedPatch) {

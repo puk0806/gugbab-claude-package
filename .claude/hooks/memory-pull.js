@@ -105,7 +105,7 @@ const afterStatus = spawnSync('git', ['-C', projectDir, 'status', '--porcelain',
   encoding: 'utf8', stdio: 'pipe',
 });
 if (afterStatus.stdout?.trim()) {
-  spawnSync('git', ['-C', projectDir, 'commit', '-m', '[memory] pull: sync from remote'], { stdio: 'pipe' });
+  spawnSync('git', ['-C', projectDir, 'commit', '-m', '[memory] Modify: sync from remote'], { stdio: 'pipe' });
 }
 
 process.exit(0);

@@ -27,6 +27,21 @@ try {
     process.exit(0);
   }
 
+  // 패키지에 테스트 프레임워크 설정이 없으면 TDD 강제 생략
+  // (commitlint-config, tsconfig, biome-config 같은 순수 설정 패키지)
+  function findTestConfig(startDir) {
+    let d = startDir;
+    for (let i = 0; i < 6; i++) {
+      const configs = ['vitest.config.ts', 'vitest.config.js', 'jest.config.ts', 'jest.config.js', 'jest.config.cjs'];
+      if (configs.some(c => fs.existsSync(path.join(d, c)))) return true;
+      const parent = path.dirname(d);
+      if (parent === d) break;
+      d = parent;
+    }
+    return false;
+  }
+  if (!findTestConfig(dir)) process.exit(0);
+
   const testPatterns = [
     path.join(dir, `${basename}.test${ext}`),
     path.join(dir, `${basename}.spec${ext}`),
