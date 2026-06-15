@@ -2,12 +2,12 @@
 
 > 주제를 논문/오픈소스/기업사례 3축으로 깊이 조사해 구조화된 보고서를 생성하는 딥리서치 오케스트레이터
 
-| 항목 | 내용                                         |
-| ---- | -------------------------------------------- |
+| 항목 | 내용 |
+|------|------|
 | 파일 | `.claude/agents/research/deep-researcher.md` |
-| 모델 | Opus (오케스트레이터)                        |
-| 도구 | Agent, Read, Glob, Write, WebSearch(폴백)    |
-| 호출 | 자동 또는 `@deep-researcher`                 |
+| 모델 | Opus (오케스트레이터) |
+| 도구 | Agent, Read, Glob, Write, WebSearch(폴백) |
+| 호출 | 자동 또는 `@deep-researcher` |
 
 ## 역할
 

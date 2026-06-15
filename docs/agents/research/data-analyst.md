@@ -2,11 +2,11 @@
 
 > 제품의 이벤트 택소노미 설계, 퍼널 분석 설계, A/B 테스트 계획, KPI 대시보드 스키마 정의, 분석용 SQL 쿼리 작성을 수행하는 데이터 분석 설계 에이전트
 
-| 항목 | 내용                                                                 |
-| ---- | -------------------------------------------------------------------- |
-| 파일 | `.claude/agents/research/data-analyst.md`                            |
-| 모델 | Sonnet                                                               |
-| 도구 | Read, Write, Glob, Grep, WebSearch, WebFetch                         |
+| 항목 | 내용 |
+|------|------|
+| 파일 | `.claude/agents/research/data-analyst.md` |
+| 모델 | Sonnet |
+| 도구 | Read, Write, Glob, Grep, WebSearch, WebFetch |
 | 호출 | 사용자 직접 호출 또는 오케스트레이터가 데이터 분석 설계 필요 시 호출 |
 
 ## 역할

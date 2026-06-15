@@ -28,50 +28,45 @@
 
 ## Claude Code 한계 및 대안
 
-| 한계                        | 대안                                                 |
-| --------------------------- | ---------------------------------------------------- |
+| 한계 | 대안 |
+|------|------|
 | Figma/Sketch 시안 생성 불가 | 텍스트 기반 와이어프레임(ASCII) + Mermaid 다이어그램 |
-| 비주얼 목업 불가            | 컴포넌트 스펙(숫자 기반 크기/여백/색상 정의)         |
-| 디자인 파일 편집 불가       | 디자인 토큰 JSON/SCSS 코드 생성 가능                 |
+| 비주얼 목업 불가 | 컴포넌트 스펙(숫자 기반 크기/여백/색상 정의) |
+| 디자인 파일 편집 불가 | 디자인 토큰 JSON/SCSS 코드 생성 가능 |
 
 ## 방법론 근거
 
 ### 와이어프레임
-
 - 저충실도(Low-fidelity) 와이어프레임으로 구조와 콘텐츠 계층에 집중
 - 최소 모바일(375px)과 데스크톱(1280px+) 두 뷰포트 고려
 
 ### 디자인 토큰
-
 - W3C DTCG 표준(v2025.10) 형식 준수 -- `$type`, `$value`, `$description` 프로퍼티
 - 3계층 추상화: Primitive(참조) -> Semantic(시스템) -> Component
 - Style Dictionary, Tokens Studio, Figma, Penpot 등 주요 도구 호환
 
 ### 컴포넌트 스펙
-
 - 변형(variants), 상태(states), 구조(anatomy), 접근성을 포함하는 완전한 스펙
 - NNGroup의 디자인 스펙 방법론 및 W3C Open UI 스펙 템플릿 참조
 
 ### 반응형 전략
-
 - Mobile-First 접근: 최소 뷰포트 기본 스타일 -> min-width 미디어 쿼리로 확장
 - 3~5개 breakpoint 권장: 480px(모바일), 768px(태블릿), 1024px(데스크톱), 1280px(와이드)
 
 ### 사용자 플로우
-
 - Mermaid flowchart 문법으로 텍스트 기반 다이어그램 생성
 - 단일 방향(TD/LR), 표준 기호(시작/끝, 단계, 분기) 사용
 
 ## 검증 소스
 
-| 항목                | 소스                                                                                 | 검증일     |
-| ------------------- | ------------------------------------------------------------------------------------ | ---------- |
-| DTCG 표준           | https://www.designtokens.org/tr/drafts/format/ (v2025.10)                            | 2026-04-20 |
-| 와이어프레임 방법론 | https://ixdf.org/literature/topics/wireframe                                         | 2026-04-20 |
-| 컴포넌트 스펙       | https://uxdesign.cc/component-spec-the-design-system-component-delivery-5f88db6ccf7e | 2026-04-20 |
-| 디자인 스펙 작성    | https://www.nngroup.com/articles/creating-design-specs-for-development/              | 2026-04-20 |
-| 반응형 breakpoint   | https://www.browserstack.com/guide/responsive-design-breakpoints                     | 2026-04-20 |
-| Mermaid 문법        | https://mermaid.ai/open-source/syntax/flowchart.html                                 | 2026-04-20 |
+| 항목 | 소스 | 검증일 |
+|------|------|--------|
+| DTCG 표준 | https://www.designtokens.org/tr/drafts/format/ (v2025.10) | 2026-04-20 |
+| 와이어프레임 방법론 | https://ixdf.org/literature/topics/wireframe | 2026-04-20 |
+| 컴포넌트 스펙 | https://uxdesign.cc/component-spec-the-design-system-component-delivery-5f88db6ccf7e | 2026-04-20 |
+| 디자인 스펙 작성 | https://www.nngroup.com/articles/creating-design-specs-for-development/ | 2026-04-20 |
+| 반응형 breakpoint | https://www.browserstack.com/guide/responsive-design-breakpoints | 2026-04-20 |
+| Mermaid 문법 | https://mermaid.ai/open-source/syntax/flowchart.html | 2026-04-20 |
 
 ## 관련 에이전트
 
