@@ -12,3 +12,4 @@
 - [No external design deps](feedback_no_external_design_deps.md) — 디자인 토큰은 외부 라이브러리(MUI/Radix 등)에 의존하지 않고 정적으로 박제
 - [Package naming clarity](feedback_package_naming_clarity.md) — 모노레포 패키지명은 의도가 즉시 드러나야 함 (모호한 `react`/`core` 회피)
 - [No worktrees, use feature branches](feedback_no_worktrees_use_feature_branch.md) — 모든 작업은 feature/* 브랜치 + PR, 머지는 사용자 직접 (워크트리 금지)
+- [PR creation by user only](feedback_pr_creation.md) — gh pr create 호출 금지, PR은 사용자가 직접 생성
