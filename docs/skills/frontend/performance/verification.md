@@ -30,14 +30,14 @@ status: APPROVED
 
 ## 메타 정보
 
-| 항목        | 내용                                                           |
-| ----------- | -------------------------------------------------------------- |
-| 스킬 이름   | performance                                                    |
-| 스킬 경로   | `.claude/skills/frontend/performance/SKILL.md`                 |
-| 최초 작성일 | 2026-04-01                                                     |
-| 재검증일    | 2026-04-14                                                     |
-| 검증 방법   | frontend-architect 활용 테스트                                 |
-| 버전 기준   | React 19, React Compiler v1.0, TanStack Virtual v3, Next.js 15 |
+| 항목 | 내용 |
+|------|------|
+| 스킬 이름 | performance |
+| 스킬 경로 | `.claude/skills/frontend/performance/SKILL.md` |
+| 최초 작성일 | 2026-04-01 |
+| 재검증일 | 2026-04-14 |
+| 검증 방법 | frontend-architect 활용 테스트 |
+| 버전 기준 | React 19, React Compiler v1.0, TanStack Virtual v3, Next.js 15 |
 
 ---
 
@@ -55,33 +55,31 @@ status: APPROVED
 
 ## 2. 실행 에이전트 로그
 
-| 단계        | 에이전트           | 입력 요약                                                                                                                   | 출력 요약                            |
-| ----------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| 단계 | 에이전트 | 입력 요약 | 출력 요약 |
+|------|----------|-----------|-----------|
 | 활용 테스트 | frontend-architect | React Compiler 출시일, use-no-memo, TanStack Virtual API, next/dynamic ssr:false, Profiler onRender, 수동 최적화 케이스 6개 | 5/6 PASS → SKILL.md 수정 후 APPROVED |
 
 ---
 
 ## 3. 조사 소스
 
-| 소스명                     | URL                                                | 신뢰도      |
-| -------------------------- | -------------------------------------------------- | ----------- |
+| 소스명 | URL | 신뢰도 |
+|--------|-----|--------|
 | React Compiler v1.0 블로그 | https://react.dev/blog/2025/10/07/react-compiler-1 | ⭐⭐⭐ High |
-| React Profiler 공식        | https://react.dev/reference/react/Profiler         | ⭐⭐⭐ High |
-| TanStack Virtual 공식      | https://tanstack.com/virtual/latest/docs           | ⭐⭐⭐ High |
+| React Profiler 공식 | https://react.dev/reference/react/Profiler | ⭐⭐⭐ High |
+| TanStack Virtual 공식 | https://tanstack.com/virtual/latest/docs | ⭐⭐⭐ High |
 
 ---
 
 ## 4. 검증 체크리스트 (Test List)
 
 ### 4-1. 내용 정확성
-
 - [✅] 공식 문서와 불일치하는 내용 없음
 - [✅] 버전 정보가 명시되어 있음
 - [✅] deprecated된 패턴을 권장하지 않음
 - [✅] 코드 예시가 실행 가능한 형태임
 
 ### 4-2. 구조 완전성
-
 - [✅] YAML frontmatter 포함 (name, description)
 - [✅] 소스 URL과 검증일 명시
 - [✅] 핵심 개념 설명 포함
@@ -90,13 +88,11 @@ status: APPROVED
 - [✅] 흔한 실수 패턴 포함
 
 ### 4-3. 실용성
-
 - [✅] 에이전트가 참조했을 때 실제 코드 작성에 도움이 되는 수준
 - [✅] 지나치게 이론적이지 않고 실용적인 예시 포함
 - [✅] 범용적으로 사용 가능 (특정 프로젝트 종속 X)
 
 ### 4-4. Claude Code 에이전트 활용 테스트
-
 - [✅] 공식 문서 1순위 소스 확인
 - [✅] deprecated 패턴 제외
 - [✅] 버전 명시 (React Compiler v1.0, TanStack Virtual v3)
@@ -111,7 +107,6 @@ status: APPROVED
 **테스트 방법:** frontend-architect 에이전트에게 performance 관련 설계 질문 및 코드 리뷰 요청
 
 **발견 및 수정 사항:**
-
 - Profiler onRender 파라미터 누락: 3개만 표기 → 6개 전체 파라미터(id, phase, actualDuration, baseDuration, startTime, commitTime) 타입 포함 수정
 
 **판정:** ✅ PASS
@@ -120,13 +115,13 @@ status: APPROVED
 
 ## 6. 검증 결과 요약
 
-| 항목                 | 결과                         |
-| -------------------- | ---------------------------- |
-| 내용 정확성          | ✅                           |
-| 구조 완전성          | ✅                           |
-| 실용성               | ✅                           |
+| 항목 | 결과 |
+|------|------|
+| 내용 정확성 | ✅ |
+| 구조 완전성 | ✅ |
+| 실용성 | ✅ |
 | 에이전트 활용 테스트 | ✅ PASS (frontend-architect) |
-| **최종 판정**        | **APPROVED**                 |
+| **최종 판정** | **APPROVED** |
 
 ---
 
@@ -138,7 +133,7 @@ status: APPROVED
 
 ## 8. 변경 이력
 
-| 날짜       | 버전 | 변경 내용                                        | 변경자                      |
-| ---------- | ---- | ------------------------------------------------ | --------------------------- |
-| 2026-04-01 | v1   | 최초 작성 및 frontend-architect 활용 테스트 완료 | frontend-architect 에이전트 |
-| 2026-04-17 | v2   | verification.md 신규 8섹션 포맷으로 마이그레이션 | 메인 대화 오케스트레이션    |
+| 날짜 | 버전 | 변경 내용 | 변경자 |
+|------|------|-----------|--------|
+| 2026-04-01 | v1 | 최초 작성 및 frontend-architect 활용 테스트 완료 | frontend-architect 에이전트 |
+| 2026-04-17 | v2 | verification.md 신규 8섹션 포맷으로 마이그레이션 | 메인 대화 오케스트레이션 |
