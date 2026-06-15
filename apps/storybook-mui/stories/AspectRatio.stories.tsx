@@ -1,14 +1,14 @@
-import { AspectRatio } from '@gugbab/styled-mui';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { AspectRatio } from "@gugbab/styled-mui";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-  title: 'Primitives/AspectRatio',
-  component: AspectRatio,
-  parameters: {
-    layout: 'centered',
-    docs: {
-      description: {
-        component: `
+    title: "Primitives/AspectRatio",
+    component: AspectRatio,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: `
 **AspectRatio** — 자식 콘텐츠의 가로·세로 비율을 강제 유지하는 컨테이너. 이미지·비디오·썸네일에서 레이아웃 시프트 없이 비율을 보장한다.
 
 ### 구조
@@ -24,76 +24,74 @@ const meta = {
 - 부모 컨테이너에 \`width\`를 명시해야 비율이 올바르게 계산된다.
 - 자식이 없어도 비율 크기만큼 빈 공간이 확보되므로 스켈레톤 UI 구현에도 활용할 수 있다.
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta<typeof AspectRatio>;
 
 export default meta;
 type Story = StoryObj;
 
 export const SixteenByNine: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`ratio={16 / 9}` — 와이드스크린 비율. 유튜브 썸네일·히어로 이미지에 가장 널리 쓰인다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`ratio={16 / 9}` — 와이드스크린 비율. 유튜브 썸네일·히어로 이미지에 가장 널리 쓰인다.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div style={{ width: 480 }}>
-      <AspectRatio ratio={16 / 9}>
-        <img
-          src="https://images.unsplash.com/photo-1535025183041-0991a977e25b?w=800&auto=format"
-          alt="Landscape"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
-        />
-      </AspectRatio>
-    </div>
-  ),
+    render: () => (
+        <div style={{ width: 480 }}>
+            <AspectRatio ratio={16 / 9}>
+                <img
+                    src="https://images.unsplash.com/photo-1535025183041-0991a977e25b?w=800&auto=format"
+                    alt="Landscape"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }}
+                />
+            </AspectRatio>
+        </div>
+    ),
 };
 
 export const FourByThree: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '`ratio={4 / 3}` — 전통 사진·슬라이드 비율. 16:9보다 세로가 조금 더 길다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`ratio={4 / 3}` — 전통 사진·슬라이드 비율. 16:9보다 세로가 조금 더 길다.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div style={{ width: 360 }}>
-      <AspectRatio ratio={4 / 3}>
-        <img
-          src="https://images.unsplash.com/photo-1535025183041-0991a977e25b?w=800&auto=format"
-          alt="Landscape 4:3"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
-        />
-      </AspectRatio>
-    </div>
-  ),
+    render: () => (
+        <div style={{ width: 360 }}>
+            <AspectRatio ratio={4 / 3}>
+                <img
+                    src="https://images.unsplash.com/photo-1535025183041-0991a977e25b?w=800&auto=format"
+                    alt="Landscape 4:3"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }}
+                />
+            </AspectRatio>
+        </div>
+    ),
 };
 
 export const Square: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`ratio={1}` — 정사각형. 프로필 이미지·카드 썸네일 등 1:1 비율이 필요한 경우에 사용한다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`ratio={1}` — 정사각형. 프로필 이미지·카드 썸네일 등 1:1 비율이 필요한 경우에 사용한다.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div style={{ width: 240 }}>
-      <AspectRatio ratio={1}>
-        <img
-          src="https://images.unsplash.com/photo-1535025183041-0991a977e25b?w=800&auto=format"
-          alt="Square"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
-        />
-      </AspectRatio>
-    </div>
-  ),
+    render: () => (
+        <div style={{ width: 240 }}>
+            <AspectRatio ratio={1}>
+                <img
+                    src="https://images.unsplash.com/photo-1535025183041-0991a977e25b?w=800&auto=format"
+                    alt="Square"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }}
+                />
+            </AspectRatio>
+        </div>
+    ),
 };

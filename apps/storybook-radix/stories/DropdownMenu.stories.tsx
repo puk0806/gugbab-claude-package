@@ -1,15 +1,15 @@
-import { DropdownMenu } from '@gugbab/styled-radix';
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { DropdownMenu } from "@gugbab/styled-radix";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 
 const meta = {
-  title: 'Menus/DropdownMenu',
-  component: DropdownMenu.Root,
-  parameters: {
-    layout: 'padded',
-    docs: {
-      description: {
-        component: `
+    title: "Menus/DropdownMenu",
+    component: DropdownMenu.Root,
+    parameters: {
+        layout: "padded",
+        docs: {
+            description: {
+                component: `
 **DropdownMenu** — 버튼 클릭으로 열리는 드롭다운 메뉴 컴포넌트. Radix UI 기반의 headless 구조 위에 MUI 토큰이 적용된 스타일드 버전이다.
 
 ### 컴파운드 구조
@@ -46,154 +46,150 @@ const meta = {
 - \`DropdownMenu.Item\` — \`disabled\`: 비활성화, \`onSelect\`: 선택 콜백
 - \`DropdownMenu.Root\` — \`open\` / \`onOpenChange\`: 외부 제어 가능
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj;
 
 function DefaultDemo() {
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>Options</DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content>
-          <DropdownMenu.Label>Actions</DropdownMenu.Label>
-          <DropdownMenu.Item>New file</DropdownMenu.Item>
-          <DropdownMenu.Item>Open…</DropdownMenu.Item>
-          <DropdownMenu.Separator />
-          <DropdownMenu.Item disabled>Save (disabled)</DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
-  );
+    return (
+        <DropdownMenu.Root>
+            <DropdownMenu.Trigger>Options</DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+                <DropdownMenu.Content>
+                    <DropdownMenu.Label>Actions</DropdownMenu.Label>
+                    <DropdownMenu.Item>New file</DropdownMenu.Item>
+                    <DropdownMenu.Item>Open…</DropdownMenu.Item>
+                    <DropdownMenu.Separator />
+                    <DropdownMenu.Item disabled>Save (disabled)</DropdownMenu.Item>
+                </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+    );
 }
 
 function WithCheckboxDemo() {
-  const [showGrid, setShowGrid] = useState(false);
-  const [showRulers, setShowRulers] = useState(true);
+    const [showGrid, setShowGrid] = useState(false);
+    const [showRulers, setShowRulers] = useState(true);
 
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>View</DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content>
-          <DropdownMenu.Label>Display</DropdownMenu.Label>
-          <DropdownMenu.CheckboxItem checked={showGrid} onCheckedChange={setShowGrid}>
-            <DropdownMenu.ItemIndicator>✓</DropdownMenu.ItemIndicator>
-            Show Grid
-          </DropdownMenu.CheckboxItem>
-          <DropdownMenu.CheckboxItem checked={showRulers} onCheckedChange={setShowRulers}>
-            <DropdownMenu.ItemIndicator>✓</DropdownMenu.ItemIndicator>
-            Show Rulers
-          </DropdownMenu.CheckboxItem>
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
-  );
+    return (
+        <DropdownMenu.Root>
+            <DropdownMenu.Trigger>View</DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+                <DropdownMenu.Content>
+                    <DropdownMenu.Label>Display</DropdownMenu.Label>
+                    <DropdownMenu.CheckboxItem checked={showGrid} onCheckedChange={setShowGrid}>
+                        <DropdownMenu.ItemIndicator>✓</DropdownMenu.ItemIndicator>
+                        Show Grid
+                    </DropdownMenu.CheckboxItem>
+                    <DropdownMenu.CheckboxItem checked={showRulers} onCheckedChange={setShowRulers}>
+                        <DropdownMenu.ItemIndicator>✓</DropdownMenu.ItemIndicator>
+                        Show Rulers
+                    </DropdownMenu.CheckboxItem>
+                </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+    );
 }
 
 function WithRadioDemo() {
-  const [theme, setTheme] = useState('system');
+    const [theme, setTheme] = useState("system");
 
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>Theme: {theme}</DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content>
-          <DropdownMenu.Label>Color Theme</DropdownMenu.Label>
-          <DropdownMenu.RadioGroup value={theme} onValueChange={setTheme}>
-            <DropdownMenu.RadioItem value="light">
-              <DropdownMenu.ItemIndicator>●</DropdownMenu.ItemIndicator>
-              Light
-            </DropdownMenu.RadioItem>
-            <DropdownMenu.RadioItem value="dark">
-              <DropdownMenu.ItemIndicator>●</DropdownMenu.ItemIndicator>
-              Dark
-            </DropdownMenu.RadioItem>
-            <DropdownMenu.RadioItem value="system">
-              <DropdownMenu.ItemIndicator>●</DropdownMenu.ItemIndicator>
-              System
-            </DropdownMenu.RadioItem>
-          </DropdownMenu.RadioGroup>
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
-  );
+    return (
+        <DropdownMenu.Root>
+            <DropdownMenu.Trigger>Theme: {theme}</DropdownMenu.Trigger>
+            <DropdownMenu.Portal>
+                <DropdownMenu.Content>
+                    <DropdownMenu.Label>Color Theme</DropdownMenu.Label>
+                    <DropdownMenu.RadioGroup value={theme} onValueChange={setTheme}>
+                        <DropdownMenu.RadioItem value="light">
+                            <DropdownMenu.ItemIndicator>●</DropdownMenu.ItemIndicator>
+                            Light
+                        </DropdownMenu.RadioItem>
+                        <DropdownMenu.RadioItem value="dark">
+                            <DropdownMenu.ItemIndicator>●</DropdownMenu.ItemIndicator>
+                            Dark
+                        </DropdownMenu.RadioItem>
+                        <DropdownMenu.RadioItem value="system">
+                            <DropdownMenu.ItemIndicator>●</DropdownMenu.ItemIndicator>
+                            System
+                        </DropdownMenu.RadioItem>
+                    </DropdownMenu.RadioGroup>
+                </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+        </DropdownMenu.Root>
+    );
 }
 
 function WithSubmenuDemo() {
-  return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>File</DropdownMenu.Trigger>
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content>
-          <DropdownMenu.Item>New file</DropdownMenu.Item>
-          <DropdownMenu.Sub>
-            <DropdownMenu.SubTrigger>Export as</DropdownMenu.SubTrigger>
+    return (
+        <DropdownMenu.Root>
+            <DropdownMenu.Trigger>File</DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-              <DropdownMenu.SubContent>
-                <DropdownMenu.Item>PDF</DropdownMenu.Item>
-                <DropdownMenu.Item>PNG</DropdownMenu.Item>
-                <DropdownMenu.Item>SVG</DropdownMenu.Item>
-              </DropdownMenu.SubContent>
+                <DropdownMenu.Content>
+                    <DropdownMenu.Item>New file</DropdownMenu.Item>
+                    <DropdownMenu.Sub>
+                        <DropdownMenu.SubTrigger>Export as</DropdownMenu.SubTrigger>
+                        <DropdownMenu.Portal>
+                            <DropdownMenu.SubContent>
+                                <DropdownMenu.Item>PDF</DropdownMenu.Item>
+                                <DropdownMenu.Item>PNG</DropdownMenu.Item>
+                                <DropdownMenu.Item>SVG</DropdownMenu.Item>
+                            </DropdownMenu.SubContent>
+                        </DropdownMenu.Portal>
+                    </DropdownMenu.Sub>
+                    <DropdownMenu.Separator />
+                    <DropdownMenu.Item>Quit</DropdownMenu.Item>
+                </DropdownMenu.Content>
             </DropdownMenu.Portal>
-          </DropdownMenu.Sub>
-          <DropdownMenu.Separator />
-          <DropdownMenu.Item>Quit</DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
-  );
+        </DropdownMenu.Root>
+    );
 }
 
 export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '기본 드롭다운 메뉴. `Label`로 그룹 제목, `Separator`로 구분선, `disabled` 항목을 포함한 일반적인 구성.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "기본 드롭다운 메뉴. `Label`로 그룹 제목, `Separator`로 구분선, `disabled` 항목을 포함한 일반적인 구성.",
+            },
+        },
     },
-  },
-  render: () => <DefaultDemo />,
+    render: () => <DefaultDemo />,
 };
 
 export const WithCheckbox: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`CheckboxItem` + `ItemIndicator`를 사용한 토글 메뉴. `checked` / `onCheckedChange`로 상태를 제어한다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`CheckboxItem` + `ItemIndicator`를 사용한 토글 메뉴. `checked` / `onCheckedChange`로 상태를 제어한다.",
+            },
+        },
     },
-  },
-  render: () => <WithCheckboxDemo />,
+    render: () => <WithCheckboxDemo />,
 };
 
 export const WithRadio: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`RadioGroup` + `RadioItem`으로 상호 배타적 선택 구현. `value` / `onValueChange`로 선택 상태를 관리한다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`RadioGroup` + `RadioItem`으로 상호 배타적 선택 구현. `value` / `onValueChange`로 선택 상태를 관리한다.",
+            },
+        },
     },
-  },
-  render: () => <WithRadioDemo />,
+    render: () => <WithRadioDemo />,
 };
 
 export const WithSubmenu: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`Sub` + `SubTrigger` + `SubContent`로 중첩 서브메뉴 구성. `ArrowRight`로 진입, `ArrowLeft`로 닫는다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`Sub` + `SubTrigger` + `SubContent`로 중첩 서브메뉴 구성. `ArrowRight`로 진입, `ArrowLeft`로 닫는다.",
+            },
+        },
     },
-  },
-  render: () => <WithSubmenuDemo />,
+    render: () => <WithSubmenuDemo />,
 };

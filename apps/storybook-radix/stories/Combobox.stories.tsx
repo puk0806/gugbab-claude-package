@@ -1,14 +1,14 @@
-import { Combobox, type ComboboxSize } from '@gugbab/styled-radix';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Combobox, type ComboboxSize } from "@gugbab/styled-radix";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-  title: 'Forms/Combobox',
-  component: Combobox.Root,
-  parameters: {
-    layout: 'centered',
-    docs: {
-      description: {
-        component: `
+    title: "Forms/Combobox",
+    component: Combobox.Root,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: `
 **Combobox** — 텍스트 입력과 드롭다운 목록을 결합한 자동완성 컴포넌트. 사용자가 직접 타이핑하거나 버튼으로 목록을 열어 항목을 선택할 수 있다.
 
 ### 컴파운드 구조
@@ -28,92 +28,84 @@ const meta = {
 - \`Combobox.Anchor\`에 \`display: flex\`를 적용해 Input과 Trigger를 나란히 배치한다.
 - 접근성: Input에 \`aria-label\` 또는 연결된 \`<label>\`을 제공한다.
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj;
 
 const FRAMEWORKS = [
-  { value: 'react', label: 'React' },
-  { value: 'vue', label: 'Vue' },
-  { value: 'angular', label: 'Angular' },
-  { value: 'svelte', label: 'Svelte' },
-  { value: 'solid', label: 'Solid' },
+    { value: "react", label: "React" },
+    { value: "vue", label: "Vue" },
+    { value: "angular", label: "Angular" },
+    { value: "svelte", label: "Svelte" },
+    { value: "solid", label: "Solid" },
 ];
 
 interface DemoProps {
-  size?: ComboboxSize;
-  disabled?: boolean;
+    size?: ComboboxSize;
+    disabled?: boolean;
 }
 
 function Demo({ size, disabled }: DemoProps) {
-  return (
-    <Combobox.Root>
-      <Combobox.Anchor style={{ display: 'flex', width: 220 }}>
-        <Combobox.Input
-          size={size}
-          disabled={disabled}
-          placeholder="프레임워크 검색…"
-          style={{ flex: 1 }}
-        />
-        <Combobox.Trigger aria-label="목록 열기" disabled={disabled}>
-          ▾
-        </Combobox.Trigger>
-      </Combobox.Anchor>
-      <Combobox.Portal>
-        <Combobox.Content style={{ minWidth: 220 }}>
-          {FRAMEWORKS.map((fw) => (
-            <Combobox.Item key={fw.value} value={fw.value}>
-              {fw.label}
-            </Combobox.Item>
-          ))}
-        </Combobox.Content>
-      </Combobox.Portal>
-    </Combobox.Root>
-  );
+    return (
+        <Combobox.Root>
+            <Combobox.Anchor style={{ display: "flex", width: 220 }}>
+                <Combobox.Input size={size} disabled={disabled} placeholder="프레임워크 검색…" style={{ flex: 1 }} />
+                <Combobox.Trigger aria-label="목록 열기" disabled={disabled}>
+                    ▾
+                </Combobox.Trigger>
+            </Combobox.Anchor>
+            <Combobox.Portal>
+                <Combobox.Content style={{ minWidth: 220 }}>
+                    {FRAMEWORKS.map((fw) => (
+                        <Combobox.Item key={fw.value} value={fw.value}>
+                            {fw.label}
+                        </Combobox.Item>
+                    ))}
+                </Combobox.Content>
+            </Combobox.Portal>
+        </Combobox.Root>
+    );
 }
 
 export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '기본 Combobox. Input에 타이핑하거나 ▾ 버튼으로 목록을 열어 프레임워크를 선택할 수 있다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "기본 Combobox. Input에 타이핑하거나 ▾ 버튼으로 목록을 열어 프레임워크를 선택할 수 있다.",
+            },
+        },
     },
-  },
-  render: () => <Demo />,
+    render: () => <Demo />,
 };
 
 export const Sizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`size` prop으로 `sm` / `md` 두 단계 크기 비교. Input 높이와 폰트 크기가 함께 변경된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`size` prop으로 `sm` / `md` 두 단계 크기 비교. Input 높이와 폰트 크기가 함께 변경된다.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <Demo size="sm" />
-      <Demo size="md" />
-    </div>
-  ),
+    render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <Demo size="sm" />
+            <Demo size="md" />
+        </div>
+    ),
 };
 
 export const Disabled: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`disabled` prop으로 Input과 Trigger를 동시에 비활성화. 입력과 드롭다운 열기가 모두 차단된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`disabled` prop으로 Input과 Trigger를 동시에 비활성화. 입력과 드롭다운 열기가 모두 차단된다.",
+            },
+        },
     },
-  },
-  render: () => <Demo disabled />,
+    render: () => <Demo disabled />,
 };

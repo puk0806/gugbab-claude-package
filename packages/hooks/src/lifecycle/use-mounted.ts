@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from "react";
 
 /**
  * Returns a stable getter that reports whether the hosting component is
@@ -12,14 +12,14 @@ import { useCallback, useEffect, useRef } from 'react';
  * ```
  */
 export function useMounted(): () => boolean {
-  const mountedRef = useRef(true);
+    const mountedRef = useRef(true);
 
-  useEffect(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
+    useEffect(() => {
+        mountedRef.current = true;
+        return () => {
+            mountedRef.current = false;
+        };
+    }, []);
 
-  return useCallback(() => mountedRef.current, []);
+    return useCallback(() => mountedRef.current, []);
 }

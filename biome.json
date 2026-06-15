@@ -1,4 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.12/schema.json",
-  "extends": ["@gugbab/biome-config/base.json"]
+  "extends": ["@gugbab/biome-config/base.json"],
+  "files": {
+    "includes": ["!.claude", "!.githooks"]
+  }
 }

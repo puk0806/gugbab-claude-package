@@ -1,4 +1,4 @@
-import { type Ref, type RefCallback, useCallback } from 'react';
+import { type Ref, type RefCallback, useCallback } from "react";
 
 export type RefLike<T> = Ref<T> | null | undefined;
 
@@ -15,18 +15,18 @@ export type RefLike<T> = Ref<T> | null | undefined;
  * ```
  */
 export function useMergedRefs<T>(...refs: RefLike<T>[]): RefCallback<T> {
-  return useCallback(
-    (node: T | null) => {
-      for (const ref of refs) {
-        if (ref == null) continue;
-        if (typeof ref === 'function') {
-          ref(node);
-        } else {
-          (ref as { current: T | null }).current = node;
-        }
-      }
-    },
-    // biome-ignore lint/correctness/useExhaustiveDependencies: rest array elements are the dependencies
-    refs,
-  );
+    return useCallback(
+        (node: T | null) => {
+            for (const ref of refs) {
+                if (ref == null) continue;
+                if (typeof ref === "function") {
+                    ref(node);
+                } else {
+                    (ref as { current: T | null }).current = node;
+                }
+            }
+        },
+        // biome-ignore lint/correctness/useExhaustiveDependencies: rest array elements are the dependencies
+        refs,
+    );
 }

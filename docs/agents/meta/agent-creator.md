@@ -2,12 +2,12 @@
 
 > 개발 관련 서브에이전트 MD 파일을 대화형으로 설계하고 생성하는 에이전트
 
-| 항목 | 내용                                   |
-| ---- | -------------------------------------- |
+| 항목 | 내용 |
+|------|------|
 | 파일 | `.claude/agents/meta/agent-creator.md` |
-| 모델 | Opus                                   |
-| 도구 | Read, Write, Glob                      |
-| 호출 | 자동 또는 `@agent-creator`             |
+| 모델 | Opus |
+| 도구 | Read, Write, Glob |
+| 호출 | 자동 또는 `@agent-creator` |
 
 ## 역할
 

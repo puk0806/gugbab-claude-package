@@ -1,3 +1,3 @@
 export function isNonEmptyArray<T>(value: unknown): value is [T, ...T[]] {
-  return Array.isArray(value) && value.length > 0;
+    return Array.isArray(value) && value.length > 0;
 }

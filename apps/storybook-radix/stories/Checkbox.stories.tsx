@@ -1,14 +1,14 @@
-import { Checkbox, type CheckboxSize, type CheckedState } from '@gugbab/styled-radix';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Checkbox, type CheckboxSize, type CheckedState } from "@gugbab/styled-radix";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-  title: 'Stateful/Checkbox',
-  component: Checkbox.Root,
-  parameters: {
-    layout: 'centered',
-    docs: {
-      description: {
-        component: `
+    title: "Stateful/Checkbox",
+    component: Checkbox.Root,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: `
 **Checkbox** — true / false / indeterminate 3가지 상태를 지원하는 체크박스 컴포넌트. 네이티브 \`<button role="checkbox">\` 기반으로 키보드·스크린 리더를 완전 지원한다.
 
 ### 컴파운드 구조
@@ -33,82 +33,76 @@ const meta = {
 - 반드시 인접한 \`<Label>\`이나 \`aria-label\`로 설명을 제공한다.
 - 스페이스 키로 토글 지원.
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj;
 
 interface CheckboxDemoProps {
-  size?: CheckboxSize;
-  checked?: CheckedState;
-  defaultChecked?: boolean;
-  disabled?: boolean;
+    size?: CheckboxSize;
+    checked?: CheckedState;
+    defaultChecked?: boolean;
+    disabled?: boolean;
 }
 
 function Demo({ size, checked, defaultChecked, disabled }: CheckboxDemoProps) {
-  return (
-    <Checkbox.Root
-      size={size}
-      checked={checked}
-      defaultChecked={defaultChecked}
-      disabled={disabled}
-    >
-      <Checkbox.Indicator />
-    </Checkbox.Root>
-  );
+    return (
+        <Checkbox.Root size={size} checked={checked} defaultChecked={defaultChecked} disabled={disabled}>
+            <Checkbox.Indicator />
+        </Checkbox.Root>
+    );
 }
 
 export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '기본 md 크기, 체크된 상태. 클릭 또는 스페이스 키로 on/off 전환이 가능하다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "기본 md 크기, 체크된 상태. 클릭 또는 스페이스 키로 on/off 전환이 가능하다.",
+            },
+        },
     },
-  },
-  render: () => <Demo defaultChecked />,
+    render: () => <Demo defaultChecked />,
 };
 
 export const Sizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '`size` prop으로 3단계 크기 선택. sm / md / lg 순으로 표시된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`size` prop으로 3단계 크기 선택. sm / md / lg 순으로 표시된다.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-      <Demo size="sm" defaultChecked />
-      <Demo size="md" defaultChecked />
-      <Demo size="lg" defaultChecked />
-    </div>
-  ),
+    render: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <Demo size="sm" defaultChecked />
+            <Demo size="md" defaultChecked />
+            <Demo size="lg" defaultChecked />
+        </div>
+    ),
 };
 
 export const Indeterminate: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`checked="indeterminate"` — 일부 선택 상태. 그룹 체크박스의 부모 항목에 주로 활용한다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: '`checked="indeterminate"` — 일부 선택 상태. 그룹 체크박스의 부모 항목에 주로 활용한다.',
+            },
+        },
     },
-  },
-  render: () => <Demo checked="indeterminate" />,
+    render: () => <Demo checked="indeterminate" />,
 };
 
 export const Disabled: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '`disabled` 상태. 포커스·클릭이 차단되며 시각적으로 비활성임을 나타낸다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`disabled` 상태. 포커스·클릭이 차단되며 시각적으로 비활성임을 나타낸다.",
+            },
+        },
     },
-  },
-  render: () => <Demo disabled defaultChecked />,
+    render: () => <Demo disabled defaultChecked />,
 };

@@ -1,1 +1,1 @@
-export { Slot, Slottable } from '@gugbab/headless';
+export { Slot, Slottable } from "@gugbab/headless";

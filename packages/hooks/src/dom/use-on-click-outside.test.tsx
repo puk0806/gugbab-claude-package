@@ -1,79 +1,79 @@
-import { act, renderHook } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { useOnClickOutside } from './use-on-click-outside';
+import { act, renderHook } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { useOnClickOutside } from "./use-on-click-outside";
 
 function makeRef(el: HTMLElement | null) {
-  return { current: el };
+    return { current: el };
 }
 
-describe('useOnClickOutside', () => {
-  it('invokes the handler when a mousedown fires outside the ref element', () => {
-    const inside = document.createElement('div');
-    const outside = document.createElement('div');
-    document.body.append(inside, outside);
+describe("useOnClickOutside", () => {
+    it("invokes the handler when a mousedown fires outside the ref element", () => {
+        const inside = document.createElement("div");
+        const outside = document.createElement("div");
+        document.body.append(inside, outside);
 
-    const handler = vi.fn();
-    renderHook(() => useOnClickOutside(makeRef(inside), handler));
+        const handler = vi.fn();
+        renderHook(() => useOnClickOutside(makeRef(inside), handler));
 
-    act(() => {
-      outside.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+        act(() => {
+            outside.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        });
+
+        expect(handler).toHaveBeenCalledTimes(1);
+
+        document.body.removeChild(inside);
+        document.body.removeChild(outside);
     });
 
-    expect(handler).toHaveBeenCalledTimes(1);
+    it("does not invoke the handler when a mousedown fires inside the ref element", () => {
+        const inside = document.createElement("div");
+        const child = document.createElement("span");
+        inside.appendChild(child);
+        document.body.appendChild(inside);
 
-    document.body.removeChild(inside);
-    document.body.removeChild(outside);
-  });
+        const handler = vi.fn();
+        renderHook(() => useOnClickOutside(makeRef(inside), handler));
 
-  it('does not invoke the handler when a mousedown fires inside the ref element', () => {
-    const inside = document.createElement('div');
-    const child = document.createElement('span');
-    inside.appendChild(child);
-    document.body.appendChild(inside);
+        act(() => {
+            child.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        });
 
-    const handler = vi.fn();
-    renderHook(() => useOnClickOutside(makeRef(inside), handler));
+        expect(handler).not.toHaveBeenCalled();
 
-    act(() => {
-      child.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+        document.body.removeChild(inside);
     });
 
-    expect(handler).not.toHaveBeenCalled();
+    it("is disabled when the enabled flag is false", () => {
+        const inside = document.createElement("div");
+        const outside = document.createElement("div");
+        document.body.append(inside, outside);
 
-    document.body.removeChild(inside);
-  });
+        const handler = vi.fn();
+        renderHook(() => useOnClickOutside(makeRef(inside), handler, false));
 
-  it('is disabled when the enabled flag is false', () => {
-    const inside = document.createElement('div');
-    const outside = document.createElement('div');
-    document.body.append(inside, outside);
+        act(() => {
+            outside.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        });
 
-    const handler = vi.fn();
-    renderHook(() => useOnClickOutside(makeRef(inside), handler, false));
+        expect(handler).not.toHaveBeenCalled();
 
-    act(() => {
-      outside.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+        document.body.removeChild(inside);
+        document.body.removeChild(outside);
     });
 
-    expect(handler).not.toHaveBeenCalled();
+    it("no-ops when the ref is null", () => {
+        const outside = document.createElement("div");
+        document.body.appendChild(outside);
 
-    document.body.removeChild(inside);
-    document.body.removeChild(outside);
-  });
+        const handler = vi.fn();
+        renderHook(() => useOnClickOutside(makeRef(null), handler));
 
-  it('no-ops when the ref is null', () => {
-    const outside = document.createElement('div');
-    document.body.appendChild(outside);
+        act(() => {
+            outside.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
+        });
 
-    const handler = vi.fn();
-    renderHook(() => useOnClickOutside(makeRef(null), handler));
+        expect(handler).not.toHaveBeenCalled();
 
-    act(() => {
-      outside.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+        document.body.removeChild(outside);
     });
-
-    expect(handler).not.toHaveBeenCalled();
-
-    document.body.removeChild(outside);
-  });
 });

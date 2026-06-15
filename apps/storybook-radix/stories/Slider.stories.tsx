@@ -1,14 +1,14 @@
-import { Slider, type SliderSize } from '@gugbab/styled-radix';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Slider, type SliderSize } from "@gugbab/styled-radix";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-  title: 'Forms/Slider',
-  component: Slider.Root,
-  parameters: {
-    layout: 'centered',
-    docs: {
-      description: {
-        component: `
+    title: "Forms/Slider",
+    component: Slider.Root,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: `
 **Slider** — 드래그 또는 키보드로 숫자 값을 선택하는 범위 입력 컴포넌트. 단일 thumb와 다중 thumb(범위 선택) 모드를 모두 지원한다.
 
 ### 컴파운드 구조
@@ -32,89 +32,86 @@ const meta = {
 | \`PageUp\` / \`PageDown\`   | ±10 단위 이동          |
 | \`Home\` / \`End\`          | 최솟값 / 최댓값으로 이동 |
         `.trim(),
-      },
+            },
+        },
     },
-  },
-  tags: ['autodocs'],
+    tags: ["autodocs"],
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj;
 
 interface DemoProps {
-  size?: SliderSize;
-  defaultValue?: number[];
-  disabled?: boolean;
+    size?: SliderSize;
+    defaultValue?: number[];
+    disabled?: boolean;
 }
 
 function Demo({ size, defaultValue = [40], disabled }: DemoProps) {
-  return (
-    <Slider.Root
-      size={size}
-      defaultValue={defaultValue}
-      disabled={disabled}
-      style={{ width: 240 }}
-      aria-label="value"
-    >
-      <Slider.Track>
-        <Slider.Range />
-      </Slider.Track>
-      {defaultValue.map((_, i) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: thumb count is fixed by defaultValue length, position is identity
-        <Slider.Thumb key={i} />
-      ))}
-    </Slider.Root>
-  );
+    return (
+        <Slider.Root
+            size={size}
+            defaultValue={defaultValue}
+            disabled={disabled}
+            style={{ width: 240 }}
+            aria-label="value"
+        >
+            <Slider.Track>
+                <Slider.Range />
+            </Slider.Track>
+            {defaultValue.map((_, i) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: thumb count is fixed by defaultValue length, position is identity
+                <Slider.Thumb key={i} />
+            ))}
+        </Slider.Root>
+    );
 }
 
 export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: '단일 thumb 기본 슬라이더. `defaultValue={[40]}`으로 초기값을 40으로 설정한 상태.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "단일 thumb 기본 슬라이더. `defaultValue={[40]}`으로 초기값을 40으로 설정한 상태.",
+            },
+        },
     },
-  },
-  render: () => <Demo />,
+    render: () => <Demo />,
 };
 
 export const Range: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '두 개의 thumb로 범위를 선택하는 모드. `defaultValue={[20, 80]}`으로 양쪽 핸들을 초기화한다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "두 개의 thumb로 범위를 선택하는 모드. `defaultValue={[20, 80]}`으로 양쪽 핸들을 초기화한다.",
+            },
+        },
     },
-  },
-  render: () => <Demo defaultValue={[20, 80]} />,
+    render: () => <Demo defaultValue={[20, 80]} />,
 };
 
 export const Sizes: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`size` prop으로 `sm` / `md` 두 가지 크기를 선택. 트랙 두께와 thumb 크기가 함께 변경된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`size` prop으로 `sm` / `md` 두 가지 크기를 선택. 트랙 두께와 thumb 크기가 함께 변경된다.",
+            },
+        },
     },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 240 }}>
-      <Demo size="sm" />
-      <Demo size="md" />
-    </div>
-  ),
+    render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 24, width: 240 }}>
+            <Demo size="sm" />
+            <Demo size="md" />
+        </div>
+    ),
 };
 
 export const Disabled: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '`disabled` prop 적용 상태. 드래그 및 키보드 조작이 차단되며 시각적으로 비활성 처리된다.',
-      },
+    parameters: {
+        docs: {
+            description: {
+                story: "`disabled` prop 적용 상태. 드래그 및 키보드 조작이 차단되며 시각적으로 비활성 처리된다.",
+            },
+        },
     },
-  },
-  render: () => <Demo disabled defaultValue={[60]} />,
+    render: () => <Demo disabled defaultValue={[60]} />,
 };

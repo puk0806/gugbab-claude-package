@@ -22,8 +22,8 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "indentWidth": 2,
-    "lineWidth": 100,
+    "indentWidth": 4,
+    "lineWidth": 120,
     "lineEnding": "lf"
   },
   "linter": {
@@ -34,7 +34,7 @@
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single",
+      "quoteStyle": "double",
       "jsxQuoteStyle": "double",
       "trailingCommas": "all",
       "semicolons": "always",

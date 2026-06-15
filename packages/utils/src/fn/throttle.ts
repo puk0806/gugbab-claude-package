@@ -2,8 +2,8 @@
 type AnyFn = (...args: any[]) => void;
 
 export interface ThrottledFunction<F extends AnyFn> {
-  (...args: Parameters<F>): void;
-  cancel(): void;
+    (...args: Parameters<F>): void;
+    cancel(): void;
 }
 
 /**
@@ -12,43 +12,43 @@ export interface ThrottledFunction<F extends AnyFn> {
  * trailing edge.
  */
 export function throttle<F extends AnyFn>(fn: F, wait: number): ThrottledFunction<F> {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  let lastArgs: Parameters<F> | undefined;
-  let trailingScheduled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let lastArgs: Parameters<F> | undefined;
+    let trailingScheduled = false;
 
-  const scheduleTrailing = () => {
-    timer = setTimeout(() => {
-      timer = undefined;
-      if (trailingScheduled && lastArgs !== undefined) {
-        const args = lastArgs;
+    const scheduleTrailing = () => {
+        timer = setTimeout(() => {
+            timer = undefined;
+            if (trailingScheduled && lastArgs !== undefined) {
+                const args = lastArgs;
+                lastArgs = undefined;
+                trailingScheduled = false;
+                fn(...args);
+                scheduleTrailing();
+            } else {
+                trailingScheduled = false;
+            }
+        }, wait);
+    };
+
+    const throttled = ((...args: Parameters<F>) => {
+        if (timer === undefined) {
+            fn(...args);
+            scheduleTrailing();
+        } else {
+            lastArgs = args;
+            trailingScheduled = true;
+        }
+    }) as ThrottledFunction<F>;
+
+    throttled.cancel = () => {
+        if (timer !== undefined) {
+            clearTimeout(timer);
+            timer = undefined;
+        }
         lastArgs = undefined;
         trailingScheduled = false;
-        fn(...args);
-        scheduleTrailing();
-      } else {
-        trailingScheduled = false;
-      }
-    }, wait);
-  };
+    };
 
-  const throttled = ((...args: Parameters<F>) => {
-    if (timer === undefined) {
-      fn(...args);
-      scheduleTrailing();
-    } else {
-      lastArgs = args;
-      trailingScheduled = true;
-    }
-  }) as ThrottledFunction<F>;
-
-  throttled.cancel = () => {
-    if (timer !== undefined) {
-      clearTimeout(timer);
-      timer = undefined;
-    }
-    lastArgs = undefined;
-    trailingScheduled = false;
-  };
-
-  return throttled;
+    return throttled;
 }

@@ -1,10 +1,5 @@
 /* DropdownMenu — gmui-* tokens, MUI-style (elevated shadow) */
 
-.gmui-dropdown-menu .gmui-menu__content,
-.gmui-dropdown-menu .gmui-menu__sub-content {
-  min-width: 180px;
-}
-
 /* Content panel */
 .gmui-menu__content {
   position: fixed;
@@ -43,6 +38,12 @@
 /* Sub content inherits panel styles, positioned right */
 .gmui-menu__sub-content {
   min-width: 160px;
+}
+
+/* DropdownMenu context: wider min-width */
+.gmui-dropdown-menu .gmui-menu__content,
+.gmui-dropdown-menu .gmui-menu__sub-content {
+  min-width: 180px;
 }
 
 /* Item */
