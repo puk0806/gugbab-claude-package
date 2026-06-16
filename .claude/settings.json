@@ -97,6 +97,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/workflow-guard.js"
+          },
+          {
+            "type": "command",
             "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/parry.js"
           },
           {
@@ -108,6 +112,10 @@
       {
         "matcher": "Edit",
         "hooks": [
+          {
+            "type": "command",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/workflow-guard.js"
+          },
           {
             "type": "command",
             "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/protect-secrets.js"

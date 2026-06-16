@@ -44,6 +44,18 @@ const DENY_PATTERNS = [
   { pattern: /\bperl\b.*-[ip].*\bmemory\//, reason: 'memory/ 파일은 Bash(perl)로 수정할 수 없습니다. Write/Edit 도구를 사용하세요.' },
   { pattern: /\becho\b.*>.*\bmemory\//, reason: 'memory/ 파일은 Bash(echo)로 수정할 수 없습니다. Write/Edit 도구를 사용하세요.' },
   { pattern: /\bcat\b.*>.*\bmemory\//, reason: 'memory/ 파일은 Bash(cat)로 수정할 수 없습니다. Write/Edit 도구를 사용하세요.' },
+  // .github/workflows/ 파일 수정 차단 — Claude가 CI/CD 워크플로우를 임의로 변경하는 것을 방지
+  // [^;&|\n]* 로 statement 경계를 넘지 않아 compound 명령 오탐 방지
+  { pattern: /\bsed\b[^;&|\n]*\.github\/workflows\//, reason: '.github/workflows/ 파일은 Bash(sed)로 수정할 수 없습니다. 사용자가 직접 수정하세요.' },
+  { pattern: /\bawk\b[^;&|\n]*\.github\/workflows\//, reason: '.github/workflows/ 파일은 Bash(awk)로 수정할 수 없습니다. 사용자가 직접 수정하세요.' },
+  { pattern: /\bperl\b[^;&|\n]*-[ip][^;&|\n]*\.github\/workflows\//, reason: '.github/workflows/ 파일은 Bash(perl)로 수정할 수 없습니다. 사용자가 직접 수정하세요.' },
+  { pattern: /\bcp\b[^;&|\n]*\.github\/workflows\//, reason: '.github/workflows/ 파일은 Bash(cp)로 수정할 수 없습니다. 사용자가 직접 수정하세요.' },
+  { pattern: /\bmv\b[^;&|\n]*\.github\/workflows\//, reason: '.github/workflows/ 파일은 Bash(mv)로 수정할 수 없습니다. 사용자가 직접 수정하세요.' },
+  { pattern: /\brm\b[^;&|\n]*\.github\/workflows\//, reason: '.github/workflows/ 파일은 Bash(rm)로 삭제할 수 없습니다. 사용자가 직접 삭제하세요.' },
+  { pattern: /\becho\b[^;&|\n]*>[^;&|\n]*\.github\/workflows\//, reason: '.github/workflows/ 파일은 Bash(echo)로 수정할 수 없습니다. 사용자가 직접 수정하세요.' },
+  { pattern: /\bcat\b[^;&|\n]*>[^;&|\n]*\.github\/workflows\//, reason: '.github/workflows/ 파일은 Bash(cat)로 수정할 수 없습니다. 사용자가 직접 수정하세요.' },
+  { pattern: /\bnode\b[^;&|\n]*(?:writeFileSync|createWriteStream|appendFileSync|writeFile)[^;&|\n]*\.github\/workflows\//, reason: '.github/workflows/ 파일은 node로 수정할 수 없습니다. 사용자가 직접 수정하세요.' },
+  { pattern: /\.github\/workflows\/[^;&|\n]*(?:writeFileSync|createWriteStream|appendFileSync|writeFile)/, reason: '.github/workflows/ 파일은 node로 수정할 수 없습니다. 사용자가 직접 수정하세요.' },
   // 기존 위험 패턴
   { pattern: /git\s+push\s+(--force|-f)\b/, reason: 'force push는 히스토리를 덮어씁니다. 직접 실행하세요.' },
   { pattern: /git\s+push\s+.*-f\b/, reason: 'force push 감지. 직접 실행하세요.' },
