@@ -1,7 +1,6 @@
 'use strict';
-// PreToolUse: .github/workflows/ 파일 수정 강제 차단
-// Claude가 CI/CD 워크플로우를 임의로 변경하는 것을 방지
-// 사용자가 직접 명시적으로 지시하지 않은 워크플로우 변경을 원천 차단
+// PreToolUse: .github/workflows/ 파일 수정 시 사용자 확인 요청
+// hard-deny 대신 ask로 변경 — 사용자가 명시적으로 허용한 경우 진행 가능
 
 const readline = require('readline');
 
@@ -28,11 +27,12 @@ async function main() {
     process.stdout.write(JSON.stringify({
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',
-        permissionDecision: 'deny',
+        permissionDecision: 'ask',
         permissionDecisionReason:
-          `.github/workflows/ 파일은 Claude가 수정할 수 없습니다.\n` +
-          `CI/CD 워크플로우는 사용자가 직접 수정하세요.\n` +
-          `파일: ${filePath}`,
+          `CI/CD 워크플로우 파일 수정 요청\n` +
+          `파일: ${filePath}\n` +
+          `의도하지 않은 자동 변경은 NPM_TOKEN/GITHUB_TOKEN 노출로 이어질 수 있습니다.\n` +
+          `사용자가 명시적으로 요청한 경우에만 허용하세요.`,
       },
     }) + '\n');
   }
