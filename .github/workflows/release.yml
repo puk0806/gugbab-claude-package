@@ -91,7 +91,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr merge --auto --squash \
+          gh pr merge --auto --merge \
             --repo ${{ github.repository }} \
             ${{ steps.changesets.outputs.pullRequestNumber }}
 
