@@ -40,15 +40,15 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 
 | 패키지                           | 역할                        | 상태 |
 | -------------------------------- | --------------------------- | ---- |
-| `@gugbab/tsconfig`            | 공용 TS 프리셋 (base / react-library / node-library) | 0.0.1 |
-| `@gugbab/biome-config`        | 공용 Biome 프리셋 (base.json) | 0.0.1 |
-| `@gugbab/commitlint-config`   | 공용 commitlint 컨벤션 (`[category] Type: Subject`) | 0.0.1 |
-| `@gugbab/utils`               | 프레임워크 독립 순수 유틸 (string/object/array/guard/fn/format, 22개 함수) | 0.0.1 |
-| `@gugbab/hooks`               | 헤드리스 공용 React 훅 (lifecycle/ref/binding/state/dom, 11개 훅) | 0.0.1 |
-| `@gugbab/headless`               | 헤드리스 React 컴포넌트 35종 + Form (Radix 1:1 ~90%, 426 tests) | 0.0.1 |
-| `@gugbab/tokens`              | 추상 디자인 토큰 + 정적 MUI/Radix 스냅샷 → CSS variables (`dist/{mui,radix}.css`). 외부 라이브러리 의존성 0 | 0.0.1 |
-| `@gugbab/styled-mui`          | MUI 외관 styled 컴포넌트 35종 (`gmui-*` 클래스, `dist/styles.css` 99 blocks) | 0.0.1 |
-| `@gugbab/styled-radix`        | Radix 외관 styled 컴포넌트 35종 (`grx-*` 클래스, `dist/styles.css` 99 blocks) | 0.0.1 |
+| `@gugbab/tsconfig`            | 공용 TS 프리셋 (base / react-library / node-library) | 1.0.0 |
+| `@gugbab/biome-config`        | 공용 Biome 프리셋 (base.json) | 1.0.1 |
+| `@gugbab/commitlint-config`   | 공용 commitlint 컨벤션 (`[category] Type: Subject`) | 1.0.1 |
+| `@gugbab/utils`               | 프레임워크 독립 순수 유틸 (string/object/array/guard/fn/format, 22개 함수) | 1.0.1 |
+| `@gugbab/hooks`               | 헤드리스 공용 React 훅 (lifecycle/ref/binding/state/dom, 11개 훅) | 1.0.1 |
+| `@gugbab/headless`               | 헤드리스 React 컴포넌트 35종 + Form (Radix 1:1 ~90%, 426 tests) | 1.0.1 |
+| `@gugbab/tokens`              | 추상 디자인 토큰 + 정적 MUI/Radix 스냅샷 → CSS variables (`dist/{mui,radix}.css`). 외부 라이브러리 의존성 0 | 1.0.0 |
+| `@gugbab/styled-mui`          | MUI 외관 styled 컴포넌트 35종 (`gmui-*` 클래스, `dist/styles.css` 99 blocks) | 1.0.2 |
+| `@gugbab/styled-radix`        | Radix 외관 styled 컴포넌트 35종 (`grx-*` 클래스, `dist/styles.css` 99 blocks) | 1.0.2 |
 
 ## 개발 워크플로우
 
@@ -190,3 +190,4 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-04-29 | Phase 6.4 — Visual Regression 인프라. Playwright `toHaveScreenshot` + `e2e/visual/` 셋업 (임계치 `maxDiffPixelRatio: 0.001` = 0.1%, 디자인 시스템 기준). 인터랙티브 stories(Toast/Dialog/Popover/Menu/Select 등)는 trigger 클릭 후 캡처 + portal 컴포넌트는 viewport 전체 캡처. `pnpm vr` 명령군 추가. GitHub Actions 워크플로우 2종(`visual-regression.yml` PR 게이트 + `visual-regression-baseline.yml` workflow_dispatch baseline 자동 PR). 양쪽 Storybook 222개 stories 픽셀 회귀 잠금. baseline은 CI(Linux)에서만 생성·commit, macOS 로컬 PNG는 `.gitignore`. |
 | 2026-05-07 | feature 브랜치 + PR 워크플로우 도입 (`.claude/rules/git-workflow.md`) — 워크트리 사용 중단. 다른 프로젝트(인문학·도덕교육 학위논문, Java/Rust 백엔드)에서 임포트된 외래 자산 정리: skills 74개(`backend` 41 / `humanities` 12 / `education` 5 / `research` 4 / `writing` 12) + agents 16개(`backend` 5 / `education` 1 / academic `research` 6 / academic `validation` 4) + rules 2개(`java`, `rust`) 제거. 결과: 스킬 46 / 에이전트 22 / 훅 6 / 규칙 8 — 헤드리스 React 패키지 모노레포에 부합하도록 정합성 회복. |
 | 2026-06-15 | 훅 시스템 대폭 보강 — 메모리 동기화(memory-sync/memory-stop-guard/memory-pull), Codex 적대적 리뷰(codex-review-guard/parry), 품질 가드(readme-guard/typescript-quality/protect-secrets/tdd-guard 등) 22개 신규 훅 추가. 3라운드 Codex 리뷰로 memory-sync/memory-pull/memory-stop-guard 안전성 버그 7건 수정(partial-staging 보존, 동적 upstream ref, branch guard 등). 규칙 6개 추가(codex-review/commands/memory-sync/task-workflow/java/rust). 결과: 훅 28개 / 규칙 14개. |
+| 2026-06-16 | npm 게시 오류 수정 — 만료 토큰(E404) 및 2FA 설정 오류(EOTP) 해결. release.yml `pnpm/action-setup@v4→@v6`, `actions/setup-node@v4→@v6` 업그레이드 (Node.js 24 대응). workflow-guard.js deny→ask 모드 전환. 4개 패키지 재게시: biome-config@1.0.1, commitlint-config@1.0.1, styled-mui@1.0.2, styled-radix@1.0.2. README 패키지 버전 일괄 수정(0.0.1→실제 버전). |
