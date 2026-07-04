@@ -27,15 +27,8 @@ try {
 
   const projectRoot = path.dirname(tsconfig);
 
-  // 로컬 tsc 바이너리 탐색 — 없으면 건너뜀 (npx 불필요한 네트워크 다운로드 방지)
-  const localTsc = path.join(projectRoot, 'node_modules', '.bin', 'tsc');
-  const tscBin = fs.existsSync(localTsc) ? localTsc : (() => {
-    try { execSync('which tsc', { stdio: 'ignore' }); return 'tsc'; } catch { return null; }
-  })();
-  if (!tscBin) process.exit(0);
-
   try {
-    execSync(`cd "${projectRoot}" && "${tscBin}" --noEmit 2>&1`, {
+    execSync(`cd "${projectRoot}" && npx --yes tsc --noEmit 2>&1`, {
       timeout: 30000,
       stdio: ['ignore', 'pipe', 'pipe'],
     });

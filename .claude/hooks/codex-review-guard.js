@@ -75,7 +75,7 @@ function hasCodeChangesNewerThan(repoRoot, markerMtime) {
         return false;
       }
       if (flag.startsWith('R')) {
-        // staged rename은 항상 새 변경으로 간주 — mtime은 파일 내용 수정 시각이므로 rename 시점을 신뢰할 수 없음
+        // staged rename은 항상 새 변경으로 간주 — mtime은 rename 시점을 반영하지 않음
         return true;
       }
       try { return fs.statSync(path.join(repoRoot, actualFile)).mtime.getTime() > markerMtime; }
