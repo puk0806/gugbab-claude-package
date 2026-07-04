@@ -3,4 +3,5 @@ export * from "./fn";
 export * from "./format";
 export * from "./guard";
 export * from "./object";
+export * from "./sse";
 export * from "./string";

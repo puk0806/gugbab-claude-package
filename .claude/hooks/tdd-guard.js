@@ -22,34 +22,33 @@ try {
     filePath.includes('__tests__') ||
     filePath.includes('.claude/hooks') ||
     filePath.includes('.claude/commands') ||
-    /(?:^|\/)scripts\//.test(filePath)
+    /(?:^|\/)scripts\//.test(filePath) ||
+    // *.config.ts / *.config.js / *.config.mjs 등 순수 설정 파일
+    /\.config\.[a-z]+$/.test(path.basename(filePath)) ||
+    // Service Worker (브라우저 환경 의존, 단위 테스트 불가)
+    basename === 'sw' ||
+    // DB 커넥션 셋업 (통합 테스트로만 검증 가능)
+    /(?:^|\/)lib\/db\//.test(filePath) ||
+    // 순수 타입 선언 파일 (런타임 구현 없음, 테스트 불필요)
+    basename === 'types' ||
+    basename.endsWith('.types') ||
+    // barrel re-export 파일 (index.ts / index.tsx)
+    basename === 'index'
   ) {
     process.exit(0);
   }
 
-  // 패키지에 테스트 프레임워크 설정이 없으면 TDD 강제 생략
-  // (commitlint-config, tsconfig, biome-config 같은 순수 설정 패키지)
-  function findTestConfig(startDir) {
-    let d = startDir;
-    for (let i = 0; i < 6; i++) {
-      const configs = ['vitest.config.ts', 'vitest.config.js', 'jest.config.ts', 'jest.config.js', 'jest.config.cjs'];
-      if (configs.some(c => fs.existsSync(path.join(d, c)))) return true;
-      const parent = path.dirname(d);
-      if (parent === d) break;
-      d = parent;
-    }
-    return false;
-  }
-  if (!findTestConfig(dir)) process.exit(0);
-
-  const testPatterns = [
-    path.join(dir, `${basename}.test${ext}`),
-    path.join(dir, `${basename}.spec${ext}`),
-    path.join(dir, '__tests__', `${basename}.test${ext}`),
-    path.join(dir, '__tests__', `${basename}.spec${ext}`),
-    path.join(path.dirname(dir), '__tests__', `${basename}.test${ext}`),
-    path.join(path.dirname(dir), '__tests__', `${basename}.spec${ext}`),
-  ];
+  // .ts ↔ .tsx 교차 확인 (훅 테스트는 .tsx, 구현은 .ts인 경우가 많음)
+  const altExt = ext === '.ts' ? '.tsx' : ext === '.tsx' ? '.ts' : null;
+  const exts = altExt ? [ext, altExt] : [ext];
+  const testPatterns = exts.flatMap(e => [
+    path.join(dir, `${basename}.test${e}`),
+    path.join(dir, `${basename}.spec${e}`),
+    path.join(dir, '__tests__', `${basename}.test${e}`),
+    path.join(dir, '__tests__', `${basename}.spec${e}`),
+    path.join(path.dirname(dir), '__tests__', `${basename}.test${e}`),
+    path.join(path.dirname(dir), '__tests__', `${basename}.spec${e}`),
+  ]);
 
   const hasTest = testPatterns.some(p => {
     try { return fs.existsSync(p); } catch { return false; }

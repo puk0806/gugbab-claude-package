@@ -1,6 +1,6 @@
 {
   "name": "@gugbab/storybook-mui",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "description": "Storybook showcase for @gugbab/styled-mui (MUI lookalike, gmui-* classes)",
   "type": "module",
