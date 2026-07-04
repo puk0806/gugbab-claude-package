@@ -23,7 +23,7 @@ const { execSync } = require('child_process')
 
 function runGit(cmd) {
   try {
-    return execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'], cwd: PROJECT_DIR })
+    return execSync(cmd, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] })
       .split('\n').filter(Boolean)
   } catch { return [] }
 }
@@ -37,8 +37,6 @@ function loadSession(sessionId) {
   if (!fs.existsSync(fp)) return { files: [] }
   try { return JSON.parse(fs.readFileSync(fp, 'utf8')) } catch { return { files: [] } }
 }
-
-const PROJECT_DIR = process.env.CLAUDE_PROJECT_DIR || process.cwd()
 
 const SKILL_PATTERN = /\.claude\/skills\/.+\/SKILL\.md$/
 const AGENT_PATTERN = /\.claude\/agents\/.+\.md$/
@@ -70,35 +68,37 @@ function getViolations(sessionId, stagedOnly = false) {
   const session = loadSession(sessionId)
   const sessionFiles = session.files || []
 
-  // git diff는 상대경로를 반환 → 절대경로로 변환 (PROJECT_DIR 기준)
-  const toAbs = (files) => files.map(f => path.isAbsolute(f) ? f : path.join(PROJECT_DIR, f))
+  // skill/agent: Write/Edit 도구로 기록됨 → session 기반 유지
+  // 단, 파일이 실제로 변경된 상태인지 git으로 교차 검증 (revert 후 오탐 방지)
+  const projectDir2 = process.env.CLAUDE_PROJECT_DIR || process.cwd()
+  const gitChangedAll = [
+    ...runGit('git diff --staged --name-only'),
+    ...runGit('git diff --name-only'),
+    ...runGit('git ls-files --others --exclude-standard'),
+    ...runGit('git diff origin/main..HEAD --name-only'),
+  ].map(f => path.isAbsolute(f) ? f : path.join(projectDir2, f))
+  const gitChangedSet = new Set(gitChangedAll)
 
-  const staged    = toAbs(runGit('git diff --staged --name-only'))
-  const unstaged  = toAbs(runGit('git diff --name-only'))
-  const untracked = toAbs(runGit('git ls-files --others --exclude-standard'))
+  const skillAgentFiles = sessionFiles.filter(f =>
+    (SKILL_PATTERN.test(f) || AGENT_PATTERN.test(f)) && gitChangedSet.has(f)
+  )
 
-  let skillAgentFiles, changesetFiles, readmeOk
+  // git diff는 상대경로를 반환 → isRootReadme의 절대경로 비교와 맞추기 위해 절대경로로 변환
+  const projectDir = process.env.CLAUDE_PROJECT_DIR || process.cwd()
+  const toAbs = (files) => files.map(f => path.isAbsolute(f) ? f : path.join(projectDir, f))
 
-  if (stagedOnly) {
-    // 커밋/푸시: 스테이지된 파일만 검사 — session append-only 우회 방지
-    skillAgentFiles = staged.filter(f => SKILL_PATTERN.test(f) || AGENT_PATTERN.test(f))
-    changesetFiles  = staged.filter(f => CHANGESET_PATTERN.test(f) && fs.existsSync(f))
-    // README도 staged 여부만 인정 — 편집 후 되돌린 경우 session 체크로 통과되는 것 방지
-    readmeOk = staged.some(isRootReadme)
-  } else {
-    // Stop: session 기록 × 실제 git 변경 교차 — 되돌린 편집 제외
-    const allPending = [...new Set([...staged, ...unstaged, ...untracked])]
-    skillAgentFiles = sessionFiles.filter(f =>
-      (SKILL_PATTERN.test(f) || AGENT_PATTERN.test(f)) &&
-      allPending.some(p => path.normalize(p) === path.normalize(f))
-    )
-    changesetFiles = allPending.filter(f => CHANGESET_PATTERN.test(f) && fs.existsSync(f))
-    // README도 실제 git 변경 여부로만 판단 (staged 또는 unstaged)
-    readmeOk = staged.some(isRootReadme) || unstaged.some(isRootReadme)
-  }
+  // changeset: Bash(pnpm changeset)로 생성 → git diff로 탐지 (P1 fix)
+  const staged = toAbs(runGit('git diff --staged --name-only'))
+  const unstaged = stagedOnly ? [] : toAbs(runGit('git diff --name-only'))
+  const untracked = stagedOnly ? [] : toAbs(runGit('git ls-files --others --exclude-standard'))
+  const changesetFiles = [...new Set([...staged, ...unstaged, ...untracked])]
+    .filter(f => CHANGESET_PATTERN.test(f) && fs.existsSync(f))
 
   if (skillAgentFiles.length === 0 && changesetFiles.length === 0) return null
-  if (readmeOk) return null
+
+  // README 업데이트 여부: session + staged + (Stop 시: unstaged까지) 확인 (P2 fix)
+  const allGitReadmeFiles = stagedOnly ? staged : [...staged, ...unstaged]
+  if (sessionFiles.some(isRootReadme) || allGitReadmeFiles.some(isRootReadme)) return null
 
   return { skillAgentFiles, changesetFiles }
 }

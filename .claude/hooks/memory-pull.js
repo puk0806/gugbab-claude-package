@@ -43,21 +43,9 @@ const claudeMemory = path.join(os.homedir(), '.claude', 'projects', encoded, 'me
     }
 
     if (stat.isDirectory()) {
-      // 기존 로컬 디렉토리 → repo로 병합 후 symlink 교체 (하위 디렉토리 포함 재귀 복사)
+      // 기존 로컬 디렉토리 → repo로 병합 후 symlink 교체 (하위 디렉토리 포함)
       try {
-        function copyRecursive(src, dst) {
-          for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
-            const srcPath = path.join(src, entry.name);
-            const dstPath = path.join(dst, entry.name);
-            if (entry.isDirectory()) {
-              if (!fs.existsSync(dstPath)) fs.mkdirSync(dstPath, { recursive: true });
-              copyRecursive(srcPath, dstPath);
-            } else if (!fs.existsSync(dstPath)) {
-              fs.copyFileSync(srcPath, dstPath);
-            }
-          }
-        }
-        copyRecursive(claudeMemory, repoMemory);
+        fs.cpSync(claudeMemory, repoMemory, { recursive: true, force: false, errorOnExist: false });
       } catch {}
       fs.rmSync(claudeMemory, { recursive: true, force: true });
       fs.symlinkSync(repoMemory, claudeMemory);
@@ -67,12 +55,12 @@ const claudeMemory = path.join(os.homedir(), '.claude', 'projects', encoded, 'me
   }
 })();
 
-// ── 2단계: 원격 최신 memory pull (main/master 브랜치에서만) ──────────────
-// feature 브랜치에서 실행 시 브랜치 로컬 memory 변경분을 덮어쓸 위험이 있음
+// ── 2단계: 원격 최신 memory pull ─────────────────────────────────
+// feature 브랜치에서는 pull 건너뜀 — committed memory 변경을 origin/main으로 덮어쓰지 않기 위해
 const currentBranch = spawnSync('git', ['-C', projectDir, 'branch', '--show-current'], {
   encoding: 'utf8', stdio: 'pipe',
 }).stdout?.trim();
-if (currentBranch !== 'main' && currentBranch !== 'master') process.exit(0);
+if (currentBranch && currentBranch !== 'main') process.exit(0);
 
 const localDirty = spawnSync('git', ['-C', projectDir, 'status', '--porcelain', 'memory/'], {
   encoding: 'utf8', stdio: 'pipe',
@@ -81,48 +69,27 @@ if (localDirty.stdout?.trim()) process.exit(0);
 
 spawnSync('git', ['-C', projectDir, 'fetch', 'origin'], { stdio: 'pipe', timeout: 10000 });
 
-// upstream 동적 조회 (origin/main 하드코딩 회피 — master 등 다른 기본 브랜치 지원)
-const upstreamRef = spawnSync('git', ['-C', projectDir, 'rev-parse', '--abbrev-ref', '@{u}'], {
-  encoding: 'utf8', stdio: 'pipe',
-}).stdout?.trim() || `origin/${currentBranch}`;
-
-// 로컬에 아직 push 안 된 memory 커밋이 있으면 덮어쓰기 위험 → 스킵
-const unpushed = spawnSync(
-  'git', ['-C', projectDir, 'log', '--oneline', `${upstreamRef}..HEAD`, '--', 'memory/'],
-  { encoding: 'utf8', stdio: 'pipe' }
-);
-if (unpushed.stdout?.trim()) process.exit(0);
-
 const behind = spawnSync(
-  'git', ['-C', projectDir, 'log', '--oneline', `HEAD..${upstreamRef}`, '--', 'memory/'],
+  'git', ['-C', projectDir, 'log', '--oneline', 'HEAD..origin/main', '--', 'memory/'],
   { encoding: 'utf8', stdio: 'pipe' }
 );
 if (!behind.stdout?.trim()) process.exit(0);
 
-// non-memory staged 파일만 pathspec 지정 stash — memory/ 파일은 stash에서 제외
-const stagedBefore = spawnSync('git', ['-C', projectDir, 'diff', '--cached', '--name-only'], { encoding: 'utf8', stdio: 'pipe' });
-const nonMemory = (stagedBefore.stdout || '').trim().split('\n').filter(f => f && !f.startsWith('memory/'));
-let stashed = false;
-if (nonMemory.length > 0) {
-  const stashResult = spawnSync(
-    'git', ['-C', projectDir, 'stash', 'push', '--staged', '-m', 'memory-hook-temp', '--', ...nonMemory],
-    { stdio: 'pipe' }
-  );
-  stashed = stashResult.status === 0;
-}
+// 로컬에 origin/main에 없는 memory 커밋이 있으면 덮어쓰기 금지
+const localAhead = spawnSync(
+  'git', ['-C', projectDir, 'log', '--oneline', 'origin/main..HEAD', '--', 'memory/'],
+  { encoding: 'utf8', stdio: 'pipe' }
+);
+if (localAhead.stdout?.trim()) process.exit(0);
 
-spawnSync('git', ['-C', projectDir, 'checkout', upstreamRef, '--', 'memory/'], { stdio: 'pipe' });
+spawnSync('git', ['-C', projectDir, 'checkout', 'origin/main', '--', 'memory/'], { stdio: 'pipe' });
 
 const afterStatus = spawnSync('git', ['-C', projectDir, 'status', '--porcelain', 'memory/'], {
   encoding: 'utf8', stdio: 'pipe',
 });
 if (afterStatus.stdout?.trim()) {
-  spawnSync('git', ['-C', projectDir, 'commit', '-m', '[memory] Modify: sync from remote'], { stdio: 'pipe' });
-}
-
-// --index: staged 상태 그대로 복원 (partial staging 유지)
-if (stashed) {
-  spawnSync('git', ['-C', projectDir, 'stash', 'pop', '--index'], { stdio: 'pipe' });
+  // pathspec으로 memory/ 만 커밋 — 기존 staged 변경에 영향 없음
+  spawnSync('git', ['-C', projectDir, 'commit', '-m', '[memory] pull: sync from remote', '--', 'memory/'], { stdio: 'pipe' });
 }
 
 process.exit(0);

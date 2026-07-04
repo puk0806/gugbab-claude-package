@@ -37,7 +37,7 @@ function isPluginEnabled(repoRoot) {
 
 function isLoggedIn() {
   try {
-    const r = execSync('codex login status 2>&1', { encoding: 'utf8', timeout: 8000, stdio: ['pipe', 'pipe', 'ignore'] });
+    const r = execSync('codex login status 2>&1', { encoding: 'utf8', timeout: 15000 });
     return /logged[\s-]*in/i.test(r);
   } catch { return false; }
 }
@@ -66,21 +66,17 @@ function hasCodeChangesNewerThan(repoRoot, markerMtime) {
       // R (renamed): "old -> new" — extract the new path after " -> "
       const actualFile = flag.startsWith('R') ? (f.split(' -> ').pop() || f) : f;
       if (!CODE_EXT.test(actualFile)) return false;
-      if (flag === 'D' || flag.startsWith('R')) {
-        // Can't check mtime of deleted/renamed source directly.
-        // Staged changes: .git/index mtime is updated.
-        // Unstaged deletes (rm -f): .git/index unchanged, parent dir mtime is updated.
+      if (flag === 'D') {
+        // deleted: .git/index mtime은 git status 자체가 갱신하므로 사용 금지 → parent dir mtime으로만 판단
         try {
-          const indexMtime = fs.statSync(path.join(repoRoot, '.git', 'index')).mtime.getTime();
-          if (indexMtime > markerMtime) return true;
+          const dirMtime = fs.statSync(path.join(repoRoot, path.dirname(actualFile))).mtime.getTime();
+          return dirMtime > markerMtime;
         } catch {}
-        if (flag === 'D') {
-          try {
-            const dirMtime = fs.statSync(path.join(repoRoot, path.dirname(actualFile))).mtime.getTime();
-            return dirMtime > markerMtime;
-          } catch {}
-        }
         return false;
+      }
+      if (flag.startsWith('R')) {
+        // staged rename은 항상 새 변경으로 간주 — mtime은 파일 내용 수정 시각이므로 rename 시점을 신뢰할 수 없음
+        return true;
       }
       try { return fs.statSync(path.join(repoRoot, actualFile)).mtime.getTime() > markerMtime; }
       catch { return false; }
@@ -131,7 +127,7 @@ process.stderr.write([
   '',
   '다음을 즉시 실행하세요 (사용자에게 묻지 말고, 3라운드 완료까지):',
   '  → .claude/rules/codex-review.md 의 워크플로우 그대로 실행',
-  '  → Round 1~3: Bash("codex review --uncommitted \\"<해당 라운드 프롬프트>\\"") 실행',
+  '  → Round 1~3: Bash("codex review --uncommitted 2>&1 | tee /tmp/codex-r{N}.txt") 실행',
   '  → 각 라운드 결과: ACCEPT/REJECT/PARTIAL 판정 및 수정 반영',
   '  → 새 Critical 이슈 없으면 조기 종료 가능',
   `  → 완료 후 반드시: Bash("touch ${marker}")`,

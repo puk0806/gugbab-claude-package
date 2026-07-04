@@ -17,6 +17,7 @@
  */
 
 const readline = require('readline')
+const fs = require('fs')
 
 const AGENT_MD_PATTERN = /\.claude\/agents\/.+\.md$/
 
@@ -107,10 +108,10 @@ async function main() {
   const filePath = (tool_input.file_path || '').replace(/\\/g, '/')
   if (!AGENT_MD_PATTERN.test(filePath)) return process.exit(0)
 
-  // Edit 도구는 new_string이 스니펫(부분 교체)이므로 전체 파일을 직접 읽어 검증
+  // Edit의 경우 new_string은 스니펫만 담고 있으므로 저장 후 전체 파일을 읽어 검증
   let content
   if (tool_name === 'Edit') {
-    try { content = require('fs').readFileSync(filePath, 'utf8') } catch { return process.exit(0) }
+    try { content = fs.readFileSync(filePath, 'utf8') } catch { return process.exit(0) }
   } else {
     content = tool_input.content || ''
   }

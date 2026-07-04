@@ -1,8 +1,8 @@
 {
   "defaultMode": "acceptEdits",
   "enabledPlugins": {
-    "codex@openai-codex": true,
-    "superpowers@superpowers-marketplace": true
+    "superpowers@superpowers-marketplace": true,
+    "codex@openai-codex": true
   },
   "permissions": {
     "allow": [
@@ -44,6 +44,7 @@
       "Bash(diff*)",
       "Bash(xargs*)",
       "Bash(for*)",
+      "Bash(tee*)",
       "Write",
       "Edit",
       "Read",
@@ -97,10 +98,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/workflow-guard.js"
-          },
-          {
-            "type": "command",
             "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/parry.js"
           },
           {
@@ -112,10 +109,6 @@
       {
         "matcher": "Edit",
         "hooks": [
-          {
-            "type": "command",
-            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/workflow-guard.js"
-          },
           {
             "type": "command",
             "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/protect-secrets.js"
@@ -141,6 +134,15 @@
           {
             "type": "command",
             "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/readme-guard.js"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node $CLAUDE_PROJECT_DIR/.claude/hooks/branch-protection.js"
           }
         ]
       }
