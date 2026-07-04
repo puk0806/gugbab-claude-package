@@ -1,6 +1,6 @@
 {
   "name": "@gugbab/hooks",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Framework-agnostic React hooks for @gugbab/* (headless 빌딩블록)",
   "license": "MIT",
   "author": "gugbab",

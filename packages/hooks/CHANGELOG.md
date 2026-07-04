@@ -1,5 +1,26 @@
 # @gugbab/hooks
 
+## 1.1.0
+
+### Minor Changes
+
+- **@gugbab/utils**: Add SSE utilities and `withRetry`
+
+  - `parseSSELine(line)` — parses a single `data: {...}` SSE line into a typed `SseEvent`
+  - `readSSEStream(body, onEvent)` — streams a `ReadableStream` and emits `SseEvent` objects
+  - `toSSELine(event)` — serializes a `SseEvent` to `data: ...\n\n` format for server-side use
+  - `withRetry(fn, options)` — exponential-backoff retry with `maxRetries`, `baseDelay`, `shouldRetry`
+  - `SseEvent` discriminated union type exported from `@gugbab/utils`
+
+  **@gugbab/hooks**: Add `useSSEChat`
+
+  - `useSSEChat({ url, onChunk, onDone, onError })` — React hook for SSE streaming chat with state management (`idle` / `streaming` / `done` / `error`), `abort()` support, and generation-safe concurrent-send handling
+
+### Patch Changes
+
+- Updated dependencies
+  - @gugbab/utils@1.1.0
+
 ## 1.0.1
 
 ### Patch Changes
