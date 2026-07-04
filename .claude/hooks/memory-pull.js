@@ -43,7 +43,7 @@ const claudeMemory = path.join(os.homedir(), '.claude', 'projects', encoded, 'me
     }
 
     if (stat.isDirectory()) {
-      // 기존 로컬 디렉토리 → repo로 병합 후 symlink 교체 (하위 디렉토리 포함)
+      // 기존 로컬 디렉토리 → repo로 병합(서브디렉토리 포함) 후 symlink 교체
       try {
         fs.cpSync(claudeMemory, repoMemory, { recursive: true, force: false, errorOnExist: false });
       } catch {}
@@ -56,16 +56,23 @@ const claudeMemory = path.join(os.homedir(), '.claude', 'projects', encoded, 'me
 })();
 
 // ── 2단계: 원격 최신 memory pull ─────────────────────────────────
-// feature 브랜치에서는 pull 건너뜀 — committed memory 변경을 origin/main으로 덮어쓰지 않기 위해
+// feature 브랜치에서는 skip — main의 memory 이력이 브랜치 memory를 덮어쓸 수 있음
 const currentBranch = spawnSync('git', ['-C', projectDir, 'branch', '--show-current'], {
   encoding: 'utf8', stdio: 'pipe',
-}).stdout?.trim();
-if (currentBranch && currentBranch !== 'main') process.exit(0);
+});
+if (currentBranch.stdout?.trim() !== 'main') process.exit(0);
 
 const localDirty = spawnSync('git', ['-C', projectDir, 'status', '--porcelain', 'memory/'], {
   encoding: 'utf8', stdio: 'pipe',
 });
 if (localDirty.stdout?.trim()) process.exit(0);
+
+// 로컬 HEAD에 origin/main에 없는 memory 커밋이 있으면 skip (덮어쓰기 금지)
+const localAhead = spawnSync(
+  'git', ['-C', projectDir, 'log', '--oneline', 'origin/main..HEAD', '--', 'memory/'],
+  { encoding: 'utf8', stdio: 'pipe' }
+);
+if (localAhead.stdout?.trim()) process.exit(0);
 
 spawnSync('git', ['-C', projectDir, 'fetch', 'origin'], { stdio: 'pipe', timeout: 10000 });
 
@@ -74,13 +81,6 @@ const behind = spawnSync(
   { encoding: 'utf8', stdio: 'pipe' }
 );
 if (!behind.stdout?.trim()) process.exit(0);
-
-// 로컬에 origin/main에 없는 memory 커밋이 있으면 덮어쓰기 금지
-const localAhead = spawnSync(
-  'git', ['-C', projectDir, 'log', '--oneline', 'origin/main..HEAD', '--', 'memory/'],
-  { encoding: 'utf8', stdio: 'pipe' }
-);
-if (localAhead.stdout?.trim()) process.exit(0);
 
 spawnSync('git', ['-C', projectDir, 'checkout', 'origin/main', '--', 'memory/'], { stdio: 'pipe' });
 
