@@ -1,0 +1,35 @@
+{
+  "name": "@gugbab/types-generator",
+  "version": "0.1.0",
+  "description": "Internal OpenAPI → TypeScript type generator for @gugbab/* packages",
+  "license": "MIT",
+  "author": "gugbab",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo coverage"
+  },
+  "dependencies": {
+    "openapi-typescript": "^7.13.0"
+  },
+  "devDependencies": {
+    "@gugbab/tsconfig": "workspace:*",
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^2.1.9",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.9"
+  }
+}
