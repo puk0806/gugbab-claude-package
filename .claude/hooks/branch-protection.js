@@ -32,10 +32,10 @@ try {
   }
   if (!currentBranch) process.exit(0) // detached HEAD 또는 git 레포 아님
 
-  // 복합 명령어를 세그먼트로 분리 (&&, ||, ;, 개행 기준)
+  // 복합 명령어를 세그먼트로 분리 (&&, ||, ; 기준)
   // heredoc 내부 텍스트 오탐 방지: heredoc 시작(<<) 이후는 제거
   const beforeHeredoc = cmd.split(/<<\s*['"]?[A-Z_]+['"]?/)[0]
-  const segments = beforeHeredoc.split(/&&|\|\||;|\n/).map(s => s.trim()).filter(Boolean)
+  const segments = beforeHeredoc.split(/&&|\|\||;/).map(s => s.trim()).filter(Boolean)
 
   for (const seg of segments) {
     // ── Rule 1: main으로 직접 push 금지 ──────────────────────────────

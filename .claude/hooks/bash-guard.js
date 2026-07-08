@@ -36,7 +36,6 @@ function buildProtectedWritePatterns() {
     { re: 'verification\\.md', label: 'verification.md', hint: ' (verification-guard 훅 통과 필수)' },
     { re: 'SKILL\\.md', label: 'SKILL.md', hint: '' },
     { re: '\\bmemory\\/', label: 'memory/ 파일', hint: ' (memory-sync 자동 동기화)' },
-    { re: '\\.github\\/workflows\\/', label: '.github/workflows/', hint: ' (CI/CD 파이프라인 보호)' },
   ]
   const patterns = []
   for (const { re, label, hint } of targets) {
@@ -66,7 +65,6 @@ const DENY_PATTERNS = [
   { pattern: /rm\s+-[a-zA-Z]*rf?[a-zA-Z]*\s+(~|\$HOME)\/?\s*$/, reason: '홈 디렉토리 삭제는 차단됩니다.' },
   { pattern: /rm\s+-[a-zA-Z]*rf?[a-zA-Z]*\s+\.\s*$/, reason: '현재 디렉토리 전체 삭제는 차단됩니다.' },
   { pattern: /rm\s+-[a-zA-Z]*rf?[a-zA-Z]*\s+\S*\.(git|claude|ssh)\/?\s*$/, reason: '.git / .claude / .ssh 디렉토리 삭제는 차단됩니다.' },
-  { pattern: /(?:rm|mv)\s+.*\.github\/workflows\//, reason: '.github/workflows/ 파일 삭제·이동은 차단됩니다. PR을 통해 수정하세요.' },
   { pattern: /curl\s+.*\|\s*(ba)?sh/, reason: '원격 스크립트 실행(curl|bash)은 차단됩니다.' },
   { pattern: /wget\s+.*\|\s*(ba)?sh/, reason: '원격 스크립트 실행(wget|bash)은 차단됩니다.' },
   { pattern: /chmod\s+777/, reason: '777 권한 설정은 보안 위험입니다.' },

@@ -93,6 +93,9 @@ function getReadmeViolations(sessionId, stagedOnly = false) {
   const session = loadSession(sessionId)
   const sessionFiles = session.files || []
 
+  // skill/agent: Write/Edit 도구로 기록됨 → session 기반
+  const skillAgentFiles = sessionFiles.filter(f => SKILL_PATTERN.test(f) || AGENT_PATTERN.test(f))
+
   const projectDir = process.env.CLAUDE_PROJECT_DIR || process.cwd()
   const toAbs = (files) => files.map(f => path.isAbsolute(f) ? f : path.join(projectDir, f))
 
@@ -102,16 +105,6 @@ function getReadmeViolations(sessionId, stagedOnly = false) {
   const untracked = stagedOnly ? [] : toAbs(runGit('git ls-files --others --exclude-standard'))
   const changesetFiles = [...new Set([...staged, ...unstaged, ...untracked])]
     .filter(f => CHANGESET_PATTERN.test(f) && fs.existsSync(f))
-
-  // skill/agent: Write/Edit 도구로 기록됨 → session 기반이나 git 상태로 교차 검증
-  // (복원·삭제된 파일은 git diff에 없으므로 제외 — false positive 방지)
-  const gitCurrentFiles = new Set([...staged, ...unstaged, ...untracked])
-  const skillAgentFiles = sessionFiles
-    .filter(f => SKILL_PATTERN.test(f) || AGENT_PATTERN.test(f))
-    .filter(f => {
-      const abs = path.isAbsolute(f) ? f : path.join(projectDir, f)
-      return gitCurrentFiles.has(abs)
-    })
 
   if (skillAgentFiles.length === 0 && changesetFiles.length === 0) return null
 
