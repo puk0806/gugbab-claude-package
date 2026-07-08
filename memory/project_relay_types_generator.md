@@ -39,6 +39,8 @@ metadata:
   2. baseline 미갱신 → 스펙 변경 1회가 이후 배포마다 중복 게시 → publish 후 CI가 generated.ts를 main에 커밋백 (`[skip ci]`)
 - 교훈: 생성 파일은 포매터 대상에서 제외해야 diff 기반 변경 감지가 성립. 로컬 git 작업 시 memory 훅과 index.lock 경합 → 재시도 루프 필요
 
+**2026-07-08 v1.0.0 승격 완료:** base 버전 1.0.0으로 승격 (PR #35), force publish로 `1.0.0-202607081514` 게시 — 현재 latest. 이전 0.1.0-* 2개는 잔존하나 무해.
+
 **2026-07-08 최종 검증 완료:** fix PR #33 머지 후 workflow_dispatch(force 없음) 실행 → "스펙 변경 없음" 스킵 확인. 파이프라인 완성. npm에 `0.1.0-202607081406`(정상), `0.1.0-202607081441`(fix 머지 전 오탐 재게시 — 내용 동일, 무해) 2개 존재.
 
 **남은 일 (선택):** relay 레포 default 브랜치 정리 — 현재 default가 `feature/initial-project-setup`이고 main과 diverged(setup이 4 ahead: docs 404 fix 등 미배포). 정리안: setup→main 머지 + default를 main으로 변경 + setup 삭제. 사용자 결정 대기.
