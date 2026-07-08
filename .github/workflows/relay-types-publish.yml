@@ -1,0 +1,99 @@
+name: relay-types-publish
+
+# @gugbab/relay-types 타임스탬프 publish 흐름:
+#
+# 1. relay 레포 main 배포 성공 → notify-types-package.yml 이 repository_dispatch 발사
+# 2. 이 워크플로우가 relay 프로덕션에서 OpenAPI 스펙을 다시 generate
+# 3. 커밋된 src/generated.ts 와 비교 (Generated/Source 헤더 줄은 제외)
+#    - 변경 없음 → publish 스킵
+#    - 변경 있음 → 버전을 {base}-{YYYYMMDDHHMM} (Asia/Seoul) 로 덮어쓰고 publish
+#
+# 소스 변경 없이 스펙만 바뀌는 패키지라 changesets 버전 관리 대상이 아니다.
+# package.json 은 repo 에서 private: true 로 두어 release.yml 의
+# `changeset publish` / `pnpm -r publish` 가 절대 건드리지 못하게 하고,
+# 이 워크플로우에서만 private 을 해제한 뒤 게시한다.
+# base 버전(0.1.0)은 breaking 변경 시에만 수동으로 올린다.
+
+on:
+  repository_dispatch:
+    types: [relay-spec-updated]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '스펙 변경이 없어도 강제 publish (최초 게시용)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write # provenance (sigstore) 인증
+
+concurrency:
+  group: relay-types-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9.9.0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.13.1
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate types from relay OpenAPI spec
+        run: pnpm --filter @gugbab/relay-types generate
+
+      - name: Detect spec changes
+        id: diff
+        run: |
+          # Generated/Source 헤더 줄은 실행할 때마다 바뀌므로 비교에서 제외
+          if git diff -I'^// Generated:' -I'^// Source:' --quiet \
+              -- packages/relay-types/src/generated.ts; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "스펙 변경 없음"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git --no-pager diff --stat -- packages/relay-types/src/generated.ts
+          fi
+
+      - name: Run tests against fresh types
+        if: steps.diff.outputs.changed == 'true' || inputs.force == true
+        run: pnpm --filter @gugbab/relay-types test
+
+      - name: Typecheck
+        if: steps.diff.outputs.changed == 'true' || inputs.force == true
+        run: pnpm --filter @gugbab/relay-types typecheck
+
+      - name: Set timestamp version and unlock publish
+        if: steps.diff.outputs.changed == 'true' || inputs.force == true
+        working-directory: packages/relay-types
+        run: |
+          BASE=$(node -p "require('./package.json').version.split('-')[0]")
+          TS=$(TZ=Asia/Seoul date +%Y%m%d%H%M)
+          npm pkg set version="${BASE}-${TS}"
+          npm pkg delete private
+          echo "publish version: ${BASE}-${TS}"
+
+      - name: Build
+        if: steps.diff.outputs.changed == 'true' || inputs.force == true
+        run: pnpm --filter @gugbab/relay-types build
+
+      - name: Publish
+        if: steps.diff.outputs.changed == 'true' || inputs.force == true
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: 'true'
+        run: |
+          pnpm --filter @gugbab/relay-types publish \
+            --provenance --no-git-checks --access public --tag latest
