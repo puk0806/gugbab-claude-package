@@ -1,46 +1,39 @@
 ---
-name: relay-types-types-generator-changeset
-description: "OpenAPI → TS 타입 자동 생성 인프라 (2026-07-08). 코드·테스트·빌드 완료, changeset·커밋·PR 미완 상태."
-metadata: 
+name: relay-types-types-generator
+description: "OpenAPI → TS 타입 자동 publish 파이프라인 — 완성·운영 중 (2026-07-08). 아키텍처·운영법·교훈."
+metadata:
   node_type: memory
   type: project
   originSessionId: 8e0d09ad-495c-46b8-a5c2-315d32a72ea9
 ---
 
-2026-07-08 세션(export: `exports/2026-07-08-bddf08e1.md`)에서 OpenAPI 타입 자동 생성 인프라 구축. `feature/update-agents-skills-hooks-cleanup` 브랜치에 **미커밋** 상태로 존재.
+**상태: 완성·운영 중** (2026-07-08). `@gugbab/relay-types@1.0.0-202607081514`가 npm latest. 소비: `pnpm add @gugbab/relay-types@latest`.
 
-**구성:**
-- `packages/types-generator` (`@gugbab/types-generator`, private 내부 도구) — openapi-typescript v7 래퍼. SSL 체인 오류 때문에 Node fetch 대신 curl로 스펙 다운로드 후 `file://` URL로 변환해 처리
-- `packages/relay-types` (`@gugbab/relay-types` v0.1.0, publishable) — gugbab-claude-relay API (`https://gugbab-claude-relay.vercel.app/api/openapi.json`) 타입 13종 자동 생성. `pnpm generate` → `src/generated.ts` → tsup 빌드
-- `turbo.json`에 `generate` 태스크 추가 (cache: false)
-- `tdd-guard.js`에 auto-generated 파일 제외 처리 추가
+## 구성
 
-**설계 결정:** API별 개별 패키지(`relay-types`, 추후 `apple-types` 등) 방식 채택 — 통합 `@gugbab/types` 단일 패키지 대신. [[feedback_package_naming_clarity]]
+- `packages/types-generator` (private 내부 도구) — openapi-typescript v7 래퍼. SSL 체인 오류 때문에 Node fetch 대신 curl로 스펙 다운로드 후 `file://` URL로 처리
+- `packages/relay-types` — relay API(`https://gugbab-claude-relay.vercel.app/api/openapi.json`) 타입 13종. `pnpm generate` → `src/generated.ts` → `index.ts`에서 친숙한 이름 재수출 (신규 스키마 추가 시 재수출 목록 수동 갱신 필요)
+- 설계 결정: API별 개별 패키지(`{name}-types`) 방식 — 새 API는 relay-types 패턴 복제. [[feedback_package_naming_clarity]]
 
-**완료:** generate 실행(13 타입), 빌드(dist/index.d.ts 9.49KB), 테스트 7개 통과, typecheck 통과, README 반영
+## 자동 publish 체인
 
-## 타임스탬프 자동 publish 설계 (2026-07-08 확정)
+relay 레포 Vercel **Production 배포 성공**(`deployment_status`, main 커밋 ancestor 검사) → `notify-types-package.yml`이 repository_dispatch(`relay-spec-updated`) → 패키지 레포 `relay-types-publish.yml`: generate → `git diff -I'^// Generated:' -I'^// Source:'` 변경 감지 → 변경 시에만 테스트·빌드 → `{base}-{YYYYMMDDHHMM}`(Asia/Seoul) 게시 → 갱신 generated.ts를 main에 커밋백(`[skip ci]`).
 
-사용자 결정: 스펙만 바뀌고 소스는 안 바뀌므로 changesets 버전 관리 대신 **타임스탬프 prerelease 버전**(`{base}-{YYYYMMDDHHMM}`, Asia/Seoul)으로 publish.
+핵심 설계:
+- **changesets 영구 제외**: `ignore` 옵션은 공식 문서상 임시 용도 → `private: true` + publish 워크플로우에서만 `npm pkg delete private`
+- **build는 tsup만** (generate 분리) — 루트 빌드가 네트워크 비의존
+- generated.ts는 **biome 제외**(`biome.json` `"!**/src/generated.ts"`) — 포매터가 건드리면 diff 감지가 영구 오탐
+- 배포 성공 이벤트 기준이라 push+sleep 레이스 없음. deployment_status 워크플로우는 default 브랜치가 main이 아니어도 동작함을 실측 확인 (Vercel은 deployment.ref에 브랜치명 아닌 SHA를 넣음)
 
-- **changesets 영구 제외**: `.changeset/config.json`의 `ignore`는 공식 문서상 임시 용도 → 대신 `package.json`에 `private: true` 박고, publish 워크플로우에서만 `npm pkg delete private` 후 게시
-- **build는 `tsup`만** (generate 분리) — 루트 `turbo run build`가 네트워크에 의존하지 않도록
-- **자동 트리거 체인**: relay 레포 Vercel Production 배포 성공(`deployment_status`) → `notify-types-package.yml`이 repository_dispatch(`relay-spec-updated`) 발사 → 패키지 레포 `relay-types-publish.yml`이 generate → `git diff -I'^// Generated:' -I'^// Source:'`로 헤더 제외 변경 감지 → 변경 시에만 publish. 배포 성공 이벤트 기준이라 push+sleep 레이스 없음
-- 최초 게시는 workflow_dispatch `force=true`로 (스펙 변경 없어도 게시)
-- base 버전(0.1.0)은 breaking 시에만 수동 bump
+## 운영
 
-## 2026-07-08 파이프라인 가동 완료
+- 스펙 변경 없으면 자동 스킵 (검증 완료). base 버전은 breaking 시에만 package.json 수동 bump
+- 강제 게시: Actions → relay-types-publish → Run workflow (`force=true`)
+- **PAT 만료 주의**: relay 레포 secret `TYPES_DISPATCH_TOKEN`(fine-grained, 대상 gugbab-claude-package, Contents R/W) 만료 시 dispatch 조용히 실패 → 갱신 필요
+- npm 잔존 버전: `0.1.0-202607081406`, `0.1.0-202607081441`(오탐 중복분) — 무해, 방치
 
-- PR #32 머지 → relay 레포 워크플로우 푸시 → **전체 체인 첫 가동 성공, `0.1.0-202607081406` npm 자동 게시** (latest 태그)
-- PAT secret `TYPES_DISPATCH_TOKEN` relay 레포 등록 완료
-- relay 레포 특이사항: default 브랜치가 `feature/initial-project-setup`였고 원격 main은 내 푸시로 생성됨. Vercel production branch = main (main 푸시가 Production 배포 유발 확인). deployment_status 워크플로우는 default 브랜치가 main이 아니어도 동작함을 실측 확인
-- **재게시 버그 2건 발견·수정** (branch `feature/exclude-generated-from-biome`, 머지 대기):
-  1. lint-staged biome이 generated.ts 리포맷 → CI 원본과 달라 매 배포 오탐 publish → biome.json `"!**/src/generated.ts"` 제외 + 원본 포맷 재커밋
-  2. baseline 미갱신 → 스펙 변경 1회가 이후 배포마다 중복 게시 → publish 후 CI가 generated.ts를 main에 커밋백 (`[skip ci]`)
-- 교훈: 생성 파일은 포매터 대상에서 제외해야 diff 기반 변경 감지가 성립. 로컬 git 작업 시 memory 훅과 index.lock 경합 → 재시도 루프 필요
+## 교훈
 
-**2026-07-08 v1.0.0 승격 완료:** base 버전 1.0.0으로 승격 (PR #35), force publish로 `1.0.0-202607081514` 게시 — 현재 latest. 이전 0.1.0-* 2개는 잔존하나 무해.
-
-**2026-07-08 최종 검증 완료:** fix PR #33 머지 후 workflow_dispatch(force 없음) 실행 → "스펙 변경 없음" 스킵 확인. 파이프라인 완성. npm에 `0.1.0-202607081406`(정상), `0.1.0-202607081441`(fix 머지 전 오탐 재게시 — 내용 동일, 무해) 2개 존재.
-
-**남은 일 (선택):** relay 레포 default 브랜치 정리 — 현재 default가 `feature/initial-project-setup`이고 main과 diverged(setup이 4 ahead: docs 404 fix 등 미배포). 정리안: setup→main 머지 + default를 main으로 변경 + setup 삭제. 사용자 결정 대기.
+- 생성 파일은 포매터·린터 대상에서 제외해야 diff 기반 변경 감지가 성립
+- npm에서 같은 버전 재게시 불가 → 타임스탬프는 `+`(build metadata) 아닌 `-`(prerelease) 형식이어야 함. prerelease는 `^` 범위에 안 잡히므로 소비자는 `@latest` 태그 사용
+- lfos-ui의 자체 파서 방식과 비교: oneOf/required 미지원·파서 유지보수 부담으로 openapi-typescript 래퍼가 우위. lfos에서 가져올 만한 것: multi-env 스펙 URL, 재수출 자동 생성 (필요 시)
