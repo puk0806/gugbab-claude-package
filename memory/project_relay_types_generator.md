@@ -32,6 +32,17 @@ relay 레포 Vercel **Production 배포 성공**(`deployment_status`, main 커�
 - **PAT 만료 주의**: relay 레포 secret `TYPES_DISPATCH_TOKEN`(fine-grained, 대상 gugbab-claude-package, Contents R/W) 만료 시 dispatch 조용히 실패 → 갱신 필요
 - npm 잔존 버전: `0.1.0-202607081406`, `0.1.0-202607081441`(오탐 중복분) — 무해, 방치
 
+## 새 {name}-types 패키지 추가 절차 (voca·dream·health 등)
+
+1. `packages/relay-types` 복제 → `packages/{name}-types`: package.json(이름·설명 변경, `version: 1.0.0`, **`private: true` 유지**, `build: tsup`), `scripts/generate.ts`의 스펙 URL만 교체, `src/index.ts` 재수출 목록은 해당 API 스키마로 재작성, 테스트도 대표 타입 기준으로 수정
+2. `@gugbab/types-generator`는 그대로 재사용 (수정 불필요)
+3. 로컬 `pnpm generate` 실행 → generated.ts 커밋 (biome 제외 `!**/src/generated.ts`·tdd-guard 제외는 전역 패턴이라 자동 적용)
+4. `.github/workflows/relay-types-publish.yml` 복제 → `{name}-types-publish.yml`: `--filter` 패키지명, `repository_dispatch` event_type을 `{name}-spec-updated`로 변경
+5. 소스 API 레포에 `notify-types-package.yml` 복제 (event_type 맞춤) + fine-grained PAT를 그 레포 secret `TYPES_DISPATCH_TOKEN`으로 등록 (PAT 대상이 gugbab-claude-package라 기존 토큰 값 재사용 가능, 레포별 secret 등록은 별도)
+   - 소스 레포가 Vercel이 아니면 `deployment_status` 대신 배포 완료 시점에 맞는 트리거로 교체 (push+대기 방식은 레이스 주의)
+6. README 패키지 표·업데이트 로그 갱신
+7. PR 머지 후 Actions에서 `force=true`로 최초 게시
+
 ## 교훈
 
 - 생성 파일은 포매터·린터 대상에서 제외해야 diff 기반 변경 감지가 성립
