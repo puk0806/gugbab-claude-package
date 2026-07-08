@@ -25,21 +25,15 @@ try {
     /(?:^|\/)scripts\//.test(filePath) ||
     // *.config.ts / *.config.js / *.config.mjs 등 순수 설정 파일
     /\.config\.[a-z]+$/.test(path.basename(filePath)) ||
-    // 배럴 재수출 파일 (index.*) — 독립적인 런타임 동작 없음
-    basename === 'index' ||
-    // 순수 타입 선언 파일 (types.ts / *.types.ts) — 런타임 코드 없음
-    basename === 'types' ||
-    /\.types$/.test(basename) ||
     // Service Worker (브라우저 환경 의존, 단위 테스트 불가)
     basename === 'sw' ||
     // DB 커넥션 셋업 (통합 테스트로만 검증 가능)
-    /(?:^|\/)lib\/db\//.test(filePath)
+    /(?:^|\/)lib\/db\//.test(filePath) ||
+    // 자동 생성 파일 (openapi-typescript 등)
+    basename === 'generated'
   ) {
     process.exit(0);
   }
-
-  // 교차 확장자 테스트 탐지: .ts 소스는 .test.tsx도 허용, .tsx 소스는 .test.ts도 허용
-  const crossExt = ext === '.ts' ? '.tsx' : ext === '.tsx' ? '.ts' : null;
 
   const testPatterns = [
     path.join(dir, `${basename}.test${ext}`),
@@ -48,15 +42,6 @@ try {
     path.join(dir, '__tests__', `${basename}.spec${ext}`),
     path.join(path.dirname(dir), '__tests__', `${basename}.test${ext}`),
     path.join(path.dirname(dir), '__tests__', `${basename}.spec${ext}`),
-    // 교차 확장자 (.ts ↔ .tsx)
-    ...(crossExt ? [
-      path.join(dir, `${basename}.test${crossExt}`),
-      path.join(dir, `${basename}.spec${crossExt}`),
-      path.join(dir, '__tests__', `${basename}.test${crossExt}`),
-      path.join(dir, '__tests__', `${basename}.spec${crossExt}`),
-      path.join(path.dirname(dir), '__tests__', `${basename}.test${crossExt}`),
-      path.join(path.dirname(dir), '__tests__', `${basename}.spec${crossExt}`),
-    ] : []),
   ];
 
   const hasTest = testPatterns.some(p => {
