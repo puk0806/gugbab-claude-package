@@ -34,7 +34,8 @@ process.stdin.on('end', () => {
 
     const fileName = path.basename(filePath);
     // memory/ 경로만 커밋 (staged 다른 파일에 영향 없음)
-    spawnSync('git', ['-C', repoRoot, 'commit', '-m', `[memory] sync: ${fileName}`, '--', 'memory/'], { stdio: 'pipe' });
+    // --no-verify: 훅 자동 커밋은 commitlint(gugbab-header-format) 대상이 아님
+    spawnSync('git', ['-C', repoRoot, 'commit', '--no-verify', '-m', `[memory] sync: ${fileName}`, '--', 'memory/'], { stdio: 'pipe' });
   } catch {
     // Claude 작업 절대 차단 금지
   }
