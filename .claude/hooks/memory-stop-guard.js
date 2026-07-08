@@ -14,7 +14,8 @@ const uncommitted = spawnSync('git', ['-C', projectDir, 'status', '--porcelain',
 if (uncommitted.stdout?.trim()) {
   spawnSync('git', ['-C', projectDir, 'add', 'memory/'], { stdio: 'pipe' });
   // memory/ 경로만 커밋 (staged 다른 파일에 영향 없음)
-  spawnSync('git', ['-C', projectDir, 'commit', '-m', '[memory] auto-sync on stop', '--', 'memory/'], { stdio: 'pipe' });
+  // --no-verify: 훅 자동 커밋은 commitlint(gugbab-header-format) 대상이 아님
+  spawnSync('git', ['-C', projectDir, 'commit', '--no-verify', '-m', '[memory] auto-sync on stop', '--', 'memory/'], { stdio: 'pipe' });
 }
 
 process.exit(0);
