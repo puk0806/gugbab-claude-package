@@ -27,6 +27,12 @@ originSessionId: bfc7802b-aa36-406e-b08b-1c96c782b326
 | 품질 가드 | typescript-quality.js | 로컬 node_modules/.bin/tsc 탐색 (npx 불사용) |
 | 품질 가드 | pending-test-guard.js | PENDING_TEST 스킬 세션 종료 차단 |
 
+## 2026-07-08 발견·수정 (branch feature/hooks-session-export)
+
+- **훅 self-commit 전멸 버그**: 강화된 commitlint(gugbab-header-format)가 `[memory] sync:`·`[export] sync:` 등 훅 자동 커밋 메시지를 거부 → stdio:pipe라 조용히 실패, memory/exports가 staged로만 쌓임. memory-sync·memory-stop-guard·session-export에 `--no-verify` 적용으로 수정. **memory-pull.js는 미수정** — 작업 트리에 pathspec 제거 등 7/4 Codex fix를 되돌리는 미커밋 변경이 있어 사용자 결정 대기 중 (--no-verify도 함께 필요)
+- 훅 self-commit과 Claude의 git 명령이 index.lock 경합 → git 작업은 재시도 루프 필수
+- session-export.js 신규 (Stop): 세션 요약을 exports/에 저장·커밋. 훅 23종으로 증가
+
 ## memory-sync.js 핵심 설계 (버그 수정 후)
 
 - partial hunk staging 보존: `git diff --cached --binary` → unstage → memory commit → `git apply --cached`
