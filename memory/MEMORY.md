@@ -4,6 +4,7 @@
 - [npm v1 publishing — DONE](project_npm_v1_publishing.md) — v1.0.0 9개 + v1.0.1 5개 npm 게시 완료. 2026-05-11 부터 feature PR 머지 1회로 publish 자동 (auto-merge 흐름).
 - [v1.0.1 quality refactor — DONE](project_v1_0_1_quality_refactor.md) — PR #23/24/25 모두 머지, 5 패키지 v1.0.1 npm 게시 완료.
 - [Claude hooks system](project_hooks_system.md) — 28개 훅 운영 중. 메모리 동기화·Codex 리뷰·품질 가드. memory-sync 설계 핵심 포함.
+- [relay-types + types-generator](project_relay_types_generator.md) — OpenAPI→TS 타입 생성 인프라 (2026-07-08). 구현·테스트 완료, changeset·커밋·PR 미완.
 - [Visual check script](reference_visual_check.md) — `scripts/visual-check.{mjs,sh}` Playwright 시각 검수 도구
 - [Batched execution preference](feedback_batched_execution.md) — 섹션별 승인 대신 초반 방향만 대화 후 일괄 진행, 전체 승인 1회
 - [Commit at end of session](feedback_commit_at_end.md) — 다단계 누적 세션은 마지막에 한 번만 커밋, 중간 커밋 금지
