@@ -7,7 +7,7 @@ export type SSEChatStatus = "idle" | "streaming" | "done" | "error";
 export interface UseSSEChatOptions {
     url: string;
     onChunk?: (text: string) => void;
-    onDone?: () => void;
+    onDone?: (event?: Extract<SseEvent, { type: "done" }>) => void;
     onError?: (error: Error | (SseEvent & { type: "error" })) => void;
 }
 
@@ -59,7 +59,7 @@ export function useSSEChat(options: UseSSEChatOptions): UseSSEChatResult {
                         onChunk?.(event.text);
                     } else if (event.type === "done") {
                         setStatus("done");
-                        onDone?.();
+                        onDone?.(event);
                     } else if (event.type === "error") {
                         setStatus("error");
                         onError?.(event);

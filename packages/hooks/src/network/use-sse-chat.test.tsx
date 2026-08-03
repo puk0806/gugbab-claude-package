@@ -76,6 +76,48 @@ describe("useSSEChat", () => {
         expect(onDone).toHaveBeenCalledTimes(1);
     });
 
+    it("passes the done event with summary to onDone", async () => {
+        const onDone = vi.fn();
+        vi.mocked(fetch).mockResolvedValue(makeSSEResponse(['data: {"type":"done","summary":"대화 요약"}\n\n']));
+
+        const { result } = renderHook(() => useSSEChat({ url: "/api/chat", onDone }));
+
+        await act(async () => {
+            await result.current.send({});
+        });
+
+        expect(onDone).toHaveBeenCalledWith({ type: "done", summary: "대화 요약" });
+    });
+
+    it("passes the done event without summary to onDone (backward compat)", async () => {
+        const onDone = vi.fn();
+        vi.mocked(fetch).mockResolvedValue(makeSSEResponse(['data: {"type":"done"}\n\n']));
+
+        const { result } = renderHook(() => useSSEChat({ url: "/api/chat", onDone }));
+
+        await act(async () => {
+            await result.current.send({});
+        });
+
+        expect(onDone).toHaveBeenCalledWith({ type: "done" });
+    });
+
+    it("accepts a zero-argument onDone callback (existing consumers)", async () => {
+        let called = false;
+        const onDone = () => {
+            called = true;
+        };
+        vi.mocked(fetch).mockResolvedValue(makeSSEResponse(['data: {"type":"done","summary":"s"}\n\n']));
+
+        const { result } = renderHook(() => useSSEChat({ url: "/api/chat", onDone }));
+
+        await act(async () => {
+            await result.current.send({});
+        });
+
+        expect(called).toBe(true);
+    });
+
     it("sets status to error and calls onError on fetch failure", async () => {
         const onError = vi.fn();
         vi.mocked(fetch).mockRejectedValue(new Error("network error"));

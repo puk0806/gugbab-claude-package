@@ -44,6 +44,17 @@ describe("readSSEStream", () => {
         expect(onEvent).toHaveBeenCalledWith({ type: "done" });
     });
 
+    it("passes through done event with summary unchanged", async () => {
+        const events: SseEvent[] = [];
+        const stream = makeStream(['data: {"type":"done","summary":"summary text"}\n\n']);
+
+        await readSSEStream(stream, (event) => events.push(event));
+
+        expect(events).toEqual([{ type: "done", summary: "summary text" }]);
+        const done = events[0];
+        expect(done.type === "done" ? done.summary : undefined).toBe("summary text");
+    });
+
     it("resolves when stream ends", async () => {
         const stream = makeStream([]);
         await expect(readSSEStream(stream, vi.fn())).resolves.toBeUndefined();
