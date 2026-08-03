@@ -12,6 +12,10 @@ describe("toSSELine", () => {
         expect(toSSELine({ type: "done" })).toBe('data: {"type":"done"}\n\n');
     });
 
+    it("formats a done event with summary", () => {
+        expect(toSSELine({ type: "done", summary: "요약" })).toBe('data: {"type":"done","summary":"요약"}\n\n');
+    });
+
     it("formats an error event", () => {
         expect(toSSELine({ type: "error", message: "oops" })).toBe('data: {"type":"error","message":"oops"}\n\n');
     });

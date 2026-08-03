@@ -30,6 +30,24 @@ describe("parseSSELine", () => {
         expect(result).toEqual({ type: "done" });
     });
 
+    it("parses done event with optional summary", () => {
+        const result = parseSSELine('data: {"type":"done","summary":"대화 요약"}');
+        expect(result).toEqual({ type: "done", summary: "대화 요약" });
+        if (result?.type === "done") {
+            const summary: string | undefined = result.summary;
+            expect(summary).toBe("대화 요약");
+        }
+    });
+
+    it("parses done event without summary as undefined summary", () => {
+        const result = parseSSELine('data: {"type":"done"}');
+        if (result?.type === "done") {
+            expect(result.summary).toBeUndefined();
+        } else {
+            expect.unreachable("expected a done event");
+        }
+    });
+
     it("parses error event", () => {
         const result = parseSSELine('data: {"type":"error","message":"oops"}');
         expect(result).toEqual({ type: "error", message: "oops" });
