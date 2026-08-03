@@ -1,96 +1,52 @@
 'use strict';
-// SessionStart: symlink 자동 설정 + 원격 최신 memory pull
-// setup-memory-link.sh 없이 clone 직후 바로 동작
+// SessionStart: 전역 memory 디렉토리 보장 + 레포 → 전역 반영 (git 조작 없음)
+//
+// 1) 과거 symlink 구조(전역 → 레포)를 발견하면 실제 디렉토리로 마이그레이션
+// 2) 레포 memory/ 파일이 전역에 없거나 내용이 다르면서 더 최신이면 전역으로 복사
+//    (다른 데스크탑에서 push한 내용을 git pull 받은 뒤 세션을 시작하면 전역에 반영됨)
+// 커밋·푸시·pull은 전부 사용자가 직접 수행한다.
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const { spawnSync } = require('child_process');
 
 const projectDir = process.env.CLAUDE_PROJECT_DIR;
 if (!projectDir) process.exit(0);
 
 const repoMemory = path.join(projectDir, 'memory');
-
 // Claude 인코딩: / 와 _ 를 모두 - 로 치환
 const encoded = projectDir.replace(/[/\_]/g, '-');
-const claudeMemory = path.join(os.homedir(), '.claude', 'projects', encoded, 'memory');
+const globalMemory = path.join(os.homedir(), '.claude', 'projects', encoded, 'memory');
 
-// ── 1단계: symlink 자동 설정 ──────────────────────────────────────
-(function setupSymlink() {
-  try {
-    // repo/memory/ 없으면 생성 (fresh clone 대비)
-    if (!fs.existsSync(repoMemory)) {
-      fs.mkdirSync(repoMemory, { recursive: true });
-    }
+try {
+  // ── 1단계: 전역 memory를 실제 디렉토리로 보장 (symlink 마이그레이션) ──
+  let stat = null;
+  try { stat = fs.lstatSync(globalMemory); } catch {}
 
-    let stat;
-    try {
-      stat = fs.lstatSync(claudeMemory);
-    } catch {
-      // 아직 없음 → 부모 디렉토리 생성 후 symlink
-      fs.mkdirSync(path.dirname(claudeMemory), { recursive: true });
-      fs.symlinkSync(repoMemory, claudeMemory);
-      return;
-    }
-
-    if (stat.isSymbolicLink()) {
-      // 이미 symlink → 올바른 대상인지 확인
-      if (path.resolve(fs.readlinkSync(claudeMemory)) === path.resolve(repoMemory)) return;
-      // 잘못된 대상 → 교체
-      fs.unlinkSync(claudeMemory);
-      fs.symlinkSync(repoMemory, claudeMemory);
-      return;
-    }
-
-    if (stat.isDirectory()) {
-      // 기존 로컬 디렉토리 → repo로 병합(서브디렉토리 포함) 후 symlink 교체
-      try {
-        fs.cpSync(claudeMemory, repoMemory, { recursive: true, force: false, errorOnExist: false });
-      } catch {}
-      fs.rmSync(claudeMemory, { recursive: true, force: true });
-      fs.symlinkSync(repoMemory, claudeMemory);
-    }
-  } catch {
-    // 세션 시작 절대 차단 금지
+  if (stat && stat.isSymbolicLink()) {
+    fs.unlinkSync(globalMemory);
+    stat = null;
   }
-})();
+  if (!stat) fs.mkdirSync(globalMemory, { recursive: true });
 
-// ── 2단계: 원격 최신 memory pull ─────────────────────────────────
-// feature 브랜치에서는 skip — main의 memory 이력이 브랜치 memory를 덮어쓸 수 있음
-const currentBranch = spawnSync('git', ['-C', projectDir, 'branch', '--show-current'], {
-  encoding: 'utf8', stdio: 'pipe',
-});
-if (currentBranch.stdout?.trim() !== 'main') process.exit(0);
+  // ── 2단계: 레포 memory/ → 전역 반영 ──
+  if (fs.existsSync(repoMemory)) {
+    for (const name of fs.readdirSync(repoMemory)) {
+      const src = path.join(repoMemory, name);
+      const dst = path.join(globalMemory, name);
+      if (!fs.statSync(src).isFile()) continue;
 
-const localDirty = spawnSync('git', ['-C', projectDir, 'status', '--porcelain', 'memory/'], {
-  encoding: 'utf8', stdio: 'pipe',
-});
-if (localDirty.stdout?.trim()) process.exit(0);
-
-// 로컬 HEAD에 origin/main에 없는 memory 커밋이 있으면 skip (덮어쓰기 금지)
-const localAhead = spawnSync(
-  'git', ['-C', projectDir, 'log', '--oneline', 'origin/main..HEAD', '--', 'memory/'],
-  { encoding: 'utf8', stdio: 'pipe' }
-);
-if (localAhead.stdout?.trim()) process.exit(0);
-
-spawnSync('git', ['-C', projectDir, 'fetch', 'origin'], { stdio: 'pipe', timeout: 10000 });
-
-const behind = spawnSync(
-  'git', ['-C', projectDir, 'log', '--oneline', 'HEAD..origin/main', '--', 'memory/'],
-  { encoding: 'utf8', stdio: 'pipe' }
-);
-if (!behind.stdout?.trim()) process.exit(0);
-
-spawnSync('git', ['-C', projectDir, 'checkout', 'origin/main', '--', 'memory/'], { stdio: 'pipe' });
-
-const afterStatus = spawnSync('git', ['-C', projectDir, 'status', '--porcelain', 'memory/'], {
-  encoding: 'utf8', stdio: 'pipe',
-});
-if (afterStatus.stdout?.trim()) {
-  // pathspec으로 memory/ 만 커밋 — 기존 staged 변경에 영향 없음
-  // --no-verify: 훅 자동 커밋은 commitlint(gugbab-header-format) 대상이 아님
-  spawnSync('git', ['-C', projectDir, 'commit', '--no-verify', '-m', '[memory] pull: sync from remote', '--', 'memory/'], { stdio: 'pipe' });
+      let copy = false;
+      if (!fs.existsSync(dst)) {
+        copy = true; // 전역에 없음 (fresh clone / 새 파일)
+      } else {
+        const differs = fs.readFileSync(src, 'utf8') !== fs.readFileSync(dst, 'utf8');
+        // 내용이 다르고 레포 쪽이 최신이면 (git pull 직후) 전역 갱신
+        copy = differs && fs.statSync(src).mtimeMs > fs.statSync(dst).mtimeMs;
+      }
+      if (copy) fs.copyFileSync(src, dst);
+    }
+  }
+} catch {
+  // 세션 시작 절대 차단 금지
 }
-
 process.exit(0);
