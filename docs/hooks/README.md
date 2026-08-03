@@ -1,6 +1,6 @@
 # 훅 (Hooks)
 
-Claude Code 이벤트에 반응하는 자동화 훅 모음 (총 23종 = 실행 훅 21종 + 공통 유틸 `_lib.js` + `statusline.sh`).
+Claude Code 이벤트에 반응하는 자동화 훅 모음 (총 24종 = 실행 훅 22종 + 공통 유틸 `_lib.js` + `statusline.sh`).
 
 훅 파일 위치: `.claude/hooks/`
 
@@ -24,14 +24,14 @@ Claude Code 이벤트에 반응하는 자동화 훅 모음 (총 23종 = 실행 �
 | [auto-approve.js](../../.claude/hooks/auto-approve.js) | PreToolUse·PermissionRequest | Bash를 제외한 도구 자동 승인 (Bash 보안은 bash-guard가 담당) | ✅ |
 | [parry.js](../../.claude/hooks/parry.js) | PreToolUse Write | 시크릿·프롬프트 인젝션 패턴 스캔 — 감지 시 저장 차단 | ✅ |
 | [protect-secrets.js](../../.claude/hooks/protect-secrets.js) | PreToolUse Write/Edit | 민감 파일(.env, *.pem, *.key, credentials 등) 수정 차단 | ✅ |
-| [deliverable-guard.js](../../.claude/hooks/deliverable-guard.js) | PostToolUse Write/Edit · PreToolUse Bash · Stop | **산출물 완결성 통합 훅** — 세션 수정 파일 추적 + git commit/push·세션 종료 시 README 동기화 검사 + PENDING_TEST 스킬 2단계 테스트 미수행 차단 (`.claude/worktrees/` 스캔 제외) | ✅ |
+| [deliverable-guard.js](../../.claude/hooks/deliverable-guard.js) | PostToolUse Write/Edit · PreToolUse Bash · Stop | **산출물 완결성 통합 훅** — 세션 수정 파일 추적 + git commit/push·세션 종료 시 README 동기화 검사 + PENDING_TEST 스킬 2단계 테스트 미수행 차단 + **push/PR 직전 memory·exports 미커밋 차단**(Y 프로젝트, 메모리 정리·세션 요약 포함 강제) (`.claude/worktrees/` 스캔 제외) | ✅ |
 | [skill-md-guard.js](../../.claude/hooks/skill-md-guard.js) | PreToolUse Write · PostToolUse Edit | SKILL.md 소스 URL·검증일·필수 섹션 검증 — **위반 시 저장 자체 차단** (Edit는 디스크 재읽기 사후 검증) | ✅ |
 | [agent-md-guard.js](../../.claude/hooks/agent-md-guard.js) | PreToolUse Write · PostToolUse Edit | 에이전트 .md name·description·tools·model·example 검증 — **위반 시 저장 자체 차단** | ✅ |
 | [verification-guard.js](../../.claude/hooks/verification-guard.js) | PreToolUse Write · PostToolUse Edit | verification.md 필수 섹션·UNVERIFIED·"내장 지식" 자백 검증 — **위반 시 저장 자체 차단** | ✅ |
 | [staleness-check.js](../../.claude/hooks/staleness-check.js) | InstructionsLoaded | 스킬 검증일 경과 감지 — 30~59일 경고, 60일+ 재검증 강제 지시 | — |
 | [instructions-loaded.js](../../.claude/hooks/instructions-loaded.js) | InstructionsLoaded | CLAUDE.md 로드 완료 시 규칙 요약 출력 | — |
 | [session-start.js](../../.claude/hooks/session-start.js) | SessionStart | 세션 시작 시 현재 브랜치·미커밋 파일·최근 커밋 요약 출력 | — |
-| [session-export.js](../../.claude/hooks/session-export.js) | Stop | 세션 대화 요약(요청·응답·수정 파일·Codex 리뷰) 강제 보존 — memory 공유 모드면 레포 `exports/`에 커밋, 아니면 로컬 `~/.claude/projects/<해시>/exports/` (비차단) | ✅ |
+| [session-export.js](../../.claude/hooks/session-export.js) | Stop | 세션 대화 요약(요청·응답·수정 파일·Codex 리뷰) 강제 보존 — Stop(매 턴)은 로컬 `~/.claude/projects/<해시>/exports/`에만 기록(레포 status 오염 없음), 커밋 배치의 `--refresh` 실행 시에만 레포 `exports/`에 전체 요약 생성(Y 프로젝트) (비차단) | ✅ |
 | [cc-notify.js](../../.claude/hooks/cc-notify.js) | Stop | 작업 완료 시 macOS 데스크탑 알림 (비차단, 타 플랫폼 silent) | — |
 | [statusline.sh](../../.claude/hooks/statusline.sh) | statusLine | 상태 바 — 브랜치 + 미커밋 수 + PENDING_TEST 스킬 수 표시 | — |
 
@@ -40,12 +40,14 @@ Claude Code 이벤트에 반응하는 자동화 훅 모음 (총 23종 = 실행 �
 
 ---
 
-## 개발 전용 훅 (2종) — dev 템플릿 (react-spa·nextjs·rust-axum·java·unity)
+## 개발 전용 훅 (4종) — dev 템플릿 (react-spa·nextjs·rust-axum·java·unity)
 
 | 훅 | 이벤트 | 설명 | 테스트 |
 |----|--------|------|:---:|
 | [tdd-guard.js](../../.claude/hooks/tdd-guard.js) | PostToolUse Write/Edit | 소스 파일 수정 시 대응 테스트 파일 존재 여부 검사 — 없으면 차단 (hooks/commands/scripts/ 제외) | ✅ |
 | [test-fake-guard.js](../../.claude/hooks/test-fake-guard.js) | PreToolUse Bash | echo/printf/true로 테스트 결과를 흉내내는 가짜 테스트 실행 차단 | ✅ |
+| [adversarial-test-guard.js](../../.claude/hooks/adversarial-test-guard.js) | PostToolUse Write/Edit | 테스트 파일이 정상 흐름만 담고 악성 유저 방어·이상 경로를 누락하면 차단 — 테스트 2케이스↑ & 적대적 커버리지(에러/보안/경계) 2카테고리↓, RED 초기 1케이스·waiver 예외 | ✅ |
+| [fake-impl-guard.js](../../.claude/hooks/fake-impl-guard.js) | PostToolUse Write/Edit | 파라미터를 무시하고 테스트 기대 리터럴(문자열/숫자)을 그대로 return하는 가짜 구현 차단 — boolean·상수 getter·waiver 제외 | ✅ |
 
 ---
 
@@ -57,13 +59,16 @@ Claude Code 이벤트에 반응하는 자동화 훅 모음 (총 23종 = 실행 �
 
 ---
 
-## 메모리 훅 (3종) — Memory 공유 기능 선택 시
+## 메모리 훅 (2종) — Memory 공유 기능 선택 시
+
+> **2026-07-10 자동 커밋 폐지**: 전역 memory(`~/.claude/projects/<해시>/memory`)가 1차 저장소(실제 디렉토리),
+> 레포 `memory/`는 워킹트리 미러. git commit·push·pull은 전부 사용자가 직접 수행.
+> symlink 구조·`memory-stop-guard.js`(Stop 자동 커밋)·`scripts/setup-memory-link.sh`는 제거됨.
 
 | 훅 | 이벤트 | 설명 | 테스트 |
 |----|--------|------|:---:|
-| [memory-pull.js](../../.claude/hooks/memory-pull.js) | SessionStart | symlink 자동 설정 + 원격 최신 memory pull | — |
-| [memory-sync.js](../../.claude/hooks/memory-sync.js) | PostToolUse Write/Edit | memory 파일 변경 감지 → 즉시 git commit (push는 사용자가 직접) | — |
-| [memory-stop-guard.js](../../.claude/hooks/memory-stop-guard.js) | Stop | 세션 종료 직전 미커밋 memory 변경 자동 커밋 | ✅ |
+| [memory-pull.js](../../.claude/hooks/memory-pull.js) | SessionStart | 전역 memory 실제 디렉토리 보장(구 symlink 자동 마이그레이션) + 레포 `memory/` → 전역 반영 (git 조작 없음) | — |
+| [memory-sync.js](../../.claude/hooks/memory-sync.js) | PostToolUse Write/Edit | memory 파일 변경 감지 → 전역↔레포 양방향 미러 복사 (git 커밋 없음) | — |
 
 ---
 
@@ -87,9 +92,9 @@ Claude Code 이벤트에 반응하는 자동화 훅 모음 (총 23종 = 실행 �
 
 ```
 공통 (15종)      ← 모든 템플릿
-├── 개발 전용 (2종)  ← react-spa·nextjs·rust-axum·java-spring-*·unity-game
+├── 개발 전용 (4종)  ← react-spa·nextjs·rust-axum·java-spring-*·unity-game
 │   └── TypeScript (1종)  ← react-spa·nextjs만 추가
-├── Memory (3종)    ← --memory 옵션 선택 시 추가
+├── Memory (2종)    ← --memory 옵션 선택 시 추가
 ├── Codex (1종)     ← --codex 옵션 선택 시 추가
 └── Branch Protection (1종)  ← --branch-protection 옵션 선택 시 추가
 ```
