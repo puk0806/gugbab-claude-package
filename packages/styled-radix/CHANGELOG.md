@@ -1,5 +1,13 @@
 # @gugbab/styled-radix
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies [16829d7]
+  - @gugbab/utils@1.2.0
+  - @gugbab/headless@1.0.3
+
 ## 1.0.3
 
 ### Patch Changes
