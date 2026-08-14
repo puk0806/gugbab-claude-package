@@ -25,6 +25,7 @@ permissions:
   contents: write       # changesets/action 의 Version PR / 태그 생성용
   pull-requests: write  # Version PR 생성용
   id-token: write       # provenance (sigstore) 인증
+  actions: write        # 직접 머지 폴백 후 workflow_dispatch 재트리거용 (gh workflow run)
 
 concurrency:
   group: release-${{ github.ref }}
