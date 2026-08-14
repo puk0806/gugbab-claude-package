@@ -7,12 +7,14 @@
  *   · scripts / deps — 빌드 스크립트, 의존성·lockfile
  *   · memory        — Claude 메모리 자동 동기화 커밋 (훅이 자동 생성)
  * - Type: Add | Remove | Fix | Modify | Improve | Refactor | Rename | Move
+ * - 예외 형식: [export] sync: <파일명> — 세션 요약(exports/) 동기화 전용 관례
  */
 
 const CATEGORIES = "agent|skill|docs|config|pkg|apps|scripts|deps|memory";
 const TYPES = "Add|Remove|Fix|Modify|Improve|Refactor|Rename|Move";
 
 const HEADER_PATTERN = new RegExp(`^\\[(${CATEGORIES})\\]\\s+(${TYPES}):\\s+.+$`);
+const EXPORT_HEADER_PATTERN = /^\[export\] sync: .+$/;
 
 /** @type {import('@commitlint/types').UserConfig} */
 module.exports = {
@@ -32,10 +34,13 @@ module.exports = {
             rules: {
                 "gugbab-header-format": (parsed) => {
                     const header = parsed.header || "";
-                    if (HEADER_PATTERN.test(header)) {
+                    if (HEADER_PATTERN.test(header) || EXPORT_HEADER_PATTERN.test(header)) {
                         return [true];
                     }
-                    return [false, `형식: [category] Type: Subject — category: ${CATEGORIES}, Type: ${TYPES}`];
+                    return [
+                        false,
+                        `형식: [category] Type: Subject — category: ${CATEGORIES}, Type: ${TYPES} (예외: [export] sync: <파일명>)`,
+                    ];
                 },
             },
         },
