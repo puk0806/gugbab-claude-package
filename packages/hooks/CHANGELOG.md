@@ -1,5 +1,12 @@
 # @gugbab/hooks
 
+## 1.2.1
+
+### Patch Changes
+
+- Updated dependencies [91889b1]
+  - @gugbab/utils@1.3.0
+
 ## 1.2.0
 
 ### Minor Changes
