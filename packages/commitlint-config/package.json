@@ -1,6 +1,6 @@
 {
   "name": "@gugbab/commitlint-config",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Shared commitlint configuration for @gugbab/* packages (gugbab git.md 컨벤션)",
   "license": "MIT",
   "author": "gugbab",
