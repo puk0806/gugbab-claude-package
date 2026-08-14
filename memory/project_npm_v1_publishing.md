@@ -3,6 +3,7 @@ name: npm v1 publishing — DONE (v1.0.1 + auto-merge)
 description: @gugbab/* 9개 v1.0.0 (2026-05-09) + 5개 v1.0.1 (2026-05-11) publish 완료. 자동 publish 흐름은 feature PR 머지 1회로 끝나도록 진화.
 type: project
 originSessionId: d38b63bc-10e0-4db4-8ff1-14cf943313c2
+modified: 2026-08-14T05:48:35.916Z
 ---
 `@gugbab/*` 패키지 npm public 게시 자동화 운영 중. v1.0.0 (9 패키지) 첫 publish 2026-05-09, v1.0.1 (5 publishable patch) 2026-05-11. 2026-05-11 자동화 한 단계 진화 — *사용자 머지 1회로 publish까지 자동*.
 
@@ -60,6 +61,19 @@ originSessionId: d38b63bc-10e0-4db4-8ff1-14cf943313c2
 **효과:** 사용자 머지 1회 (feature PR) → Version PR 자동 머지 → publish 자동.
 
 ---
+
+## 2026-08-14 auto-merge 폴백 (utils 1.3.0 release 중 발견)
+
+**문제:** Version PR auto-merge 가 `GraphQL: Pull request Branch does not have required
+protected branch rules (enablePullRequestAutoMerge)` 로 실패 — main 에 branch protection
+rule 이 없으면 GitHub 이 auto-merge 자체를 거부한다 (05-11 당시엔 ruleset 이 있었으나 이후 부재).
+Version PR #40 이 열린 채 방치 → 사용자 수동 머지로 publish 완료.
+
+**해결 (release.yml):** auto-merge 실패 시 `gh pr merge --merge` 로 즉시 직접 머지 폴백.
+핵심 함정 — **GITHUB_TOKEN 이 만든 push 는 on:push 워크플로우를 재트리거하지 않는다**
+(GitHub 재귀 방지 정책, `workflow_dispatch`·`repository_dispatch` 만 예외 — 공식 문서 확인).
+따라서 폴백 직후 `gh workflow run release -f mode=changeset` 으로 publish 를 명시 재트리거.
+`changeset publish` 는 npm 에 이미 있는 버전을 건너뛰므로 중복 실행 안전.
 
 ## 첫 publish 가 막혔던 5-layer 장애 (참고용)
 
