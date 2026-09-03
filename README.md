@@ -45,8 +45,8 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 | `@gugbab/tsconfig`            | 공용 TS 프리셋 (base / react-library / node-library) | 1.0.0 |
 | `@gugbab/biome-config`        | 공용 Biome 프리셋 (base.json) | 1.0.1 |
 | `@gugbab/commitlint-config`   | 공용 commitlint 컨벤션 (`[category] Type: Subject`) | 1.1.0 |
-| `@gugbab/utils`               | 프레임워크 독립 순수 유틸 (string/object/array/guard/fn/format/sse/history, 31개 함수) | 1.3.0 |
-| `@gugbab/hooks`               | 헤드리스 공용 React 훅 (lifecycle/ref/binding/state/dom/network, 12개 훅) | 1.2.0 |
+| `@gugbab/utils`               | 프레임워크 독립 순수 유틸 (string/object/array/guard/fn/format/sse/history, 32개 함수) | 1.3.0 |
+| `@gugbab/hooks`               | 헤드리스 공용 React 훅 (lifecycle/ref/binding/state/dom/network/speech, 14개 훅) | 1.2.1 |
 | `@gugbab/headless`               | 헤드리스 React 컴포넌트 35종 + Form (Radix 1:1 ~90%, 426 tests) | 1.0.1 |
 | `@gugbab/tokens`              | 추상 디자인 토큰 + 정적 MUI/Radix 스냅샷 → CSS variables (`dist/{mui,radix}.css`). 외부 라이브러리 의존성 0 | 1.0.0 |
 | `@gugbab/styled-mui`          | MUI 외관 styled 컴포넌트 35종 (`gmui-*` 클래스, `dist/styles.css` 99 blocks) | 1.0.2 |
@@ -197,4 +197,5 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-07-04 | SSE 유틸 + 훅 추가 — `@gugbab/utils` v1.1.0: `parseSSELine`, `readSSEStream`, `toSSELine`, `withRetry`, `SseEvent` 타입. `@gugbab/hooks` v1.1.0: `useSSEChat`. Codex 3라운드 리뷰 반영(generation 가드, response.ok 체크, memory-pull pathspec, codex-review-guard rename 판정 개선). |
 | 2026-07-08 | OpenAPI 타입 자동 생성 인프라 추가 — `packages/types-generator` (내부 도구, 비배포): openapi-typescript 래퍼. `packages/relay-types` (`@gugbab/relay-types` v0.1.0): gugbab-claude-relay API 13개 타입 자동 생성·배포. `turbo.json`에 `generate` 태스크 추가. tdd-guard에 generated 파일 제외 처리. relay-types 타임스탬프 자동 publish 파이프라인 추가 — relay 레포 Vercel Production 배포 성공 → repository_dispatch → `relay-types-publish.yml`이 스펙 재생성·변경 감지 후 `{base}-{YYYYMMDDHHMM}` 버전으로 publish (repo에서는 `private: true`로 changesets publish 영구 차단). 첫 자동 게시 성공(`0.1.0-202607081406`) 후 재게시 버그 2건 수정 — generated.ts biome 포맷 제외(포맷 차이 오탐 방지) + publish 후 baseline 커밋백(스펙 변경 1회가 매 배포 중복 게시되는 문제 방지). base 버전 1.0.0 승격(실 API 확정 스펙 반영·소비 가능 상태). 훅 self-commit commitlint 거부 버그 수정(--no-verify) — memory·exports 자동 커밋 6/17 이후 실패하던 것 복구. |
 | 2026-08-03 | SSE `done` 이벤트 `summary` 선택 필드 지원 — `@gugbab/utils` v1.2.0: `SseEvent` done 변형을 `{ type: "done"; summary?: string }`로 확장 (parse/read/to 런타임 무변경, 하위 호환). `@gugbab/hooks` v1.2.0: `useSSEChat`이 `onDone?.(event)`로 done 이벤트 객체 전달 (선택 인자 — 기존 0-인자 소비자 호환). 테스트 9개 추가. README 패키지 버전 테이블 utils/hooks 현행화. |
+| 2026-09-03 | Web Speech API 공통화 — 형제 앱 3곳(꿈일기·영어회화·건강)에 복붙되어 있던 마이크(STT)·TTS 모듈을 패키지로 승격. `@gugbab/hooks` 신규 `speech` 카테고리: `useSpeechRecognition`(stale 세션 가드·언마운트 abort), `useSpeak`(voice 비동기 로딩 대응), `createRecognizer`(lang 파라미터화, resultIndex 배치 유실 방지), `pickVoice`/`listVoices`, 지원 감지 2종(부분 구현 방어). `@gugbab/utils`: `appendTranscript`(서로게이트 쌍 안전 절단). 테스트 89개 추가 (적대적·경계 계층 포함, Codex 리뷰 반영 — stale utterance 가드·부분 구현 방어·핸들 오염 방지). |
 | 2026-08-14 | relay 입력 상한 대응 이력 압축 유틸 — `@gugbab/utils` v1.3.0: `history` 모듈 순수 함수 4종(`totalContentBytes`·`fitMessagesToBudget`·`compressHistory`·`isHistoryValidationError`). 상한 값 파라미터 주입, 타 패키지 의존 없음, 첫·마지막 role=user 계약 보장. 적대적·경계 테스트 21개 추가 (Codex 3라운드 리뷰 반영 — 꼬리 assistant 계약 파괴 수정). `@gugbab/commitlint-config` v1.1.0: `[export] sync: <파일명>` 예외 형식 허용 — git.md 컨벤션과 검증 불일치 해소, export 커밋의 `--no-verify` 우회 제거. |

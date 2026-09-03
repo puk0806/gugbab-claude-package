@@ -43,6 +43,7 @@ import { camelCase, chunk, debounce, isNil, formatBytes } from '@gugbab/utils';
 | `camelCase(s)` | `user-profile`, `user_profile`, `UserProfile` → `userProfile` |
 | `kebabCase(s)` | `userProfile` → `user-profile` |
 | `truncate(s, { length, suffix? })` | 길이 초과 시 `…`(기본) 접미사 붙임 |
+| `appendTranscript(prev, transcript, max?)` | 음성 인식 결과를 공백으로 이어붙이고 상한 강제 (서로게이트 쌍 안전 절단) |
 
 ### array
 
