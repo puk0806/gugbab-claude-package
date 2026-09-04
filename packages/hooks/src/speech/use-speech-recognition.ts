@@ -25,6 +25,8 @@ export interface UseSpeechRecognitionReturn {
     readonly error: MicError | null;
     readonly start: () => void;
     readonly stop: () => void;
+    /** 세션 즉시 파기 — stop과 달리 대기 중인 최종 결과도 버린다 (전송 직후 입력 오염 방지용) */
+    readonly abort: () => void;
     readonly toggle: () => void;
 }
 
@@ -110,6 +112,15 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions): UseS
         setInterimText("");
     }, []);
 
+    const abort = useCallback(() => {
+        const rec = recognizerRef.current;
+        // ref를 먼저 비워 abort 이후 비동기로 도착하는 결과·이벤트를 stale 가드가 무시하게 한다
+        recognizerRef.current = null;
+        rec?.abort();
+        setListening(false);
+        setInterimText("");
+    }, []);
+
     const toggle = useCallback(() => {
         if (listening) {
             stop();
@@ -118,5 +129,5 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions): UseS
         }
     }, [listening, start, stop]);
 
-    return { supported, listening, interimText, error, start, stop, toggle };
+    return { supported, listening, interimText, error, start, stop, abort, toggle };
 }

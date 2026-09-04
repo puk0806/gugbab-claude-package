@@ -138,6 +138,20 @@ describe("useSpeechRecognition", () => {
         expect(inst.abort).toHaveBeenCalled();
     });
 
+    it("abort()는 세션을 즉시 파기하고 늦은 최종 결과를 무시한다 (전송 직후 입력 오염 방지)", () => {
+        const onFinal = vi.fn();
+        const { result } = renderHook(() => useSpeechRecognition({ lang: "ko-KR", onFinal }));
+        act(() => result.current.start());
+        const inst = last();
+        act(() => result.current.abort());
+        expect(inst.abort).toHaveBeenCalled();
+        expect(result.current.listening).toBe(false);
+        expect(result.current.interimText).toBe("");
+        // abort 이후 브라우저가 비동기로 흘려보내는 최종 결과는 무시되어야 한다
+        act(() => inst.onresult?.(makeEvent([["늦은 결과", true]])));
+        expect(onFinal).not.toHaveBeenCalled();
+    });
+
     // ── 악성·오남용 (adversarial) ──
 
     it("미지원 환경에서 start()해도 예외 없이 error='unknown'으로 방어한다", () => {
