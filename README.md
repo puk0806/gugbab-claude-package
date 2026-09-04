@@ -85,86 +85,50 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 
 ## Claude 자산 현황
 
-### 에이전트 (22개)
+### 에이전트 (35개)
 
-| 카테고리       | 항목                                                                                          |
-| -------------- | --------------------------------------------------------------------------------------------- |
-| devops (1)     | devops-engineer                                                                               |
-| domain (5)     | api-spec-designer, business-domain-analyst, codebase-domain-analyst, product-planner, ui-ux-designer |
-| frontend (2)   | frontend-architect, frontend-developer                                                        |
-| meta (6)       | agent-creator, claude-code-guide, freshness-auditor, planner, skill-creator, skill-tester     |
-| research (5)   | competitor-analyst, data-analyst, deep-researcher, research-reviewer, web-searcher            |
-| validation (3) | fact-checker, qa-engineer, source-validator                                                   |
+| 카테고리        | 항목                                                                                          |
+| --------------- | --------------------------------------------------------------------------------------------- |
+| backend (3)     | build-error-resolver, typescript-backend-architect, typescript-backend-developer              |
+| devops (1)      | devops-engineer                                                                               |
+| domain (6)      | api-spec-designer, business-domain-analyst, codebase-domain-analyst, frontend-domain-refactorer, product-planner, ui-ux-designer |
+| frontend (2)    | frontend-architect, frontend-developer                                                        |
+| meta (8)        | agent-creator, changelog-writer, claude-code-guide, freshness-auditor, project-scaffolder, skill-creator, skill-tester, tech-stack-advisor |
+| research (5)    | competitor-analyst, data-analyst, deep-researcher, research-reviewer, web-searcher            |
+| validation (10) | a11y-auditor, build-perf-benchmarker, content-quality-reviewer, fact-checker, perf-report-writer, pr-reviewer, qa-engineer, security-auditor, seo-auditor, source-validator |
 
-### 스킬 (46개)
+### 스킬 (112개)
 
-| 카테고리       | 수  | 항목                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| -------------- | :-: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| architecture   |  1  | ddd                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| devops         |  3  | docker-deployment, github-actions, github-actions-visual-regression                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| frontend       | 40  | accessibility, animation, api-integration, bundling-compiler, code-convention, component-design, cra-to-vite-migration, css-variables, dayjs, design-patterns, design-token-scss, e2e-testing, error-handling, form-handling, intersection-observer, monorepo-turborepo, mui-v5, mutation-observer, nextjs, page-visibility, performance, radix-ui, react-core, react-dnd, react-virtuoso, resize-observer, rsbuild, sass, seo, state-management, storybook, storybook-visual-testing, swiper, testing, tsup, typescript-v4, typescript-v5, vite-advanced-splitting, vite-pwa-service-worker, webpack-vite-config-mapping |
-| meta           |  2  | continuous-learning, ralph-loop                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| 카테고리       | 수  | 항목 |
+| -------------- | :-: | ---- |
+| architecture   |  5  | ddd, dream-journal-data-modeling, frontend-domain-structure, incremental-refactoring, module-boundaries |
+| backend        |  1  | claude-code-headless |
+| devops         | 10  | docker-deployment, github-actions, github-actions-visual-regression, n8n-error-handling, n8n-llm-integration, n8n-self-hosting, n8n-webhook-patterns, n8n-workflow-design, site-migration-seo, vercel-sandbox |
+| frontend       | 81  | ag-grid, animation, bot-management-seo, build-perf-benchmarking, bundle-size-analysis, bundling-compiler, chat-ui-pattern, claude-api-streaming-frontend, code-convention, core-web-vitals-optimization, cra-to-vite-migration, design-token-scss, dev-server-hmr-benchmarking, dream-app-onboarding, dream-export-import, dream-image-generation, dream-privacy-consent-ui, dream-recurrence-detection, dream-sharing-anonymized, dream-statistics-visualization, dream-symbol-tagging, e2e-testing, ecommerce-seo, emotion-tagging-input, error-handling, font-optimization, form-handling, geo-ai-discoverability, google-indexing-api, i18n-seo, image-optimization-seo, indexeddb-dexie, kakao-share-optimization, lighthouse-ci-setup, local-business-seo, media-accessibility, media-recorder-api, mobile-seo-pwa, monorepo-turborepo, mui-v5, mui-v9, naver-seo-specifics, nextjs, og-image-generation, performance, pwa-offline-llm-fallback, pwa-push-notifications, radix-ui, react-dnd, react-virtuoso, recoil-to-zustand-migration, rsbuild, schema-org-patterns, search-console-webmaster, security-headers-seo, seo-monitoring-automation, seo-nextjs, seo-static-html, seo-vite-spa, srs-spaced-repetition, state-management, storybook, storybook-visual-testing, structured-data-validation-api, swiper, tanstack-query, tanstack-query-v4-to-v5-migration, testing, tsup, typescript-v4, typescript-v5, url-canonicalization-redirects, vite-advanced-splitting, vite-pwa-service-worker, voice-input-ui, wcag-2.2-checklist, web-speech-api-stt, web-speech-api-tts, web-vitals-rum-comparison, webpack-vite-config-mapping, whisper-api-integration |
+| health         |  5  | ingredient-management, korean-food-nutrition, meal-recommendation-prompt, nutrition-analysis-prompt, nutrition-basics |
+| meta           |  6  | claude-code-hook-authoring, dream-app-ab-testing-prompts, dream-interpretation-prompt-engineering, dream-safety-classifier-prompts, ralph-loop, riper-workflow |
+| writing        |  4  | accessibility-vpat-writing, content-eeat-quality, multilingual-content-strategy, ymyl-content-seo |
 
-### 훅 (28개)
+### 훅 (23개 = 실행 훅 21종 + `_lib.js` + `statusline.sh`)
 
-**세션 제어**
+상세 목록·이벤트·동작은 [docs/hooks/README.md](docs/hooks/README.md)가 단일 소스.
 
-- `auto-approve.js` — 안전 커맨드 자동 승인
-- `session-start.js` — SessionStart 이벤트 처리
-- `session-summary.js` — 세션 종료 요약
-- `session-handoff.js` / `session-handoff-inject.js` — 세션 핸드오프 컨텍스트 주입
-- `instructions-loaded.js` — InstructionsLoaded 이벤트 처리
+- **세션**: session-start, instructions-loaded, staleness-check, cc-notify, statusline
+- **가드·품질**: auto-approve, bash-guard, branch-protection, protect-secrets, agent-md-guard, skill-md-guard, verification-guard, deliverable-guard, adversarial-test-guard, fake-impl-guard, test-fake-guard, typescript-quality
+- **메모리·기록**: memory-sync, memory-pull, session-export
+- **Codex 리뷰**: codex-review-guard, parry
+- **유틸**: _lib
 
-**가드·품질**
+### 규칙 (8개)
 
-- `bash-guard.js` — Bash 명령 실행 전/후 가드
-- `pending-test-guard.js` — PENDING_TEST 스킬 세션 종료 차단
-- `skill-md-guard.js` — SKILL.md 편집 가드
-- `verification-guard.js` — verification.md 편집 가드
-- `verification-gate.js` — 검증 게이트 (추가 확인)
-- `agent-md-guard.js` — 에이전트 MD 편집 가드
-- `readme-guard.js` — 루트 README 변경 시 동기화 강제
-- `task-plan-guard.js` — 작업 계획 없이 코딩 착수 차단
-- `typescript-quality.js` — TypeScript 타입 오류 사전 차단
-- `protect-secrets.js` — 시크릿·민감 정보 커밋 차단
-- `test-fake-guard.js` — 가짜 테스트 작성 탐지
-- `tdd-guard.js` — TDD RED-GREEN-REFACTOR 순서 강제
-
-**메모리 동기화**
-
-- `memory-sync.js` — memory 파일 변경 감지 → 즉시 commit + push
-- `memory-stop-guard.js` — 세션 종료 전 미동기 memory 재시도
-- `memory-pull.js` — SessionStart 시 원격 최신 memory pull + symlink 설정
-
-**Codex 리뷰**
-
-- `codex-review-guard.js` — Stop 시 Codex 적대적 리뷰 강제 실행
-- `parry.js` — Codex 리뷰 결과 핑퐁 처리
-- `careful-with-judge.js` — 고위험 Bash 명령 판단 요청
-- `cc-notify.js` — Claude Code 알림
-
-**유틸**
-
-- `_lib.js` — 훅 공통 유틸리티 라이브러리
-- `staleness-check.js` — 스킬·에이전트 freshness 검사
-- `statusline.sh` — 상태표시줄 쉘 헬퍼
-
-### 규칙 (14개)
-
-- `agent-design.md` — 에이전트 설계 기준
+- `adversarial-testing.md` — 적대적 테스트 3계층 원칙 (훅으로 강제)
+- `agent-design.md` — 에이전트 설계 기준 (모델·도구·구조)
 - `codex-review.md` — Codex 적대적 리뷰 워크플로우 (최대 3라운드)
-- `commands.md` — 슬래시 커맨드 작성 규칙
-- `creation-workflow.md` — 스킬·에이전트 생성 5단계 워크플로우
-- `git-workflow.md` — feature 브랜치 + PR 워크플로우 (워크트리 금지)
-- `git.md` — Git 커밋 컨벤션
-- `info-verification.md` — 외부 정보 검증 원칙
-- `java.md` — Java + Spring Boot 코딩 규칙
-- `memory-sync.md` — 메모리 동기화 정책 (repo 기반 symlink)
-- `readme-update.md` — README 동기화 규칙
-- `rust.md` — Rust + Axum 코딩 규칙
+- `git.md` — Git 커밋 컨벤션 (`[category] Type: Subject`)
+- `info-verification.md` — 외부 정보 검증 원칙 (소스 신뢰도 4단계)
+- `memory-sync.md` — 메모리 동기화 정책 (전역 1차 + 레포 미러)
 - `task-workflow.md` — 작업 착수 전 확인 절차
 - `typescript.md` — TypeScript·React 코딩 규칙
-- `verification-policy.md` — 검증 상태 전환 정책
 
 ### 플러그인 (프로젝트 레벨)
 
@@ -197,5 +161,6 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-07-04 | SSE 유틸 + 훅 추가 — `@gugbab/utils` v1.1.0: `parseSSELine`, `readSSEStream`, `toSSELine`, `withRetry`, `SseEvent` 타입. `@gugbab/hooks` v1.1.0: `useSSEChat`. Codex 3라운드 리뷰 반영(generation 가드, response.ok 체크, memory-pull pathspec, codex-review-guard rename 판정 개선). |
 | 2026-07-08 | OpenAPI 타입 자동 생성 인프라 추가 — `packages/types-generator` (내부 도구, 비배포): openapi-typescript 래퍼. `packages/relay-types` (`@gugbab/relay-types` v0.1.0): gugbab-claude-relay API 13개 타입 자동 생성·배포. `turbo.json`에 `generate` 태스크 추가. tdd-guard에 generated 파일 제외 처리. relay-types 타임스탬프 자동 publish 파이프라인 추가 — relay 레포 Vercel Production 배포 성공 → repository_dispatch → `relay-types-publish.yml`이 스펙 재생성·변경 감지 후 `{base}-{YYYYMMDDHHMM}` 버전으로 publish (repo에서는 `private: true`로 changesets publish 영구 차단). 첫 자동 게시 성공(`0.1.0-202607081406`) 후 재게시 버그 2건 수정 — generated.ts biome 포맷 제외(포맷 차이 오탐 방지) + publish 후 baseline 커밋백(스펙 변경 1회가 매 배포 중복 게시되는 문제 방지). base 버전 1.0.0 승격(실 API 확정 스펙 반영·소비 가능 상태). 훅 self-commit commitlint 거부 버그 수정(--no-verify) — memory·exports 자동 커밋 6/17 이후 실패하던 것 복구. |
 | 2026-08-03 | SSE `done` 이벤트 `summary` 선택 필드 지원 — `@gugbab/utils` v1.2.0: `SseEvent` done 변형을 `{ type: "done"; summary?: string }`로 확장 (parse/read/to 런타임 무변경, 하위 호환). `@gugbab/hooks` v1.2.0: `useSSEChat`이 `onDone?.(event)`로 done 이벤트 객체 전달 (선택 인자 — 기존 0-인자 소비자 호환). 테스트 9개 추가. README 패키지 버전 테이블 utils/hooks 현행화. |
+| 2026-09-04 | Claude 자산 대규모 개편 정리 커밋 — 에이전트 통합(planner·spec-writer 제거, mvp-scope-planner→product-planner 흡수, seo-content-writer-coach 제거, frontend-domain-refactorer·build-error-resolver 추가), 스킬 9종 추가(tanstack-query 2종, mui-v9, ag-grid, recoil-to-zustand-migration, architecture 3종, claude-code-hook-authoring) + 대량 재검증(v4, references/ 분리), 슬래시 커맨드 10종 최초 커밋. 훅 개편: tdd-guard 제거(superpowers TDD로 대체), typescript-quality `--changed-only`, deliverable-guard `--no-readme`, 차단 메시지 stderr 회귀 수정. rules 4종 삭제(creation-workflow·verification-policy·readme-update·commands)에 따른 잔존 참조 정리(CLAUDE.md·훅·에이전트·커맨드). README 자산 현황 실측 재생성(에이전트 35·스킬 112·훅 23). |
 | 2026-09-03 | Web Speech API 공통화 — 형제 앱 3곳(꿈일기·영어회화·건강)에 복붙되어 있던 마이크(STT)·TTS 모듈을 패키지로 승격. `@gugbab/hooks` 신규 `speech` 카테고리: `useSpeechRecognition`(stale 세션 가드·언마운트 abort), `useSpeak`(voice 비동기 로딩 대응), `createRecognizer`(lang 파라미터화, resultIndex 배치 유실 방지), `pickVoice`/`listVoices`, 지원 감지 2종(부분 구현 방어). `@gugbab/utils`: `appendTranscript`(서로게이트 쌍 안전 절단). 테스트 89개 추가 (적대적·경계 계층 포함, Codex 리뷰 반영 — stale utterance 가드·부분 구현 방어·핸들 오염 방지). |
 | 2026-08-14 | relay 입력 상한 대응 이력 압축 유틸 — `@gugbab/utils` v1.3.0: `history` 모듈 순수 함수 4종(`totalContentBytes`·`fitMessagesToBudget`·`compressHistory`·`isHistoryValidationError`). 상한 값 파라미터 주입, 타 패키지 의존 없음, 첫·마지막 role=user 계약 보장. 적대적·경계 테스트 21개 추가 (Codex 3라운드 리뷰 반영 — 꼬리 assistant 계약 파괴 수정). `@gugbab/commitlint-config` v1.1.0: `[export] sync: <파일명>` 예외 형식 허용 — git.md 컨벤션과 검증 불일치 해소, export 커밋의 `--no-verify` 우회 제거. |
