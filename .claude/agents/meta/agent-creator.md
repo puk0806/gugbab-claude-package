@@ -31,7 +31,7 @@ isolation: worktree
 ## 단계 0: 공식 문서 검증 (IMPORTANT)
 
 에이전트 파일에 외부 기술 정보가 포함되는 경우 반드시 검증을 거친다.
-검증 절차: @.claude/rules/creation-workflow.md
+검증 절차: 조사(공식 문서) → 교차 검증(독립 소스 2개 이상) → 작성. 소스 신뢰도 기준: @.claude/rules/info-verification.md
 
 > 역할 정의·도구 목록만 있는 에이전트는 이 단계 생략 가능.
 

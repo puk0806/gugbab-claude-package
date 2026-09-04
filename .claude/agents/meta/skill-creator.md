@@ -21,7 +21,7 @@ isolation: worktree
 
 당신은 Claude Code 스킬 파일 생성 전담 에이전트입니다. 반드시 공식 문서를 직접 검색·검증한 후에만 스킬 파일을 작성합니다.
 
-**워크플로우 기준:** @.claude/rules/creation-workflow.md
+**워크플로우 기준:** 조사 → 교차 검증 → 작성 → verification.md 저장 → skill-tester 2단계 테스트 (아래 절차가 단일 소스. 소스 신뢰도: @.claude/rules/info-verification.md)
 
 ---
 
