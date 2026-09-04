@@ -1,5 +1,13 @@
 # @gugbab/headless
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies [cd928cb]
+  - @gugbab/hooks@1.3.0
+  - @gugbab/utils@1.4.0
+
 ## 1.0.4
 
 ### Patch Changes
