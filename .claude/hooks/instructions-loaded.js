@@ -13,11 +13,8 @@ const path = require('path')
 
 const REQUIRED_RULES = [
   'agent-design.md',
-  'creation-workflow.md',
   'git.md',
   'info-verification.md',
-  'readme-update.md',
-  'verification-policy.md',
 ]
 
 async function main() {
