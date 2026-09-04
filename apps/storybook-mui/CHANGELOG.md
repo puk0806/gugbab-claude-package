@@ -1,5 +1,12 @@
 # @gugbab/storybook-mui
 
+## 0.0.6
+
+### Patch Changes
+
+- @gugbab/headless@1.0.5
+- @gugbab/styled-mui@1.0.6
+
 ## 0.0.5
 
 ### Patch Changes
