@@ -158,7 +158,7 @@ function buildReadmeReason(violations, action) {
     )
   }
 
-  lines.push('', '참고: @.claude/rules/readme-update.md')
+  lines.push('', '참고: README.md 업데이트 로그 규칙 — 날짜별 단일 행, 같은 날 변경은 기존 행에 합산')
   return lines.join('\n')
 }
 
@@ -351,7 +351,7 @@ function buildPendingTestReason(missing) {
     '  B. 수동으로 section 5에 테스트 기록 작성 ("**수행일**: ' + today + '" + PASS/FAIL)',
     '  C. "실사용 필수 스킬" 카테고리면 agent content test 기록만으로 PENDING_TEST 유지 가능',
     '',
-    '참고: @.claude/rules/verification-policy.md, @.claude/rules/creation-workflow.md',
+    '참고: docs/skills/<category>/<name>/verification.md 섹션 5 형식 (수행일 + PASS/FAIL 기록)',
     '═══════════════════════════════════════════════════════════════',
     '',
   ].join('\n')

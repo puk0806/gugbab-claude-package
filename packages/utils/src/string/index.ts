@@ -1,3 +1,4 @@
+export { appendTranscript } from "./append-transcript";
 export { camelCase } from "./camel-case";
 export { capitalize } from "./capitalize";
 export { cn } from "./cn";

@@ -42,7 +42,7 @@ function isTestFile(filePath) {
   )
 }
 
-// 대응 테스트 파일 경로 후보 (tdd-guard와 동일 규칙)
+// 대응 테스트 파일 경로 후보 (테스트 파일 탐색 규칙)
 function findTestFile(filePath) {
   const ext = path.extname(filePath)
   const basename = path.basename(filePath, ext)
@@ -155,7 +155,7 @@ try {
   const filePath = input.tool_input?.file_path || input.tool_input?.path
   if (!filePath) process.exit(0)
 
-  // 레포 인프라(훅·커맨드·스크립트)는 제품 코드가 아니므로 제외 (tdd-guard와 동일 철학)
+  // 레포 인프라(훅·커맨드·스크립트)는 제품 코드가 아니므로 제외
   if (/\.claude\/(?:hooks|commands)\//.test(filePath) || /(?:^|\/)scripts\//.test(filePath)) process.exit(0)
 
   const ext = path.extname(filePath)
@@ -171,7 +171,7 @@ try {
   if (WAIVER.test(src)) process.exit(0)
 
   const testPath = findTestFile(filePath)
-  if (!testPath) process.exit(0) // 테스트 없으면 tdd-guard가 담당
+  if (!testPath) process.exit(0) // 테스트 없으면 통과 — 테스트 존재 강제는 superpowers TDD 워크플로우 담당
 
   let testText = ''
   try { testText = fs.readFileSync(testPath, 'utf8') } catch { process.exit(0) }
@@ -193,7 +193,6 @@ try {
   if (offenders.length === 0) process.exit(0)
 
   const rel = path.relative(process.cwd(), filePath)
-  // exit 2 차단 시 모델에 전달되는 메시지는 stderr (stdout은 유실됨)
   process.stderr.write([
     `[fake-impl-guard] ❌ 테스트 통과용 가짜 구현 감지: ${rel}`,
     '',

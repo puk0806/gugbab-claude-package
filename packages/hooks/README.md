@@ -21,6 +21,11 @@
 | state | `useControllableState` | controlled / uncontrolled 자동 전환 (headless 패턴) |
 | dom | `useEventListener` | 타입 안전한 DOM 이벤트 리스너 |
 | dom | `useOnClickOutside` | 특정 요소 밖 클릭 감지 (팝오버·다이얼로그용) |
+| speech | `useSpeechRecognition` | Web Speech API 음성 인식(STT) — listening/interim/error 상태 + stale 세션 가드 |
+| speech | `useSpeak` | speechSynthesis 발화(TTS) — voice 비동기 로딩·언마운트 cancel 대응 |
+| speech | `createRecognizer` | 프레임워크 독립 STT 코어 (훅 없이 직접 제어할 때) |
+| speech | `pickVoice` / `listVoices` | voice 선택 유틸 (preferredURI > lang 정확 일치 > primary subtag) |
+| speech | `isSpeechRecognitionSupported` / `isSpeechSynthesisSupported` | 지원 감지 (부분 구현 방어 포함) |
 
 ## 설치
 

@@ -76,9 +76,6 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 | Git 커밋 컨벤션               | @.claude/rules/git.md                 |
 | 외부 정보 조사·검증           | @.claude/rules/info-verification.md   |
 | 에이전트 설계·작성            | @.claude/rules/agent-design.md        |
-| 스킬·에이전트 생성 절차       | @.claude/rules/creation-workflow.md   |
-| README 업데이트               | @.claude/rules/readme-update.md       |
-| 검증 정책·APPROVED 전환       | @.claude/rules/verification-policy.md |
 | TypeScript / React 코딩       | @.claude/rules/typescript.md          |
 
 > **워크트리 사용 금지** — 모든 작업(시각화 테스트 포함)은 `feature/{설명}` 피처 브랜치로 진행하고 PR로 머지한다. 머지는 사용자가 직접 수행한다. `superpowers:using-git-worktrees` 스킬보다 우선 적용.

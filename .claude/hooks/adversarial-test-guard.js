@@ -105,7 +105,7 @@ try {
   const filePath = input.tool_input?.file_path || input.tool_input?.path
   if (!filePath) process.exit(0)
 
-  // 레포 인프라(훅·커맨드·스크립트)는 제품 코드가 아니므로 제외 (tdd-guard와 동일 철학)
+  // 레포 인프라(훅·커맨드·스크립트)는 제품 코드가 아니므로 제외
   if (/\.claude\/(?:hooks|commands)\//.test(filePath) || /(?:^|\/)scripts\//.test(filePath)) process.exit(0)
 
   const ext = path.extname(filePath)
@@ -124,7 +124,6 @@ try {
   if (categories >= 2) process.exit(0)
 
   const rel = path.relative(process.cwd(), filePath)
-  // exit 2 차단 시 모델에 전달되는 메시지는 stderr (stdout은 유실됨)
   process.stderr.write([
     `[adversarial-test-guard] ❌ 적대적 테스트 커버리지 부족: ${rel}`,
     '',
