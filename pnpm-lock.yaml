@@ -175,9 +175,6 @@ importers:
       '@gugbab/hooks':
         specifier: workspace:*
         version: link:../hooks
-      '@gugbab/utils':
-        specifier: workspace:*
-        version: link:../utils
     devDependencies:
       '@gugbab/tsconfig':
         specifier: workspace:*
