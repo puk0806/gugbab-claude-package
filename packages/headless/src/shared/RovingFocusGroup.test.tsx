@@ -36,7 +36,7 @@ describe('RovingFocusGroup — render', () => {
     expect(item.closest('[data-roving-group="true"]')).not.toBeNull();
   });
 
-  it('container is tabbable when items exist', () => {
+  it('컨테이너는 탭 순서에 들어가지 않는다 (tabindex -1)', () => {
     render(
       <RovingFocusGroup>
         <RovingFocusGroupItem>
@@ -47,7 +47,7 @@ describe('RovingFocusGroup — render', () => {
       </RovingFocusGroup>,
     );
     const container = screen.getByTestId('a').closest('[data-roving-group="true"]');
-    expect(container?.getAttribute('tabindex')).toBe('0');
+    expect(container?.getAttribute('tabindex')).toBe('-1');
   });
 
   it('asChild merges props onto a single child', () => {
@@ -61,7 +61,53 @@ describe('RovingFocusGroup — render', () => {
       </RovingFocusGroup>,
     );
     expect(screen.getByTestId('group').tagName).toBe('UL');
-    expect(screen.getByTestId('group').getAttribute('tabindex')).toBe('0');
+    expect(screen.getByTestId('group').getAttribute('tabindex')).toBe('-1');
+  });
+});
+
+describe('RovingFocusGroup — 탭 스톱 (경계)', () => {
+  it('그룹 전체에서 tabindex=0인 요소는 정확히 하나다', () => {
+    render(
+      <RovingFocusGroup>
+        {['a', 'b', 'c'].map((id) => (
+          <RovingFocusGroupItem key={id}>
+            <button type="button" data-testid={id}>
+              {id}
+            </button>
+          </RovingFocusGroupItem>
+        ))}
+      </RovingFocusGroup>,
+    );
+    const group = screen.getByTestId('a').closest('[data-roving-group="true"]') as HTMLElement;
+    const tabbables = [group, ...Array.from(group.querySelectorAll('[tabindex]'))].filter(
+      (el) => el.getAttribute('tabindex') === '0',
+    );
+    expect(tabbables).toHaveLength(1);
+    // 항목 래퍼(기본 span)가 탭 스톱이며, 첫 번째 항목이어야 한다
+    expect(tabbables[0]).not.toBe(group);
+    expect(tabbables[0].contains(screen.getByTestId('a'))).toBe(true);
+  });
+
+  it('항목이 없는 빈 그룹은 탭 가능한 요소가 없다', () => {
+    render(<RovingFocusGroup data-testid="empty" />);
+    expect(screen.getByTestId('empty').getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('소비자가 tabIndex를 명시하면 그 값을 존중한다', () => {
+    render(<RovingFocusGroup data-testid="g" tabIndex={0} />);
+    expect(screen.getByTestId('g').getAttribute('tabindex')).toBe('0');
+  });
+
+  it('그룹 밖에서 항목을 쓰면 명확한 에러로 거부한다 (오용)', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() =>
+      render(
+        <RovingFocusGroupItem>
+          <button type="button">orphan</button>
+        </RovingFocusGroupItem>,
+      ),
+    ).toThrow('useRovingFocusGroupItem must be used inside <RovingFocusGroup>');
+    spy.mockRestore();
   });
 });
 
