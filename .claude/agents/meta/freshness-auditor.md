@@ -43,15 +43,16 @@ CLAUDE.md 파일은 제외하고 처리한다.
 - `tools:` 목록
 - `name:`, `description:` 존재 여부
 
-**모델 ID deprecated 판정 기준 (2026-08-12 기준):**
+**모델 ID deprecated 판정 기준 (2026-09-25 기준):**
 
 | 모델 ID | 상태 |
 |---------|------|
-| `claude-opus-5` | ✅ 최신 (현행 Opus) |
+| `claude-opus-5-5` | ✅ 최신 (현행 Opus) |
 | `claude-sonnet-5` | ✅ 최신 (현행 Sonnet) |
 | `claude-haiku-4-5` | ✅ 최신 (현행 Haiku) |
-| `claude-fable-5` | ✅ 최신 (최상위 티어) |
-| `claude-opus-4-8` / `claude-opus-4-7` / `claude-opus-4-6` | ⚠️ 구세대 — `claude-opus-5`로 교체 권장 |
+| `claude-fable-5-1` | ✅ 최신 (최상위 티어) |
+| `claude-fable-5` | ⚠️ 구세대 — `claude-fable-5-1`로 교체 권장 |
+| `claude-opus-5` / `claude-opus-4-8` / `claude-opus-4-7` / `claude-opus-4-6` | ⚠️ 구세대 — `claude-opus-5-5`로 교체 권장 (Opus 5.5 브레이킹 체인지는 `.claude/rules/agent-design.md` 참조) |
 | `claude-sonnet-4-6` | ⚠️ 구세대 — `claude-sonnet-5`로 교체 권장 |
 | `claude-sonnet-4-20250514` | ⚠️ deprecated 예정 (2026-06-15) |
 | `claude-opus-4-20250514` | ⚠️ deprecated 예정 (2026-06-15) |
@@ -89,6 +90,8 @@ Glob: .claude/skills/**/SKILL.md
 - 6개월 이내: ✅ 최신
 - 6~12개월: ⚠️ 재검증 권장
 - 12개월 이상: ❌ 재검증 필요
+
+> 검증일은 SKILL.md `> 검증일:`, verification.md 메타 표 `| 검증일 |`·frontmatter `date:`·섹션 8 "재검증" 행 중 **최신값**으로 판정한다(staleness-check 훅과 동일 기준). 재검증 결과를 반영할 때는 SKILL.md `> 검증일:`과 verification.md 메타 표 검증일(+ frontmatter `date:`)을 **함께** 갱신하고 섹션 8에 "재검증" 행을 추가하도록 권고한다.
 
 ### 2-3. verification.md 존재 확인
 
