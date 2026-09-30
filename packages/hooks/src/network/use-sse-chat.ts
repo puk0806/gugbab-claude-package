@@ -1,6 +1,6 @@
 import type { SseEvent } from "@gugbab/utils";
 import { readSSEStream } from "@gugbab/utils";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type SSEChatStatus = "idle" | "streaming" | "done" | "error";
 
@@ -92,6 +92,21 @@ export function useSSEChat(options: UseSSEChatOptions): UseSSEChatResult {
         abortRef.current = null;
         setStatus("idle");
     }, []);
+
+    // Unmount: abort the in-flight request and invalidate its generation so
+    // late events from the reader are dropped (no callbacks after unmount).
+    // Effects can also be torn down without an unmount (StrictMode dev
+    // double-invoke, <Activity mode="hidden">) — reset a "streaming" status so
+    // the hook does not stay stuck after re-attaching.
+    useEffect(
+        () => () => {
+            generationRef.current++;
+            abortRef.current?.abort();
+            abortRef.current = null;
+            setStatus((s) => (s === "streaming" ? "idle" : s));
+        },
+        [],
+    );
 
     return { text, status, send, abort };
 }
