@@ -502,17 +502,16 @@ const Thumb = forwardRef<HTMLSpanElement, SliderThumbProps>(function SliderThumb
         e.preventDefault();
         svc(index, value - ctx.step);
         break;
+      // Only horizontal sliders reach these cases (vertical ones match
+      // incrementKey/decrementKey above). APG: Up=increase / Down=decrease
+      // regardless of RTL or `inverted`.
       case 'ArrowUp':
-        if (!horizontal) {
-          e.preventDefault();
-          svc(index, inverted ? value - ctx.step : value + ctx.step);
-        }
+        e.preventDefault();
+        svc(index, value + ctx.step);
         break;
       case 'ArrowDown':
-        if (!horizontal) {
-          e.preventDefault();
-          svc(index, inverted ? value + ctx.step : value - ctx.step);
-        }
+        e.preventDefault();
+        svc(index, value - ctx.step);
         break;
       case 'Home':
         e.preventDefault();

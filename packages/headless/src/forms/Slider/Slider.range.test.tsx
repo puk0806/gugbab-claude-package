@@ -142,11 +142,19 @@ describe('Slider — Keyboard navigation', () => {
     expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(40);
   });
 
-  it('ArrowUp on horizontal slider has no effect', () => {
+  it('가로 슬라이더에서 ArrowUp은 증가, ArrowDown은 감소 (APG)', () => {
     const thumb = setup([50]);
     fireEvent.keyDown(thumb, { key: 'ArrowUp' });
-    // Horizontal slider: ArrowUp is not bound (no flipH match)
-    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(50);
+    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(51);
+    fireEvent.keyDown(thumb, { key: 'ArrowDown' });
+    fireEvent.keyDown(thumb, { key: 'ArrowDown' });
+    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(49);
+  });
+
+  it('가로 ArrowUp도 max에서 clamp된다 (경계)', () => {
+    const thumb = setup([100]);
+    fireEvent.keyDown(thumb, { key: 'ArrowUp' });
+    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(100);
   });
 
   it('ArrowRight clamps at max', () => {
@@ -224,6 +232,62 @@ describe('Slider — inverted', () => {
     thumb.focus();
     fireEvent.keyDown(thumb, { key: 'ArrowLeft' });
     expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(51);
+  });
+
+  it('가로 inverted여도 ArrowUp은 증가한다 (APG: Up=증가)', () => {
+    render(
+      <Slider.Root defaultValue={[50]} inverted>
+        <Slider.Thumb aria-label="v" />
+      </Slider.Root>,
+    );
+    const thumb = screen.getByRole('slider');
+    thumb.focus();
+    fireEvent.keyDown(thumb, { key: 'ArrowUp' });
+    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(51);
+  });
+
+  it('가로 RTL이어도 ArrowUp은 증가, ArrowDown은 감소한다', () => {
+    render(
+      <Slider.Root defaultValue={[50]} dir="rtl">
+        <Slider.Thumb aria-label="v" />
+      </Slider.Root>,
+    );
+    const thumb = screen.getByRole('slider');
+    thumb.focus();
+    fireEvent.keyDown(thumb, { key: 'ArrowUp' });
+    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(51);
+    fireEvent.keyDown(thumb, { key: 'ArrowDown' });
+    fireEvent.keyDown(thumb, { key: 'ArrowDown' });
+    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(49);
+  });
+
+  it('세로 inverted는 기존대로 ArrowUp이 감소한다 (회귀 방지)', () => {
+    render(
+      <Slider.Root defaultValue={[50]} orientation="vertical" inverted>
+        <Slider.Thumb aria-label="v" />
+      </Slider.Root>,
+    );
+    const thumb = screen.getByRole('slider');
+    thumb.focus();
+    fireEvent.keyDown(thumb, { key: 'ArrowUp' });
+    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(49);
+  });
+
+  it('disabled면 ArrowUp이 무시된다 (오남용 방어)', () => {
+    render(
+      <Slider.Root defaultValue={[50]} disabled>
+        <Slider.Thumb aria-label="v" />
+      </Slider.Root>,
+    );
+    const thumb = screen.getByRole('slider');
+    fireEvent.keyDown(thumb, { key: 'ArrowUp' });
+    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(50);
+  });
+
+  it('Root 밖의 Thumb은 명확한 에러로 거부한다 (오용)', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    expect(() => render(<Slider.Thumb aria-label="orphan" />)).toThrow('must be used inside <Slider.Root>');
+    spy.mockRestore();
   });
 });
 
