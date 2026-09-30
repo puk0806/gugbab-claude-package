@@ -29,10 +29,10 @@ npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 
-# Env
+# Env — .env.production 등 모든 변형 차단, 예시 파일만 허용
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Husky internals (auto-managed)
 .husky/_
