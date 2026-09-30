@@ -1,10 +1,12 @@
 import {
   FloatingFocusManager,
+  FloatingList,
   FloatingPortal,
   type Placement,
   useClick,
   useDismiss,
   useInteractions,
+  useListItem,
   useListNavigation,
   useRole,
 } from '@floating-ui/react';
@@ -15,6 +17,7 @@ import {
   forwardRef,
   type HTMLAttributes,
   type InputHTMLAttributes,
+  type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
   useContext,
   useRef,
@@ -134,7 +137,7 @@ function ComboboxRoot({
         activeIndex,
       }}
     >
-      {children}
+      <FloatingList elementsRef={listRef}>{children}</FloatingList>
     </Ctx.Provider>
   );
 }
@@ -156,7 +159,7 @@ const Anchor = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
 );
 
 const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
-  function ComboboxInput({ onChange, onFocus, value, ...rest }, ref) {
+  function ComboboxInput({ onChange, onFocus, onKeyDown, value, ...rest }, ref) {
     const ctx = useCtx('Combobox.Input');
     return (
       <input
@@ -174,6 +177,23 @@ const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>
           onFocus: (e: React.FocusEvent<HTMLInputElement>) => {
             onFocus?.(e);
             if (!ctx.open) ctx.setOpen(true);
+          },
+          onKeyDown: (e: ReactKeyboardEvent<HTMLInputElement>) => {
+            onKeyDown?.(e);
+            if (e.defaultPrevented) return;
+            // Virtual focus: the active option never receives DOM focus, so
+            // Enter on the input commits it (reusing the item's click logic,
+            // which already guards `disabled`).
+            if (e.key !== 'Enter' || !ctx.open || ctx.activeIndex === null) return;
+            // IME composition (e.g. Hangul): this Enter confirms the composed
+            // text, not the option.
+            if (e.nativeEvent.isComposing || e.keyCode === 229) return;
+            // The active option can vanish when the list is filtered — then
+            // leave Enter alone so the surrounding form still submits.
+            const active = ctx.listRef.current[ctx.activeIndex];
+            if (!active) return;
+            e.preventDefault();
+            active.click();
           },
         })}
       />
@@ -236,20 +256,24 @@ const Item = forwardRef<HTMLButtonElement, ComboboxItemProps>(function ComboboxI
 ) {
   const ctx = useCtx('Combobox.Item');
   const selected = ctx.value === itemValue;
+  // FloatingList owns registration: index follows DOM order and unmounted
+  // items are removed, so reopening/filtering never leaves stale nodes.
+  const { ref: listItemRef, index } = useListItem();
+  // `index` is null until FloatingList registers the item; without this guard
+  // every item would match `activeIndex === null` on its first commit.
+  const highlighted = index !== null && ctx.activeIndex === index;
 
   return (
     <button
       ref={(node) => {
-        if (node) {
-          const idx = ctx.listRef.current.indexOf(node);
-          if (idx === -1) ctx.listRef.current.push(node);
-        }
+        listItemRef(node);
         if (typeof ref === 'function') ref(node);
         else if (ref) ref.current = node;
       }}
       type={type}
       role="option"
       aria-selected={selected}
+      data-highlighted={highlighted ? '' : undefined}
       disabled={disabled}
       {...ctx.getItemProps({
         ...rest,
