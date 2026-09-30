@@ -8,7 +8,7 @@
   justify-content: space-between;
   gap: var(--gugbab-space-2);
   border-radius: var(--gugbab-radius-sm);
-  border: 1px solid var(--gugbab-color-border-base);
+  border: 1px solid var(--gugbab-color-border-control);
   background: var(--gugbab-color-bg-surface);
   color: var(--gugbab-color-fg-primary);
   font-family: var(--gugbab-font-family-sans);
@@ -31,13 +31,13 @@
 }
 
 .gmui-select__trigger:hover {
-  border-color: var(--gugbab-color-border-strong);
+  border-color: var(--gugbab-color-fg-primary);
 }
 
 .gmui-select__trigger:focus-visible {
   outline: none;
   border-color: var(--gugbab-color-accent-base);
-  box-shadow: 0 0 0 3px rgba(var(--gugbab-color-accent-base, 0 0 0) / 0.2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gugbab-color-accent-base) 20%, transparent);
 }
 
 .gmui-select__trigger[data-state="open"] {
@@ -176,4 +176,10 @@
   color: var(--gugbab-color-fg-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* 키보드 포커스 표시 (WCAG 2.4.7) */
+.gmui-select__item:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: -2px;
 }

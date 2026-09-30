@@ -130,7 +130,7 @@
 
 .grx-slider__thumb:hover {
   box-shadow:
-    0 0 0 6px rgba(var(--gugbab-color-accent-base, 0 0 0) / 0.1),
+    0 0 0 6px color-mix(in srgb, var(--gugbab-color-accent-base) 10%, transparent),
     0 1px 3px rgba(0, 0, 0, 0.15);
 }
 

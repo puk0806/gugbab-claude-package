@@ -61,7 +61,7 @@
 }
 
 .grx-menu__item:hover,
-.grx-menu__item[data-highlighted] {
+.grx-menu__item:focus-visible {
   background: var(--gugbab-color-bg-inset);
 }
 
@@ -124,4 +124,10 @@
 .grx-menu__radio-group {
   display: flex;
   flex-direction: column;
+}
+
+/* 항목은 실제 DOM 포커스를 받는다 — 키보드 포커스 표시 (WCAG 2.4.7) */
+.grx-menu__item:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: -2px;
 }

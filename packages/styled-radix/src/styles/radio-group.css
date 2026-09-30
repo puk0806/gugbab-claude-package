@@ -27,7 +27,7 @@
   width: 18px;
   height: 18px;
   border-radius: var(--gugbab-radius-full);
-  border: 1px solid var(--gugbab-color-border-base);
+  border: 1px solid var(--gugbab-color-border-control);
   background: var(--gugbab-color-bg-surface);
   box-shadow: inset 0 0 0 1px var(--gugbab-color-border-subtle, rgba(0, 0, 0, 0.06));
   cursor: pointer;

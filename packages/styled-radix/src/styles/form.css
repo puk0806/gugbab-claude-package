@@ -44,7 +44,7 @@
   height: 36px;
   padding: 0 var(--gugbab-space-3);
   border-radius: var(--gugbab-radius-md);
-  border: 1px solid var(--gugbab-color-border-base);
+  border: 1px solid var(--gugbab-color-border-control);
   background: var(--gugbab-color-bg-surface);
   color: var(--gugbab-color-fg-primary);
   font-family: var(--gugbab-font-family-sans);
@@ -55,13 +55,13 @@
 }
 
 .grx-form__control:hover {
-  border-color: var(--gugbab-color-border-strong);
+  border-color: var(--gugbab-color-fg-secondary);
 }
 
 .grx-form__control:focus {
   outline: none;
-  border-color: var(--gugbab-color-accent-subtle);
-  box-shadow: 0 0 0 2px var(--gugbab-color-accent-subtle);
+  border-color: var(--gugbab-color-border-focus);
+  box-shadow: 0 0 0 2px var(--gugbab-color-border-focus);
 }
 
 .grx-form__control:disabled {
