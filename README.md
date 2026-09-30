@@ -47,7 +47,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 | `@gugbab/commitlint-config`   | 공용 commitlint 컨벤션 (`[category] Type: Subject`) | 1.1.0 |
 | `@gugbab/utils`               | 프레임워크 독립 순수 유틸 (string/object/array/guard/fn/format/sse/history, 32개 함수) | 1.4.0 |
 | `@gugbab/hooks`               | 헤드리스 공용 React 훅 (lifecycle/ref/binding/state/dom/network/speech, 14개 훅) | 1.3.0 |
-| `@gugbab/headless`               | 헤드리스 React 컴포넌트 35종 + Form (Radix 1:1 ~90%, 426 tests) | 1.0.5 |
+| `@gugbab/headless`               | 헤드리스 React 컴포넌트 35종(Form 포함, Radix 1:1 ~90%, 426 tests) | 1.0.5 |
 | `@gugbab/tokens`              | 추상 디자인 토큰 + 정적 MUI/Radix 스냅샷 → CSS variables (`dist/{mui,radix}.css`). 외부 라이브러리 의존성 0 | 1.0.0 |
 | `@gugbab/styled-mui`          | MUI 외관 styled 컴포넌트 35종 (`gmui-*` 클래스, `dist/styles.css` 99 blocks) | 1.0.6 |
 | `@gugbab/styled-radix`        | Radix 외관 styled 컴포넌트 35종 (`grx-*` 클래스, `dist/styles.css` 99 blocks) | 1.0.6 |
