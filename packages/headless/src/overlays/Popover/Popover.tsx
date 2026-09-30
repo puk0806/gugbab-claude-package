@@ -11,8 +11,11 @@ import {
   createContext,
   forwardRef,
   type HTMLAttributes,
+  type RefObject,
   useContext,
+  useEffect,
   useId,
+  useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import {
@@ -22,6 +25,7 @@ import {
 } from '../../shared/DismissableLayer';
 import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
+import { handleCloseAutoFocus } from '../_closeAutoFocus';
 import { useFloatingBase } from '../_floatingBase';
 
 export interface PopoverTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -42,6 +46,8 @@ interface PopoverContextValue {
   getFloatingProps: ReturnType<typeof useInteractions>['getFloatingProps'];
   contentId: string;
   modal: boolean;
+  /** The trigger button only — `refs.domReference` becomes the Anchor when one is rendered. */
+  triggerRef: RefObject<HTMLButtonElement | null>;
 }
 
 const Ctx = createContext<PopoverContextValue | null>(null);
@@ -86,6 +92,7 @@ function PopoverRoot({
   const role = useRole(floating.context, { role: 'dialog' });
   const { getReferenceProps, getFloatingProps } = useInteractions([click, role]);
   const contentId = useId();
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   return (
     <Ctx.Provider
@@ -99,6 +106,7 @@ function PopoverRoot({
         getFloatingProps,
         contentId,
         modal,
+        triggerRef,
       }}
     >
       {children}
@@ -114,6 +122,7 @@ const Trigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>(function Popo
   const Comp = asChild ? Slot : 'button';
   const setRef = (node: HTMLButtonElement | null) => {
     ctx.refs.setReference(node);
+    ctx.triggerRef.current = node;
     if (typeof ref === 'function') ref(node);
     else if (ref) ref.current = node;
   };
@@ -177,6 +186,12 @@ const Content = forwardRef<HTMLDivElement, PopoverContentProps>(function Popover
 ) {
   const ctx = useCtx('Popover.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  // Closed by an outside interaction → focus stays where the user put it.
+  const hasInteractedOutsideRef = useRef(false);
+  // Reset on every open — a rejected (controlled) close must not leak into the next one.
+  useEffect(() => {
+    if (ctx.open) hasInteractedOutsideRef.current = false;
+  }, [ctx.open]);
   if (!mounted && !forceMount) return null;
 
   const Comp = asChild ? Slot : 'div';
@@ -194,7 +209,21 @@ const Content = forwardRef<HTMLDivElement, PopoverContentProps>(function Popover
       disableOutsidePointerEvents={ctx.modal}
       onPointerDownOutside={onPointerDownOutside}
       onFocusOutside={onFocusOutside}
-      onInteractOutside={onInteractOutside}
+      onInteractOutside={(event) => {
+        onInteractOutside?.(event);
+        if (event.defaultPrevented) return;
+        // A press on the trigger is not "outside": let its click toggle the
+        // popover closed instead of dismissing here and re-opening on click.
+        const trigger = ctx.triggerRef.current;
+        const target = event.detail.originalEvent.target;
+        if (trigger && target instanceof Node && trigger.contains(target)) {
+          event.preventDefault();
+          return;
+        }
+        // Modal: outside pointer events are blocked, so the click cannot have
+        // moved focus anywhere useful — keep the default return-to-trigger.
+        if (!ctx.modal) hasInteractedOutsideRef.current = true;
+      }}
       onEscapeKeyDown={onEscapeKeyDown}
       onDismiss={() => ctx.setOpen(false)}
     >
@@ -203,7 +232,11 @@ const Content = forwardRef<HTMLDivElement, PopoverContentProps>(function Popover
         trapped={ctx.modal}
         loop
         onMountAutoFocus={onOpenAutoFocus}
-        onUnmountAutoFocus={onCloseAutoFocus}
+        onUnmountAutoFocus={(event) => {
+          onCloseAutoFocus?.(event);
+          handleCloseAutoFocus(event, ctx.triggerRef.current, hasInteractedOutsideRef.current);
+          hasInteractedOutsideRef.current = false;
+        }}
       >
         <Comp
           ref={composeRef}
