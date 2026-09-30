@@ -23,6 +23,8 @@ interface RadioGroupContextValue {
   /** true when a name was explicitly provided — BubbleInput is only rendered then */
   hasName: boolean;
   orientation: 'horizontal' | 'vertical';
+  /** Resolved direction (prop ?? DirectionProvider) — keeps value selection in sync with roving focus. */
+  dir: 'ltr' | 'rtl';
 }
 
 const Ctx = createContext<RadioGroupContextValue | null>(null);
@@ -32,7 +34,7 @@ const useCtx = (n: string) => {
   return ctx;
 };
 
-export interface RadioGroupRootProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue'> {
+export interface RadioGroupRootProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'dir'> {
   value?: string;
   defaultValue?: string;
   onValueChange?: (v: string) => void;
@@ -40,6 +42,8 @@ export interface RadioGroupRootProps extends Omit<HTMLAttributes<HTMLDivElement>
   required?: boolean;
   name?: string;
   orientation?: 'horizontal' | 'vertical';
+  /** Reading direction; overrides the nearest DirectionProvider. */
+  dir?: 'ltr' | 'rtl';
 }
 
 const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(function RadioGroupRoot(
@@ -51,6 +55,7 @@ const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(function RadioGroup
     required,
     name,
     orientation = 'vertical',
+    dir: dirProp,
     children,
     ...rest
   },
@@ -63,7 +68,7 @@ const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(function RadioGroup
   });
   const generatedName = useId();
   const groupName = name ?? generatedName;
-  const dir = useDirection();
+  const dir = useDirection(dirProp);
 
   return (
     <Ctx.Provider
@@ -74,6 +79,7 @@ const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(function RadioGroup
         name: groupName,
         hasName: name !== undefined,
         orientation,
+        dir,
       }}
     >
       <RovingFocusGroup asChild orientation={orientation} dir={dir} loop>
@@ -82,6 +88,7 @@ const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(function RadioGroup
           role="radiogroup"
           aria-required={required}
           aria-orientation={orientation}
+          dir={dir}
           data-disabled={disabled ? '' : undefined}
           {...rest}
         >
@@ -141,12 +148,9 @@ const Item = forwardRef<HTMLButtonElement, RadioGroupItemProps>(function RadioGr
     // We compute the target item synchronously so setValue fires before focus
     // moves (jsdom tests rely on synchronous selection change).
     const horizontal = ctx.orientation === 'horizontal';
-    const rtl =
-      ctx.orientation === 'horizontal'
-        ? (rovingProps.ref as React.RefObject<HTMLElement>).current
-            ?.closest('[data-roving-group]')
-            ?.getAttribute('data-dir') === 'rtl'
-        : false;
+    // Same direction RovingFocusGroup uses to move focus — reading a DOM
+    // attribute here drifted (it was never set), so value and focus diverged.
+    const rtl = horizontal && ctx.dir === 'rtl';
 
     const nextKey = horizontal ? (rtl ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown';
     const prevKey = horizontal ? (rtl ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp';
