@@ -12,6 +12,13 @@
  * applies the `gmui-*` class names defined in the bundled CSS.
  */
 
+// Shared context re-exported so consumers never need to import
+// `@gugbab/headless` directly. The dependency is pinned to an exact version;
+// if an app also installed a different headless version, a provider imported
+// from there would be a different React context and silently not reach these
+// components.
+export { type Direction, DirectionProvider, type DirectionProviderProps, useDirection } from "@gugbab/headless";
+
 export type { AccordionRootStyledProps, AccordionVariant } from "./components/Accordion";
 export { Accordion } from "./components/Accordion";
 export type {
