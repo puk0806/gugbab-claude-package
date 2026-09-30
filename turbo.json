@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalDependencies": ["**/.env.*local", ".nvmrc", ".npmrc"],
+  "globalDependencies": ["**/.env.*local", ".nvmrc", ".npmrc", "scripts/**"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
