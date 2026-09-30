@@ -37,6 +37,8 @@ export function tokensToVars(tokens: DesignTokens): Record<string, string> {
     setVar(vars, "color-border-base", tokens.color.border.base);
     setVar(vars, "color-border-strong", tokens.color.border.strong);
     setVar(vars, "color-border-focus", tokens.color.border.focus);
+    // Optional token (added later) — fall back so custom themes never emit an empty var.
+    setVar(vars, "color-border-control", tokens.color.border.control ?? tokens.color.border.strong);
     setVar(vars, "color-overlay", tokens.color.overlay);
 
     // space

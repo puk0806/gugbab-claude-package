@@ -33,7 +33,14 @@ export const radixTheme: ThemeTokens = {
             warning: { base: "#ffc53d", fg: "black", subtle: "#fff7c2" },
             danger: { base: "#e5484d", fg: "white", subtle: "#feebec" },
             info: { base: "#0090ff", fg: "white", subtle: "#e6f4fe" },
-            border: { subtle: "#d9d9e0", base: "#cdced6", strong: "#b9bbc6", focus: "#5eb1ef" },
+            border: {
+                subtle: "#d9d9e0",
+                base: "#cdced6",
+                strong: "#b9bbc6",
+                focus: "#5eb1ef",
+                // Radix gray step used for fg.muted — the lightest step that clears 3:1 on the app background.
+                control: "#80838d",
+            },
             overlay: "rgba(0, 0, 0, 0.6)",
         },
         space: {
@@ -116,7 +123,13 @@ export const radixTheme: ThemeTokens = {
             warning: { base: "#ffc53d", fg: "black", subtle: "#302008" },
             danger: { base: "#e5484d", fg: "white", subtle: "#3b1219" },
             info: { base: "#0090ff", fg: "white", subtle: "#0d2847" },
-            border: { subtle: "#363a3f", base: "#43484e", strong: "#5a6169", focus: "#2870bd" },
+            border: {
+                subtle: "#363a3f",
+                base: "#43484e",
+                strong: "#5a6169",
+                focus: "#2870bd",
+                control: "#777b84",
+            },
             overlay: "rgba(255, 255, 255, 0.2)",
         },
         space: {
