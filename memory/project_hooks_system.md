@@ -3,9 +3,9 @@ name: Claude hooks system
 description: .claude/hooks/ 훅 시스템(실행 훅 21종 + _lib + statusline)의 역할 구분과 핵심 동작. 메모리 미러 동기화, Codex 리뷰, 품질·적대적 테스트 가드.
 type: project
 originSessionId: bfc7802b-aa36-406e-b08b-1c96c782b326
-modified: 2026-09-04T00:09:11.642Z
+modified: 2026-09-30T04:20:49.327Z
 ---
-2026-09-04 기준 훅 23종(실행 훅 21종 + `_lib.js` + `statusline.sh`) 운영 중. 상세 목록은 `docs/hooks/README.md`가 단일 소스.
+2026-09-30 기준 훅 24개(실행 훅 21종 + `_lib.js` + `statusline.sh` + `package.json`) 운영 중. 상세 목록은 `docs/hooks/README.md`가 단일 소스. 훅·에이전트·스킬·rules·commands는 **원본 레포(00_gugbab-claude)의 project-install.sh 설치본**이다(`.claude/.install-manifest.json` — 템플릿 react-spa·nextjs, 작성 도구 제외, `--legacy`·README 가드·staleness `--strict`). 설치본 파일을 로컬에서만 고치면 다음 재설치 때 덮어써진다 — [[feedback_report_upstream_asset_bugs]].
 
 **Why:** 메모리·세션 기록 동기화, Codex 코드 리뷰 강제, 품질 가드(README 동기화, TDD, 적대적 테스트 커버리지, 가짜 구현 차단 등)를 훅으로 자동화.
 
@@ -34,3 +34,4 @@ modified: 2026-09-04T00:09:11.642Z
 - 2026-07-08: 훅 self-commit 전멸 버그 수정 (commitlint 거부 → `--no-verify`) — 이후 07-10 개편으로 self-commit 자체 폐지되어 과거 이력
 - 2026-07-10~08-03: 메모리 구조 개편 — symlink·자동 커밋 폐지, 전역 1차 + 레포 미러. memory-stop-guard.js 제거. adversarial-test-guard·fake-impl-guard 신설(적대적 테스트·가짜 구현 차단, @.claude/rules/adversarial-testing.md). tdd-guard 교차 확장자·stderr 수정. codex 리뷰는 adversarial-review 컴패니언 경로로 전환
 - 2026-09-03~04: 훅·rules 간소화 개편 — tdd-guard.js 제거(superpowers TDD 워크플로우로 대체, 테스트 "존재" 강제 훅 없음), typescript-quality `--changed-only`(베이스라인 대비 신규 에러만 차단), deliverable-guard 일부 이벤트 `--no-readme`. rules 4종 삭제(creation-workflow·verification-policy·readme-update·commands — 내용은 에이전트 MD·훅 메시지에 흡수). 개편 중 stderr→stdout 회귀 발생해 재수정(위 stderr 원칙 재확인)
+- 2026-09-25~30: 원본 레포 설치본으로 교체. 로컬 수정(stderr·/agent-status)이 설치로 덮여 회귀 → 원본에 제보해 원본에서 수정(차단 훅 5종 stderr, hooks/package.json, 경고 훅 SessionStart 재배선) 후 재설치. 작성 도구(agent-creator·skill-creator·skill-tester·작성 rules 5종) 미설치로 확정. 설치 목록 밖 잔재 스킬 57·에이전트 2·고아 검증 문서 143 삭제. codex `gpt-5.4`가 ChatGPT 계정에서 400 → `.claude/.codex-unavailable` 마커로 통과 중

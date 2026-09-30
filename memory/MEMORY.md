@@ -2,10 +2,12 @@
 - [Reference monorepo](project_reference_monorepo.md) — 참고 레포(gugbab-integrated-admin-poc) 구조·스택 요약
 - [Headless React package roadmap](project_react_roadmap.md) — @gugbab/headless 5-tier 35 컴포넌트의 설계 결정·카탈로그·다음 후보
 - [npm v1 publishing — DONE](project_npm_v1_publishing.md) — v1.0.0 9개 + v1.0.1 5개 npm 게시 완료. 2026-05-11 부터 feature PR 머지 1회로 publish 자동 (auto-merge 흐름).
-- [Claude hooks system](project_hooks_system.md) — 훅 23종 운영. 메모리·세션 export 동기화, Codex 리뷰, 품질 가드. 훅 self-commit은 --no-verify 필수.
+- [Claude hooks system](project_hooks_system.md) — 훅 24개 운영(원본 레포 설치본, 작성 도구 미설치). 메모리·세션 export 동기화, Codex 리뷰, 품질 가드.
+- [2026-09-30 audit & priorities](project_audit_2026_09_30.md) — 전체 점검 우선순위 1~4, 1순위(헤드리스 버그 4건) 완료·미커밋, 2순위 보안부터 대기
+- [Report upstream asset bugs](feedback_report_upstream_asset_bugs.md) — 설치본 .claude 자산 버그는 원본(00_gugbab-claude) 세션에 SendMessage로 전달 후 재설치
 - [relay-types + types-generator](project_relay_types_generator.md) — OpenAPI→TS 타입 자동 publish 파이프라인 완성·운영 중 (1.0.0-{ts}, relay 배포 성공 → 자동 게시). PAT 만료 주의.
 - [utils history module](project_utils_history_module.md) — utils 1.3.0 이력 압축 순수 함수 4종. 상한 값 파라미터 주입, relay-types 의존 금지 (사용자 확정)
-- [Speech common package](project_speech_common.md) — Web Speech API(STT/TTS) 공통화: hooks speech 카테고리 + utils appendTranscript. 3앱 마이그레이션 예정. pnpm pack 주의.
+- [Speech common package](project_speech_common.md) — Web Speech API(STT/TTS) 공통화 완료: hooks 1.3.0·utils 1.4.0 게시 + 3앱 마이그레이션 브랜치 푸시(2026-09-04). 남은 것: 앱 PR 머지·실기기 확인. pnpm pack 주의.
 - [Visual check script](reference_visual_check.md) — `scripts/visual-check.{mjs,sh}` Playwright 시각 검수 도구
 - [Batched execution preference](feedback_batched_execution.md) — 섹션별 승인 대신 초반 방향만 대화 후 일괄 진행, 전체 승인 1회
 - [Commit at end of session](feedback_commit_at_end.md) — 다단계 누적 세션은 마지막에 한 번만 커밋, 중간 커밋 금지
