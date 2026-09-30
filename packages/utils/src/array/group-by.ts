@@ -5,11 +5,14 @@ export function groupBy<T, K extends PropertyKey>(
     const result = {} as Record<K, T[]>;
     array.forEach((item, index) => {
         const key = keyFn(item, index);
-        const bucket = result[key];
-        if (bucket) {
-            bucket.push(item);
+        // Own-property check: inherited members (toString, constructor, …)
+        // must not be mistaken for an existing bucket.
+        if (Object.hasOwn(result, key)) {
+            result[key].push(item);
         } else {
-            result[key] = [item];
+            // defineProperty: plain assignment to "__proto__" would replace the
+            // prototype instead of creating a key.
+            Object.defineProperty(result, key, { value: [item], writable: true, enumerable: true, configurable: true });
         }
     });
     return result;
