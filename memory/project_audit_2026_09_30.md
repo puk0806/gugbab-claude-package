@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: f35db723-e646-4a91-90c9-1860c939e8df
-  modified: 2026-09-30T06:56:42.465Z
+  modified: 2026-09-30T10:14:10.347Z
 ---
 
 2026-09-30 전체 프로젝트 점검. a11y-auditor, security-auditor, codebase-domain-analyst, qa-engineer, pr-reviewer를 병렬로 돌렸다. 빌드·타입·테스트·biome는 모두 GREEN이었다.
@@ -35,7 +35,15 @@ metadata:
 - 보류: styled-mui/radix 복제 통합
 - 후속: 테스트 파일 타입 검사를 CI에 포함(기존 TS 오류 3건 방치), SSE 함수 제네릭화, 다음 major에서 safety_block 제거
 
-**4순위 (대기):** 스타일 a11y(Select/Combobox 항목과 Tabs 패널 포커스 표시, 무효한 `rgba(var(hex))` 포커스 링, 비텍스트 대비 3:1). 토큰 색을 바꾸면 VR 기준 이미지가 갱신된다. 남은 a11y Major는 RadioGroup RTL, Popover 바깥 클릭 포커스, Dialog 트리거 복귀, DropdownMenu RTL 서브메뉴다. 테스트 보강(qa 추천 10건)도 남아 있다.
+**4순위 (접근성): 완료·커밋** — `feature/a11y-priority4`(main 기준, 8커밋), 계획·결과 `docs/superpowers/plans/2026-09-30-a11y-priority4.md`
+- tokens `border.control`(선택 필드, 없으면 strong). mui 값은 MUI 소스 확인(text.secondary)
+- styled 포커스 표시·대비·무효 `color-mix` 교체. **기본 외관이 바뀌므로 PR에서 VR `accept-baseline` 필요**
+- headless: RadioGroup RTL, Popover·DropdownMenu 닫힘 포커스와 트리거 재오픈(`overlays/_closeAutoFocus.ts`), Dialog 트리거 복원, DropdownMenu RTL 서브메뉴와 비활성 SubTrigger
+- Combobox `[data-highlighted]` CSS는 1순위(headless)와 함께 동작한다 → 권장 머지 순서는 1 → 4
+- 독립 리뷰 C3·I6 반영. 후속: CSS의 `var`·`data-*` 계약 테스트, `color-mix` 지원 브라우저 README 명시
+- **branch-protection 훅:** 피처→피처 분기 금지다(새 브랜치는 main에서, checkout main과 브랜치 생성을 별도 명령으로). 3순위는 이 훅 도입 전에 2순위 위에 쌓아서 예외로 유지한다
+
+**남은 것:** 푸시(사용자가 한 번에, 한 차례 중단함), 2순위 결정 D1~D4, Codex 설정, 테스트 보강(qa 추천 10건), 테스트 파일 타입 검사를 CI에 포함, SSE 제네릭화, styled 복제 통합(보류)
 
 **원본 레포 반영 대기:** 원본 세션이 제보 항목을 반영했지만 원본도 미커밋 상태다. 원본이 커밋되면 재설치한다(작성 도구 N, CLAUDE.md N). `_lib.js` 폐지로 훅 수가 바뀌므로 README를 동기화해야 한다.
 
