@@ -3,7 +3,8 @@
 - [Headless React package roadmap](project_react_roadmap.md) — @gugbab/headless 5-tier 35 컴포넌트의 설계 결정·카탈로그·다음 후보
 - [npm v1 publishing — DONE](project_npm_v1_publishing.md) — v1.0.0 9개 + v1.0.1 5개 npm 게시 완료. 2026-05-11 부터 feature PR 머지 1회로 publish 자동 (auto-merge 흐름).
 - [Claude hooks system](project_hooks_system.md) — 훅 24개 운영(원본 레포 설치본, 작성 도구 미설치). 메모리·세션 export 동기화, Codex 리뷰, 품질 가드.
-- [2026-09-30 audit & priorities](project_audit_2026_09_30.md) — 전체 점검 우선순위 1~4, 1순위(헤드리스 버그 4건) 완료·미커밋, 2순위 보안부터 대기
+- [2026-09-30 audit & priorities](project_audit_2026_09_30.md) — 1~3순위 완료·커밋(미푸시, 브랜치 4개, 3순위는 2순위 위에 쌓임). 4순위·결정 D1~D4·후속 작업 대기
+- [No git stash for temp comparisons](feedback_no_git_stash.md) — 기존 stash 항목이 있어 pop 사고 발생(09-30). 사본 교체·복원으로 비교, 사용자 stash는 절대 pop/drop 금지
 - [Report upstream asset bugs](feedback_report_upstream_asset_bugs.md) — 설치본 .claude 자산 버그는 원본(00_gugbab-claude) 세션에 SendMessage로 전달 후 재설치
 - [relay-types + types-generator](project_relay_types_generator.md) — OpenAPI→TS 타입 자동 publish 파이프라인 완성·운영 중 (1.0.0-{ts}, relay 배포 성공 → 자동 게시). PAT 만료 주의.
 - [utils history module](project_utils_history_module.md) — utils 1.3.0 이력 압축 순수 함수 4종. 상한 값 파라미터 주입, relay-types 의존 금지 (사용자 확정)
