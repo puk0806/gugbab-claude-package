@@ -33,8 +33,10 @@ import {
   type FocusOutsideEvent,
   type PointerDownOutsideEvent,
 } from '../../shared/DismissableLayer';
+import { useDirection } from '../../shared/DirectionProvider';
 import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
+import { handleCloseAutoFocus } from '../_closeAutoFocus';
 import { useFloatingBase } from '../_floatingBase';
 
 export interface DropdownMenuTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -195,6 +197,12 @@ const Content = forwardRef<HTMLDivElement, DropdownMenuContentProps>(function Dr
 ) {
   const ctx = useCtx('DropdownMenu.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  // Closed by an outside interaction → focus stays where the user put it.
+  const hasInteractedOutsideRef = useRef(false);
+  // Reset on every open — a rejected (controlled) close must not leak into the next one.
+  useEffect(() => {
+    if (ctx.open) hasInteractedOutsideRef.current = false;
+  }, [ctx.open]);
   if (!mounted && !forceMount) return null;
   return (
     <DismissableLayer
@@ -202,7 +210,19 @@ const Content = forwardRef<HTMLDivElement, DropdownMenuContentProps>(function Dr
       disableOutsidePointerEvents={false}
       onPointerDownOutside={onPointerDownOutside}
       onFocusOutside={onFocusOutside}
-      onInteractOutside={onInteractOutside}
+      onInteractOutside={(event) => {
+        onInteractOutside?.(event);
+        if (event.defaultPrevented) return;
+        // A press on the trigger is not "outside": let its click toggle the
+        // menu closed instead of dismissing here and re-opening on click.
+        const trigger = ctx.refs.domReference.current;
+        const target = event.detail.originalEvent.target;
+        if (trigger && target instanceof Node && trigger.contains(target)) {
+          event.preventDefault();
+          return;
+        }
+        hasInteractedOutsideRef.current = true;
+      }}
       onEscapeKeyDown={onEscapeKeyDown}
       onDismiss={() => ctx.setOpen(false)}
     >
@@ -211,7 +231,16 @@ const Content = forwardRef<HTMLDivElement, DropdownMenuContentProps>(function Dr
         trapped={false}
         loop
         onMountAutoFocus={onOpenAutoFocus}
-        onUnmountAutoFocus={onCloseAutoFocus}
+        onUnmountAutoFocus={(event) => {
+          onCloseAutoFocus?.(event);
+          const trigger = ctx.refs.domReference.current;
+          handleCloseAutoFocus(
+            event,
+            trigger instanceof HTMLElement ? trigger : null,
+            hasInteractedOutsideRef.current,
+          );
+          hasInteractedOutsideRef.current = false;
+        }}
       >
         <div
           ref={(node) => {
@@ -497,6 +526,8 @@ interface SubContextValue {
   elementsRef: React.RefObject<Array<HTMLElement | null>>;
   labelsRef: React.RefObject<Array<string | null>>;
   parent: DropdownMenuContextValue;
+  /** SubTrigger reports its `disabled` so hover/click open can be switched off. */
+  setTriggerDisabled: (disabled: boolean) => void;
 }
 const SubCtx = createContext<SubContextValue | null>(null);
 const useSubCtx = (n: string) => {
@@ -523,18 +554,24 @@ function Sub({ open, defaultOpen, onOpenChange, children }: DropdownMenuSubProps
   const elementsRef = useRef<Array<HTMLElement | null>>([]);
   const labelsRef = useRef<Array<string | null>>([]);
 
+  // RTL: the submenu opens to the left, so the open/close arrow keys flip too.
+  const dir = useDirection();
+  const [triggerDisabled, setTriggerDisabled] = useState(false);
   const floating = useFloatingBase({
     open: isOpen,
     onOpenChange: (v) => setOpen(v),
-    placement: 'right-start',
+    placement: dir === 'rtl' ? 'left-start' : 'right-start',
   });
 
+  // useHover attaches a native mouseenter listener to the reference element,
+  // so leaving the trigger's props out is not enough — switch it off.
   const hover = useHover(floating.context, {
-    enabled: true,
+    enabled: !triggerDisabled,
     delay: { open: 75 },
     handleClose: safePolygon({ blockPointerEvents: true }),
   });
   const click = useClick(floating.context, {
+    enabled: !triggerDisabled,
     event: 'mousedown',
     toggle: false,
     ignoreMouse: true,
@@ -546,6 +583,7 @@ function Sub({ open, defaultOpen, onOpenChange, children }: DropdownMenuSubProps
     onNavigate: setActiveIndex,
     loop: true,
     nested: true,
+    rtl: dir === 'rtl',
   });
 
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([
@@ -574,6 +612,7 @@ function Sub({ open, defaultOpen, onOpenChange, children }: DropdownMenuSubProps
         elementsRef,
         labelsRef,
         parent,
+        setTriggerDisabled,
       }}
     >
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
@@ -594,6 +633,11 @@ const SubTrigger = forwardRef<HTMLButtonElement, DropdownMenuSubTriggerProps>(
     ref,
   ) {
     const sub = useSubCtx('DropdownMenu.SubTrigger');
+    const { setTriggerDisabled } = sub;
+    useEffect(() => {
+      setTriggerDisabled(Boolean(disabled));
+    }, [setTriggerDisabled, disabled]);
+    const openKey = useDirection() === 'rtl' ? 'ArrowLeft' : 'ArrowRight';
     const inferredLabel = label ?? (typeof children === 'string' ? children : null);
     // register in PARENT list so keyboard nav in parent menu reaches the trigger
     const parentItem = useListItem({ label: inferredLabel });
@@ -609,17 +653,19 @@ const SubTrigger = forwardRef<HTMLButtonElement, DropdownMenuSubTriggerProps>(
     const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
       onKeyDown?.(e);
       if (e.defaultPrevented) return;
-      // ArrowRight (LTR) opens sub menu and focuses first item
-      if (e.key === 'ArrowRight') {
+      if (disabled) return;
+      // The arrow pointing toward the submenu (Right in LTR, Left in RTL) opens it
+      if (e.key === openKey) {
         e.preventDefault();
         sub.setOpen(true);
       }
     };
 
-    // compose parent's getItemProps + sub's getReferenceProps
-    const merged = sub.getReferenceProps({
-      ...sub.parent.getItemProps({ ...rest }),
-    }) as ButtonHTMLAttributes<HTMLButtonElement>;
+    // compose parent's getItemProps + sub's getReferenceProps. A disabled
+    // trigger keeps parent list semantics but gets none of the submenu's
+    // open interactions (hover / click / arrow key).
+    const itemProps = sub.parent.getItemProps({ ...rest });
+    const merged = (disabled ? itemProps : sub.getReferenceProps(itemProps)) as ButtonHTMLAttributes<HTMLButtonElement>;
 
     return (
       <Comp
