@@ -284,7 +284,19 @@ const Content = forwardRef<HTMLDivElement, DialogContentProps>(function DialogCo
         trapped={ctx.modal}
         loop
         onMountAutoFocus={onOpenAutoFocus}
-        onUnmountAutoFocus={onCloseAutoFocus}
+        onUnmountAutoFocus={(event) => {
+          onCloseAutoFocus?.(event);
+          if (event.defaultPrevented) return;
+          // Modal dialog: return to the trigger (APG). The element focused at
+          // open time can be <body> — Safari does not focus buttons on click —
+          // so restore explicitly. Without a mounted trigger (controlled open,
+          // trigger removed), fall back to FocusScope's default restore.
+          const trigger = ctx.refs.domReference.current;
+          if (trigger instanceof HTMLElement && trigger.isConnected) {
+            event.preventDefault();
+            trigger.focus();
+          }
+        }}
       >
         <Comp
           ref={composeRef}
