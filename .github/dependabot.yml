@@ -1,0 +1,13 @@
+# 워크플로우 액션은 SHA로 고정한다(태그 이동·탈취 방어). Dependabot이
+# 새 버전의 SHA와 버전 주석을 함께 갱신하는 PR을 연다.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # minor/patch 는 한 PR로 묶고, major 는 액션별 개별 PR로 받아 변경점을 따로 검토한다.
+      actions-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]

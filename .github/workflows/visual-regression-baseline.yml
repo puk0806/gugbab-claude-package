@@ -29,13 +29,13 @@ jobs:
     # peter-evans / github-actions bot 의 PR 자동 머지로 인한 push 는 skip
     if: github.actor != 'github-actions[bot]'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
         with:
           version: 9.9.0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22.13.1
           cache: 'pnpm'
@@ -56,9 +56,11 @@ jobs:
 
       - name: Determine target project
         id: target
+        env:
+          PROJECT_INPUT: ${{ inputs.project || 'both' }}
         run: |
           # workflow_dispatch 면 inputs.project, push 면 both 기본
-          PROJECT="${{ inputs.project || 'both' }}"
+          PROJECT="${PROJECT_INPUT}"
           echo "project=$PROJECT" >> $GITHUB_OUTPUT
           echo "→ target project: $PROJECT"
 
@@ -71,7 +73,7 @@ jobs:
           fi
 
       - name: Create PR with new baselines
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7.0.11
         env:
           # peter-evans 가 내부적으로 git commit 할 때 husky pre-commit/commit-msg 가
           # 도는 것을 차단. CI 환경이라 hook 의 의미가 없으며 commitlint 가 자동 메시지를
