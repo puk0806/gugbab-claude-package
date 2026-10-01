@@ -3,7 +3,7 @@ name: npm v1 publishing — DONE (v1.0.1 + auto-merge)
 description: @gugbab/* 9개 v1.0.0 (2026-05-09) + 5개 v1.0.1 (2026-05-11) publish 완료. 자동 publish 흐름은 feature PR 머지 1회로 끝나도록 진화.
 type: project
 originSessionId: d38b63bc-10e0-4db4-8ff1-14cf943313c2
-modified: 2026-10-01T06:02:56.326Z
+modified: 2026-10-01T08:47:11.887Z
 ---
 `@gugbab/*` 패키지 npm public 게시 자동화 운영 중. v1.0.0 (9 패키지) 첫 publish 2026-05-09, v1.0.1 (5 publishable patch) 2026-05-11. 2026-05-11 자동화 한 단계 진화 — *사용자 머지 1회로 publish까지 자동*.
 
@@ -83,6 +83,8 @@ Version PR #40 이 열린 채 방치 → 사용자 수동 머지로 publish 완�
 - **`ci.yml` 신설:** frozen install, `biome ci`, typecheck, test, build
 - **봇 PR 처리:** Version PR과 relay-types baseline PR은 `scripts/ci-verify-bot-pr.sh`로 처리한다. 허용 파일만 바뀌었는지 확인하고, 같은 전체 검사를 돌린 뒤 `ci`·`visual-regression` 성공 상태를 등록하고 머지한다. 봇 bypass(422) 없이 자동 배포를 유지하는 방법이다. release는 머지 후 `workflow_dispatch`로 publish를 재트리거한다
 - **archive:** main 대신 `vrt-archive` 브랜치에 보관(삭제 금지 ruleset에 포함)
+- **저장소 `allow_auto_merge`를 false로 되돌림:** 켜져 있으면 검사가 진행 중일 때 초록 "Enable auto-merge" 버튼이 떠서 머지가 열린 것처럼 보이고, 누르면 검사 통과 즉시 사람 확인 없이 머지된다. 세 앱과 동일하게 맞췄다. release는 auto-merge 대신 검증 후 직접 머지한다
+- **accept-baseline 커밋의 ci 승계:** 봇 push라 ci가 돌지 않는다. 스크린샷만 바뀌었고 직전 커밋 ci가 성공했을 때만 `ci` 상태를 이어받는다(visual-regression.yml)
 - **알아둘 점:** `visual-regression-baseline.yml`(봇 PR, 수동)은 검사가 돌지 않는다. 그 브랜치에 사용자가 한 번 푸시해야 검사가 돈다. voca·dream·health도 같은 기준으로 통일할 예정이다 — [[project_audit_2026_09_30]]
 
 ## 첫 publish 가 막혔던 5-layer 장애 (참고용)
@@ -105,6 +107,7 @@ Version PR #40 이 열린 채 방치 → 사용자 수동 머지로 publish 완�
 ## 운영 메모
 
 - 토큰 만료: 90일 (npm 신규 정책 max)
+- **2026-10-01 만료로 publish 실패:** `NPM_TOKEN`을 06-16에 등록했고 09-14에 만료됐다. #50 머지 → Version PR #56 자동 머지까지는 정상이었지만, publish 단계에서 6개 패키지가 모두 `E404 Not Found - PUT`으로 실패했다(만료 토큰은 404로 보인다). 재발급하면 `gh workflow run release --ref main -f mode=changeset`으로 다시 게시한다. 첫 재발급 토큰은 "Bypass 2FA"가 꺼져 있어 EOTP로 또 실패했고, 세 번째 토큰(Secret 갱신 2026-10-01 07:22 UTC)으로 6개 게시에 성공했다. **이 토큰은 약 2026-12-30에 만료된다(90일). publish 전에 `gh secret list`로 NPM_TOKEN 날짜를 확인할 것**(날짜 + 90일)
 - 갱신 주기: 만료 1주 전 알림 보고 새 토큰 발급 + GitHub Secret 갱신
 - Token: 발급 직후 한 번만 노출 → 즉시 GitHub Secret 에 저장
 - Provenance: GitHub Actions OIDC + sigstore 자동 서명 (`--provenance` 플래그)
