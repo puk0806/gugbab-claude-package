@@ -1,5 +1,41 @@
 # @gugbab/hooks
 
+## 1.3.1
+
+### Patch Changes
+
+- 79227b7: 접근성·동작 버그 수정 (WAI-ARIA APG 기준)
+
+  - `useControllableState`: StrictMode에서 `onChange`가 두 번 호출되던 문제 수정. 이 훅을 쓰는 모든 컴포넌트의 `onValueChange`·`onOpenChange` 등에 영향.
+  - Combobox: 재오픈·필터링 시 항목 목록이 누적되던 문제 수정. **Enter 키로 활성 항목 선택** 지원 추가(IME 조합 중 Enter는 무시). 활성 항목에 `data-highlighted` 속성 노출 — 스타일에서 키보드 하이라이트에 사용.
+  - RovingFocusGroup: 컨테이너의 `tabindex`가 `0` → `-1`로 바뀌어, Tabs·RadioGroup·Toolbar·Accordion 등에서 Tab이 두 번 멈추던 문제 해결. 컨테이너 탭 스톱에 의존하던 테스트가 있다면 갱신 필요.
+  - Slider: 가로형에서 ArrowUp은 증가, ArrowDown은 감소(RTL·`inverted`와 무관). 이 키에서 `preventDefault`가 호출되어 더 이상 페이지가 스크롤되지 않음.
+
+- 84137d3: 동작·접근성·성능 후속 수정
+
+  - **성능:** 17개 컴포넌트의 context value를 메모이제이션했습니다. 부모가 같은 props로 리렌더할 때 하위 컴포넌트가 다시 렌더링되지 않습니다. 대상은 Tabs·Collapsible·Accordion·ToggleGroup·Select·Combobox·Slider·Toast·Form·OneTimePasswordField·Pagination·ContextMenu·HoverCard·Menubar·Tooltip·Avatar·ScrollArea입니다.
+  - **Slider:** 마운트만으로 숨은 input의 `input` 이벤트를 보내 폼 `onInput`/`onChange`가 초기 렌더에 불리던 문제를 고쳤습니다.
+  - **Toast:**
+    - 스와이프 뒤 click이 오지 않으면 남아 있던 리스너가 나중의 정상 클릭(링크 등)을 막던 문제를 고쳤습니다.
+    - 접근성 구조를 바꿨습니다. `role="region"` 랜드마크는 뷰포트 래퍼로 옮기고 `<ol>`은 목록 의미를 유지합니다. 토스트 `<li>`의 `role="status"`/`aria-live`는 제거해 낭독은 Announcer 한 곳에서만 일어납니다(이중 낭독과 허용되지 않은 role 해소). **뷰포트의 `role`을 `<ol>`에서 찾던 코드는 래퍼를 찾도록 바꿔야 합니다.**
+  - **Combobox:** `FloatingFocusManager`를 `modal={false}`로 바꿨습니다(입력 중 포커스 유지, floating-ui의 combobox 패턴).
+  - **OneTimePasswordField:** 입력칸이 동적으로 줄어든 뒤 End 등의 키 이동이 사라진 칸을 가리킬 수 있던 문제를 고쳤습니다.
+  - **hooks `createRecognizer`:** `window`가 없는 SSR 환경에서 `ReferenceError` 대신 문서화된 "not supported" 에러를 던집니다.
+
+- 2398432: 보안·안정성 수정
+
+  - `readSSEStream`: 개행 없이 들어오는 라인에 상한(`maxBufferSize`, 기본 1,048,576자)을 두고, 초과하면 `RangeError`로 중단합니다(메모리 폭증 방지). **동작 변경:** 이전에는 통과하던, 개행 없이 1MB를 넘는 라인이 이제 오류가 됩니다. 상한 초과, 읽기 실패, `onEvent` 예외가 나면 스트림을 취소해 연결을 닫습니다. 옵션 타입 `ReadSSEStreamOptions`를 추가했습니다. 줄 구분자로 LF·CRLF뿐 아니라 CR 단독도 인식합니다(WHATWG event-stream). 이전에는 CR만 쓰는 서버의 이벤트를 받지 못했습니다.
+  - `parseSSELine`: 이벤트 형식을 런타임에 검증하고 정규화합니다. 필수 필드 타입이 틀리거나 알 수 없는 `type`이면 `null`을 반환합니다(**동작 변경:** 이전에는 그대로 전달됨. `text`가 없는 chunk 때문에 화면에 `"undefined"`가 붙을 수 있었음). 선택 필드의 `null`은 허용해 제거하고, `safety_block`의 `resources`가 없으면 `[]`로 채웁니다. 알려지지 않은 여분 필드는 결과에 포함하지 않습니다.
+  - `withRetry`: `maxRetries`·`baseDelay`·`maxDelay`가 비정상이면 `RangeError`를 던집니다(이전엔 `Infinity`면 무한 재시도). 대기 상한 `maxDelay`(기본 30초)를 추가했고, `signal`(AbortSignal)로 중단할 수 있습니다. `shouldRetry`가 예외를 던져도 원래 오류로 reject합니다.
+  - `groupBy`: `toString`·`constructor`·`__proto__` 같은 키에서 크래시하거나 프로토타입이 바뀌던 문제를 수정했습니다.
+  - `useSSEChat`: 언마운트하면 진행 중인 요청을 abort하고, 이후 `onChunk`·`onDone`·`onError`를 호출하지 않습니다. 언마운트 없이 effect만 정리되는 경우(예: `<Activity mode="hidden">`)에도 요청을 끊고 `status`를 `idle`로 되돌립니다.
+  - `groupBy`: `Object.hasOwn`(ES2022) 대신 `hasOwnProperty.call`을 써서 Safari 15.3 이하에서도 동작합니다.
+
+- b3672cf: peer 범위 명시: `react`·`react-dom` peer를 `>=18`에서 `^18.0.0 || ^19.0.0`으로 좁혔습니다. 검증되지 않은 미래 major(React 20 등)가 자동으로 허용되지 않습니다. React 18·19 사용자에게는 변화가 없습니다. React 20 이상이나 canary를 쓰면 설치 시 peer 경고(엄격 모드에서는 오류)가 날 수 있습니다. 새 major는 지원을 검증한 뒤 범위를 넓힙니다.
+- Updated dependencies [2398432]
+- Updated dependencies [0d2c8ef]
+  - @gugbab/utils@1.5.0
+
 ## 1.3.0
 
 ### Minor Changes

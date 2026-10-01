@@ -1,6 +1,6 @@
 {
   "name": "@gugbab/utils",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Framework-agnostic utilities for @gugbab/*",
   "license": "MIT",
   "author": "gugbab",
