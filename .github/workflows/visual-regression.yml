@@ -14,6 +14,7 @@ permissions:
   contents: write
   pull-requests: write
   actions: read
+  checks: read
   statuses: write
 
 concurrency:
@@ -183,6 +184,50 @@ jobs:
             -f description="${DESC}" \
             -f target_url="${SERVER}/${REPO}/actions/runs/${RUN_ID}"
           echo "→ visual-regression status 등록 완료 on ${TARGET_SHA}"
+
+      # 기준 이미지 커밋은 GITHUB_TOKEN push 라 ci 워크플로우가 돌지 않는다. main 규칙은 `ci` 도
+      # 필수이므로 그대로 두면 라벨을 붙여도 PR 이 영원히 막힌다. 아래 두 조건이 모두 맞을 때만
+      # 직전 커밋(라벨 시점 head)의 ci 결과를 새 커밋으로 이어받는다:
+      #   ① 새 커밋이 e2e/visual/__screenshots__/ 아래 파일만 바꿨다(코드 변경 없음)
+      #   ② 직전 커밋의 ci 가 성공했다(진행 중이면 최대 20분 기다린다)
+      # 하나라도 아니면 실패한다 — 상태가 없으니 PR 은 막힌 채 남고, 사용자가 푸시하면 ci 가 다시 돈다.
+      - name: Carry ci result to baseline commit
+        if: steps.mode.outputs.mode == 'accept' && steps.accept_commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PREV_SHA: ${{ github.event.pull_request.head.sha }}
+          TARGET_SHA: ${{ steps.accept_commit.outputs.target_sha }}
+          RUN_ID: ${{ github.run_id }}
+          REPO: ${{ github.repository }}
+          SERVER: ${{ github.server_url }}
+        run: |
+          set -euo pipefail
+          OUTSIDE=$(git diff --name-only "$PREV_SHA" "$TARGET_SHA" | grep -v '^e2e/visual/__screenshots__/' || true)
+          if [ -n "$OUTSIDE" ]; then
+            echo "::error::기준 이미지 커밋에 스크린샷 외 변경이 있어 ci 결과를 이어받지 않습니다:"
+            echo "$OUTSIDE"
+            exit 1
+          fi
+          ci_result() {
+            gh api "repos/${REPO}/commits/${PREV_SHA}/check-runs?check_name=ci" \
+              --jq '[.check_runs[] | select(.app.id == 15368)] | if length == 0 then "missing" elif any(.status != "completed") then "pending" elif any(.conclusion == "success") then "success" else "failure" end'
+          }
+          for _ in $(seq 1 60); do
+            RESULT=$(ci_result)
+            [ "$RESULT" = "pending" ] || [ "$RESULT" = "missing" ] || break
+            echo "직전 커밋 ci 결과 대기 중 ($RESULT)…"
+            sleep 20
+          done
+          if [ "$RESULT" != "success" ]; then
+            echo "::error::직전 커밋(${PREV_SHA})의 ci 가 성공이 아닙니다: ${RESULT}"
+            exit 1
+          fi
+          gh api -X POST "repos/${REPO}/statuses/${TARGET_SHA}" \
+            -f state=success \
+            -f context=ci \
+            -f description="스크린샷만 추가된 커밋 — 직전 커밋 ci 통과 승계" \
+            -f target_url="${SERVER}/${REPO}/actions/runs/${RUN_ID}" >/dev/null
+          echo "→ ci status 승계 완료 on ${TARGET_SHA} (from ${PREV_SHA})"
 
       - name: Comment PR — baseline accepted (status)
         if: steps.mode.outputs.mode == 'accept'
