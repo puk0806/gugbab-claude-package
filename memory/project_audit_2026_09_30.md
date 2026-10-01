@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: f35db723-e646-4a91-90c9-1860c939e8df
-  modified: 2026-10-01T04:39:07.610Z
+  modified: 2026-10-01T04:47:05.072Z
 ---
 
 2026-09-30 전체 프로젝트 점검. a11y-auditor, security-auditor, codebase-domain-analyst, qa-engineer, pr-reviewer를 병렬로 돌렸다. 2026-10-01까지 모든 순위 작업을 마쳤다.
@@ -26,7 +26,9 @@ metadata:
 - 반영: Toast onClickCapture 소실(1), 토큰 검사기 주석·url() 우회(4), 비모달 Dialog 포커스(4), RadioGroup dir 상속(4), NavigationMenu SSR 경고(4), SSE CR 구분자·재분할 비용(2), groupBy 호환(2), VR 라벨 env(2), private 참조 빌드 가드(styled-factory), codex 마커 추적 해제(cleanup)
 - 오탐(테스트로 확인): 거부된 바깥 닫힘 뒤 포커스 유실, SSE BOM
 - 설치본 자산의 끊긴 참조(agent-design.md·skill-tester 등)는 원본 세션(00-gugbab-claude)에 SendMessage로 제보했다
-- semver 판단 대기: 1순위 DOM 계약 변경, 2순위 SSE·withRetry 동작 변경, 4순위 토큰 TypeError가 모두 minor다. major 여부는 사용자가 결정한다
+- semver: 1순위 DOM 계약 변경, 2순위 SSE·withRetry 동작 변경, 4순위 토큰 TypeError를 **minor로 유지**한다(2026-10-01 사용자 확정). `^1.x` 소비자에게 자동으로 들어가므로, 배포 뒤 소비 프로젝트 점검이 필수다
+
+**소비 프로젝트 (사용자 확인):** gugbab-dream·gugbab-voca·gugbab-health 세션이 `@gugbab/*`를 쓴다. relay(API)는 대상이 아니다. 배포 뒤 각 세션에 영향 변경 목록(utils SSE 동작, hooks peer와 useSSEChat, headless DOM과 role, styled 외관, tokens TypeError)을 전달하고, 업그레이드 브랜치에서 테스트와 시각 회귀로 확인한다
 
 **사용자 결정 대기:**
 - D1 npm OIDC Trusted Publishing: 패키지 9개 등록 필요, pnpm publish의 OIDC 지원 미확인
