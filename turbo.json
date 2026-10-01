@@ -1,18 +1,16 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "agentGuidance": false,
   "globalDependencies": ["**/.env.*local", ".nvmrc", ".npmrc", "scripts/**"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "storybook-static/**"]
+      "outputs": ["dist/**", "storybook-static/**"]
     },
     "dev": {
       "cache": false,
       "persistent": true
-    },
-    "lint": {
-      "dependsOn": ["^build"]
     },
     "typecheck": {
       "dependsOn": ["^build"]
