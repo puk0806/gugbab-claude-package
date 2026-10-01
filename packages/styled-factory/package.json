@@ -11,11 +11,6 @@
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "@gugbab/headless": "workspace:*",
-    "@gugbab/utils": "workspace:*",
-    "react": ">=18"
-  },
   "devDependencies": {
     "@gugbab/headless": "workspace:*",
     "@gugbab/tsconfig": "workspace:*",

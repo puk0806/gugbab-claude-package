@@ -53,7 +53,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsup && node ../../scripts/build-styled-css.mjs mui && node ../../scripts/inject-use-client.mjs dist/index.mjs dist/index.cjs",
+    "build": "tsup && node ../../scripts/build-styled-css.mjs mui && node ../../scripts/inject-use-client.mjs dist/index.mjs dist/index.cjs && node ../../scripts/assert-no-private-imports.mjs @gugbab/styled-factory dist/index.mjs dist/index.cjs dist/index.d.ts dist/index.d.cts",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
