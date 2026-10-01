@@ -76,7 +76,9 @@ describe('Combobox — 키보드 선택', () => {
     fireEvent.focus(input);
     fireEvent.keyDown(input, { key: 'ArrowDown' });
 
-    const highlighted = screen.getAllByRole('option').filter((o) => o.hasAttribute('data-highlighted'));
+    const highlighted = screen
+      .getAllByRole('option')
+      .filter((o) => o.hasAttribute('data-highlighted'));
     expect(highlighted).toHaveLength(1);
     expect(highlighted[0]).toHaveTextContent('apple');
     expect(input.getAttribute('aria-activedescendant')).toBe(highlighted[0].id);
@@ -135,7 +137,9 @@ describe('Combobox — 재오픈·필터 (경계)', () => {
   it('활성 항목이 없을 때 어떤 항목에도 data-highlighted가 없다', () => {
     render(<Fruits />);
     fireEvent.focus(screen.getByLabelText('fruit'));
-    expect(screen.getAllByRole('option').some((o) => o.hasAttribute('data-highlighted'))).toBe(false);
+    expect(screen.getAllByRole('option').some((o) => o.hasAttribute('data-highlighted'))).toBe(
+      false,
+    );
   });
 
   it('필터로 목록이 바뀌면 새 목록 기준으로 선택한다', () => {

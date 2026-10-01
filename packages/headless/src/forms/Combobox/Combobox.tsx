@@ -20,6 +20,7 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
   useContext,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -118,25 +119,43 @@ function ComboboxRoot({
     listNav,
   ]);
 
+  const { refs, context, floatingStyles } = floating;
+  const ctxValue = useMemo<ComboboxContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      value: current,
+      setValue,
+      inputValue: text,
+      setInputValue: setText,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      listRef,
+      activeIndex,
+    }),
+    [
+      isOpen,
+      setOpen,
+      current,
+      setValue,
+      text,
+      setText,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      activeIndex,
+    ],
+  );
+
   return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        value: current,
-        setValue: (v) => setValue(v),
-        inputValue: text,
-        setInputValue: (v) => setText(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        listRef,
-        activeIndex,
-      }}
-    >
+    <Ctx.Provider value={ctxValue}>
       <FloatingList elementsRef={listRef}>{children}</FloatingList>
     </Ctx.Provider>
   );
@@ -231,7 +250,14 @@ const Content = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(funct
   const ctx = useCtx('Combobox.Content');
   if (!ctx.open) return null;
   return (
-    <FloatingFocusManager context={ctx.context} initialFocus={-1} visuallyHiddenDismiss>
+    // modal={false}: focus stays in the input while typing (floating-ui's
+    // combobox pattern); a modal manager adds unnamed focus guards.
+    <FloatingFocusManager
+      context={ctx.context}
+      initialFocus={-1}
+      modal={false}
+      visuallyHiddenDismiss
+    >
       <div
         ref={(node) => {
           ctx.refs.setFloating(node);
