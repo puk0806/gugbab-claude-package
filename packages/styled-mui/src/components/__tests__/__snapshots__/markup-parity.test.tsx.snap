@@ -4,82 +4,54 @@ exports[`markup parity — boundary cases > Tabs default variant and size are fr
 
 exports[`markup parity — boundary cases > consumer className and hostile attribute values are preserved verbatim 1`] = `
 "container:
-<div>
-  <div class="gmui-separator gmui-separator--horizontal "><script>alert(1)</script>">
+<div class="gmui-separator gmui-separator--horizontal "><script>alert(1)</script>">
 body:
-<body>
-  <div>
-    <div class="gmui-separator gmui-separator--horizontal "><script>alert(1)</script>">"
+<div class="gmui-separator gmui-separator--horizontal "><script>alert(1)</script>">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 1`] = `
 "container:
-<div>
-  <button class="gmui-switch gmui-switch--md">
+<button class="gmui-switch gmui-switch--md">
 body:
-<body>
-  <div>
-    <button class="gmui-switch gmui-switch--md">"
+<button class="gmui-switch gmui-switch--md">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 2`] = `
 "container:
-<div>
-  <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
 body:
-<body>
-  <div>
-    <button class="gmui-switch gmui-switch--md">
-  <div>
-    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">"
+<button class="gmui-switch gmui-switch--md">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 3`] = `
 "container:
-<div>
-  <div class="gmui-accordion gmui-accordion--default">
+<div class="gmui-accordion gmui-accordion--default">
 body:
-<body>
-  <div>
-    <button class="gmui-switch gmui-switch--md">
-  <div>
-    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
-  <div>
-    <div class="gmui-accordion gmui-accordion--default">"
+<button class="gmui-switch gmui-switch--md">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+<div class="gmui-accordion gmui-accordion--default">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 4`] = `
 "container:
-<div>
-  <form class="gmui-form">
+<form class="gmui-form">
 body:
-<body>
-  <div>
-    <button class="gmui-switch gmui-switch--md">
-  <div>
-    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
-  <div>
-    <div class="gmui-accordion gmui-accordion--default">
-  <div>
-    <form class="gmui-form">"
+<button class="gmui-switch gmui-switch--md">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+<div class="gmui-accordion gmui-accordion--default">
+<form class="gmui-form">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 5`] = `
 "container:
-<div>
-  <div class="gmui-toolbar">
+<div class="gmui-toolbar">
 body:
-<body>
-  <div>
-    <button class="gmui-switch gmui-switch--md">
-  <div>
-    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
-  <div>
-    <div class="gmui-accordion gmui-accordion--default">
-  <div>
-    <form class="gmui-form">
-  <div>
-    <div class="gmui-toolbar">"
+<button class="gmui-switch gmui-switch--md">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+<div class="gmui-accordion gmui-accordion--default">
+<form class="gmui-form">
+<div class="gmui-toolbar">"
 `;
 
 exports[`markup parity — export shape (35 components) > Accordion: keys and part display names are frozen 1`] = `
@@ -470,583 +442,433 @@ exports[`markup parity — export shape (35 components) > exposes exactly the ex
 
 exports[`markup parity — rendered HTML > Accordion: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-accordion gmui-accordion--outline">
-    <div class="gmui-accordion__item">
-      <h3 class="gmui-accordion__header">
-        <button class="gmui-accordion__trigger">
-      <div class="gmui-accordion__content">
+<div class="gmui-accordion gmui-accordion--outline">
+  <div class="gmui-accordion__item">
+    <h3 class="gmui-accordion__header">
+      <button class="gmui-accordion__trigger">
+    <div class="gmui-accordion__content">
 body:
-<body>
-  <div>
-    <div class="gmui-accordion gmui-accordion--outline">
-      <div class="gmui-accordion__item">
-        <h3 class="gmui-accordion__header">
-          <button class="gmui-accordion__trigger">
-        <div class="gmui-accordion__content">"
+<div class="gmui-accordion gmui-accordion--outline">
+  <div class="gmui-accordion__item">
+    <h3 class="gmui-accordion__header">
+      <button class="gmui-accordion__trigger">
+    <div class="gmui-accordion__content">"
 `;
 
 exports[`markup parity — rendered HTML > AlertDialog: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="gmui-alert-dialog__trigger">
+<button class="gmui-alert-dialog__trigger">
 body:
-<body>
-  <div>
-    <button class="gmui-alert-dialog__trigger">
-  <div>
-    <div class="gmui-alert-dialog__overlay">
-    <div class="gmui-alert-dialog__content gmui-alert-dialog__content--lg">
-      <h2 class="gmui-alert-dialog__title">
-      <p class="gmui-alert-dialog__description">
-      <button class="gmui-alert-dialog__cancel">
-      <button class="gmui-alert-dialog__action gmui-alert-dialog__action--danger">"
+<button class="gmui-alert-dialog__trigger">
+<div class="gmui-alert-dialog__overlay">
+<div class="gmui-alert-dialog__content gmui-alert-dialog__content--lg">
+  <h2 class="gmui-alert-dialog__title">
+  <p class="gmui-alert-dialog__description">
+  <button class="gmui-alert-dialog__cancel">
+  <button class="gmui-alert-dialog__action gmui-alert-dialog__action--danger">"
 `;
 
 exports[`markup parity — rendered HTML > AspectRatio: open/representative configuration 1`] = `
 "container:
-<div>
-  <div>
-    <div class="gmui-aspect-ratio custom">
+<div class="gmui-aspect-ratio custom">
 body:
-<body>
-  <div>
-    <div>
-      <div class="gmui-aspect-ratio custom">"
+<div class="gmui-aspect-ratio custom">"
 `;
 
 exports[`markup parity — rendered HTML > Avatar: open/representative configuration 1`] = `
 "container:
-<div>
-  <span class="gmui-avatar gmui-avatar--lg">
-    <span class="gmui-avatar__fallback">
+<span class="gmui-avatar gmui-avatar--lg">
+  <span class="gmui-avatar__fallback">
 body:
-<body>
-  <div>
-    <span class="gmui-avatar gmui-avatar--lg">
-      <span class="gmui-avatar__fallback">"
+<span class="gmui-avatar gmui-avatar--lg">
+  <span class="gmui-avatar__fallback">"
 `;
 
 exports[`markup parity — rendered HTML > Breadcrumbs: open/representative configuration 1`] = `
 "container:
-<div>
-  <nav class="gmui-breadcrumbs gmui-breadcrumbs--slash">
-    <ol class="gmui-breadcrumbs__list">
-      <li class="gmui-breadcrumbs__item">
-        <a class="gmui-breadcrumbs__link">
-      <span class="gmui-breadcrumbs__separator">
-      <li class="gmui-breadcrumbs__item">
-        <span class="gmui-breadcrumbs__page">
+<nav class="gmui-breadcrumbs gmui-breadcrumbs--slash">
+  <ol class="gmui-breadcrumbs__list">
+    <li class="gmui-breadcrumbs__item">
+      <a class="gmui-breadcrumbs__link">
+    <span class="gmui-breadcrumbs__separator">
+    <li class="gmui-breadcrumbs__item">
+      <span class="gmui-breadcrumbs__page">
 body:
-<body>
-  <div>
-    <nav class="gmui-breadcrumbs gmui-breadcrumbs--slash">
-      <ol class="gmui-breadcrumbs__list">
-        <li class="gmui-breadcrumbs__item">
-          <a class="gmui-breadcrumbs__link">
-        <span class="gmui-breadcrumbs__separator">
-        <li class="gmui-breadcrumbs__item">
-          <span class="gmui-breadcrumbs__page">"
+<nav class="gmui-breadcrumbs gmui-breadcrumbs--slash">
+  <ol class="gmui-breadcrumbs__list">
+    <li class="gmui-breadcrumbs__item">
+      <a class="gmui-breadcrumbs__link">
+    <span class="gmui-breadcrumbs__separator">
+    <li class="gmui-breadcrumbs__item">
+      <span class="gmui-breadcrumbs__page">"
 `;
 
 exports[`markup parity — rendered HTML > Checkbox: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="gmui-checkbox gmui-checkbox--sm">
-    <span class="gmui-checkbox__indicator">
+<button class="gmui-checkbox gmui-checkbox--sm">
+  <span class="gmui-checkbox__indicator">
 body:
-<body>
-  <div>
-    <button class="gmui-checkbox gmui-checkbox--sm">
-      <span class="gmui-checkbox__indicator">"
+<button class="gmui-checkbox gmui-checkbox--sm">
+  <span class="gmui-checkbox__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > Collapsible: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-collapsible">
-    <button class="gmui-collapsible__trigger">
-    <div class="gmui-collapsible__content">
+<div class="gmui-collapsible">
+  <button class="gmui-collapsible__trigger">
+  <div class="gmui-collapsible__content">
 body:
-<body>
-  <div>
-    <div class="gmui-collapsible">
-      <button class="gmui-collapsible__trigger">
-      <div class="gmui-collapsible__content">"
+<div class="gmui-collapsible">
+  <button class="gmui-collapsible__trigger">
+  <div class="gmui-collapsible__content">"
 `;
 
 exports[`markup parity — rendered HTML > Combobox: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-combobox__anchor">
-    <input class="gmui-combobox__input gmui-combobox__input--sm">
-    <button class="gmui-combobox__trigger">
-  <span>
+<div class="gmui-combobox__anchor">
+  <input class="gmui-combobox__input gmui-combobox__input--sm">
+  <button class="gmui-combobox__trigger">
 body:
-<body>
-  <div>
-    <div class="gmui-combobox__anchor">
-      <input class="gmui-combobox__input gmui-combobox__input--sm">
-      <button class="gmui-combobox__trigger">
-    <span>
-  <div>
-    <span>
-    <button>
-    <div class="gmui-combobox__content">
-      <button class="gmui-combobox__item">
-    <button>
-    <span>"
+<div class="gmui-combobox__anchor">
+  <input class="gmui-combobox__input gmui-combobox__input--sm">
+  <button class="gmui-combobox__trigger">
+<div class="gmui-combobox__content">
+  <button class="gmui-combobox__item">"
 `;
 
 exports[`markup parity — rendered HTML > ContextMenu: open/representative configuration 1`] = `
 "container:
-<div>
-  <div>
+
 body:
-<body>
-  <div>
-    <div>
-  <div>
-    <div class="gmui-menu__content">
-      <button class="gmui-menu__item">
-      <button class="gmui-menu__item gmui-menu__item--sub-trigger">
-      <div class="gmui-menu__content gmui-menu__sub-content">
-        <button class="gmui-menu__item">"
+<div class="gmui-menu__content">
+  <button class="gmui-menu__item">
+  <button class="gmui-menu__item gmui-menu__item--sub-trigger">
+  <div class="gmui-menu__content gmui-menu__sub-content">
+    <button class="gmui-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > Dialog: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="gmui-dialog__trigger">
+<button class="gmui-dialog__trigger">
 body:
-<body>
-  <div>
-    <button class="gmui-dialog__trigger">
-  <div>
-    <div class="gmui-dialog__overlay">
-    <div class="gmui-dialog__content gmui-dialog__content--xl">
-      <h2 class="gmui-dialog__title">
-      <p class="gmui-dialog__description">
-      <button class="gmui-dialog__close">"
+<button class="gmui-dialog__trigger">
+<div class="gmui-dialog__overlay">
+<div class="gmui-dialog__content gmui-dialog__content--xl">
+  <h2 class="gmui-dialog__title">
+  <p class="gmui-dialog__description">
+  <button class="gmui-dialog__close">"
 `;
 
 exports[`markup parity — rendered HTML > DropdownMenu: open/representative configuration 1`] = `
 "container:
-<div>
-  <button>
+
 body:
-<body>
-  <div>
-    <button>
-  <div>
-    <div class="gmui-menu__content">
-      <div class="gmui-menu__label">
-      <button class="gmui-menu__item">
-      <button class="gmui-menu__item gmui-menu__item--checkbox">
-        <span class="gmui-menu__item-indicator">
-      <div class="gmui-menu__separator">
-      <div class="gmui-menu__radio-group">
-        <button class="gmui-menu__item gmui-menu__item--radio">
-      <button class="gmui-menu__item gmui-menu__item--sub-trigger">
-      <div class="gmui-menu__content gmui-menu__sub-content">
-        <button class="gmui-menu__item">"
+<div class="gmui-menu__content">
+  <div class="gmui-menu__label">
+  <button class="gmui-menu__item">
+  <button class="gmui-menu__item gmui-menu__item--checkbox">
+    <span class="gmui-menu__item-indicator">
+  <div class="gmui-menu__separator">
+  <div class="gmui-menu__radio-group">
+    <button class="gmui-menu__item gmui-menu__item--radio">
+  <button class="gmui-menu__item gmui-menu__item--sub-trigger">
+  <div class="gmui-menu__content gmui-menu__sub-content">
+    <button class="gmui-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > Form: open/representative configuration 1`] = `
 "container:
-<div>
-  <form class="gmui-form">
-    <div class="gmui-form__field gmui-form__field--error">
-      <label class="gmui-form__label">
-      <input class="gmui-form__control">
-    <button class="gmui-form__submit">
+<form class="gmui-form">
+  <div class="gmui-form__field gmui-form__field--error">
+    <label class="gmui-form__label">
+    <input class="gmui-form__control">
+  <button class="gmui-form__submit">
 body:
-<body>
-  <div>
-    <form class="gmui-form">
-      <div class="gmui-form__field gmui-form__field--error">
-        <label class="gmui-form__label">
-        <input class="gmui-form__control">
-      <button class="gmui-form__submit">"
+<form class="gmui-form">
+  <div class="gmui-form__field gmui-form__field--error">
+    <label class="gmui-form__label">
+    <input class="gmui-form__control">
+  <button class="gmui-form__submit">"
 `;
 
 exports[`markup parity — rendered HTML > HoverCard: open/representative configuration 1`] = `
 "container:
-<div>
-  <a class="gmui-hover-card__trigger">
+<a class="gmui-hover-card__trigger">
 body:
-<body>
-  <div>
-    <a class="gmui-hover-card__trigger">
-  <div>
-    <div class="gmui-hover-card__content">"
+<a class="gmui-hover-card__trigger">
+<div class="gmui-hover-card__content">"
 `;
 
 exports[`markup parity — rendered HTML > Label: open/representative configuration 1`] = `
 "container:
-<div>
-  <label class="gmui-label custom">
-  <input>
+<label class="gmui-label custom">
 body:
-<body>
-  <div>
-    <label class="gmui-label custom">
-    <input>"
+<label class="gmui-label custom">"
 `;
 
 exports[`markup parity — rendered HTML > Menubar: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-menubar">
-    <button class="gmui-menubar__trigger">
+<div class="gmui-menubar">
+  <button class="gmui-menubar__trigger">
 body:
-<body>
-  <div>
-    <div class="gmui-menubar">
-      <button class="gmui-menubar__trigger">
-  <div>
-    <div class="gmui-menu__content">
-      <div class="gmui-menu__label">
-      <button class="gmui-menu__item">
-      <button class="gmui-menu__item gmui-menu__item--checkbox">
-        <span class="gmui-menu__item-indicator">
-      <div class="gmui-menu__separator">
-      <div class="gmui-menu__radio-group">
-        <button class="gmui-menu__item gmui-menu__item--radio">
-      <button class="gmui-menu__item gmui-menu__item--sub-trigger">
-      <div class="gmui-menu__content gmui-menu__sub-content">
-        <button class="gmui-menu__item">"
+<div class="gmui-menubar">
+  <button class="gmui-menubar__trigger">
+<div class="gmui-menu__content">
+  <div class="gmui-menu__label">
+  <button class="gmui-menu__item">
+  <button class="gmui-menu__item gmui-menu__item--checkbox">
+    <span class="gmui-menu__item-indicator">
+  <div class="gmui-menu__separator">
+  <div class="gmui-menu__radio-group">
+    <button class="gmui-menu__item gmui-menu__item--radio">
+  <button class="gmui-menu__item gmui-menu__item--sub-trigger">
+  <div class="gmui-menu__content gmui-menu__sub-content">
+    <button class="gmui-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > NavigationMenu: open/representative configuration 1`] = `
 "container:
-<div>
-  <nav class="gmui-navigation-menu">
-    <ul class="gmui-navigation-menu__list">
-      <li class="gmui-navigation-menu__item">
-        <button class="gmui-navigation-menu__trigger">
-        <div class="gmui-navigation-menu__content">
-          <a class="gmui-navigation-menu__link">
+<nav class="gmui-navigation-menu">
+  <ul class="gmui-navigation-menu__list">
+    <li class="gmui-navigation-menu__item">
+      <button class="gmui-navigation-menu__trigger">
+      <div class="gmui-navigation-menu__content">
+        <a class="gmui-navigation-menu__link">
 body:
-<body>
-  <div>
-    <nav class="gmui-navigation-menu">
-      <ul class="gmui-navigation-menu__list">
-        <li class="gmui-navigation-menu__item">
-          <button class="gmui-navigation-menu__trigger">
-          <div class="gmui-navigation-menu__content">
-            <a class="gmui-navigation-menu__link">"
+<nav class="gmui-navigation-menu">
+  <ul class="gmui-navigation-menu__list">
+    <li class="gmui-navigation-menu__item">
+      <button class="gmui-navigation-menu__trigger">
+      <div class="gmui-navigation-menu__content">
+        <a class="gmui-navigation-menu__link">"
 `;
 
 exports[`markup parity — rendered HTML > OneTimePasswordField: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-otp">
-    <input class="gmui-otp__input">
-    <input class="gmui-otp__input">
-    <input>
+<div class="gmui-otp">
+  <input class="gmui-otp__input">
+  <input class="gmui-otp__input">
 body:
-<body>
-  <div>
-    <div class="gmui-otp">
-      <input class="gmui-otp__input">
-      <input class="gmui-otp__input">
-      <input>"
+<div class="gmui-otp">
+  <input class="gmui-otp__input">
+  <input class="gmui-otp__input">"
 `;
 
 exports[`markup parity — rendered HTML > Pagination: open/representative configuration 1`] = `
 "container:
-<div>
-  <nav class="gmui-pagination gmui-pagination--sm">
-    <ul class="gmui-pagination__list">
-      <li class="gmui-pagination__item">
-        <button class="gmui-pagination__prev">
-      <li class="gmui-pagination__item">
-        <button class="gmui-pagination__page">
-      <li class="gmui-pagination__item">
-        <span class="gmui-pagination__ellipsis">
-      <li class="gmui-pagination__item">
-        <button class="gmui-pagination__next">
+<nav class="gmui-pagination gmui-pagination--sm">
+  <ul class="gmui-pagination__list">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__prev">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__page">
+    <li class="gmui-pagination__item">
+      <span class="gmui-pagination__ellipsis">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__next">
 body:
-<body>
-  <div>
-    <nav class="gmui-pagination gmui-pagination--sm">
-      <ul class="gmui-pagination__list">
-        <li class="gmui-pagination__item">
-          <button class="gmui-pagination__prev">
-        <li class="gmui-pagination__item">
-          <button class="gmui-pagination__page">
-        <li class="gmui-pagination__item">
-          <span class="gmui-pagination__ellipsis">
-        <li class="gmui-pagination__item">
-          <button class="gmui-pagination__next">"
+<nav class="gmui-pagination gmui-pagination--sm">
+  <ul class="gmui-pagination__list">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__prev">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__page">
+    <li class="gmui-pagination__item">
+      <span class="gmui-pagination__ellipsis">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__next">"
 `;
 
 exports[`markup parity — rendered HTML > Popover: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="gmui-popover__trigger">
-  <div class="gmui-popover__anchor">
+<button class="gmui-popover__trigger">
+<div class="gmui-popover__anchor">
 body:
-<body>
-  <div>
-    <button class="gmui-popover__trigger">
-    <div class="gmui-popover__anchor">
-  <div>
-    <div class="gmui-popover__content">
-      <button class="gmui-popover__close">"
+<button class="gmui-popover__trigger">
+<div class="gmui-popover__anchor">
+<div class="gmui-popover__content">
+  <button class="gmui-popover__close">"
 `;
 
 exports[`markup parity — rendered HTML > Portal: open/representative configuration 1`] = `
 "container:
-<div>
+
 body:
-<body>
-  <div>
-  <div>
-    <span>"
+"
 `;
 
 exports[`markup parity — rendered HTML > Progress: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-progress gmui-progress--sm">
-    <div class="gmui-progress__indicator">
+<div class="gmui-progress gmui-progress--sm">
+  <div class="gmui-progress__indicator">
 body:
-<body>
-  <div>
-    <div class="gmui-progress gmui-progress--sm">
-      <div class="gmui-progress__indicator">"
+<div class="gmui-progress gmui-progress--sm">
+  <div class="gmui-progress__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > RadioGroup: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-radio-group gmui-radio-group--sm">
-    <button class="gmui-radio-group__item">
-      <span class="gmui-radio-group__indicator">
-    <button class="gmui-radio-group__item">
-      <span class="gmui-radio-group__indicator">
+<div class="gmui-radio-group gmui-radio-group--sm">
+  <button class="gmui-radio-group__item">
+    <span class="gmui-radio-group__indicator">
+  <button class="gmui-radio-group__item">
+    <span class="gmui-radio-group__indicator">
 body:
-<body>
-  <div>
-    <div class="gmui-radio-group gmui-radio-group--sm">
-      <button class="gmui-radio-group__item">
-        <span class="gmui-radio-group__indicator">
-      <button class="gmui-radio-group__item">
-        <span class="gmui-radio-group__indicator">"
+<div class="gmui-radio-group gmui-radio-group--sm">
+  <button class="gmui-radio-group__item">
+    <span class="gmui-radio-group__indicator">
+  <button class="gmui-radio-group__item">
+    <span class="gmui-radio-group__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > ScrollArea: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-scroll-area">
-    <div class="gmui-scroll-area__viewport">
-    <div class="gmui-scroll-area__scrollbar">
-      <div class="gmui-scroll-area__thumb">
-    <div class="gmui-scroll-area__scrollbar">
-      <div class="gmui-scroll-area__thumb">
-    <div class="gmui-scroll-area__corner">
+<div class="gmui-scroll-area">
+  <div class="gmui-scroll-area__viewport">
+  <div class="gmui-scroll-area__scrollbar">
+    <div class="gmui-scroll-area__thumb">
+  <div class="gmui-scroll-area__scrollbar">
+    <div class="gmui-scroll-area__thumb">
+  <div class="gmui-scroll-area__corner">
 body:
-<body>
-  <div>
-    <div class="gmui-scroll-area">
-      <div class="gmui-scroll-area__viewport">
-      <div class="gmui-scroll-area__scrollbar">
-        <div class="gmui-scroll-area__thumb">
-      <div class="gmui-scroll-area__scrollbar">
-        <div class="gmui-scroll-area__thumb">
-      <div class="gmui-scroll-area__corner">"
+<div class="gmui-scroll-area">
+  <div class="gmui-scroll-area__viewport">
+  <div class="gmui-scroll-area__scrollbar">
+    <div class="gmui-scroll-area__thumb">
+  <div class="gmui-scroll-area__scrollbar">
+    <div class="gmui-scroll-area__thumb">
+  <div class="gmui-scroll-area__corner">"
 `;
 
 exports[`markup parity — rendered HTML > Select: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="gmui-select__trigger gmui-select__trigger--sm">
-    <span class="gmui-select__value">
-  <span>
-  <span>
-  <span>
-  <span>
+<button class="gmui-select__trigger gmui-select__trigger--sm">
+  <span class="gmui-select__value">
 body:
-<body>
-  <div>
-    <button class="gmui-select__trigger gmui-select__trigger--sm">
-      <span class="gmui-select__value">
-    <span>
-    <span>
-    <span>
-    <span>
-  <div>
-    <span>
-    <div class="gmui-select__content">
-      <div class="gmui-select__scroll-button gmui-select__scroll-button--up">
-      <div class="gmui-select__viewport">
-        <div class="gmui-select__group">
-          <div class="gmui-select__label">
-          <button class="gmui-select__item">
-            <span class="gmui-select__item-text">
-      <div class="gmui-select__scroll-button gmui-select__scroll-button--down">
-    <span>"
+<button class="gmui-select__trigger gmui-select__trigger--sm">
+  <span class="gmui-select__value">
+<div class="gmui-select__content">
+  <div class="gmui-select__scroll-button gmui-select__scroll-button--up">
+  <div class="gmui-select__viewport">
+    <div class="gmui-select__group">
+      <div class="gmui-select__label">
+      <button class="gmui-select__item">
+        <span class="gmui-select__item-text">
+  <div class="gmui-select__scroll-button gmui-select__scroll-button--down">"
 `;
 
 exports[`markup parity — rendered HTML > Separator: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-separator gmui-separator--vertical custom">
+<div class="gmui-separator gmui-separator--vertical custom">
 body:
-<body>
-  <div>
-    <div class="gmui-separator gmui-separator--vertical custom">"
+<div class="gmui-separator gmui-separator--vertical custom">"
 `;
 
 exports[`markup parity — rendered HTML > Slider: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-slider gmui-slider--sm">
-    <span class="gmui-slider__track">
-      <span class="gmui-slider__range">
-    <span class="gmui-slider__thumb">
+<div class="gmui-slider gmui-slider--sm">
+  <span class="gmui-slider__track">
+    <span class="gmui-slider__range">
+  <span class="gmui-slider__thumb">
 body:
-<body>
-  <div>
-    <div class="gmui-slider gmui-slider--sm">
-      <span class="gmui-slider__track">
-        <span class="gmui-slider__range">
-      <span class="gmui-slider__thumb">"
+<div class="gmui-slider gmui-slider--sm">
+  <span class="gmui-slider__track">
+    <span class="gmui-slider__range">
+  <span class="gmui-slider__thumb">"
 `;
 
 exports[`markup parity — rendered HTML > Slot: open/representative configuration 1`] = `
 "container:
-<div>
-  <span class="slotted">
+
 body:
-<body>
-  <div>
-    <span class="slotted">"
+"
 `;
 
 exports[`markup parity — rendered HTML > Switch: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="gmui-switch gmui-switch--lg">
-    <span class="gmui-switch__thumb">
+<button class="gmui-switch gmui-switch--lg">
+  <span class="gmui-switch__thumb">
 body:
-<body>
-  <div>
-    <button class="gmui-switch gmui-switch--lg">
-      <span class="gmui-switch__thumb">"
+<button class="gmui-switch gmui-switch--lg">
+  <span class="gmui-switch__thumb">"
 `;
 
 exports[`markup parity — rendered HTML > Tabs: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
-    <div class="gmui-tabs__list">
-      <button class="gmui-tabs__trigger">
-      <button class="gmui-tabs__trigger">
-    <div class="gmui-tabs__content">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+  <div class="gmui-tabs__list">
+    <button class="gmui-tabs__trigger">
+    <button class="gmui-tabs__trigger">
+  <div class="gmui-tabs__content">
 body:
-<body>
-  <div>
-    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
-      <div class="gmui-tabs__list">
-        <button class="gmui-tabs__trigger">
-        <button class="gmui-tabs__trigger">
-      <div class="gmui-tabs__content">"
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+  <div class="gmui-tabs__list">
+    <button class="gmui-tabs__trigger">
+    <button class="gmui-tabs__trigger">
+  <div class="gmui-tabs__content">"
 `;
 
 exports[`markup parity — rendered HTML > Toast: open/representative configuration 1`] = `
 "container:
-<div>
-  <div>
-    <span>
-    <ol class="gmui-toast-viewport">
-      <li class="gmui-toast">
-        <div class="gmui-toast__title">
-        <div class="gmui-toast__description">
-        <div>
-          <button class="gmui-toast__action">
-        <div>
-          <button class="gmui-toast__close">
-    <span>
+<ol class="gmui-toast-viewport">
+  <li class="gmui-toast">
+    <div class="gmui-toast__title">
+    <div class="gmui-toast__description">
+    <button class="gmui-toast__action">
+    <button class="gmui-toast__close">
 body:
-<body>
-  <div>
-    <div>
-      <span>
-      <ol class="gmui-toast-viewport">
-        <li class="gmui-toast">
-          <div class="gmui-toast__title">
-          <div class="gmui-toast__description">
-          <div>
-            <button class="gmui-toast__action">
-          <div>
-            <button class="gmui-toast__close">
-      <span>
-  <span>"
+<ol class="gmui-toast-viewport">
+  <li class="gmui-toast">
+    <div class="gmui-toast__title">
+    <div class="gmui-toast__description">
+    <button class="gmui-toast__action">
+    <button class="gmui-toast__close">"
 `;
 
 exports[`markup parity — rendered HTML > Toggle: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom">
+<button class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom">
 body:
-<body>
-  <div>
-    <button class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom">"
+<button class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom">"
 `;
 
 exports[`markup parity — rendered HTML > ToggleGroup: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline">
-    <button class="gmui-toggle-group__item">
+<div class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline">
+  <button class="gmui-toggle-group__item">
 body:
-<body>
-  <div>
-    <div class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline">
-      <button class="gmui-toggle-group__item">"
+<div class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline">
+  <button class="gmui-toggle-group__item">"
 `;
 
 exports[`markup parity — rendered HTML > Toolbar: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="gmui-toolbar">
-    <button class="gmui-toolbar__button">
-    <a class="gmui-toolbar__link">
-    <div class="gmui-toolbar__separator">
-    <div class="gmui-toolbar__toggle-group">
-      <button class="gmui-toolbar__toggle-item">
+<div class="gmui-toolbar">
+  <button class="gmui-toolbar__button">
+  <a class="gmui-toolbar__link">
+  <div class="gmui-toolbar__separator">
+  <div class="gmui-toolbar__toggle-group">
+    <button class="gmui-toolbar__toggle-item">
 body:
-<body>
-  <div>
-    <div class="gmui-toolbar">
-      <button class="gmui-toolbar__button">
-      <a class="gmui-toolbar__link">
-      <div class="gmui-toolbar__separator">
-      <div class="gmui-toolbar__toggle-group">
-        <button class="gmui-toolbar__toggle-item">"
+<div class="gmui-toolbar">
+  <button class="gmui-toolbar__button">
+  <a class="gmui-toolbar__link">
+  <div class="gmui-toolbar__separator">
+  <div class="gmui-toolbar__toggle-group">
+    <button class="gmui-toolbar__toggle-item">"
 `;
 
 exports[`markup parity — rendered HTML > Tooltip: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="gmui-tooltip__trigger">
+<button class="gmui-tooltip__trigger">
 body:
-<body>
-  <div>
-    <button class="gmui-tooltip__trigger">
-  <div>
-    <div class="gmui-tooltip__content">"
+<button class="gmui-tooltip__trigger">
+<div class="gmui-tooltip__content">"
 `;
 
 exports[`markup parity — rendered HTML > VisuallyHidden: open/representative configuration 1`] = `
 "container:
-<div>
-  <span>
+
 body:
-<body>
-  <div>
-    <span>"
+"
 `;

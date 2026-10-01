@@ -4,15 +4,21 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import * as Styled from "../..";
 
 // Safety net for the styled-factory refactor: freezes what THIS package owns —
-// the element tree with its class names — plus the export shape and display names.
+// the elements carrying its class prefix, in nesting order — plus the export shape
+// and display names. Headless-only nodes (focus guards, wrappers) are skipped.
 // (The refactor was first verified against full-HTML snapshots of the pre-refactor
 // code; this class-only projection stays stable when @gugbab/headless legitimately
 // changes ARIA/data attributes.) Update snapshots only for intentional class changes.
 
+const PREFIX = "grx-";
+
 function structureOf(el: Element, depth = 0): string {
     const cls = el.getAttribute("class");
-    const line = `${"  ".repeat(depth)}<${el.tagName.toLowerCase()}${cls ? ` class="${cls}"` : ""}>`;
-    return [line, ...Array.from(el.children, (child) => structureOf(child, depth + 1))].join("\n");
+    const owned = cls?.split(/\s+/).some((c) => c.startsWith(PREFIX)) ?? false;
+    const childDepth = owned ? depth + 1 : depth;
+    const children = Array.from(el.children, (child) => structureOf(child, childDepth)).filter(Boolean);
+    if (!owned) return children.join("\n");
+    return [`${"  ".repeat(depth)}<${el.tagName.toLowerCase()} class="${cls}">`, ...children].join("\n");
 }
 
 function snapshotOf(node: ReactElement): string {
@@ -273,14 +279,14 @@ const SCENARIOS: Record<string, () => ReactElement> = {
         </NavigationMenu.Root>
     ),
     OneTimePasswordField: () => (
-        <OneTimePasswordField.Root length={4}>
-            <OneTimePasswordField.Input index={0} />
-            <OneTimePasswordField.Input index={1} />
+        <OneTimePasswordField.Root maxLength={2}>
+            <OneTimePasswordField.Input />
+            <OneTimePasswordField.Input />
             <OneTimePasswordField.HiddenInput />
         </OneTimePasswordField.Root>
     ),
     Pagination: () => (
-        <Pagination.Root size="sm">
+        <Pagination.Root size="sm" pageCount={3}>
             <Pagination.List>
                 <Pagination.Item>
                     <Pagination.Previous />
@@ -445,9 +451,7 @@ describe("markup parity — export shape (35 components)", () => {
 });
 
 describe("markup parity — rendered HTML", () => {
-    it.each(Object.keys(SCENARIOS))("%s: open/representative configuration", (name) => {
-        const scenario = SCENARIOS[name];
-        expect(scenario).toBeDefined();
+    it.each(Object.entries(SCENARIOS))("%s: open/representative configuration", (_name, scenario) => {
         expect(snapshotOf(scenario())).toMatchSnapshot();
     });
 });

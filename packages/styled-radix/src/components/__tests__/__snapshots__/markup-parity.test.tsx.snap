@@ -4,82 +4,54 @@ exports[`markup parity — boundary cases > Tabs default variant and size are fr
 
 exports[`markup parity — boundary cases > consumer className and hostile attribute values are preserved verbatim 1`] = `
 "container:
-<div>
-  <div class="grx-separator grx-separator--horizontal "><script>alert(1)</script>">
+<div class="grx-separator grx-separator--horizontal "><script>alert(1)</script>">
 body:
-<body>
-  <div>
-    <div class="grx-separator grx-separator--horizontal "><script>alert(1)</script>">"
+<div class="grx-separator grx-separator--horizontal "><script>alert(1)</script>">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 1`] = `
 "container:
-<div>
-  <button class="grx-switch grx-switch--md">
+<button class="grx-switch grx-switch--md">
 body:
-<body>
-  <div>
-    <button class="grx-switch grx-switch--md">"
+<button class="grx-switch grx-switch--md">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 2`] = `
 "container:
-<div>
-  <div class="grx-tabs grx-tabs--pills grx-tabs--md">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
 body:
-<body>
-  <div>
-    <button class="grx-switch grx-switch--md">
-  <div>
-    <div class="grx-tabs grx-tabs--pills grx-tabs--md">"
+<button class="grx-switch grx-switch--md">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 3`] = `
 "container:
-<div>
-  <div class="grx-accordion grx-accordion--default">
+<div class="grx-accordion grx-accordion--default">
 body:
-<body>
-  <div>
-    <button class="grx-switch grx-switch--md">
-  <div>
-    <div class="grx-tabs grx-tabs--pills grx-tabs--md">
-  <div>
-    <div class="grx-accordion grx-accordion--default">"
+<button class="grx-switch grx-switch--md">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+<div class="grx-accordion grx-accordion--default">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 4`] = `
 "container:
-<div>
-  <form class="grx-form">
+<form class="grx-form">
 body:
-<body>
-  <div>
-    <button class="grx-switch grx-switch--md">
-  <div>
-    <div class="grx-tabs grx-tabs--pills grx-tabs--md">
-  <div>
-    <div class="grx-accordion grx-accordion--default">
-  <div>
-    <form class="grx-form">"
+<button class="grx-switch grx-switch--md">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+<div class="grx-accordion grx-accordion--default">
+<form class="grx-form">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 5`] = `
 "container:
-<div>
-  <div class="grx-toolbar">
+<div class="grx-toolbar">
 body:
-<body>
-  <div>
-    <button class="grx-switch grx-switch--md">
-  <div>
-    <div class="grx-tabs grx-tabs--pills grx-tabs--md">
-  <div>
-    <div class="grx-accordion grx-accordion--default">
-  <div>
-    <form class="grx-form">
-  <div>
-    <div class="grx-toolbar">"
+<button class="grx-switch grx-switch--md">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+<div class="grx-accordion grx-accordion--default">
+<form class="grx-form">
+<div class="grx-toolbar">"
 `;
 
 exports[`markup parity — export shape (35 components) > Accordion: keys and part display names are frozen 1`] = `
@@ -470,583 +442,433 @@ exports[`markup parity — export shape (35 components) > exposes exactly the ex
 
 exports[`markup parity — rendered HTML > Accordion: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-accordion grx-accordion--outline">
-    <div class="grx-accordion__item">
-      <h3 class="grx-accordion__header">
-        <button class="grx-accordion__trigger">
-      <div class="grx-accordion__content">
+<div class="grx-accordion grx-accordion--outline">
+  <div class="grx-accordion__item">
+    <h3 class="grx-accordion__header">
+      <button class="grx-accordion__trigger">
+    <div class="grx-accordion__content">
 body:
-<body>
-  <div>
-    <div class="grx-accordion grx-accordion--outline">
-      <div class="grx-accordion__item">
-        <h3 class="grx-accordion__header">
-          <button class="grx-accordion__trigger">
-        <div class="grx-accordion__content">"
+<div class="grx-accordion grx-accordion--outline">
+  <div class="grx-accordion__item">
+    <h3 class="grx-accordion__header">
+      <button class="grx-accordion__trigger">
+    <div class="grx-accordion__content">"
 `;
 
 exports[`markup parity — rendered HTML > AlertDialog: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="grx-alert-dialog__trigger">
+<button class="grx-alert-dialog__trigger">
 body:
-<body>
-  <div>
-    <button class="grx-alert-dialog__trigger">
-  <div>
-    <div class="grx-alert-dialog__overlay">
-    <div class="grx-alert-dialog__content grx-alert-dialog__content--lg">
-      <h2 class="grx-alert-dialog__title">
-      <p class="grx-alert-dialog__description">
-      <button class="grx-alert-dialog__cancel">
-      <button class="grx-alert-dialog__action grx-alert-dialog__action--danger">"
+<button class="grx-alert-dialog__trigger">
+<div class="grx-alert-dialog__overlay">
+<div class="grx-alert-dialog__content grx-alert-dialog__content--lg">
+  <h2 class="grx-alert-dialog__title">
+  <p class="grx-alert-dialog__description">
+  <button class="grx-alert-dialog__cancel">
+  <button class="grx-alert-dialog__action grx-alert-dialog__action--danger">"
 `;
 
 exports[`markup parity — rendered HTML > AspectRatio: open/representative configuration 1`] = `
 "container:
-<div>
-  <div>
-    <div class="grx-aspect-ratio custom">
+<div class="grx-aspect-ratio custom">
 body:
-<body>
-  <div>
-    <div>
-      <div class="grx-aspect-ratio custom">"
+<div class="grx-aspect-ratio custom">"
 `;
 
 exports[`markup parity — rendered HTML > Avatar: open/representative configuration 1`] = `
 "container:
-<div>
-  <span class="grx-avatar grx-avatar--lg">
-    <span class="grx-avatar__fallback">
+<span class="grx-avatar grx-avatar--lg">
+  <span class="grx-avatar__fallback">
 body:
-<body>
-  <div>
-    <span class="grx-avatar grx-avatar--lg">
-      <span class="grx-avatar__fallback">"
+<span class="grx-avatar grx-avatar--lg">
+  <span class="grx-avatar__fallback">"
 `;
 
 exports[`markup parity — rendered HTML > Breadcrumbs: open/representative configuration 1`] = `
 "container:
-<div>
-  <nav class="grx-breadcrumbs grx-breadcrumbs--slash">
-    <ol class="grx-breadcrumbs__list">
-      <li class="grx-breadcrumbs__item">
-        <a class="grx-breadcrumbs__link">
-      <span class="grx-breadcrumbs__separator">
-      <li class="grx-breadcrumbs__item">
-        <span class="grx-breadcrumbs__page">
+<nav class="grx-breadcrumbs grx-breadcrumbs--slash">
+  <ol class="grx-breadcrumbs__list">
+    <li class="grx-breadcrumbs__item">
+      <a class="grx-breadcrumbs__link">
+    <span class="grx-breadcrumbs__separator">
+    <li class="grx-breadcrumbs__item">
+      <span class="grx-breadcrumbs__page">
 body:
-<body>
-  <div>
-    <nav class="grx-breadcrumbs grx-breadcrumbs--slash">
-      <ol class="grx-breadcrumbs__list">
-        <li class="grx-breadcrumbs__item">
-          <a class="grx-breadcrumbs__link">
-        <span class="grx-breadcrumbs__separator">
-        <li class="grx-breadcrumbs__item">
-          <span class="grx-breadcrumbs__page">"
+<nav class="grx-breadcrumbs grx-breadcrumbs--slash">
+  <ol class="grx-breadcrumbs__list">
+    <li class="grx-breadcrumbs__item">
+      <a class="grx-breadcrumbs__link">
+    <span class="grx-breadcrumbs__separator">
+    <li class="grx-breadcrumbs__item">
+      <span class="grx-breadcrumbs__page">"
 `;
 
 exports[`markup parity — rendered HTML > Checkbox: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="grx-checkbox grx-checkbox--sm">
-    <span class="grx-checkbox__indicator">
+<button class="grx-checkbox grx-checkbox--sm">
+  <span class="grx-checkbox__indicator">
 body:
-<body>
-  <div>
-    <button class="grx-checkbox grx-checkbox--sm">
-      <span class="grx-checkbox__indicator">"
+<button class="grx-checkbox grx-checkbox--sm">
+  <span class="grx-checkbox__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > Collapsible: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-collapsible">
-    <button class="grx-collapsible__trigger">
-    <div class="grx-collapsible__content">
+<div class="grx-collapsible">
+  <button class="grx-collapsible__trigger">
+  <div class="grx-collapsible__content">
 body:
-<body>
-  <div>
-    <div class="grx-collapsible">
-      <button class="grx-collapsible__trigger">
-      <div class="grx-collapsible__content">"
+<div class="grx-collapsible">
+  <button class="grx-collapsible__trigger">
+  <div class="grx-collapsible__content">"
 `;
 
 exports[`markup parity — rendered HTML > Combobox: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-combobox__anchor">
-    <input class="grx-combobox__input grx-combobox__input--sm">
-    <button class="grx-combobox__trigger">
-  <span>
+<div class="grx-combobox__anchor">
+  <input class="grx-combobox__input grx-combobox__input--sm">
+  <button class="grx-combobox__trigger">
 body:
-<body>
-  <div>
-    <div class="grx-combobox__anchor">
-      <input class="grx-combobox__input grx-combobox__input--sm">
-      <button class="grx-combobox__trigger">
-    <span>
-  <div>
-    <span>
-    <button>
-    <div class="grx-combobox__content">
-      <button class="grx-combobox__item">
-    <button>
-    <span>"
+<div class="grx-combobox__anchor">
+  <input class="grx-combobox__input grx-combobox__input--sm">
+  <button class="grx-combobox__trigger">
+<div class="grx-combobox__content">
+  <button class="grx-combobox__item">"
 `;
 
 exports[`markup parity — rendered HTML > ContextMenu: open/representative configuration 1`] = `
 "container:
-<div>
-  <div>
+
 body:
-<body>
-  <div>
-    <div>
-  <div>
-    <div class="grx-menu__content">
-      <button class="grx-menu__item">
-      <button class="grx-menu__item grx-menu__item--sub-trigger">
-      <div class="grx-menu__content grx-menu__sub-content">
-        <button class="grx-menu__item">"
+<div class="grx-menu__content">
+  <button class="grx-menu__item">
+  <button class="grx-menu__item grx-menu__item--sub-trigger">
+  <div class="grx-menu__content grx-menu__sub-content">
+    <button class="grx-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > Dialog: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="grx-dialog__trigger">
+<button class="grx-dialog__trigger">
 body:
-<body>
-  <div>
-    <button class="grx-dialog__trigger">
-  <div>
-    <div class="grx-dialog__overlay">
-    <div class="grx-dialog__content grx-dialog__content--xl">
-      <h2 class="grx-dialog__title">
-      <p class="grx-dialog__description">
-      <button class="grx-dialog__close">"
+<button class="grx-dialog__trigger">
+<div class="grx-dialog__overlay">
+<div class="grx-dialog__content grx-dialog__content--xl">
+  <h2 class="grx-dialog__title">
+  <p class="grx-dialog__description">
+  <button class="grx-dialog__close">"
 `;
 
 exports[`markup parity — rendered HTML > DropdownMenu: open/representative configuration 1`] = `
 "container:
-<div>
-  <button>
+
 body:
-<body>
-  <div>
-    <button>
-  <div>
-    <div class="grx-menu__content">
-      <div class="grx-menu__label">
-      <button class="grx-menu__item">
-      <button class="grx-menu__item grx-menu__item--checkbox">
-        <span class="grx-menu__item-indicator">
-      <div class="grx-menu__separator">
-      <div class="grx-menu__radio-group">
-        <button class="grx-menu__item grx-menu__item--radio">
-      <button class="grx-menu__item grx-menu__item--sub-trigger">
-      <div class="grx-menu__content grx-menu__sub-content">
-        <button class="grx-menu__item">"
+<div class="grx-menu__content">
+  <div class="grx-menu__label">
+  <button class="grx-menu__item">
+  <button class="grx-menu__item grx-menu__item--checkbox">
+    <span class="grx-menu__item-indicator">
+  <div class="grx-menu__separator">
+  <div class="grx-menu__radio-group">
+    <button class="grx-menu__item grx-menu__item--radio">
+  <button class="grx-menu__item grx-menu__item--sub-trigger">
+  <div class="grx-menu__content grx-menu__sub-content">
+    <button class="grx-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > Form: open/representative configuration 1`] = `
 "container:
-<div>
-  <form class="grx-form">
-    <div class="grx-form__field grx-form__field--error">
-      <label class="grx-form__label">
-      <input class="grx-form__control">
-    <button class="grx-form__submit">
+<form class="grx-form">
+  <div class="grx-form__field grx-form__field--error">
+    <label class="grx-form__label">
+    <input class="grx-form__control">
+  <button class="grx-form__submit">
 body:
-<body>
-  <div>
-    <form class="grx-form">
-      <div class="grx-form__field grx-form__field--error">
-        <label class="grx-form__label">
-        <input class="grx-form__control">
-      <button class="grx-form__submit">"
+<form class="grx-form">
+  <div class="grx-form__field grx-form__field--error">
+    <label class="grx-form__label">
+    <input class="grx-form__control">
+  <button class="grx-form__submit">"
 `;
 
 exports[`markup parity — rendered HTML > HoverCard: open/representative configuration 1`] = `
 "container:
-<div>
-  <a class="grx-hover-card__trigger">
+<a class="grx-hover-card__trigger">
 body:
-<body>
-  <div>
-    <a class="grx-hover-card__trigger">
-  <div>
-    <div class="grx-hover-card__content">"
+<a class="grx-hover-card__trigger">
+<div class="grx-hover-card__content">"
 `;
 
 exports[`markup parity — rendered HTML > Label: open/representative configuration 1`] = `
 "container:
-<div>
-  <label class="grx-label custom">
-  <input>
+<label class="grx-label custom">
 body:
-<body>
-  <div>
-    <label class="grx-label custom">
-    <input>"
+<label class="grx-label custom">"
 `;
 
 exports[`markup parity — rendered HTML > Menubar: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-menubar">
-    <button class="grx-menubar__trigger">
+<div class="grx-menubar">
+  <button class="grx-menubar__trigger">
 body:
-<body>
-  <div>
-    <div class="grx-menubar">
-      <button class="grx-menubar__trigger">
-  <div>
-    <div class="grx-menu__content">
-      <div class="grx-menu__label">
-      <button class="grx-menu__item">
-      <button class="grx-menu__item grx-menu__item--checkbox">
-        <span class="grx-menu__item-indicator">
-      <div class="grx-menu__separator">
-      <div class="grx-menu__radio-group">
-        <button class="grx-menu__item grx-menu__item--radio">
-      <button class="grx-menu__item grx-menu__item--sub-trigger">
-      <div class="grx-menu__content grx-menu__sub-content">
-        <button class="grx-menu__item">"
+<div class="grx-menubar">
+  <button class="grx-menubar__trigger">
+<div class="grx-menu__content">
+  <div class="grx-menu__label">
+  <button class="grx-menu__item">
+  <button class="grx-menu__item grx-menu__item--checkbox">
+    <span class="grx-menu__item-indicator">
+  <div class="grx-menu__separator">
+  <div class="grx-menu__radio-group">
+    <button class="grx-menu__item grx-menu__item--radio">
+  <button class="grx-menu__item grx-menu__item--sub-trigger">
+  <div class="grx-menu__content grx-menu__sub-content">
+    <button class="grx-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > NavigationMenu: open/representative configuration 1`] = `
 "container:
-<div>
-  <nav class="grx-navigation-menu">
-    <ul class="grx-navigation-menu__list">
-      <li class="grx-navigation-menu__item">
-        <button class="grx-navigation-menu__trigger">
-        <div class="grx-navigation-menu__content">
-          <a class="grx-navigation-menu__link">
+<nav class="grx-navigation-menu">
+  <ul class="grx-navigation-menu__list">
+    <li class="grx-navigation-menu__item">
+      <button class="grx-navigation-menu__trigger">
+      <div class="grx-navigation-menu__content">
+        <a class="grx-navigation-menu__link">
 body:
-<body>
-  <div>
-    <nav class="grx-navigation-menu">
-      <ul class="grx-navigation-menu__list">
-        <li class="grx-navigation-menu__item">
-          <button class="grx-navigation-menu__trigger">
-          <div class="grx-navigation-menu__content">
-            <a class="grx-navigation-menu__link">"
+<nav class="grx-navigation-menu">
+  <ul class="grx-navigation-menu__list">
+    <li class="grx-navigation-menu__item">
+      <button class="grx-navigation-menu__trigger">
+      <div class="grx-navigation-menu__content">
+        <a class="grx-navigation-menu__link">"
 `;
 
 exports[`markup parity — rendered HTML > OneTimePasswordField: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-otp">
-    <input class="grx-otp__input">
-    <input class="grx-otp__input">
-    <input>
+<div class="grx-otp">
+  <input class="grx-otp__input">
+  <input class="grx-otp__input">
 body:
-<body>
-  <div>
-    <div class="grx-otp">
-      <input class="grx-otp__input">
-      <input class="grx-otp__input">
-      <input>"
+<div class="grx-otp">
+  <input class="grx-otp__input">
+  <input class="grx-otp__input">"
 `;
 
 exports[`markup parity — rendered HTML > Pagination: open/representative configuration 1`] = `
 "container:
-<div>
-  <nav class="grx-pagination grx-pagination--sm">
-    <ul class="grx-pagination__list">
-      <li class="grx-pagination__item">
-        <button class="grx-pagination__prev">
-      <li class="grx-pagination__item">
-        <button class="grx-pagination__page">
-      <li class="grx-pagination__item">
-        <span class="grx-pagination__ellipsis">
-      <li class="grx-pagination__item">
-        <button class="grx-pagination__next">
+<nav class="grx-pagination grx-pagination--sm">
+  <ul class="grx-pagination__list">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__prev">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__page">
+    <li class="grx-pagination__item">
+      <span class="grx-pagination__ellipsis">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__next">
 body:
-<body>
-  <div>
-    <nav class="grx-pagination grx-pagination--sm">
-      <ul class="grx-pagination__list">
-        <li class="grx-pagination__item">
-          <button class="grx-pagination__prev">
-        <li class="grx-pagination__item">
-          <button class="grx-pagination__page">
-        <li class="grx-pagination__item">
-          <span class="grx-pagination__ellipsis">
-        <li class="grx-pagination__item">
-          <button class="grx-pagination__next">"
+<nav class="grx-pagination grx-pagination--sm">
+  <ul class="grx-pagination__list">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__prev">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__page">
+    <li class="grx-pagination__item">
+      <span class="grx-pagination__ellipsis">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__next">"
 `;
 
 exports[`markup parity — rendered HTML > Popover: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="grx-popover__trigger">
-  <div class="grx-popover__anchor">
+<button class="grx-popover__trigger">
+<div class="grx-popover__anchor">
 body:
-<body>
-  <div>
-    <button class="grx-popover__trigger">
-    <div class="grx-popover__anchor">
-  <div>
-    <div class="grx-popover__content">
-      <button class="grx-popover__close">"
+<button class="grx-popover__trigger">
+<div class="grx-popover__anchor">
+<div class="grx-popover__content">
+  <button class="grx-popover__close">"
 `;
 
 exports[`markup parity — rendered HTML > Portal: open/representative configuration 1`] = `
 "container:
-<div>
+
 body:
-<body>
-  <div>
-  <div>
-    <span>"
+"
 `;
 
 exports[`markup parity — rendered HTML > Progress: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-progress grx-progress--sm">
-    <div class="grx-progress__indicator">
+<div class="grx-progress grx-progress--sm">
+  <div class="grx-progress__indicator">
 body:
-<body>
-  <div>
-    <div class="grx-progress grx-progress--sm">
-      <div class="grx-progress__indicator">"
+<div class="grx-progress grx-progress--sm">
+  <div class="grx-progress__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > RadioGroup: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-radio-group grx-radio-group--sm">
-    <button class="grx-radio-group__item">
-      <span class="grx-radio-group__indicator">
-    <button class="grx-radio-group__item">
-      <span class="grx-radio-group__indicator">
+<div class="grx-radio-group grx-radio-group--sm">
+  <button class="grx-radio-group__item">
+    <span class="grx-radio-group__indicator">
+  <button class="grx-radio-group__item">
+    <span class="grx-radio-group__indicator">
 body:
-<body>
-  <div>
-    <div class="grx-radio-group grx-radio-group--sm">
-      <button class="grx-radio-group__item">
-        <span class="grx-radio-group__indicator">
-      <button class="grx-radio-group__item">
-        <span class="grx-radio-group__indicator">"
+<div class="grx-radio-group grx-radio-group--sm">
+  <button class="grx-radio-group__item">
+    <span class="grx-radio-group__indicator">
+  <button class="grx-radio-group__item">
+    <span class="grx-radio-group__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > ScrollArea: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-scroll-area">
-    <div class="grx-scroll-area__viewport">
-    <div class="grx-scroll-area__scrollbar">
-      <div class="grx-scroll-area__thumb">
-    <div class="grx-scroll-area__scrollbar">
-      <div class="grx-scroll-area__thumb">
-    <div class="grx-scroll-area__corner">
+<div class="grx-scroll-area">
+  <div class="grx-scroll-area__viewport">
+  <div class="grx-scroll-area__scrollbar">
+    <div class="grx-scroll-area__thumb">
+  <div class="grx-scroll-area__scrollbar">
+    <div class="grx-scroll-area__thumb">
+  <div class="grx-scroll-area__corner">
 body:
-<body>
-  <div>
-    <div class="grx-scroll-area">
-      <div class="grx-scroll-area__viewport">
-      <div class="grx-scroll-area__scrollbar">
-        <div class="grx-scroll-area__thumb">
-      <div class="grx-scroll-area__scrollbar">
-        <div class="grx-scroll-area__thumb">
-      <div class="grx-scroll-area__corner">"
+<div class="grx-scroll-area">
+  <div class="grx-scroll-area__viewport">
+  <div class="grx-scroll-area__scrollbar">
+    <div class="grx-scroll-area__thumb">
+  <div class="grx-scroll-area__scrollbar">
+    <div class="grx-scroll-area__thumb">
+  <div class="grx-scroll-area__corner">"
 `;
 
 exports[`markup parity — rendered HTML > Select: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="grx-select__trigger grx-select__trigger--sm">
-    <span class="grx-select__value">
-  <span>
-  <span>
-  <span>
-  <span>
+<button class="grx-select__trigger grx-select__trigger--sm">
+  <span class="grx-select__value">
 body:
-<body>
-  <div>
-    <button class="grx-select__trigger grx-select__trigger--sm">
-      <span class="grx-select__value">
-    <span>
-    <span>
-    <span>
-    <span>
-  <div>
-    <span>
-    <div class="grx-select__content">
-      <div class="grx-select__scroll-button grx-select__scroll-button--up">
-      <div class="grx-select__viewport">
-        <div class="grx-select__group">
-          <div class="grx-select__label">
-          <button class="grx-select__item">
-            <span class="grx-select__item-text">
-      <div class="grx-select__scroll-button grx-select__scroll-button--down">
-    <span>"
+<button class="grx-select__trigger grx-select__trigger--sm">
+  <span class="grx-select__value">
+<div class="grx-select__content">
+  <div class="grx-select__scroll-button grx-select__scroll-button--up">
+  <div class="grx-select__viewport">
+    <div class="grx-select__group">
+      <div class="grx-select__label">
+      <button class="grx-select__item">
+        <span class="grx-select__item-text">
+  <div class="grx-select__scroll-button grx-select__scroll-button--down">"
 `;
 
 exports[`markup parity — rendered HTML > Separator: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-separator grx-separator--vertical custom">
+<div class="grx-separator grx-separator--vertical custom">
 body:
-<body>
-  <div>
-    <div class="grx-separator grx-separator--vertical custom">"
+<div class="grx-separator grx-separator--vertical custom">"
 `;
 
 exports[`markup parity — rendered HTML > Slider: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-slider grx-slider--sm">
-    <span class="grx-slider__track">
-      <span class="grx-slider__range">
-    <span class="grx-slider__thumb">
+<div class="grx-slider grx-slider--sm">
+  <span class="grx-slider__track">
+    <span class="grx-slider__range">
+  <span class="grx-slider__thumb">
 body:
-<body>
-  <div>
-    <div class="grx-slider grx-slider--sm">
-      <span class="grx-slider__track">
-        <span class="grx-slider__range">
-      <span class="grx-slider__thumb">"
+<div class="grx-slider grx-slider--sm">
+  <span class="grx-slider__track">
+    <span class="grx-slider__range">
+  <span class="grx-slider__thumb">"
 `;
 
 exports[`markup parity — rendered HTML > Slot: open/representative configuration 1`] = `
 "container:
-<div>
-  <span class="slotted">
+
 body:
-<body>
-  <div>
-    <span class="slotted">"
+"
 `;
 
 exports[`markup parity — rendered HTML > Switch: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="grx-switch grx-switch--lg">
-    <span class="grx-switch__thumb">
+<button class="grx-switch grx-switch--lg">
+  <span class="grx-switch__thumb">
 body:
-<body>
-  <div>
-    <button class="grx-switch grx-switch--lg">
-      <span class="grx-switch__thumb">"
+<button class="grx-switch grx-switch--lg">
+  <span class="grx-switch__thumb">"
 `;
 
 exports[`markup parity — rendered HTML > Tabs: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-tabs grx-tabs--pills grx-tabs--md">
-    <div class="grx-tabs__list">
-      <button class="grx-tabs__trigger">
-      <button class="grx-tabs__trigger">
-    <div class="grx-tabs__content">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+  <div class="grx-tabs__list">
+    <button class="grx-tabs__trigger">
+    <button class="grx-tabs__trigger">
+  <div class="grx-tabs__content">
 body:
-<body>
-  <div>
-    <div class="grx-tabs grx-tabs--pills grx-tabs--md">
-      <div class="grx-tabs__list">
-        <button class="grx-tabs__trigger">
-        <button class="grx-tabs__trigger">
-      <div class="grx-tabs__content">"
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+  <div class="grx-tabs__list">
+    <button class="grx-tabs__trigger">
+    <button class="grx-tabs__trigger">
+  <div class="grx-tabs__content">"
 `;
 
 exports[`markup parity — rendered HTML > Toast: open/representative configuration 1`] = `
 "container:
-<div>
-  <div>
-    <span>
-    <ol class="grx-toast-viewport">
-      <li class="grx-toast">
-        <div class="grx-toast__title">
-        <div class="grx-toast__description">
-        <div>
-          <button class="grx-toast__action">
-        <div>
-          <button class="grx-toast__close">
-    <span>
+<ol class="grx-toast-viewport">
+  <li class="grx-toast">
+    <div class="grx-toast__title">
+    <div class="grx-toast__description">
+    <button class="grx-toast__action">
+    <button class="grx-toast__close">
 body:
-<body>
-  <div>
-    <div>
-      <span>
-      <ol class="grx-toast-viewport">
-        <li class="grx-toast">
-          <div class="grx-toast__title">
-          <div class="grx-toast__description">
-          <div>
-            <button class="grx-toast__action">
-          <div>
-            <button class="grx-toast__close">
-      <span>
-  <span>"
+<ol class="grx-toast-viewport">
+  <li class="grx-toast">
+    <div class="grx-toast__title">
+    <div class="grx-toast__description">
+    <button class="grx-toast__action">
+    <button class="grx-toast__close">"
 `;
 
 exports[`markup parity — rendered HTML > Toggle: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="grx-toggle grx-toggle--sm grx-toggle--outline custom">
+<button class="grx-toggle grx-toggle--sm grx-toggle--outline custom">
 body:
-<body>
-  <div>
-    <button class="grx-toggle grx-toggle--sm grx-toggle--outline custom">"
+<button class="grx-toggle grx-toggle--sm grx-toggle--outline custom">"
 `;
 
 exports[`markup parity — rendered HTML > ToggleGroup: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline">
-    <button class="grx-toggle-group__item">
+<div class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline">
+  <button class="grx-toggle-group__item">
 body:
-<body>
-  <div>
-    <div class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline">
-      <button class="grx-toggle-group__item">"
+<div class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline">
+  <button class="grx-toggle-group__item">"
 `;
 
 exports[`markup parity — rendered HTML > Toolbar: open/representative configuration 1`] = `
 "container:
-<div>
-  <div class="grx-toolbar">
-    <button class="grx-toolbar__button">
-    <a class="grx-toolbar__link">
-    <div class="grx-toolbar__separator">
-    <div class="grx-toolbar__toggle-group">
-      <button class="grx-toolbar__toggle-item">
+<div class="grx-toolbar">
+  <button class="grx-toolbar__button">
+  <a class="grx-toolbar__link">
+  <div class="grx-toolbar__separator">
+  <div class="grx-toolbar__toggle-group">
+    <button class="grx-toolbar__toggle-item">
 body:
-<body>
-  <div>
-    <div class="grx-toolbar">
-      <button class="grx-toolbar__button">
-      <a class="grx-toolbar__link">
-      <div class="grx-toolbar__separator">
-      <div class="grx-toolbar__toggle-group">
-        <button class="grx-toolbar__toggle-item">"
+<div class="grx-toolbar">
+  <button class="grx-toolbar__button">
+  <a class="grx-toolbar__link">
+  <div class="grx-toolbar__separator">
+  <div class="grx-toolbar__toggle-group">
+    <button class="grx-toolbar__toggle-item">"
 `;
 
 exports[`markup parity — rendered HTML > Tooltip: open/representative configuration 1`] = `
 "container:
-<div>
-  <button class="grx-tooltip__trigger">
+<button class="grx-tooltip__trigger">
 body:
-<body>
-  <div>
-    <button class="grx-tooltip__trigger">
-  <div>
-    <div class="grx-tooltip__content">"
+<button class="grx-tooltip__trigger">
+<div class="grx-tooltip__content">"
 `;
 
 exports[`markup parity — rendered HTML > VisuallyHidden: open/representative configuration 1`] = `
 "container:
-<div>
-  <span>
+
 body:
-<body>
-  <div>
-    <span>"
+"
 `;
