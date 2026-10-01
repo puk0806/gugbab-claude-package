@@ -70,7 +70,6 @@ describe('NavigationMenu — 키보드·현재 페이지 (APG Disclosure Navigat
   it('하위 메뉴를 닫는 Escape 는 바깥(감싼 다이얼로그 등)으로 전파되지 않는다', () => {
     const outer = vi.fn();
     render(
-      // biome-ignore lint/a11y/noStaticElementInteractions: test listener for propagation
       <div onKeyDown={(e) => outer(e.key)}>
         <Nav />
       </div>,
