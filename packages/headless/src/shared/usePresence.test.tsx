@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { usePresence } from './usePresence';
 
 function Probe({ present }: { present: boolean }) {
-  const { mounted, presenceRef } = usePresence(present);
+  const { mounted, presenceRef } = usePresence<HTMLDivElement>(present);
   if (!mounted) return null;
   return (
     <div ref={presenceRef} data-testid="el">

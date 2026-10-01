@@ -385,9 +385,16 @@ describe('RovingFocusGroup — non-focusable items', () => {
 describe('useRovingFocusGroupItem hook', () => {
   it('returns props to spread on a custom element', () => {
     function CustomItem({ children }: { children: React.ReactNode }) {
-      const itemProps = useRovingFocusGroupItem();
+      const { ref: itemRef, ...itemProps } = useRovingFocusGroupItem();
       return (
-        <button type="button" {...itemProps}>
+        <button
+          type="button"
+          {...itemProps}
+          ref={(node) => {
+            if (typeof itemRef === 'function') itemRef(node);
+            else if (itemRef) itemRef.current = node;
+          }}
+        >
           {children}
         </button>
       );

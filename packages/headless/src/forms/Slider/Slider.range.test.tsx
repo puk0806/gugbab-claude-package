@@ -18,6 +18,7 @@ describe('Slider — Range (multi-thumb)', () => {
       </Slider.Root>,
     );
     const [t0, t1] = screen.getAllByRole('slider');
+    if (!t0 || !t1) throw new Error('slider thumbs not found');
     expect(t0.getAttribute('aria-valuenow')).toBe('25');
     expect(t1.getAttribute('aria-valuenow')).toBe('75');
   });
@@ -30,6 +31,7 @@ describe('Slider — Range (multi-thumb)', () => {
       </Slider.Root>,
     );
     const [t0, t1] = screen.getAllByRole('slider');
+    if (!t0 || !t1) throw new Error('slider thumbs not found');
     t0.focus();
     fireEvent.keyDown(t0, { key: 'ArrowRight' });
     expect(t0.getAttribute('aria-valuenow')).toBe('21');
@@ -44,6 +46,7 @@ describe('Slider — Range (multi-thumb)', () => {
       </Slider.Root>,
     );
     const [, t1] = screen.getAllByRole('slider');
+    if (!t1) throw new Error('slider thumbs not found');
     t1.focus();
     fireEvent.keyDown(t1, { key: 'ArrowLeft' });
     expect(t1.getAttribute('aria-valuenow')).toBe('75');
@@ -58,6 +61,7 @@ describe('Slider — Range (multi-thumb)', () => {
       </Slider.Root>,
     );
     const [t0] = screen.getAllByRole('slider');
+    if (!t0) throw new Error('slider thumbs not found');
     t0.focus();
     fireEvent.keyDown(t0, { key: 'ArrowRight' });
     expect(onChange).toHaveBeenCalledWith([11, 90]);
@@ -72,6 +76,7 @@ describe('Slider — Range (multi-thumb)', () => {
       </Slider.Root>,
     );
     const [t0] = screen.getAllByRole('slider');
+    if (!t0) throw new Error('slider thumbs not found');
     t0.focus();
     fireEvent.keyDown(t0, { key: 'ArrowRight' });
     expect(onCommit).toHaveBeenCalledWith([31, 70]);
@@ -85,6 +90,7 @@ describe('Slider — Range (multi-thumb)', () => {
       </Slider.Root>,
     );
     const [t0, t1] = screen.getAllByRole('slider');
+    if (!t0 || !t1) throw new Error('slider thumbs not found');
 
     // Push t0 upward toward t1 several times.
     t0.focus();

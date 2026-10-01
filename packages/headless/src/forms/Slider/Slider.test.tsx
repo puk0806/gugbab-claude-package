@@ -62,6 +62,7 @@ describe('Slider', () => {
       </Slider.Root>,
     );
     const [minThumb, maxThumb] = screen.getAllByRole('slider');
+    if (!minThumb || !maxThumb) throw new Error('slider thumbs not found');
     expect(minThumb.getAttribute('aria-valuenow')).toBe('20');
     expect(maxThumb.getAttribute('aria-valuenow')).toBe('80');
 

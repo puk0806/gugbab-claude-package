@@ -22,7 +22,13 @@ describe("AspectRatio (styled-mui)", () => {
 
     it("forwards ref", () => {
         let captured: HTMLDivElement | null = null;
-        render(<AspectRatio ref={(el) => (captured = el)} />);
+        render(
+            <AspectRatio
+                ref={(el) => {
+                    captured = el;
+                }}
+            />,
+        );
         expect(captured).toBeInstanceOf(HTMLDivElement);
     });
 });

@@ -56,13 +56,13 @@
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "clean": "rm -rf dist .turbo coverage"
   },
   "devDependencies": {
     "@gugbab/tsconfig": "workspace:*",
     "tsup": "^8.3.6",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.9"
+    "vitest": "^3.2.7"
   }
 }
