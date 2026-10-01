@@ -5,11 +5,16 @@ export function groupBy<T, K extends PropertyKey>(
     const result = {} as Record<K, T[]>;
     array.forEach((item, index) => {
         const key = keyFn(item, index);
-        const bucket = result[key];
-        if (bucket) {
-            bucket.push(item);
+        // Own-property check (not Object.hasOwn — ES2022, missing in Safari < 15.4):
+        // inherited members (toString, constructor, …)
+        // must not be mistaken for an existing bucket.
+        // biome-ignore lint/suspicious/noPrototypeBuiltins: Object.hasOwn is ES2022 (Safari < 15.4 lacks it); this util targets older runtimes too
+        if (Object.prototype.hasOwnProperty.call(result, key)) {
+            result[key].push(item);
         } else {
-            result[key] = [item];
+            // defineProperty: plain assignment to "__proto__" would replace the
+            // prototype instead of creating a key.
+            Object.defineProperty(result, key, { value: [item], writable: true, enumerable: true, configurable: true });
         }
     });
     return result;
