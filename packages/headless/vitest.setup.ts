@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach, expect } from 'vitest';
-import * as matchers from 'vitest-axe/matchers';
 import type { AxeMatchers } from 'vitest-axe/matchers';
+import * as matchers from 'vitest-axe/matchers';
 
 // jsdom does not implement PointerEvent — provide a minimal polyfill
 if (typeof window !== 'undefined' && !window.PointerEvent) {

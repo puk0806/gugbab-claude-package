@@ -389,9 +389,11 @@ describe('FocusScope — falls back to scope element when no tabbable child', ()
     function Tree() {
       const [focused, setFocused] = useState(false);
       return (
-        <FocusScope ref={(node) => {
+        <FocusScope
+          ref={(node) => {
             if (node && !focused) setFocused(true);
-          }}>
+          }}
+        >
           <span>not tabbable</span>
         </FocusScope>
       );
