@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: c5b5da51-0ed4-41ba-a315-b50840ef73fd
-  modified: 2026-09-25T04:03:50.045Z
+  modified: 2026-10-01T01:32:40.112Z
 ---
 
 2026-09-03 형제 앱 3곳(dream·voca·health)에 복붙돼 있던 마이크(STT)·TTS 모듈을 `@gugbab/hooks` `speech` 카테고리 + `@gugbab/utils` `appendTranscript`로 승격 (feature/speech-common).

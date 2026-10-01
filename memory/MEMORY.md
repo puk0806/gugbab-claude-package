@@ -2,8 +2,8 @@
 - [Reference monorepo](project_reference_monorepo.md) — 참고 레포(gugbab-integrated-admin-poc) 구조·스택 요약
 - [Headless React package roadmap](project_react_roadmap.md) — @gugbab/headless 5-tier 35 컴포넌트의 설계 결정·카탈로그·다음 후보
 - [npm v1 publishing — DONE](project_npm_v1_publishing.md) — v1.0.0 9개 + v1.0.1 5개 npm 게시 완료. 2026-05-11 부터 feature PR 머지 1회로 publish 자동 (auto-merge 흐름).
-- [Claude hooks system](project_hooks_system.md) — 훅 24개 운영(원본 레포 설치본, 작성 도구 미설치). 메모리·세션 export 동기화, Codex 리뷰, 품질 가드.
-- [2026-09-30 audit & priorities](project_audit_2026_09_30.md) — 1~4순위 완료·커밋(미푸시, 브랜치 5개, 3순위만 2순위 위에 쌓임). 결정 D1~D4·후속 작업 대기, 새 브랜치는 main에서만
+- [Claude hooks system](project_hooks_system.md) — 훅 24개 운영(원본 레포 설치본, 작성 도구 미설치). 메모리·세션 export 동기화, Codex 리뷰, 품질 가드. 브랜치 전환 시 전역 메모리 퇴행 주의.
+- [2026-09-30 audit & priorities](project_audit_2026_09_30.md) — 1~4순위 + styled 통합까지 브랜치 6개 커밋 완료(미푸시), 합친 트리 검증 GREEN. 머지 순서 cleanup→1→2→3→4→styled-factory. 결정 D1~D4·Codex 설정 대기
 - [No git stash for temp comparisons](feedback_no_git_stash.md) — 기존 stash 항목이 있어 pop 사고 발생(09-30). 사본 교체·복원으로 비교, 사용자 stash는 절대 pop/drop 금지
 - [Report upstream asset bugs](feedback_report_upstream_asset_bugs.md) — 설치본 .claude 자산 버그는 원본(00_gugbab-claude) 세션에 SendMessage로 전달 후 재설치
 - [relay-types + types-generator](project_relay_types_generator.md) — OpenAPI→TS 타입 자동 publish 파이프라인 완성·운영 중 (1.0.0-{ts}, relay 배포 성공 → 자동 게시). PAT 만료 주의.

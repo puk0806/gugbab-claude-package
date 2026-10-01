@@ -3,7 +3,7 @@ name: Claude hooks system
 description: .claude/hooks/ 훅 시스템(실행 훅 21종 + _lib + statusline)의 역할 구분과 핵심 동작. 메모리 미러 동기화, Codex 리뷰, 품질·적대적 테스트 가드.
 type: project
 originSessionId: bfc7802b-aa36-406e-b08b-1c96c782b326
-modified: 2026-09-30T04:20:49.327Z
+modified: 2026-10-01T01:32:32.499Z
 ---
 2026-09-30 기준 훅 24개(실행 훅 21종 + `_lib.js` + `statusline.sh` + `package.json`) 운영 중. 상세 목록은 `docs/hooks/README.md`가 단일 소스. 훅·에이전트·스킬·rules·commands는 **원본 레포(00_gugbab-claude)의 project-install.sh 설치본**이다(`.claude/.install-manifest.json` — 템플릿 react-spa·nextjs, 작성 도구 제외, `--legacy`·README 가드·staleness `--strict`). 설치본 파일을 로컬에서만 고치면 다음 재설치 때 덮어써진다 — [[feedback_report_upstream_asset_bugs]].
 
@@ -14,7 +14,8 @@ modified: 2026-09-30T04:20:49.327Z
 - **훅은 git commit을 절대 수행하지 않는다** (2026-07-10 개편 — 자동 커밋 폐지). 전역 `~/.claude/projects/<해시>/memory/`가 1차 저장소(실디렉토리), 레포 `memory/`는 미러. 커밋·푸시는 사용자 요청 시 배치로만
 - 커밋·푸시 요청 시 선행 절차: 낡은 memory 갱신 → `session-export.js --refresh` → 미러 diff 확인 → `[memory]`/`[export]` 커밋을 같은 배치에 포함 (deliverable-guard가 push/PR 직전 memory·exports 미커밋을 차단)
 - PostToolUse/PreToolUse 차단 훅(exit 2)의 메시지는 **stderr**로 출력해야 모델에 전달됨 (stdout은 유실 — tdd-guard·adversarial-test-guard·fake-impl-guard에서 수정 이력)
-- Stop 시 `.claude/.codex-review-done` 없으면 codex-review-guard가 리뷰 강제 (codex CLI 미설치 머신은 조용히 통과)
+- Stop 시 `.claude/.codex-review-done` 없으면 codex-review-guard가 리뷰 강제 (codex CLI 미설치 머신은 조용히 통과). 마커보다 늦게 바뀐 파일이 있으면 다시 막는다 — 서브에이전트가 편집 중이면 반복 발동한다
+- **브랜치 전환 주의 (2026-10-01):** memory/가 다른 브랜치로 체크아웃되면 그 브랜치의 오래된 memory 파일이 전역으로 복사되어 전역이 퇴행할 수 있다. 메모리 커밋 브랜치로 돌아온 뒤 `diff -rq memory <전역>`으로 확인하고, 더 최신인 쪽으로 Write 도구를 써서 복원한다
 
 ## 카테고리별 핵심 훅
 
