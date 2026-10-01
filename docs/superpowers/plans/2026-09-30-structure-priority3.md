@@ -44,3 +44,29 @@
   - dist 인라인 회귀 검사(빌드 후 `from '@gugbab/headless'` 존재, `createContext` 0건)
   - turbo `scripts/**` 무효화 범위를 패키지별 `inputs`로 좁히기(현재는 비용만 증가하고 결과에는 영향 없음)
 
+
+## 후속 반영 (2026-10-01, "남은 작업 전부")
+
+**의존성 취약점 (`pnpm audit`)**
+- 게시 패키지의 **런타임 의존성에는 취약점이 없었다.** 모두 개발 도구 경로였다.
+- 조치:
+  - vitest 2.1.9 → 3.2.7 (critical 해소). 테스트 1,195개 무변경 통과
+  - 스토리북 앱 vite 5 → 6.4.3. 두 스토리북 빌드 성공을 확인했다
+  - turbo → 2.11.5
+  - 같은 major 안의 패치 버전으로 `pnpm.overrides` 적용: axios, brace-expansion(1·2·5), browserslist, fast-uri, form-data, joi(17·18), js-yaml(3·4), nanoid, postcss, qs, shell-quote, ws, baseline-browser-mapping, @babel/core
+- 결과: critical 3 → 0, high 58 → 0, moderate 41 → 5, low 8 → 1
+- 남은 것(major 필요·개발 도구 전용): `@vitest/mocker`·vitest(4.x 필요, moderate), uuid(11.x 필요, moderate), esbuild(0.28, low)
+
+**기타**
+- **lifecycle 스크립트 허용 목록:** `pnpm.onlyBuiltDependencies = [@swc/core, esbuild, unrs-resolver]`(설치 스크립트가 있는 의존성 전수 조사). 새 의존성의 설치 스크립트는 기본 차단된다.
+- **turbo 2.11:** AI 에이전트를 감지하면 루트에 `AGENTS.md`를 자동 생성한다. `"agentGuidance": false`로 끄고 파일을 지웠다(지침은 CLAUDE.md로 관리).
+- **테스트 파일 타입 검사:** 8개 패키지에 `tsconfig.test.json`을 두고 `typecheck`에 연결했다. 기존 오류 69건을 수정했다. styled OTP 테스트는 존재하지 않는 `length`·`index` prop을 넘겨 4자리 설정이 한 번도 적용되지 않고 있었다.
+- **peer 범위:** `^18.0.0 || ^19.0.0`
+- **정리:** turbo 미사용 `lint` 태스크와 `.next` 출력 제거. 스토리북 앱의 미사용 `@gugbab/headless` 의존성(실제 import 0건)과 존재하지 않는 `src` include 제거. types-generator의 소비처 없는 tsup build를 `tsc --noEmit`으로 변경
+- **relay-types:** 실제로 게시되는데 없던 README·LICENSE 추가(예제 타입은 컴파일 확인)
+- **`"use client"` 주입:** 소스맵을 1줄 밀어 디버깅 위치 어긋남 해소
+- **보류:**
+  - `shared/*` 내부 API의 subpath 분리: 공개 API 제거라 major가 필요하다. index의 기존 주석이 실험적 API임을 명시하고 있다
+  - hooks 비훅 함수의 `"use client"` 분리: 별도 entry가 필요해서 다음 major에서 검토
+  - styled 복제 통합: 별도 브랜치에서 진행
+- **타입 검토 권고(미반영):** `MenubarContentProps.onEscapeKeyDown` 선언(React KeyboardEvent)과 런타임(DOM KeyboardEvent)이 불일치한다. `useRovingFocusGroupItem`의 ref 타입은 제네릭화를 검토할 만하다.
