@@ -40,9 +40,12 @@ describe('Popover — 바깥 닫힘을 거부한 뒤 Escape 로 닫기 (경계)'
         >
           <Popover.Trigger>open</Popover.Trigger>
           <Popover.Portal>
-            <Popover.Content aria-label="details" onInteractOutside={() => {
+            <Popover.Content
+              aria-label="details"
+              onInteractOutside={() => {
                 outsideRef.current = true;
-              }}>
+              }}
+            >
               <button type="button">inside</button>
             </Popover.Content>
           </Popover.Portal>

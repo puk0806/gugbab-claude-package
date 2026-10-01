@@ -25,8 +25,8 @@ import {
   type PointerDownOutsideEvent,
 } from '../../shared/DismissableLayer';
 import { FocusScope } from '../../shared/FocusScope';
-import { handleCloseAutoFocus } from '../_closeAutoFocus';
 import { usePresence } from '../../shared/usePresence';
+import { handleCloseAutoFocus } from '../_closeAutoFocus';
 
 interface DialogContextValue {
   open: boolean;
