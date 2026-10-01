@@ -11,12 +11,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 ```
 01_gugbab-claude-package/
 ├── CLAUDE.md              # 프로젝트 지침
-├── .claude/               # Claude Code 자산
-│   ├── agents/            # 서브에이전트
-│   ├── skills/            # 스킬
-│   ├── hooks/             # 훅
-│   ├── rules/             # 규칙 문서
-│   └── settings.json      # Claude Code 설정·플러그인
+├── .claude/               # Claude Code 자산 (원본 레포 gugbab-claude의 설치본)
 ├── .husky/                # Git 훅 (pre-commit / commit-msg / pre-push)
 ├── .changeset/            # Changesets 버전 기록
 ├── packages/              # 배포 대상 패키지 (@gugbab/*)
@@ -83,59 +78,6 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 
 Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 
-## Claude 자산 현황
-
-### 에이전트 (30개)
-
-| 카테고리       | 항목                                                                                          |
-| -------------- | --------------------------------------------------------------------------------------------- |
-| backend (3)    | build-error-resolver, typescript-backend-architect, typescript-backend-developer              |
-| devops (1)     | devops-engineer                                                                               |
-| domain (6)     | api-spec-designer, business-domain-analyst, codebase-domain-analyst, frontend-domain-refactorer, product-planner, ui-ux-designer |
-| frontend (2)   | frontend-architect, frontend-developer                                                        |
-| meta (5)       | changelog-writer, claude-code-guide, freshness-auditor, project-scaffolder, tech-stack-advisor |
-| research (5)   | competitor-analyst, data-analyst, deep-researcher, research-reviewer, web-searcher            |
-| validation (8) | a11y-auditor, build-perf-benchmarker, fact-checker, perf-report-writer, pr-reviewer, qa-engineer, security-auditor, source-validator |
-
-> 스킬·에이전트 작성 도구(agent-creator·skill-creator·skill-tester + 작성 규칙 5종)는 설치하지 않는다 — 자산은 원본 레포(gugbab-claude)에서 만들고 이 레포는 설치본만 받는다.
-
-### 스킬 (53개)
-
-| 카테고리       | 수  | 항목 |
-| -------------- | :-: | ---- |
-| architecture   |  4  | ddd, frontend-domain-structure, incremental-refactoring, module-boundaries |
-| backend        |  6  | better-auth, claude-code-headless, drizzle-neon-postgres, hono-api-patterns, prisma-orm, zod-schema-validation |
-| devops         |  5  | docker-deployment, github-actions, github-actions-visual-regression, vercel-sandbox, vercel-workflow |
-| frontend       | 37  | ag-grid, animation, build-perf-benchmarking, bundle-size-analysis, bundling-compiler, code-convention, core-web-vitals-optimization, design-token-scss, dev-server-hmr-benchmarking, e2e-testing, font-optimization, form-handling, indexeddb-dexie, lighthouse-ci-setup, monorepo-turborepo, mui-v5, mui-v9, next-intl-i18n, nextjs, pwa-push-notifications, recoil-to-zustand-migration, rsbuild, state-management, storybook, storybook-visual-testing, swiper, tanstack-query, tanstack-query-v4-to-v5-migration, testing, tsup, typescript-v4, typescript-v5, vite-advanced-splitting, vite-pwa-service-worker, wcag-2.2-checklist, web-vitals-rum-comparison, webpack-vite-config-mapping |
-| meta           |  1  | claude-code-hook-authoring |
-
-검증 문서: `docs/skills/{category}/{name}/verification.md` (스킬 53개와 1:1)
-
-### 훅 (24개 = 실행 훅 21종 + `_lib.js` + `statusline.sh` + `package.json`)
-
-상세 목록·이벤트·동작은 [docs/hooks/README.md](docs/hooks/README.md)가 단일 소스. 이 레포는 `--legacy` 프로파일이라 `tdd-guard`는 설치하지 않는다(TDD는 superpowers 플러그인이 담당). `package.json`(`"type": "commonjs"`)은 ESM 대상에서도 훅이 CommonJS로 동작하도록 고정한다.
-
-- **세션**: session-start, instructions-loaded, staleness-check(`--strict`), cc-notify, statusline
-- **가드·품질**: auto-approve, bash-guard, branch-protection, protect-secrets, agent-md-guard, skill-md-guard, verification-guard, deliverable-guard(README 가드 포함), adversarial-test-guard, fake-impl-guard, test-fake-guard, typescript-quality(`--changed-only`)
-- **메모리·기록**: memory-sync, memory-pull, session-export
-- **Codex 리뷰**: codex-review-guard, parry
-- **유틸**: _lib, package.json
-
-### 규칙 (7개)
-
-- `adversarial-testing.md` — 적대적 테스트 3계층 원칙 (훅으로 강제)
-- `codex-review.md` — Codex 적대적 리뷰 워크플로우 (최대 3라운드, 사용 불가 감지 마커)
-- `git.md` — Git 커밋 컨벤션 (`[category] Type: Subject`)
-- `info-verification.md` — 외부 정보 검증 원칙 (소스 신뢰도 4단계)
-- `memory-sync.md` — 메모리 동기화 정책 (전역 1차 + 레포 미러)
-- `task-workflow.md` — 작업 착수 전 확인 절차
-- `typescript.md` — TypeScript·React 코딩 규칙
-
-### 플러그인 (프로젝트 레벨)
-
-- [`codex@openai-codex`](https://github.com/openai/codex-plugin-cc) — 2차 코드 리뷰 (Codex가 Claude 외부에서 독립 검토)
-- [`superpowers@superpowers-marketplace`](https://github.com/obra/superpowers) — TDD 강제(RED→GREEN→REFACTOR) + 7단계 워크플로우
-
 ---
 
 ## 업데이트 로그
@@ -166,3 +108,4 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-09-03 | Web Speech API 공통화 — 형제 앱 3곳(꿈일기·영어회화·건강)에 복붙되어 있던 마이크(STT)·TTS 모듈을 패키지로 승격. `@gugbab/hooks` 신규 `speech` 카테고리: `useSpeechRecognition`(stale 세션 가드·언마운트 abort), `useSpeak`(voice 비동기 로딩 대응), `createRecognizer`(lang 파라미터화, resultIndex 배치 유실 방지), `pickVoice`/`listVoices`, 지원 감지 2종(부분 구현 방어). `@gugbab/utils`: `appendTranscript`(서로게이트 쌍 안전 절단). 테스트 89개 추가 (적대적·경계 계층 포함, Codex 리뷰 반영 — stale utterance 가드·부분 구현 방어·핸들 오염 방지). |
 | 2026-08-14 | relay 입력 상한 대응 이력 압축 유틸 — `@gugbab/utils` v1.3.0: `history` 모듈 순수 함수 4종(`totalContentBytes`·`fitMessagesToBudget`·`compressHistory`·`isHistoryValidationError`). 상한 값 파라미터 주입, 타 패키지 의존 없음, 첫·마지막 role=user 계약 보장. 적대적·경계 테스트 21개 추가 (Codex 3라운드 리뷰 반영 — 꼬리 assistant 계약 파괴 수정). `@gugbab/commitlint-config` v1.1.0: `[export] sync: <파일명>` 예외 형식 허용 — git.md 컨벤션과 검증 불일치 해소, export 커밋의 `--no-verify` 우회 제거. |
 | 2026-09-30 | Claude 자산을 원본 레포 최신 설치본(react-spa·nextjs, 작성 도구 제외, `--legacy`·README 가드·staleness 강제)으로 교체 후 정리 — 설치 목록 밖 잔재 스킬 57종(꿈 앱·SEO·health·n8n·writing)·에이전트 2종(seo-auditor·content-quality-reviewer)과 스킬 없는 검증 문서 143개 삭제, 원본 제거 스킬 9종(radix-ui 등) 반영. 원본에서 수정된 훅 버그 반영(차단 훅 5종 stderr, `/agent-status` git 기반 집계, `hooks/package.json`). 템플릿으로 덮인 CLAUDE.md를 프로젝트 내용으로 복원·병합(biome·commitlint 스택, 빌드 순서 현행화). README 자산 현황(에이전트 30·스킬 53·훅 24·규칙 7)·패키지 버전 현행화. |
+| 2026-10-01 | README에서 Claude 자산 현황(에이전트·스킬·훅·규칙·플러그인 목록) 섹션 제거 — 자산은 원본 레포 설치본이라 여기서 목록을 유지하지 않는다. 훅 상세는 `docs/hooks/README.md` |
