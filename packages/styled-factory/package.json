@@ -1,0 +1,27 @@
+{
+  "name": "@gugbab/styled-factory",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Internal per-component factories shared by @gugbab/styled-mui and @gugbab/styled-radix (source-only, bundled into consumers, never published)",
+  "license": "MIT",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@gugbab/headless": "workspace:*",
+    "@gugbab/utils": "workspace:*",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@gugbab/headless": "workspace:*",
+    "@gugbab/tsconfig": "workspace:*",
+    "@gugbab/utils": "workspace:*",
+    "@types/react": "^19.0.0",
+    "react": "^19.0.0",
+    "typescript": "^5.7.2"
+  }
+}

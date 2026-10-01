@@ -1,0 +1,37 @@
+import { type AvatarFallbackProps, type AvatarImageProps, Avatar as Headless } from "@gugbab/headless";
+import { cn } from "@gugbab/utils";
+import { forwardRef, type HTMLAttributes } from "react";
+
+export type AvatarSize = "sm" | "md" | "lg";
+
+export interface AvatarRootProps extends HTMLAttributes<HTMLSpanElement> {
+    size?: AvatarSize;
+}
+
+export function createAvatar(prefix: string) {
+    const Root = forwardRef<HTMLSpanElement, AvatarRootProps>(function AvatarRoot(
+        { size = "md", className, ...rest },
+        ref,
+    ) {
+        return (
+            <Headless.Root
+                ref={ref}
+                className={cn(`${prefix}-avatar`, `${prefix}-avatar--${size}`, className)}
+                {...rest}
+            />
+        );
+    });
+
+    const Image = forwardRef<HTMLImageElement, AvatarImageProps>(function AvatarImage({ className, ...rest }, ref) {
+        return <Headless.Image ref={ref} className={cn(`${prefix}-avatar__image`, className)} {...rest} />;
+    });
+
+    const Fallback = forwardRef<HTMLSpanElement, AvatarFallbackProps>(function AvatarFallback(
+        { className, ...rest },
+        ref,
+    ) {
+        return <Headless.Fallback ref={ref} className={cn(`${prefix}-avatar__fallback`, className)} {...rest} />;
+    });
+
+    return { Root, Image, Fallback };
+}
