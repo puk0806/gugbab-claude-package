@@ -54,4 +54,14 @@ describe("groupBy", () => {
             expect(result.hasOwnProperty).toEqual(["y"]);
         });
     });
+
+    it("Object.hasOwn 이 없는 런타임(Safari 15.3 이하)에서도 동작한다 (경계)", () => {
+        const descriptor = Object.getOwnPropertyDescriptor(Object, "hasOwn");
+        Reflect.deleteProperty(Object, "hasOwn");
+        try {
+            expect(groupBy(["a", "b", "a"], (s) => s)).toEqual({ a: ["a", "a"], b: ["b"] });
+        } finally {
+            if (descriptor) Object.defineProperty(Object, "hasOwn", descriptor);
+        }
+    });
 });
