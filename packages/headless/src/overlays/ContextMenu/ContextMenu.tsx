@@ -10,7 +10,7 @@ import {
   useListNavigation,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -19,6 +19,7 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useId,
@@ -84,7 +85,13 @@ function ContextMenuRoot({ children }: ContextMenuRootProps) {
   // Dismissal handled by <DismissableLayer> on Content; floating-ui only
   // provides clientPoint + role + list-nav wiring here.
   const clientPoint = useClientPoint(context, coords ?? undefined);
-  const role = useRole(context, { role: 'menu' });
+  const menuRole = useRole(context, { role: 'menu' });
+  // The trigger is a plain region, not a button — aria-expanded/haspopup are not
+  // allowed on it (Radix renders none). Keep the role wiring for menu and items only.
+  const role = useMemo(
+    () => ({ floating: menuRole.floating, item: menuRole.item }),
+    [menuRole.floating, menuRole.item],
+  );
   const listNav = useListNavigation(context, {
     listRef,
     activeIndex,
@@ -134,6 +141,7 @@ function ContextMenuRoot({ children }: ContextMenuRootProps) {
 const Trigger = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   function ContextMenuTrigger({ onContextMenu, ...rest }, ref) {
     const ctx = useCtx('ContextMenu.Trigger');
+    const composedRef = useMergedRefs<HTMLDivElement>(ctx.refs.setReference, ref);
     const handleContextMenu = (e: ReactMouseEvent<HTMLDivElement>) => {
       onContextMenu?.(e);
       if (e.defaultPrevented) return;
@@ -143,11 +151,7 @@ const Trigger = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     };
     return (
       <div
-        ref={(node) => {
-          ctx.refs.setReference(node);
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
+        ref={composedRef}
         data-state={ctx.open ? 'open' : 'closed'}
         onContextMenu={handleContextMenu}
         {...ctx.getReferenceProps(rest)}
@@ -202,16 +206,10 @@ const Content = forwardRef<HTMLDivElement, ContextMenuContentProps>(function Con
 ) {
   const ctx = useCtx('ContextMenu.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  const composeRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
 
   const Comp = asChild ? Slot : 'div';
-
-  const composeRef = (node: HTMLDivElement | null) => {
-    ctx.refs.setFloating(node);
-    presenceRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
 
   return (
     <DismissableLayer
@@ -254,16 +252,20 @@ const Item = forwardRef<HTMLButtonElement, ContextMenuItemProps>(function Contex
   ref,
 ) {
   const ctx = useCtx('ContextMenu.Item');
+  const { listRef } = ctx;
+  const registerNode = useCallback(
+    (node: HTMLButtonElement | null) => {
+      if (node) {
+        const idx = listRef.current.indexOf(node);
+        if (idx === -1) listRef.current.push(node);
+      }
+    },
+    [listRef],
+  );
+  const composedRef = useMergedRefs<HTMLButtonElement>(registerNode, ref);
   return (
     <button
-      ref={(node) => {
-        if (node) {
-          const idx = ctx.listRef.current.indexOf(node);
-          if (idx === -1) ctx.listRef.current.push(node);
-        }
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={composedRef}
       type={type}
       role="menuitem"
       disabled={disabled}
@@ -396,16 +398,18 @@ const SubTrigger = forwardRef<HTMLButtonElement, ContextMenuSubTriggerProps>(
   ) {
     const sub = useSubCtx('ContextMenu.SubTrigger');
     const Comp = asChild ? Slot : 'button';
-    const setRef = (node: HTMLButtonElement | null) => {
-      sub.refs.setReference(node);
-      // also register in parent listRef so parent keyboard nav reaches the trigger
-      if (node) {
-        const list = sub.parent.listRef.current;
-        if (!list.includes(node)) list.push(node);
-      }
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
+    const parentListRef = sub.parent.listRef;
+    // also register in parent listRef so parent keyboard nav reaches the trigger
+    const registerInParent = useCallback(
+      (node: HTMLButtonElement | null) => {
+        if (node) {
+          const list = parentListRef.current;
+          if (!list.includes(node)) list.push(node);
+        }
+      },
+      [parentListRef],
+    );
+    const setRef = useMergedRefs<HTMLButtonElement>(sub.refs.setReference, registerInParent, ref);
     const handleKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>) => {
       onKeyDown?.(e);
       if (e.defaultPrevented) return;
@@ -471,16 +475,10 @@ const SubContent = forwardRef<HTMLDivElement, ContextMenuSubContentProps>(
   ) {
     const sub = useSubCtx('ContextMenu.SubContent');
     const { mounted, presenceRef } = usePresence<HTMLDivElement>(sub.open);
+    const composeRef = useMergedRefs<HTMLDivElement>(sub.refs.setFloating, presenceRef, ref);
     if (!mounted && !forceMount) return null;
 
     const Comp = asChild ? Slot : 'div';
-
-    const composeRef = (node: HTMLDivElement | null) => {
-      sub.refs.setFloating(node);
-      presenceRef.current = node;
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
 
     return (
       <DismissableLayer

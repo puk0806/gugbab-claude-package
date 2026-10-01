@@ -11,7 +11,7 @@ import {
   useListNavigation,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -208,16 +208,13 @@ const Trigger = forwardRef<HTMLButtonElement, MenubarTriggerProps>(function Menu
 ) {
   const ctx = useMenuCtx('Menubar.Trigger');
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    ctx.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(ctx.refs.setReference, ref);
   const refProps = ctx.getReferenceProps(props) as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
     <Comp
       ref={setRef}
       type={asChild ? undefined : 'button'}
+      role="menuitem"
       aria-haspopup="menu"
       aria-expanded={ctx.open}
       aria-controls={ctx.contentId}
@@ -275,15 +272,9 @@ const Content = forwardRef<HTMLDivElement, MenubarContentProps>(function Menubar
 ) {
   const ctx = useMenuCtx('Menubar.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  const composeRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
   const Comp = asChild ? Slot : 'div';
-
-  const composeRef = (node: HTMLDivElement | null) => {
-    ctx.refs.setFloating(node);
-    presenceRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
 
   return (
     <DismissableLayer
@@ -334,11 +325,7 @@ const Item = forwardRef<HTMLButtonElement, MenubarItemProps>(function MenubarIte
   const inferredLabel = label ?? (typeof children === 'string' ? children : null);
   const { ref: itemRef } = useListItem({ label: inferredLabel });
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    itemRef(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(itemRef, ref);
   const itemProps = ctx.getItemProps({
     ...rest,
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -420,11 +407,7 @@ const CheckboxItem = forwardRef<HTMLButtonElement, MenubarCheckboxItemProps>(
     const inferredLabel = label ?? (typeof children === 'string' ? children : null);
     const { ref: itemRef } = useListItem({ label: inferredLabel });
     const Comp = asChild ? Slot : 'button';
-    const setRef = (node: HTMLButtonElement | null) => {
-      itemRef(node);
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
+    const setRef = useMergedRefs<HTMLButtonElement>(itemRef, ref);
     const itemProps = ctx.getItemProps({
       ...rest,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -525,11 +508,7 @@ const RadioItem = forwardRef<HTMLButtonElement, MenubarRadioItemProps>(function 
   const inferredLabel = label ?? (typeof children === 'string' ? children : null);
   const { ref: itemRef } = useListItem({ label: inferredLabel });
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    itemRef(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(itemRef, ref);
   const itemProps = ctx.getItemProps({
     ...rest,
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -715,12 +694,7 @@ const SubTrigger = forwardRef<HTMLButtonElement, MenubarSubTriggerProps>(functio
   const parentItem = useListItem({ label: inferredLabel });
   const Comp = asChild ? Slot : 'button';
 
-  const setRef = (node: HTMLButtonElement | null) => {
-    parentItem.ref(node);
-    sub.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(parentItem.ref, sub.refs.setReference, ref);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     onKeyDown?.(e);
@@ -785,6 +759,7 @@ const SubContent = forwardRef<HTMLDivElement, MenubarSubContentProps>(function M
 ) {
   const sub = useSubCtx('Menubar.SubContent');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(sub.open);
+  const composedRef = useMergedRefs<HTMLDivElement>(sub.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
   const Comp = asChild ? Slot : 'div';
 
@@ -808,12 +783,7 @@ const SubContent = forwardRef<HTMLDivElement, MenubarSubContentProps>(function M
         onUnmountAutoFocus={onCloseAutoFocus}
       >
         <Comp
-          ref={(node: HTMLDivElement | null) => {
-            sub.refs.setFloating(node);
-            presenceRef.current = node;
-            if (typeof ref === 'function') ref(node);
-            else if (ref) ref.current = node;
-          }}
+          ref={composedRef}
           style={{ ...sub.floatingStyles, ...style }}
           data-state={sub.open ? 'open' : 'closed'}
           {...sub.getFloatingProps(props)}

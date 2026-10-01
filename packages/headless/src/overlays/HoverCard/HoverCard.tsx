@@ -4,9 +4,8 @@ import {
   safePolygon,
   useHover,
   useInteractions,
-  useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type AnchorHTMLAttributes,
   createContext,
@@ -97,9 +96,10 @@ function HoverCardRoot({
     delay: { open: openDelay, close: closeDelay },
     handleClose: safePolygon(),
   });
-  const role = useRole(floating.context, { role: 'dialog' });
-
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover, role]);
+  // No ARIA role (as in Radix): a hover card is a sighted-pointer preview of a
+  // link that is already reachable. role="dialog" would need a name and imply
+  // focus management it does not have.
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover]);
   const contentId = useId();
 
   const { refs, floatingStyles } = floating;
@@ -125,11 +125,7 @@ const Trigger = forwardRef<HTMLAnchorElement, HoverCardTriggerProps>(function Ho
 ) {
   const ctx = useCtx('HoverCard.Trigger');
   const Comp = asChild ? Slot : 'a';
-  const setRef = (node: HTMLAnchorElement | null) => {
-    ctx.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLAnchorElement>(ctx.refs.setReference, ref);
   const refProps = ctx.getReferenceProps(props) as AnchorHTMLAttributes<HTMLAnchorElement>;
   return <Comp ref={setRef} data-state={ctx.open ? 'open' : 'closed'} {...refProps} />;
 });
@@ -162,14 +158,8 @@ const Content = forwardRef<HTMLDivElement, HoverCardContentProps>(function Hover
 ) {
   const ctx = useCtx('HoverCard.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  const composeRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
-
-  const composeRef = (node: HTMLDivElement | null) => {
-    ctx.refs.setFloating(node);
-    presenceRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
 
   return (
     <DismissableLayer
