@@ -1,4 +1,4 @@
-import { useIsomorphicLayoutEffect, useLatestRef } from '@gugbab/hooks';
+import { useIsomorphicLayoutEffect, useLatestRef, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -30,6 +30,7 @@ type SwipeDirection = 'up' | 'down' | 'left' | 'right';
 
 interface ToastProviderContextValue {
   label: string;
+  closeLabel: string;
   duration: number;
   swipeDirection: SwipeDirection;
   swipeThreshold: number;
@@ -92,6 +93,12 @@ export interface ToastProviderProps {
    */
   label?: string;
   /**
+   * Author-localized accessible name for icon-only `Toast.Close` buttons.
+   * A button's own `aria-label` takes precedence.
+   * @defaultValue 'Close'
+   */
+  closeLabel?: string;
+  /**
    * Default duration (ms) each toast remains visible.
    * @defaultValue 5000
    */
@@ -111,10 +118,13 @@ export interface ToastProviderProps {
 function Provider({
   children,
   label = 'Notification',
+  closeLabel: closeLabelProp,
   duration = 5000,
   swipeDirection = 'right',
   swipeThreshold = 50,
 }: ToastProviderProps) {
+  // Blank strings would leave the icon button nameless — fall back to the default.
+  const closeLabel = closeLabelProp?.trim() ? closeLabelProp : 'Close';
   const [viewport, setViewport] = useState<HTMLOListElement | null>(null);
   const [toastCount, setToastCount] = useState(0);
   const isFocusedToastEscapeKeyDownRef = useRef(false);
@@ -126,6 +136,7 @@ function Provider({
   const ctxValue = useMemo<ToastProviderContextValue>(
     () => ({
       label,
+      closeLabel,
       duration,
       swipeDirection,
       swipeThreshold,
@@ -139,6 +150,7 @@ function Provider({
     }),
     [
       label,
+      closeLabel,
       duration,
       swipeDirection,
       swipeThreshold,
@@ -182,16 +194,7 @@ const Viewport = forwardRef<HTMLOListElement, ToastViewportProps>(function Toast
   const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
 
   // Merge forwarded ref + internal ref + notify Provider
-  // biome-ignore lint/correctness/useExhaustiveDependencies: forwardedRef is a ref object/callback — adding it would cause infinite re-renders with inline ref callbacks
-  const setRef = useCallback(
-    (el: HTMLOListElement | null) => {
-      (internalRef as React.MutableRefObject<HTMLOListElement | null>).current = el;
-      ctx.onViewportChange(el);
-      if (typeof forwardedRef === 'function') forwardedRef(el);
-      else if (forwardedRef) forwardedRef.current = el;
-    },
-    [ctx.onViewportChange],
-  );
+  const setRef = useMergedRefs<HTMLOListElement>(internalRef, ctx.onViewportChange, forwardedRef);
 
   // Hotkey: focus viewport when key combo is pressed.
   // Use a latestRef so an inline `hotkey={[...]}` prop doesn't churn the effect
@@ -400,14 +403,7 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
   const closeTimerRemainingRef = useRef(duration);
   const { onToastAdd, onToastRemove } = ctx;
 
-  const composedRef = useCallback(
-    (el: HTMLLIElement | null) => {
-      setNode(el);
-      if (typeof forwardedRef === 'function') forwardedRef(el);
-      else if (forwardedRef) forwardedRef.current = el;
-    },
-    [forwardedRef],
-  );
+  const composedRef = useMergedRefs<HTMLLIElement>(setNode, forwardedRef);
 
   const handleClose = useCallback(() => {
     const focusInToast = node?.contains(document.activeElement);
@@ -691,16 +687,17 @@ const Action = forwardRef<HTMLButtonElement, ToastActionProps>(function ToastAct
 export interface ToastCloseProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 const Close = forwardRef<HTMLButtonElement, ToastCloseProps>(function ToastClose(
-  { onClick, type = 'button', children, ...rest },
+  { onClick, type = 'button', children, 'aria-label': ariaLabel, ...rest },
   ref,
 ) {
   const { onClose } = useInteractiveCtx('Toast.Close');
+  const { closeLabel } = useProviderCtx('Toast.Close');
   return (
     <div data-gugbab-toast-announce-exclude="">
       <button
         ref={ref}
         type={type}
-        aria-label={children ? undefined : 'Close'}
+        aria-label={ariaLabel ?? (children ? undefined : closeLabel)}
         {...rest}
         onClick={(e) => {
           onClick?.(e);
