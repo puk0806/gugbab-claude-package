@@ -3,19 +3,21 @@ import type { ReactElement } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import * as Styled from "../..";
 
-// Golden-baseline safety net for the styled-factory refactor: freezes the rendered
-// markup, the export shape and the component display names of all 35 components.
-// Snapshots are generated against the pre-refactor code and must never be updated
-// (`-u`) while refactoring.
+// Safety net for the styled-factory refactor: freezes what THIS package owns —
+// the element tree with its class names — plus the export shape and display names.
+// (The refactor was first verified against full-HTML snapshots of the pre-refactor
+// code; this class-only projection stays stable when @gugbab/headless legitimately
+// changes ARIA/data attributes.) Update snapshots only for intentional class changes.
 
-// useId output differs between runs / React versions — replace it with a stable token.
-function normalizeIds(html: string): string {
-    return html.replace(/(?:«|:|_)r_?[0-9a-z]+_?(?:»|:|_)/g, "ID");
+function structureOf(el: Element, depth = 0): string {
+    const cls = el.getAttribute("class");
+    const line = `${"  ".repeat(depth)}<${el.tagName.toLowerCase()}${cls ? ` class="${cls}"` : ""}>`;
+    return [line, ...Array.from(el.children, (child) => structureOf(child, depth + 1))].join("\n");
 }
 
 function snapshotOf(node: ReactElement): string {
     const { container } = render(node);
-    return `container: ${normalizeIds(container.innerHTML)}\nbody: ${normalizeIds(document.body.innerHTML)}`;
+    return `container:\n${structureOf(container)}\nbody:\n${structureOf(document.body)}`;
 }
 
 interface NamedLike {

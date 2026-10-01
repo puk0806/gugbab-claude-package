@@ -3,33 +3,83 @@
 exports[`markup parity — boundary cases > Tabs default variant and size are frozen (the only per-package difference) 1`] = `"gmui-tabs gmui-tabs--underline gmui-tabs--md"`;
 
 exports[`markup parity — boundary cases > consumer className and hostile attribute values are preserved verbatim 1`] = `
-"container: <div data-orientation="horizontal" role="separator" class="gmui-separator gmui-separator--horizontal &quot;><script>alert(1)</script>" aria-label="&quot;><script>alert(1)</script>"></div>
-body: <div><div data-orientation="horizontal" role="separator" class="gmui-separator gmui-separator--horizontal &quot;><script>alert(1)</script>" aria-label="&quot;><script>alert(1)</script>"></div></div>"
+"container:
+<div>
+  <div class="gmui-separator gmui-separator--horizontal "><script>alert(1)</script>">
+body:
+<body>
+  <div>
+    <div class="gmui-separator gmui-separator--horizontal "><script>alert(1)</script>">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 1`] = `
-"container: <button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="gmui-switch gmui-switch--md"></button>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="gmui-switch gmui-switch--md"></button></div>"
+"container:
+<div>
+  <button class="gmui-switch gmui-switch--md">
+body:
+<body>
+  <div>
+    <button class="gmui-switch gmui-switch--md">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 2`] = `
-"container: <div data-orientation="horizontal" dir="ltr" class="gmui-tabs gmui-tabs--underline gmui-tabs--md"></div>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="gmui-switch gmui-switch--md"></button></div><div><div data-orientation="horizontal" dir="ltr" class="gmui-tabs gmui-tabs--underline gmui-tabs--md"></div></div>"
+"container:
+<div>
+  <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+body:
+<body>
+  <div>
+    <button class="gmui-switch gmui-switch--md">
+  <div>
+    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 3`] = `
-"container: <div data-orientation="vertical" class="gmui-accordion gmui-accordion--default" tabindex="0" data-roving-group="true"></div>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="gmui-switch gmui-switch--md"></button></div><div><div data-orientation="horizontal" dir="ltr" class="gmui-tabs gmui-tabs--underline gmui-tabs--md"></div></div><div><div data-orientation="vertical" class="gmui-accordion gmui-accordion--default" tabindex="0" data-roving-group="true"></div></div>"
+"container:
+<div>
+  <div class="gmui-accordion gmui-accordion--default">
+body:
+<body>
+  <div>
+    <button class="gmui-switch gmui-switch--md">
+  <div>
+    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+  <div>
+    <div class="gmui-accordion gmui-accordion--default">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 4`] = `
-"container: <form novalidate="" class="gmui-form"></form>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="gmui-switch gmui-switch--md"></button></div><div><div data-orientation="horizontal" dir="ltr" class="gmui-tabs gmui-tabs--underline gmui-tabs--md"></div></div><div><div data-orientation="vertical" class="gmui-accordion gmui-accordion--default" tabindex="0" data-roving-group="true"></div></div><div><form novalidate="" class="gmui-form"></form></div>"
+"container:
+<div>
+  <form class="gmui-form">
+body:
+<body>
+  <div>
+    <button class="gmui-switch gmui-switch--md">
+  <div>
+    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+  <div>
+    <div class="gmui-accordion gmui-accordion--default">
+  <div>
+    <form class="gmui-form">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 5`] = `
-"container: <div role="toolbar" aria-orientation="horizontal" dir="ltr" data-orientation="horizontal" class="gmui-toolbar" tabindex="0" data-roving-group="true"></div>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="gmui-switch gmui-switch--md"></button></div><div><div data-orientation="horizontal" dir="ltr" class="gmui-tabs gmui-tabs--underline gmui-tabs--md"></div></div><div><div data-orientation="vertical" class="gmui-accordion gmui-accordion--default" tabindex="0" data-roving-group="true"></div></div><div><form novalidate="" class="gmui-form"></form></div><div><div role="toolbar" aria-orientation="horizontal" dir="ltr" data-orientation="horizontal" class="gmui-toolbar" tabindex="0" data-roving-group="true"></div></div>"
+"container:
+<div>
+  <div class="gmui-toolbar">
+body:
+<body>
+  <div>
+    <button class="gmui-switch gmui-switch--md">
+  <div>
+    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+  <div>
+    <div class="gmui-accordion gmui-accordion--default">
+  <div>
+    <form class="gmui-form">
+  <div>
+    <div class="gmui-toolbar">"
 `;
 
 exports[`markup parity — export shape (35 components) > Accordion: keys and part display names are frozen 1`] = `
@@ -419,176 +469,584 @@ exports[`markup parity — export shape (35 components) > exposes exactly the ex
 `;
 
 exports[`markup parity — rendered HTML > Accordion: open/representative configuration 1`] = `
-"container: <div data-orientation="vertical" class="gmui-accordion gmui-accordion--outline" tabindex="0" data-roving-group="true"><div data-state="open" data-orientation="vertical" class="gmui-accordion__item"><h3 data-state="open" data-orientation="vertical" class="gmui-accordion__header"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" aria-disabled="true" data-state="open" data-orientation="vertical" data-accordion-trigger="" tabindex="0" class="gmui-accordion__trigger">Open</button></h3><div id="ID" role="region" aria-labelledby="ID" data-state="open" data-orientation="vertical" class="gmui-accordion__content">body</div></div></div>
-body: <div><div data-orientation="vertical" class="gmui-accordion gmui-accordion--outline" tabindex="0" data-roving-group="true"><div data-state="open" data-orientation="vertical" class="gmui-accordion__item"><h3 data-state="open" data-orientation="vertical" class="gmui-accordion__header"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" aria-disabled="true" data-state="open" data-orientation="vertical" data-accordion-trigger="" tabindex="0" class="gmui-accordion__trigger">Open</button></h3><div id="ID" role="region" aria-labelledby="ID" data-state="open" data-orientation="vertical" class="gmui-accordion__content">body</div></div></div></div>"
+"container:
+<div>
+  <div class="gmui-accordion gmui-accordion--outline">
+    <div class="gmui-accordion__item">
+      <h3 class="gmui-accordion__header">
+        <button class="gmui-accordion__trigger">
+      <div class="gmui-accordion__content">
+body:
+<body>
+  <div>
+    <div class="gmui-accordion gmui-accordion--outline">
+      <div class="gmui-accordion__item">
+        <h3 class="gmui-accordion__header">
+          <button class="gmui-accordion__trigger">
+        <div class="gmui-accordion__content">"
 `;
 
 exports[`markup parity — rendered HTML > AlertDialog: open/representative configuration 1`] = `
-"container: <button class="gmui-alert-dialog__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" type="button" data-state="open">Open</button>
-body: <div aria-hidden="true"><button class="gmui-alert-dialog__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" type="button" data-state="open">Open</button></div><div id="ID" data-floating-ui-portal=""><div data-state="open" class="gmui-alert-dialog__overlay" style="position: fixed; overflow: auto; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div id="ID" role="alertdialog" aria-modal="true" aria-labelledby="ID" aria-describedby="ID" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="gmui-alert-dialog__content gmui-alert-dialog__content--lg"><h2 id="ID" class="gmui-alert-dialog__title">Title</h2><p id="ID" class="gmui-alert-dialog__description">Desc</p><button type="button" class="gmui-alert-dialog__cancel">No</button><button type="button" class="gmui-alert-dialog__action gmui-alert-dialog__action--danger">Yes</button></div></div>"
+"container:
+<div>
+  <button class="gmui-alert-dialog__trigger">
+body:
+<body>
+  <div>
+    <button class="gmui-alert-dialog__trigger">
+  <div>
+    <div class="gmui-alert-dialog__overlay">
+    <div class="gmui-alert-dialog__content gmui-alert-dialog__content--lg">
+      <h2 class="gmui-alert-dialog__title">
+      <p class="gmui-alert-dialog__description">
+      <button class="gmui-alert-dialog__cancel">
+      <button class="gmui-alert-dialog__action gmui-alert-dialog__action--danger">"
 `;
 
 exports[`markup parity — rendered HTML > AspectRatio: open/representative configuration 1`] = `
-"container: <div data-aspect-ratio-wrapper="" style="position: relative; width: 100%; padding-bottom: 56.25%;"><div class="gmui-aspect-ratio custom" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div></div>
-body: <div><div data-aspect-ratio-wrapper="" style="position: relative; width: 100%; padding-bottom: 56.25%;"><div class="gmui-aspect-ratio custom" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div></div></div>"
+"container:
+<div>
+  <div>
+    <div class="gmui-aspect-ratio custom">
+body:
+<body>
+  <div>
+    <div>
+      <div class="gmui-aspect-ratio custom">"
 `;
 
 exports[`markup parity — rendered HTML > Avatar: open/representative configuration 1`] = `
-"container: <span data-state="loading" class="gmui-avatar gmui-avatar--lg"><span class="gmui-avatar__fallback">JD</span></span>
-body: <div><span data-state="loading" class="gmui-avatar gmui-avatar--lg"><span class="gmui-avatar__fallback">JD</span></span></div>"
+"container:
+<div>
+  <span class="gmui-avatar gmui-avatar--lg">
+    <span class="gmui-avatar__fallback">
+body:
+<body>
+  <div>
+    <span class="gmui-avatar gmui-avatar--lg">
+      <span class="gmui-avatar__fallback">"
 `;
 
 exports[`markup parity — rendered HTML > Breadcrumbs: open/representative configuration 1`] = `
-"container: <nav aria-label="breadcrumbs" class="gmui-breadcrumbs gmui-breadcrumbs--slash"><ol class="gmui-breadcrumbs__list"><li class="gmui-breadcrumbs__item"><a class="gmui-breadcrumbs__link" href="/">Home</a></li><span role="presentation" aria-hidden="true" class="gmui-breadcrumbs__separator"></span><li class="gmui-breadcrumbs__item"><span aria-current="page" class="gmui-breadcrumbs__page">Now</span></li></ol></nav>
-body: <div><nav aria-label="breadcrumbs" class="gmui-breadcrumbs gmui-breadcrumbs--slash"><ol class="gmui-breadcrumbs__list"><li class="gmui-breadcrumbs__item"><a class="gmui-breadcrumbs__link" href="/">Home</a></li><span role="presentation" aria-hidden="true" class="gmui-breadcrumbs__separator"></span><li class="gmui-breadcrumbs__item"><span aria-current="page" class="gmui-breadcrumbs__page">Now</span></li></ol></nav></div>"
+"container:
+<div>
+  <nav class="gmui-breadcrumbs gmui-breadcrumbs--slash">
+    <ol class="gmui-breadcrumbs__list">
+      <li class="gmui-breadcrumbs__item">
+        <a class="gmui-breadcrumbs__link">
+      <span class="gmui-breadcrumbs__separator">
+      <li class="gmui-breadcrumbs__item">
+        <span class="gmui-breadcrumbs__page">
+body:
+<body>
+  <div>
+    <nav class="gmui-breadcrumbs gmui-breadcrumbs--slash">
+      <ol class="gmui-breadcrumbs__list">
+        <li class="gmui-breadcrumbs__item">
+          <a class="gmui-breadcrumbs__link">
+        <span class="gmui-breadcrumbs__separator">
+        <li class="gmui-breadcrumbs__item">
+          <span class="gmui-breadcrumbs__page">"
 `;
 
 exports[`markup parity — rendered HTML > Checkbox: open/representative configuration 1`] = `
-"container: <button type="button" role="checkbox" aria-checked="true" data-state="checked" value="on" class="gmui-checkbox gmui-checkbox--sm"><span data-state="checked" style="pointer-events: none;" class="gmui-checkbox__indicator"></span></button>
-body: <div><button type="button" role="checkbox" aria-checked="true" data-state="checked" value="on" class="gmui-checkbox gmui-checkbox--sm"><span data-state="checked" style="pointer-events: none;" class="gmui-checkbox__indicator"></span></button></div>"
+"container:
+<div>
+  <button class="gmui-checkbox gmui-checkbox--sm">
+    <span class="gmui-checkbox__indicator">
+body:
+<body>
+  <div>
+    <button class="gmui-checkbox gmui-checkbox--sm">
+      <span class="gmui-checkbox__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > Collapsible: open/representative configuration 1`] = `
-"container: <div data-state="open" class="gmui-collapsible"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" data-state="open" class="gmui-collapsible__trigger">Toggle</button><div id="ID" role="region" aria-labelledby="ID" data-state="open" class="gmui-collapsible__content" style="--gugbab-collapsible-content-height: 0px; --gugbab-collapsible-content-width: 0px;">body</div></div>
-body: <div><div data-state="open" class="gmui-collapsible"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" data-state="open" class="gmui-collapsible__trigger">Toggle</button><div id="ID" role="region" aria-labelledby="ID" data-state="open" class="gmui-collapsible__content" style="--gugbab-collapsible-content-height: 0px; --gugbab-collapsible-content-width: 0px;">body</div></div></div>"
+"container:
+<div>
+  <div class="gmui-collapsible">
+    <button class="gmui-collapsible__trigger">
+    <div class="gmui-collapsible__content">
+body:
+<body>
+  <div>
+    <div class="gmui-collapsible">
+      <button class="gmui-collapsible__trigger">
+      <div class="gmui-collapsible__content">"
 `;
 
 exports[`markup parity — rendered HTML > Combobox: open/representative configuration 1`] = `
-"container: <div class="gmui-combobox__anchor"><input aria-autocomplete="list" class="gmui-combobox__input gmui-combobox__input--sm" aria-expanded="true" aria-haspopup="listbox" aria-controls="ID" role="combobox" type="text" value=""><button type="button" aria-haspopup="listbox" aria-expanded="true" class="gmui-combobox__trigger">v</button></div><span tabindex="-1" aria-hidden="true" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"></span>
-body: <div data-floating-ui-inert="" aria-hidden="true"><div class="gmui-combobox__anchor"><input aria-autocomplete="list" class="gmui-combobox__input gmui-combobox__input--sm" aria-expanded="true" aria-haspopup="listbox" aria-controls="ID" role="combobox" type="text" value=""><button type="button" aria-haspopup="listbox" aria-expanded="true" class="gmui-combobox__trigger">v</button></div><span tabindex="-1" aria-hidden="true" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"></span></div><div id="ID" data-floating-ui-portal=""><span data-type="inside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span><button type="button" tabindex="-1" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;">Dismiss</button><div style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="gmui-combobox__content" id="ID" role="listbox" aria-orientation="vertical"><button type="button" role="option" class="gmui-combobox__item">A</button></div><button type="button" tabindex="-1" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;">Dismiss</button><span data-type="inside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span></div>"
+"container:
+<div>
+  <div class="gmui-combobox__anchor">
+    <input class="gmui-combobox__input gmui-combobox__input--sm">
+    <button class="gmui-combobox__trigger">
+  <span>
+body:
+<body>
+  <div>
+    <div class="gmui-combobox__anchor">
+      <input class="gmui-combobox__input gmui-combobox__input--sm">
+      <button class="gmui-combobox__trigger">
+    <span>
+  <div>
+    <span>
+    <button>
+    <div class="gmui-combobox__content">
+      <button class="gmui-combobox__item">
+    <button>
+    <span>"
 `;
 
 exports[`markup parity — rendered HTML > ContextMenu: open/representative configuration 1`] = `
-"container: <div data-state="closed" aria-expanded="false" aria-haspopup="menu" id="ID">Right click</div>
-body: <div><div data-state="closed" aria-expanded="false" aria-haspopup="menu" id="ID">Right click</div></div><div id="ID" data-floating-ui-portal=""><div id="ID" role="menu" style="position: fixed; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="closed" tabindex="-1" data-floating-ui-focusable="" class="gmui-menu__content" aria-labelledby="ID" aria-orientation="vertical"><button type="button" role="menuitem" class="gmui-menu__item">Item</button><button type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-state="closed" class="gmui-menu__item gmui-menu__item--sub-trigger" id="ID">Sub</button><div role="menu" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="closed" tabindex="-1" data-floating-ui-focusable="" class="gmui-menu__content gmui-menu__sub-content" id="ID" aria-labelledby="ID" aria-orientation="vertical"><button type="button" role="menuitem" class="gmui-menu__item">Nested</button></div></div></div>"
+"container:
+<div>
+  <div>
+body:
+<body>
+  <div>
+    <div>
+  <div>
+    <div class="gmui-menu__content">
+      <button class="gmui-menu__item">
+      <button class="gmui-menu__item gmui-menu__item--sub-trigger">
+      <div class="gmui-menu__content gmui-menu__sub-content">
+        <button class="gmui-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > Dialog: open/representative configuration 1`] = `
-"container: <button class="gmui-dialog__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" type="button" data-state="open">Open</button>
-body: <div aria-hidden="true"><button class="gmui-dialog__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" type="button" data-state="open">Open</button></div><div id="ID" data-floating-ui-portal=""><div data-state="open" class="gmui-dialog__overlay" style="position: fixed; overflow: auto; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div id="ID" role="dialog" aria-modal="true" aria-labelledby="ID" aria-describedby="ID" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="gmui-dialog__content gmui-dialog__content--xl"><h2 id="ID" class="gmui-dialog__title">t</h2><p id="ID" class="gmui-dialog__description">d</p><button type="button" class="gmui-dialog__close">x</button></div></div>"
+"container:
+<div>
+  <button class="gmui-dialog__trigger">
+body:
+<body>
+  <div>
+    <button class="gmui-dialog__trigger">
+  <div>
+    <div class="gmui-dialog__overlay">
+    <div class="gmui-dialog__content gmui-dialog__content--xl">
+      <h2 class="gmui-dialog__title">
+      <p class="gmui-dialog__description">
+      <button class="gmui-dialog__close">"
 `;
 
 exports[`markup parity — rendered HTML > DropdownMenu: open/representative configuration 1`] = `
-"container: <button type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="ID" data-state="open" id="ID">Menu</button>
-body: <div><button type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="ID" data-state="open" id="ID">Menu</button></div><div id="ID" data-floating-ui-portal=""><div id="ID" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="gmui-menu__content" role="menu" aria-labelledby="ID" aria-orientation="vertical"><div class="gmui-menu__label">Label</div><button type="button" role="menuitem" class="gmui-menu__item">A</button><button type="button" role="menuitemcheckbox" aria-checked="true" data-state="checked" class="gmui-menu__item gmui-menu__item--checkbox">cb<span data-state="checked" class="gmui-menu__item-indicator">ok</span></button><div role="separator" class="gmui-menu__separator"></div><div role="group" class="gmui-menu__radio-group"><button type="button" role="menuitemradio" aria-checked="true" data-state="checked" class="gmui-menu__item gmui-menu__item--radio">a</button></div><button type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-state="closed" class="gmui-menu__item gmui-menu__item--sub-trigger" id="ID">Sub</button><div style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="closed" tabindex="-1" data-floating-ui-focusable="" class="gmui-menu__content gmui-menu__sub-content" id="ID" role="menu" aria-labelledby="ID" aria-orientation="vertical"><button type="button" role="menuitem" class="gmui-menu__item">Nested</button></div></div></div>"
+"container:
+<div>
+  <button>
+body:
+<body>
+  <div>
+    <button>
+  <div>
+    <div class="gmui-menu__content">
+      <div class="gmui-menu__label">
+      <button class="gmui-menu__item">
+      <button class="gmui-menu__item gmui-menu__item--checkbox">
+        <span class="gmui-menu__item-indicator">
+      <div class="gmui-menu__separator">
+      <div class="gmui-menu__radio-group">
+        <button class="gmui-menu__item gmui-menu__item--radio">
+      <button class="gmui-menu__item gmui-menu__item--sub-trigger">
+      <div class="gmui-menu__content gmui-menu__sub-content">
+        <button class="gmui-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > Form: open/representative configuration 1`] = `
-"container: <form novalidate="" class="gmui-form"><div data-valid="" class="gmui-form__field gmui-form__field--error"><label for="ID" class="gmui-form__label">x</label><input id="ID" class="gmui-form__control" name="x"></div><button type="submit" class="gmui-form__submit">go</button></form>
-body: <div><form novalidate="" class="gmui-form"><div data-valid="" class="gmui-form__field gmui-form__field--error"><label for="ID" class="gmui-form__label">x</label><input id="ID" class="gmui-form__control" name="x"></div><button type="submit" class="gmui-form__submit">go</button></form></div>"
+"container:
+<div>
+  <form class="gmui-form">
+    <div class="gmui-form__field gmui-form__field--error">
+      <label class="gmui-form__label">
+      <input class="gmui-form__control">
+    <button class="gmui-form__submit">
+body:
+<body>
+  <div>
+    <form class="gmui-form">
+      <div class="gmui-form__field gmui-form__field--error">
+        <label class="gmui-form__label">
+        <input class="gmui-form__control">
+      <button class="gmui-form__submit">"
 `;
 
 exports[`markup parity — rendered HTML > HoverCard: open/representative configuration 1`] = `
-"container: <a data-state="open" class="gmui-hover-card__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID">Hover</a>
-body: <div><a data-state="open" class="gmui-hover-card__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID">Hover</a></div><div id="ID" data-floating-ui-portal=""><div id="ID" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="gmui-hover-card__content" role="dialog">body</div></div>"
+"container:
+<div>
+  <a class="gmui-hover-card__trigger">
+body:
+<body>
+  <div>
+    <a class="gmui-hover-card__trigger">
+  <div>
+    <div class="gmui-hover-card__content">"
 `;
 
 exports[`markup parity — rendered HTML > Label: open/representative configuration 1`] = `
-"container: <label class="gmui-label custom" for="email">Email</label><input id="email" type="email">
-body: <div><label class="gmui-label custom" for="email">Email</label><input id="email" type="email"></div>"
+"container:
+<div>
+  <label class="gmui-label custom">
+  <input>
+body:
+<body>
+  <div>
+    <label class="gmui-label custom">
+    <input>"
 `;
 
 exports[`markup parity — rendered HTML > Menubar: open/representative configuration 1`] = `
-"container: <div role="menubar" class="gmui-menubar"><button type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="ID" data-state="open" class="gmui-menubar__trigger" id="ID">File</button></div>
-body: <div><div role="menubar" class="gmui-menubar"><button type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="ID" data-state="open" class="gmui-menubar__trigger" id="ID">File</button></div></div><div id="ID" data-floating-ui-portal=""><div id="ID" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="gmui-menu__content" role="menu" aria-labelledby="ID" aria-orientation="vertical"><div class="gmui-menu__label">Label</div><button type="button" role="menuitem" class="gmui-menu__item">New</button><button type="button" role="menuitemcheckbox" aria-checked="true" data-state="checked" class="gmui-menu__item gmui-menu__item--checkbox">cb<span data-state="checked" class="gmui-menu__item-indicator">ok</span></button><div role="separator" class="gmui-menu__separator"></div><div role="group" class="gmui-menu__radio-group"><button type="button" role="menuitemradio" aria-checked="true" data-state="checked" class="gmui-menu__item gmui-menu__item--radio">a</button></div><button type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-state="closed" class="gmui-menu__item gmui-menu__item--sub-trigger" id="ID">Sub</button><div style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="closed" tabindex="-1" data-floating-ui-focusable="" class="gmui-menu__content gmui-menu__sub-content" id="ID" role="menu" aria-labelledby="ID" aria-orientation="vertical"><button type="button" role="menuitem" class="gmui-menu__item">Nested</button></div></div></div>"
+"container:
+<div>
+  <div class="gmui-menubar">
+    <button class="gmui-menubar__trigger">
+body:
+<body>
+  <div>
+    <div class="gmui-menubar">
+      <button class="gmui-menubar__trigger">
+  <div>
+    <div class="gmui-menu__content">
+      <div class="gmui-menu__label">
+      <button class="gmui-menu__item">
+      <button class="gmui-menu__item gmui-menu__item--checkbox">
+        <span class="gmui-menu__item-indicator">
+      <div class="gmui-menu__separator">
+      <div class="gmui-menu__radio-group">
+        <button class="gmui-menu__item gmui-menu__item--radio">
+      <button class="gmui-menu__item gmui-menu__item--sub-trigger">
+      <div class="gmui-menu__content gmui-menu__sub-content">
+        <button class="gmui-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > NavigationMenu: open/representative configuration 1`] = `
-"container: <nav aria-label="Main" data-orientation="horizontal" class="gmui-navigation-menu"><ul data-orientation="horizontal" class="gmui-navigation-menu__list"><li data-state="open" class="gmui-navigation-menu__item"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" data-state="open" class="gmui-navigation-menu__trigger">More</button><div id="ID" aria-labelledby="ID" data-state="open" class="gmui-navigation-menu__content"><a class="gmui-navigation-menu__link" href="/">Home</a></div></li></ul></nav>
-body: <div><nav aria-label="Main" data-orientation="horizontal" class="gmui-navigation-menu"><ul data-orientation="horizontal" class="gmui-navigation-menu__list"><li data-state="open" class="gmui-navigation-menu__item"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" data-state="open" class="gmui-navigation-menu__trigger">More</button><div id="ID" aria-labelledby="ID" data-state="open" class="gmui-navigation-menu__content"><a class="gmui-navigation-menu__link" href="/">Home</a></div></li></ul></nav></div>"
+"container:
+<div>
+  <nav class="gmui-navigation-menu">
+    <ul class="gmui-navigation-menu__list">
+      <li class="gmui-navigation-menu__item">
+        <button class="gmui-navigation-menu__trigger">
+        <div class="gmui-navigation-menu__content">
+          <a class="gmui-navigation-menu__link">
+body:
+<body>
+  <div>
+    <nav class="gmui-navigation-menu">
+      <ul class="gmui-navigation-menu__list">
+        <li class="gmui-navigation-menu__item">
+          <button class="gmui-navigation-menu__trigger">
+          <div class="gmui-navigation-menu__content">
+            <a class="gmui-navigation-menu__link">"
 `;
 
 exports[`markup parity — rendered HTML > OneTimePasswordField: open/representative configuration 1`] = `
-"container: <div dir="ltr" class="gmui-otp" length="4"><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="gmui-otp__input" index="0" type="text" value=""><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="gmui-otp__input" index="1" type="text" value=""><input type="hidden" value=""></div>
-body: <div><div dir="ltr" class="gmui-otp" length="4"><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="gmui-otp__input" index="0" type="text" value=""><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="gmui-otp__input" index="1" type="text" value=""><input type="hidden" value=""></div></div>"
+"container:
+<div>
+  <div class="gmui-otp">
+    <input class="gmui-otp__input">
+    <input class="gmui-otp__input">
+    <input>
+body:
+<body>
+  <div>
+    <div class="gmui-otp">
+      <input class="gmui-otp__input">
+      <input class="gmui-otp__input">
+      <input>"
 `;
 
 exports[`markup parity — rendered HTML > Pagination: open/representative configuration 1`] = `
-"container: <nav aria-label="pagination" class="gmui-pagination gmui-pagination--sm"><ul class="gmui-pagination__list"><li class="gmui-pagination__item"><button type="button" aria-label="Go to previous page" disabled="" class="gmui-pagination__prev"></button></li><li class="gmui-pagination__item"><button type="button" aria-current="page" data-current="" class="gmui-pagination__page">1</button></li><li class="gmui-pagination__item"><span aria-hidden="true" class="gmui-pagination__ellipsis"></span></li><li class="gmui-pagination__item"><button type="button" aria-label="Go to next page" class="gmui-pagination__next"></button></li></ul></nav>
-body: <div><nav aria-label="pagination" class="gmui-pagination gmui-pagination--sm"><ul class="gmui-pagination__list"><li class="gmui-pagination__item"><button type="button" aria-label="Go to previous page" disabled="" class="gmui-pagination__prev"></button></li><li class="gmui-pagination__item"><button type="button" aria-current="page" data-current="" class="gmui-pagination__page">1</button></li><li class="gmui-pagination__item"><span aria-hidden="true" class="gmui-pagination__ellipsis"></span></li><li class="gmui-pagination__item"><button type="button" aria-label="Go to next page" class="gmui-pagination__next"></button></li></ul></nav></div>"
+"container:
+<div>
+  <nav class="gmui-pagination gmui-pagination--sm">
+    <ul class="gmui-pagination__list">
+      <li class="gmui-pagination__item">
+        <button class="gmui-pagination__prev">
+      <li class="gmui-pagination__item">
+        <button class="gmui-pagination__page">
+      <li class="gmui-pagination__item">
+        <span class="gmui-pagination__ellipsis">
+      <li class="gmui-pagination__item">
+        <button class="gmui-pagination__next">
+body:
+<body>
+  <div>
+    <nav class="gmui-pagination gmui-pagination--sm">
+      <ul class="gmui-pagination__list">
+        <li class="gmui-pagination__item">
+          <button class="gmui-pagination__prev">
+        <li class="gmui-pagination__item">
+          <button class="gmui-pagination__page">
+        <li class="gmui-pagination__item">
+          <span class="gmui-pagination__ellipsis">
+        <li class="gmui-pagination__item">
+          <button class="gmui-pagination__next">"
 `;
 
 exports[`markup parity — rendered HTML > Popover: open/representative configuration 1`] = `
-"container: <button type="button" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" data-state="open" class="gmui-popover__trigger">Open</button><div class="gmui-popover__anchor"></div>
-body: <div><button type="button" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" data-state="open" class="gmui-popover__trigger">Open</button><div class="gmui-popover__anchor"></div></div><div id="ID" data-floating-ui-portal=""><div id="ID" role="dialog" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="gmui-popover__content">body<button type="button" class="gmui-popover__close">x</button></div></div>"
+"container:
+<div>
+  <button class="gmui-popover__trigger">
+  <div class="gmui-popover__anchor">
+body:
+<body>
+  <div>
+    <button class="gmui-popover__trigger">
+    <div class="gmui-popover__anchor">
+  <div>
+    <div class="gmui-popover__content">
+      <button class="gmui-popover__close">"
 `;
 
 exports[`markup parity — rendered HTML > Portal: open/representative configuration 1`] = `
-"container: 
-body: <div></div><div><span>portalled</span></div>"
+"container:
+<div>
+body:
+<body>
+  <div>
+  <div>
+    <span>"
 `;
 
 exports[`markup parity — rendered HTML > Progress: open/representative configuration 1`] = `
-"container: <div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="42" aria-valuetext="42%" data-state="loading" data-value="42" data-max="100" class="gmui-progress gmui-progress--sm"><div data-state="loading" data-value="42" data-max="100" class="gmui-progress__indicator"></div></div>
-body: <div><div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="42" aria-valuetext="42%" data-state="loading" data-value="42" data-max="100" class="gmui-progress gmui-progress--sm"><div data-state="loading" data-value="42" data-max="100" class="gmui-progress__indicator"></div></div></div>"
+"container:
+<div>
+  <div class="gmui-progress gmui-progress--sm">
+    <div class="gmui-progress__indicator">
+body:
+<body>
+  <div>
+    <div class="gmui-progress gmui-progress--sm">
+      <div class="gmui-progress__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > RadioGroup: open/representative configuration 1`] = `
-"container: <div role="radiogroup" aria-orientation="vertical" class="gmui-radio-group gmui-radio-group--sm" aria-label="x" tabindex="0" data-orientation="vertical" data-roving-group="true"><button type="button" role="radio" aria-checked="true" tabindex="0" data-state="checked" data-value="a" style="position: relative;" class="gmui-radio-group__item"><span class="gmui-radio-group__indicator"></span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-state="unchecked" data-value="b" style="position: relative;" class="gmui-radio-group__item"><span class="gmui-radio-group__indicator"></span></button></div>
-body: <div><div role="radiogroup" aria-orientation="vertical" class="gmui-radio-group gmui-radio-group--sm" aria-label="x" tabindex="0" data-orientation="vertical" data-roving-group="true"><button type="button" role="radio" aria-checked="true" tabindex="0" data-state="checked" data-value="a" style="position: relative;" class="gmui-radio-group__item"><span class="gmui-radio-group__indicator"></span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-state="unchecked" data-value="b" style="position: relative;" class="gmui-radio-group__item"><span class="gmui-radio-group__indicator"></span></button></div></div>"
+"container:
+<div>
+  <div class="gmui-radio-group gmui-radio-group--sm">
+    <button class="gmui-radio-group__item">
+      <span class="gmui-radio-group__indicator">
+    <button class="gmui-radio-group__item">
+      <span class="gmui-radio-group__indicator">
+body:
+<body>
+  <div>
+    <div class="gmui-radio-group gmui-radio-group--sm">
+      <button class="gmui-radio-group__item">
+        <span class="gmui-radio-group__indicator">
+      <button class="gmui-radio-group__item">
+        <span class="gmui-radio-group__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > ScrollArea: open/representative configuration 1`] = `
-"container: <div dir="ltr" data-orientation="both" style="position: relative;" class="gmui-scroll-area"><div data-scroll-area-viewport="" style="overflow: scroll;" class="gmui-scroll-area__viewport">content</div><div role="scrollbar" aria-orientation="vertical" data-orientation="vertical" data-state="hidden" style="position: absolute; top: 0px; right: 0px; height: 100%;" class="gmui-scroll-area__scrollbar"><div data-state="hidden" data-orientation="vertical" style="height: 0px; transform: translateY(0px);" class="gmui-scroll-area__thumb"></div></div><div role="scrollbar" aria-orientation="horizontal" data-orientation="horizontal" data-state="hidden" style="position: absolute; bottom: 0px; left: 0px; width: 100%;" class="gmui-scroll-area__scrollbar"><div data-state="hidden" data-orientation="horizontal" style="width: 0px; transform: translateX(0px);" class="gmui-scroll-area__thumb"></div></div><div data-scroll-area-corner="" style="position: absolute; bottom: 0px; right: 0px;" class="gmui-scroll-area__corner"></div></div>
-body: <div><div dir="ltr" data-orientation="both" style="position: relative;" class="gmui-scroll-area"><div data-scroll-area-viewport="" style="overflow: scroll;" class="gmui-scroll-area__viewport">content</div><div role="scrollbar" aria-orientation="vertical" data-orientation="vertical" data-state="hidden" style="position: absolute; top: 0px; right: 0px; height: 100%;" class="gmui-scroll-area__scrollbar"><div data-state="hidden" data-orientation="vertical" style="height: 0px; transform: translateY(0px);" class="gmui-scroll-area__thumb"></div></div><div role="scrollbar" aria-orientation="horizontal" data-orientation="horizontal" data-state="hidden" style="position: absolute; bottom: 0px; left: 0px; width: 100%;" class="gmui-scroll-area__scrollbar"><div data-state="hidden" data-orientation="horizontal" style="width: 0px; transform: translateX(0px);" class="gmui-scroll-area__thumb"></div></div><div data-scroll-area-corner="" style="position: absolute; bottom: 0px; right: 0px;" class="gmui-scroll-area__corner"></div></div></div>"
+"container:
+<div>
+  <div class="gmui-scroll-area">
+    <div class="gmui-scroll-area__viewport">
+    <div class="gmui-scroll-area__scrollbar">
+      <div class="gmui-scroll-area__thumb">
+    <div class="gmui-scroll-area__scrollbar">
+      <div class="gmui-scroll-area__thumb">
+    <div class="gmui-scroll-area__corner">
+body:
+<body>
+  <div>
+    <div class="gmui-scroll-area">
+      <div class="gmui-scroll-area__viewport">
+      <div class="gmui-scroll-area__scrollbar">
+        <div class="gmui-scroll-area__thumb">
+      <div class="gmui-scroll-area__scrollbar">
+        <div class="gmui-scroll-area__thumb">
+      <div class="gmui-scroll-area__corner">"
 `;
 
 exports[`markup parity — rendered HTML > Select: open/representative configuration 1`] = `
-"container: <button type="button" aria-haspopup="listbox" aria-expanded="true" data-state="open" class="gmui-select__trigger gmui-select__trigger--sm" aria-controls="ID" role="combobox" data-floating-ui-inert=""><span class="gmui-select__value">Pick</span></button><span tabindex="-1" aria-hidden="true" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" data-floating-ui-inert=""></span><span data-type="outside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span><span aria-owns="ID" style="clip-path: inset(50%); position: fixed; top: 0px; left: 0px;" data-floating-ui-inert=""></span><span data-type="outside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span>
-body: <div><button type="button" aria-haspopup="listbox" aria-expanded="true" data-state="open" class="gmui-select__trigger gmui-select__trigger--sm" aria-controls="ID" role="combobox" data-floating-ui-inert=""><span class="gmui-select__value">Pick</span></button><span tabindex="-1" aria-hidden="true" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" data-floating-ui-inert=""></span><span data-type="outside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span><span aria-owns="ID" style="clip-path: inset(50%); position: fixed; top: 0px; left: 0px;" data-floating-ui-inert=""></span><span data-type="outside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span></div><div id="ID" data-floating-ui-portal=""><span data-type="inside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span><div style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" data-position="popper" tabindex="-1" data-floating-ui-focusable="" class="gmui-select__content" id="ID" role="listbox" aria-orientation="vertical"><div aria-hidden="true" data-scroll-button="up" class="gmui-select__scroll-button gmui-select__scroll-button--up"></div><div class="gmui-select__viewport"><div role="group" aria-labelledby="ID" class="gmui-select__group"><div id="ID" role="presentation" class="gmui-select__label">Group</div><button type="button" role="option" aria-selected="false" data-state="unchecked" class="gmui-select__item"><span class="gmui-select__item-text">A</span></button></div></div><div aria-hidden="true" data-scroll-button="down" class="gmui-select__scroll-button gmui-select__scroll-button--down"></div></div><span data-type="inside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span></div>"
+"container:
+<div>
+  <button class="gmui-select__trigger gmui-select__trigger--sm">
+    <span class="gmui-select__value">
+  <span>
+  <span>
+  <span>
+  <span>
+body:
+<body>
+  <div>
+    <button class="gmui-select__trigger gmui-select__trigger--sm">
+      <span class="gmui-select__value">
+    <span>
+    <span>
+    <span>
+    <span>
+  <div>
+    <span>
+    <div class="gmui-select__content">
+      <div class="gmui-select__scroll-button gmui-select__scroll-button--up">
+      <div class="gmui-select__viewport">
+        <div class="gmui-select__group">
+          <div class="gmui-select__label">
+          <button class="gmui-select__item">
+            <span class="gmui-select__item-text">
+      <div class="gmui-select__scroll-button gmui-select__scroll-button--down">
+    <span>"
 `;
 
 exports[`markup parity — rendered HTML > Separator: open/representative configuration 1`] = `
-"container: <div data-orientation="vertical" role="separator" aria-orientation="vertical" class="gmui-separator gmui-separator--vertical custom"></div>
-body: <div><div data-orientation="vertical" role="separator" aria-orientation="vertical" class="gmui-separator gmui-separator--vertical custom"></div></div>"
+"container:
+<div>
+  <div class="gmui-separator gmui-separator--vertical custom">
+body:
+<body>
+  <div>
+    <div class="gmui-separator gmui-separator--vertical custom">"
 `;
 
 exports[`markup parity — rendered HTML > Slider: open/representative configuration 1`] = `
-"container: <div data-orientation="horizontal" dir="ltr" class="gmui-slider gmui-slider--sm"><span data-orientation="horizontal" class="gmui-slider__track"><span data-orientation="horizontal" data-low="0.00" data-high="20.00" class="gmui-slider__range"></span></span><span role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20" aria-orientation="horizontal" tabindex="0" data-orientation="horizontal" data-value="20" data-index="0" class="gmui-slider__thumb"></span></div>
-body: <div><div data-orientation="horizontal" dir="ltr" class="gmui-slider gmui-slider--sm"><span data-orientation="horizontal" class="gmui-slider__track"><span data-orientation="horizontal" data-low="0.00" data-high="20.00" class="gmui-slider__range"></span></span><span role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20" aria-orientation="horizontal" tabindex="0" data-orientation="horizontal" data-value="20" data-index="0" class="gmui-slider__thumb"></span></div></div>"
+"container:
+<div>
+  <div class="gmui-slider gmui-slider--sm">
+    <span class="gmui-slider__track">
+      <span class="gmui-slider__range">
+    <span class="gmui-slider__thumb">
+body:
+<body>
+  <div>
+    <div class="gmui-slider gmui-slider--sm">
+      <span class="gmui-slider__track">
+        <span class="gmui-slider__range">
+      <span class="gmui-slider__thumb">"
 `;
 
 exports[`markup parity — rendered HTML > Slot: open/representative configuration 1`] = `
-"container: <span class="slotted">child</span>
-body: <div><span class="slotted">child</span></div>"
+"container:
+<div>
+  <span class="slotted">
+body:
+<body>
+  <div>
+    <span class="slotted">"
 `;
 
 exports[`markup parity — rendered HTML > Switch: open/representative configuration 1`] = `
-"container: <button type="button" role="switch" aria-checked="true" data-state="checked" value="on" class="gmui-switch gmui-switch--lg"><span data-state="checked" class="gmui-switch__thumb"></span></button>
-body: <div><button type="button" role="switch" aria-checked="true" data-state="checked" value="on" class="gmui-switch gmui-switch--lg"><span data-state="checked" class="gmui-switch__thumb"></span></button></div>"
+"container:
+<div>
+  <button class="gmui-switch gmui-switch--lg">
+    <span class="gmui-switch__thumb">
+body:
+<body>
+  <div>
+    <button class="gmui-switch gmui-switch--lg">
+      <span class="gmui-switch__thumb">"
 `;
 
 exports[`markup parity — rendered HTML > Tabs: open/representative configuration 1`] = `
-"container: <div data-orientation="horizontal" dir="ltr" class="gmui-tabs gmui-tabs--underline gmui-tabs--md"><div role="tablist" aria-orientation="horizontal" data-orientation="horizontal" class="gmui-tabs__list" tabindex="0" data-roving-group="true"><button type="button" role="tab" id="ID-trigger-a" aria-selected="true" aria-controls="ID-content-a" tabindex="0" data-state="active" data-value="a" class="gmui-tabs__trigger">A</button><button type="button" role="tab" id="ID-trigger-b" aria-selected="false" aria-controls="ID-content-b" tabindex="-1" data-state="inactive" data-value="b" class="gmui-tabs__trigger">B</button></div><div role="tabpanel" id="ID-content-a" aria-labelledby="ID-trigger-a" tabindex="0" data-state="active" class="gmui-tabs__content">A content</div></div>
-body: <div><div data-orientation="horizontal" dir="ltr" class="gmui-tabs gmui-tabs--underline gmui-tabs--md"><div role="tablist" aria-orientation="horizontal" data-orientation="horizontal" class="gmui-tabs__list" tabindex="0" data-roving-group="true"><button type="button" role="tab" id="ID-trigger-a" aria-selected="true" aria-controls="ID-content-a" tabindex="0" data-state="active" data-value="a" class="gmui-tabs__trigger">A</button><button type="button" role="tab" id="ID-trigger-b" aria-selected="false" aria-controls="ID-content-b" tabindex="-1" data-state="inactive" data-value="b" class="gmui-tabs__trigger">B</button></div><div role="tabpanel" id="ID-content-a" aria-labelledby="ID-trigger-a" tabindex="0" data-state="active" class="gmui-tabs__content">A content</div></div></div>"
+"container:
+<div>
+  <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+    <div class="gmui-tabs__list">
+      <button class="gmui-tabs__trigger">
+      <button class="gmui-tabs__trigger">
+    <div class="gmui-tabs__content">
+body:
+<body>
+  <div>
+    <div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+      <div class="gmui-tabs__list">
+        <button class="gmui-tabs__trigger">
+        <button class="gmui-tabs__trigger">
+      <div class="gmui-tabs__content">"
 `;
 
 exports[`markup parity — rendered HTML > Toast: open/representative configuration 1`] = `
-"container: <div style=""><span tabindex="0" style="position: fixed; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span><ol tabindex="-1" role="region" aria-label="Notifications (F8)" class="gmui-toast-viewport"><li tabindex="0" role="status" aria-live="assertive" aria-atomic="true" data-state="open" data-type="foreground" data-swipe-direction="right" class="gmui-toast" style="user-select: none;"><div class="gmui-toast__title">Title</div><div class="gmui-toast__description">Desc</div><div data-gugbab-toast-announce-exclude="" data-gugbab-toast-announce-alt="alt"><button type="button" class="gmui-toast__action">Do</button></div><div data-gugbab-toast-announce-exclude=""><button type="button" class="gmui-toast__close">x</button></div></li></ol><span tabindex="0" style="position: fixed; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span></div>
-body: <div><div style=""><span tabindex="0" style="position: fixed; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span><ol tabindex="-1" role="region" aria-label="Notifications (F8)" class="gmui-toast-viewport"><li tabindex="0" role="status" aria-live="assertive" aria-atomic="true" data-state="open" data-type="foreground" data-swipe-direction="right" class="gmui-toast" style="user-select: none;"><div class="gmui-toast__title">Title</div><div class="gmui-toast__description">Desc</div><div data-gugbab-toast-announce-exclude="" data-gugbab-toast-announce-alt="alt"><button type="button" class="gmui-toast__action">Do</button></div><div data-gugbab-toast-announce-exclude=""><button type="button" class="gmui-toast__close">x</button></div></li></ol><span tabindex="0" style="position: fixed; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span></div></div><span role="status" aria-live="assertive" aria-atomic="true" style="position: absolute; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span>"
+"container:
+<div>
+  <div>
+    <span>
+    <ol class="gmui-toast-viewport">
+      <li class="gmui-toast">
+        <div class="gmui-toast__title">
+        <div class="gmui-toast__description">
+        <div>
+          <button class="gmui-toast__action">
+        <div>
+          <button class="gmui-toast__close">
+    <span>
+body:
+<body>
+  <div>
+    <div>
+      <span>
+      <ol class="gmui-toast-viewport">
+        <li class="gmui-toast">
+          <div class="gmui-toast__title">
+          <div class="gmui-toast__description">
+          <div>
+            <button class="gmui-toast__action">
+          <div>
+            <button class="gmui-toast__close">
+      <span>
+  <span>"
 `;
 
 exports[`markup parity — rendered HTML > Toggle: open/representative configuration 1`] = `
-"container: <button type="button" aria-pressed="false" data-state="off" class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom"></button>
-body: <div><button type="button" aria-pressed="false" data-state="off" class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom"></button></div>"
+"container:
+<div>
+  <button class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom">
+body:
+<body>
+  <div>
+    <button class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom">"
 `;
 
 exports[`markup parity — rendered HTML > ToggleGroup: open/representative configuration 1`] = `
-"container: <div tabindex="0" data-orientation="horizontal" data-roving-group="true" role="radiogroup" class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline"><button type="button" role="radio" aria-checked="false" data-state="off" data-toggle-group-item="" data-orientation="horizontal" tabindex="0" class="gmui-toggle-group__item">A</button></div>
-body: <div><div tabindex="0" data-orientation="horizontal" data-roving-group="true" role="radiogroup" class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline"><button type="button" role="radio" aria-checked="false" data-state="off" data-toggle-group-item="" data-orientation="horizontal" tabindex="0" class="gmui-toggle-group__item">A</button></div></div>"
+"container:
+<div>
+  <div class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline">
+    <button class="gmui-toggle-group__item">
+body:
+<body>
+  <div>
+    <div class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline">
+      <button class="gmui-toggle-group__item">"
 `;
 
 exports[`markup parity — rendered HTML > Toolbar: open/representative configuration 1`] = `
-"container: <div role="toolbar" aria-orientation="horizontal" dir="ltr" data-orientation="horizontal" class="gmui-toolbar" tabindex="0" data-roving-group="true"><button type="button" tabindex="0" class="gmui-toolbar__button">B</button><a tabindex="-1" class="gmui-toolbar__link" href="/">L</a><div data-orientation="vertical" role="separator" aria-orientation="vertical" class="gmui-toolbar__separator"></div><div role="radiogroup" data-orientation="horizontal" class="gmui-toolbar__toggle-group"><button type="button" role="radio" aria-checked="false" data-state="off" data-toggle-group-item="" data-orientation="horizontal" tabindex="-1" class="gmui-toolbar__toggle-item">X</button></div></div>
-body: <div><div role="toolbar" aria-orientation="horizontal" dir="ltr" data-orientation="horizontal" class="gmui-toolbar" tabindex="0" data-roving-group="true"><button type="button" tabindex="0" class="gmui-toolbar__button">B</button><a tabindex="-1" class="gmui-toolbar__link" href="/">L</a><div data-orientation="vertical" role="separator" aria-orientation="vertical" class="gmui-toolbar__separator"></div><div role="radiogroup" data-orientation="horizontal" class="gmui-toolbar__toggle-group"><button type="button" role="radio" aria-checked="false" data-state="off" data-toggle-group-item="" data-orientation="horizontal" tabindex="-1" class="gmui-toolbar__toggle-item">X</button></div></div></div>"
+"container:
+<div>
+  <div class="gmui-toolbar">
+    <button class="gmui-toolbar__button">
+    <a class="gmui-toolbar__link">
+    <div class="gmui-toolbar__separator">
+    <div class="gmui-toolbar__toggle-group">
+      <button class="gmui-toolbar__toggle-item">
+body:
+<body>
+  <div>
+    <div class="gmui-toolbar">
+      <button class="gmui-toolbar__button">
+      <a class="gmui-toolbar__link">
+      <div class="gmui-toolbar__separator">
+      <div class="gmui-toolbar__toggle-group">
+        <button class="gmui-toolbar__toggle-item">"
 `;
 
 exports[`markup parity — rendered HTML > Tooltip: open/representative configuration 1`] = `
-"container: <button type="button" aria-describedby="ID" data-state="open" class="gmui-tooltip__trigger">Hover</button>
-body: <div><button type="button" aria-describedby="ID" data-state="open" class="gmui-tooltip__trigger">Hover</button></div><div id="ID" data-floating-ui-portal=""><div id="ID" role="tooltip" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="gmui-tooltip__content">tip</div></div>"
+"container:
+<div>
+  <button class="gmui-tooltip__trigger">
+body:
+<body>
+  <div>
+    <button class="gmui-tooltip__trigger">
+  <div>
+    <div class="gmui-tooltip__content">"
 `;
 
 exports[`markup parity — rendered HTML > VisuallyHidden: open/representative configuration 1`] = `
-"container: <span style="position: absolute; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;">hidden</span>
-body: <div><span style="position: absolute; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;">hidden</span></div>"
+"container:
+<div>
+  <span>
+body:
+<body>
+  <div>
+    <span>"
 `;

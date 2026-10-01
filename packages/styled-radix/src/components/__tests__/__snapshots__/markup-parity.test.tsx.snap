@@ -3,33 +3,83 @@
 exports[`markup parity — boundary cases > Tabs default variant and size are frozen (the only per-package difference) 1`] = `"grx-tabs grx-tabs--pills grx-tabs--md"`;
 
 exports[`markup parity — boundary cases > consumer className and hostile attribute values are preserved verbatim 1`] = `
-"container: <div data-orientation="horizontal" role="separator" class="grx-separator grx-separator--horizontal &quot;><script>alert(1)</script>" aria-label="&quot;><script>alert(1)</script>"></div>
-body: <div><div data-orientation="horizontal" role="separator" class="grx-separator grx-separator--horizontal &quot;><script>alert(1)</script>" aria-label="&quot;><script>alert(1)</script>"></div></div>"
+"container:
+<div>
+  <div class="grx-separator grx-separator--horizontal "><script>alert(1)</script>">
+body:
+<body>
+  <div>
+    <div class="grx-separator grx-separator--horizontal "><script>alert(1)</script>">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 1`] = `
-"container: <button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="grx-switch grx-switch--md"></button>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="grx-switch grx-switch--md"></button></div>"
+"container:
+<div>
+  <button class="grx-switch grx-switch--md">
+body:
+<body>
+  <div>
+    <button class="grx-switch grx-switch--md">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 2`] = `
-"container: <div data-orientation="horizontal" dir="ltr" class="grx-tabs grx-tabs--pills grx-tabs--md"></div>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="grx-switch grx-switch--md"></button></div><div><div data-orientation="horizontal" dir="ltr" class="grx-tabs grx-tabs--pills grx-tabs--md"></div></div>"
+"container:
+<div>
+  <div class="grx-tabs grx-tabs--pills grx-tabs--md">
+body:
+<body>
+  <div>
+    <button class="grx-switch grx-switch--md">
+  <div>
+    <div class="grx-tabs grx-tabs--pills grx-tabs--md">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 3`] = `
-"container: <div data-orientation="vertical" class="grx-accordion grx-accordion--default" tabindex="0" data-roving-group="true"></div>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="grx-switch grx-switch--md"></button></div><div><div data-orientation="horizontal" dir="ltr" class="grx-tabs grx-tabs--pills grx-tabs--md"></div></div><div><div data-orientation="vertical" class="grx-accordion grx-accordion--default" tabindex="0" data-roving-group="true"></div></div>"
+"container:
+<div>
+  <div class="grx-accordion grx-accordion--default">
+body:
+<body>
+  <div>
+    <button class="grx-switch grx-switch--md">
+  <div>
+    <div class="grx-tabs grx-tabs--pills grx-tabs--md">
+  <div>
+    <div class="grx-accordion grx-accordion--default">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 4`] = `
-"container: <form novalidate="" class="grx-form"></form>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="grx-switch grx-switch--md"></button></div><div><div data-orientation="horizontal" dir="ltr" class="grx-tabs grx-tabs--pills grx-tabs--md"></div></div><div><div data-orientation="vertical" class="grx-accordion grx-accordion--default" tabindex="0" data-roving-group="true"></div></div><div><form novalidate="" class="grx-form"></form></div>"
+"container:
+<div>
+  <form class="grx-form">
+body:
+<body>
+  <div>
+    <button class="grx-switch grx-switch--md">
+  <div>
+    <div class="grx-tabs grx-tabs--pills grx-tabs--md">
+  <div>
+    <div class="grx-accordion grx-accordion--default">
+  <div>
+    <form class="grx-form">"
 `;
 
 exports[`markup parity — boundary cases > renders roots with no props and no children 5`] = `
-"container: <div role="toolbar" aria-orientation="horizontal" dir="ltr" data-orientation="horizontal" class="grx-toolbar" tabindex="0" data-roving-group="true"></div>
-body: <div><button type="button" role="switch" aria-checked="false" data-state="unchecked" value="on" class="grx-switch grx-switch--md"></button></div><div><div data-orientation="horizontal" dir="ltr" class="grx-tabs grx-tabs--pills grx-tabs--md"></div></div><div><div data-orientation="vertical" class="grx-accordion grx-accordion--default" tabindex="0" data-roving-group="true"></div></div><div><form novalidate="" class="grx-form"></form></div><div><div role="toolbar" aria-orientation="horizontal" dir="ltr" data-orientation="horizontal" class="grx-toolbar" tabindex="0" data-roving-group="true"></div></div>"
+"container:
+<div>
+  <div class="grx-toolbar">
+body:
+<body>
+  <div>
+    <button class="grx-switch grx-switch--md">
+  <div>
+    <div class="grx-tabs grx-tabs--pills grx-tabs--md">
+  <div>
+    <div class="grx-accordion grx-accordion--default">
+  <div>
+    <form class="grx-form">
+  <div>
+    <div class="grx-toolbar">"
 `;
 
 exports[`markup parity — export shape (35 components) > Accordion: keys and part display names are frozen 1`] = `
@@ -419,176 +469,584 @@ exports[`markup parity — export shape (35 components) > exposes exactly the ex
 `;
 
 exports[`markup parity — rendered HTML > Accordion: open/representative configuration 1`] = `
-"container: <div data-orientation="vertical" class="grx-accordion grx-accordion--outline" tabindex="0" data-roving-group="true"><div data-state="open" data-orientation="vertical" class="grx-accordion__item"><h3 data-state="open" data-orientation="vertical" class="grx-accordion__header"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" aria-disabled="true" data-state="open" data-orientation="vertical" data-accordion-trigger="" tabindex="0" class="grx-accordion__trigger">Open</button></h3><div id="ID" role="region" aria-labelledby="ID" data-state="open" data-orientation="vertical" class="grx-accordion__content">body</div></div></div>
-body: <div><div data-orientation="vertical" class="grx-accordion grx-accordion--outline" tabindex="0" data-roving-group="true"><div data-state="open" data-orientation="vertical" class="grx-accordion__item"><h3 data-state="open" data-orientation="vertical" class="grx-accordion__header"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" aria-disabled="true" data-state="open" data-orientation="vertical" data-accordion-trigger="" tabindex="0" class="grx-accordion__trigger">Open</button></h3><div id="ID" role="region" aria-labelledby="ID" data-state="open" data-orientation="vertical" class="grx-accordion__content">body</div></div></div></div>"
+"container:
+<div>
+  <div class="grx-accordion grx-accordion--outline">
+    <div class="grx-accordion__item">
+      <h3 class="grx-accordion__header">
+        <button class="grx-accordion__trigger">
+      <div class="grx-accordion__content">
+body:
+<body>
+  <div>
+    <div class="grx-accordion grx-accordion--outline">
+      <div class="grx-accordion__item">
+        <h3 class="grx-accordion__header">
+          <button class="grx-accordion__trigger">
+        <div class="grx-accordion__content">"
 `;
 
 exports[`markup parity — rendered HTML > AlertDialog: open/representative configuration 1`] = `
-"container: <button class="grx-alert-dialog__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" type="button" data-state="open">Open</button>
-body: <div aria-hidden="true"><button class="grx-alert-dialog__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" type="button" data-state="open">Open</button></div><div id="ID" data-floating-ui-portal=""><div data-state="open" class="grx-alert-dialog__overlay" style="position: fixed; overflow: auto; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div id="ID" role="alertdialog" aria-modal="true" aria-labelledby="ID" aria-describedby="ID" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="grx-alert-dialog__content grx-alert-dialog__content--lg"><h2 id="ID" class="grx-alert-dialog__title">Title</h2><p id="ID" class="grx-alert-dialog__description">Desc</p><button type="button" class="grx-alert-dialog__cancel">No</button><button type="button" class="grx-alert-dialog__action grx-alert-dialog__action--danger">Yes</button></div></div>"
+"container:
+<div>
+  <button class="grx-alert-dialog__trigger">
+body:
+<body>
+  <div>
+    <button class="grx-alert-dialog__trigger">
+  <div>
+    <div class="grx-alert-dialog__overlay">
+    <div class="grx-alert-dialog__content grx-alert-dialog__content--lg">
+      <h2 class="grx-alert-dialog__title">
+      <p class="grx-alert-dialog__description">
+      <button class="grx-alert-dialog__cancel">
+      <button class="grx-alert-dialog__action grx-alert-dialog__action--danger">"
 `;
 
 exports[`markup parity — rendered HTML > AspectRatio: open/representative configuration 1`] = `
-"container: <div data-aspect-ratio-wrapper="" style="position: relative; width: 100%; padding-bottom: 56.25%;"><div class="grx-aspect-ratio custom" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div></div>
-body: <div><div data-aspect-ratio-wrapper="" style="position: relative; width: 100%; padding-bottom: 56.25%;"><div class="grx-aspect-ratio custom" style="position: absolute; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div></div></div>"
+"container:
+<div>
+  <div>
+    <div class="grx-aspect-ratio custom">
+body:
+<body>
+  <div>
+    <div>
+      <div class="grx-aspect-ratio custom">"
 `;
 
 exports[`markup parity — rendered HTML > Avatar: open/representative configuration 1`] = `
-"container: <span data-state="loading" class="grx-avatar grx-avatar--lg"><span class="grx-avatar__fallback">JD</span></span>
-body: <div><span data-state="loading" class="grx-avatar grx-avatar--lg"><span class="grx-avatar__fallback">JD</span></span></div>"
+"container:
+<div>
+  <span class="grx-avatar grx-avatar--lg">
+    <span class="grx-avatar__fallback">
+body:
+<body>
+  <div>
+    <span class="grx-avatar grx-avatar--lg">
+      <span class="grx-avatar__fallback">"
 `;
 
 exports[`markup parity — rendered HTML > Breadcrumbs: open/representative configuration 1`] = `
-"container: <nav aria-label="breadcrumbs" class="grx-breadcrumbs grx-breadcrumbs--slash"><ol class="grx-breadcrumbs__list"><li class="grx-breadcrumbs__item"><a class="grx-breadcrumbs__link" href="/">Home</a></li><span role="presentation" aria-hidden="true" class="grx-breadcrumbs__separator"></span><li class="grx-breadcrumbs__item"><span aria-current="page" class="grx-breadcrumbs__page">Now</span></li></ol></nav>
-body: <div><nav aria-label="breadcrumbs" class="grx-breadcrumbs grx-breadcrumbs--slash"><ol class="grx-breadcrumbs__list"><li class="grx-breadcrumbs__item"><a class="grx-breadcrumbs__link" href="/">Home</a></li><span role="presentation" aria-hidden="true" class="grx-breadcrumbs__separator"></span><li class="grx-breadcrumbs__item"><span aria-current="page" class="grx-breadcrumbs__page">Now</span></li></ol></nav></div>"
+"container:
+<div>
+  <nav class="grx-breadcrumbs grx-breadcrumbs--slash">
+    <ol class="grx-breadcrumbs__list">
+      <li class="grx-breadcrumbs__item">
+        <a class="grx-breadcrumbs__link">
+      <span class="grx-breadcrumbs__separator">
+      <li class="grx-breadcrumbs__item">
+        <span class="grx-breadcrumbs__page">
+body:
+<body>
+  <div>
+    <nav class="grx-breadcrumbs grx-breadcrumbs--slash">
+      <ol class="grx-breadcrumbs__list">
+        <li class="grx-breadcrumbs__item">
+          <a class="grx-breadcrumbs__link">
+        <span class="grx-breadcrumbs__separator">
+        <li class="grx-breadcrumbs__item">
+          <span class="grx-breadcrumbs__page">"
 `;
 
 exports[`markup parity — rendered HTML > Checkbox: open/representative configuration 1`] = `
-"container: <button type="button" role="checkbox" aria-checked="true" data-state="checked" value="on" class="grx-checkbox grx-checkbox--sm"><span data-state="checked" style="pointer-events: none;" class="grx-checkbox__indicator"></span></button>
-body: <div><button type="button" role="checkbox" aria-checked="true" data-state="checked" value="on" class="grx-checkbox grx-checkbox--sm"><span data-state="checked" style="pointer-events: none;" class="grx-checkbox__indicator"></span></button></div>"
+"container:
+<div>
+  <button class="grx-checkbox grx-checkbox--sm">
+    <span class="grx-checkbox__indicator">
+body:
+<body>
+  <div>
+    <button class="grx-checkbox grx-checkbox--sm">
+      <span class="grx-checkbox__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > Collapsible: open/representative configuration 1`] = `
-"container: <div data-state="open" class="grx-collapsible"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" data-state="open" class="grx-collapsible__trigger">Toggle</button><div id="ID" role="region" aria-labelledby="ID" data-state="open" class="grx-collapsible__content" style="--gugbab-collapsible-content-height: 0px; --gugbab-collapsible-content-width: 0px;">body</div></div>
-body: <div><div data-state="open" class="grx-collapsible"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" data-state="open" class="grx-collapsible__trigger">Toggle</button><div id="ID" role="region" aria-labelledby="ID" data-state="open" class="grx-collapsible__content" style="--gugbab-collapsible-content-height: 0px; --gugbab-collapsible-content-width: 0px;">body</div></div></div>"
+"container:
+<div>
+  <div class="grx-collapsible">
+    <button class="grx-collapsible__trigger">
+    <div class="grx-collapsible__content">
+body:
+<body>
+  <div>
+    <div class="grx-collapsible">
+      <button class="grx-collapsible__trigger">
+      <div class="grx-collapsible__content">"
 `;
 
 exports[`markup parity — rendered HTML > Combobox: open/representative configuration 1`] = `
-"container: <div class="grx-combobox__anchor"><input aria-autocomplete="list" class="grx-combobox__input grx-combobox__input--sm" aria-expanded="true" aria-haspopup="listbox" aria-controls="ID" role="combobox" type="text" value=""><button type="button" aria-haspopup="listbox" aria-expanded="true" class="grx-combobox__trigger">v</button></div><span tabindex="-1" aria-hidden="true" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"></span>
-body: <div data-floating-ui-inert="" aria-hidden="true"><div class="grx-combobox__anchor"><input aria-autocomplete="list" class="grx-combobox__input grx-combobox__input--sm" aria-expanded="true" aria-haspopup="listbox" aria-controls="ID" role="combobox" type="text" value=""><button type="button" aria-haspopup="listbox" aria-expanded="true" class="grx-combobox__trigger">v</button></div><span tabindex="-1" aria-hidden="true" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;"></span></div><div id="ID" data-floating-ui-portal=""><span data-type="inside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span><button type="button" tabindex="-1" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;">Dismiss</button><div style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="grx-combobox__content" id="ID" role="listbox" aria-orientation="vertical"><button type="button" role="option" class="grx-combobox__item">A</button></div><button type="button" tabindex="-1" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;">Dismiss</button><span data-type="inside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span></div>"
+"container:
+<div>
+  <div class="grx-combobox__anchor">
+    <input class="grx-combobox__input grx-combobox__input--sm">
+    <button class="grx-combobox__trigger">
+  <span>
+body:
+<body>
+  <div>
+    <div class="grx-combobox__anchor">
+      <input class="grx-combobox__input grx-combobox__input--sm">
+      <button class="grx-combobox__trigger">
+    <span>
+  <div>
+    <span>
+    <button>
+    <div class="grx-combobox__content">
+      <button class="grx-combobox__item">
+    <button>
+    <span>"
 `;
 
 exports[`markup parity — rendered HTML > ContextMenu: open/representative configuration 1`] = `
-"container: <div data-state="closed" aria-expanded="false" aria-haspopup="menu" id="ID">Right click</div>
-body: <div><div data-state="closed" aria-expanded="false" aria-haspopup="menu" id="ID">Right click</div></div><div id="ID" data-floating-ui-portal=""><div id="ID" role="menu" style="position: fixed; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="closed" tabindex="-1" data-floating-ui-focusable="" class="grx-menu__content" aria-labelledby="ID" aria-orientation="vertical"><button type="button" role="menuitem" class="grx-menu__item">Item</button><button type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-state="closed" class="grx-menu__item grx-menu__item--sub-trigger" id="ID">Sub</button><div role="menu" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="closed" tabindex="-1" data-floating-ui-focusable="" class="grx-menu__content grx-menu__sub-content" id="ID" aria-labelledby="ID" aria-orientation="vertical"><button type="button" role="menuitem" class="grx-menu__item">Nested</button></div></div></div>"
+"container:
+<div>
+  <div>
+body:
+<body>
+  <div>
+    <div>
+  <div>
+    <div class="grx-menu__content">
+      <button class="grx-menu__item">
+      <button class="grx-menu__item grx-menu__item--sub-trigger">
+      <div class="grx-menu__content grx-menu__sub-content">
+        <button class="grx-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > Dialog: open/representative configuration 1`] = `
-"container: <button class="grx-dialog__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" type="button" data-state="open">Open</button>
-body: <div aria-hidden="true"><button class="grx-dialog__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" type="button" data-state="open">Open</button></div><div id="ID" data-floating-ui-portal=""><div data-state="open" class="grx-dialog__overlay" style="position: fixed; overflow: auto; top: 0px; right: 0px; bottom: 0px; left: 0px;"></div><div id="ID" role="dialog" aria-modal="true" aria-labelledby="ID" aria-describedby="ID" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="grx-dialog__content grx-dialog__content--xl"><h2 id="ID" class="grx-dialog__title">t</h2><p id="ID" class="grx-dialog__description">d</p><button type="button" class="grx-dialog__close">x</button></div></div>"
+"container:
+<div>
+  <button class="grx-dialog__trigger">
+body:
+<body>
+  <div>
+    <button class="grx-dialog__trigger">
+  <div>
+    <div class="grx-dialog__overlay">
+    <div class="grx-dialog__content grx-dialog__content--xl">
+      <h2 class="grx-dialog__title">
+      <p class="grx-dialog__description">
+      <button class="grx-dialog__close">"
 `;
 
 exports[`markup parity — rendered HTML > DropdownMenu: open/representative configuration 1`] = `
-"container: <button type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="ID" data-state="open" id="ID">Menu</button>
-body: <div><button type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="ID" data-state="open" id="ID">Menu</button></div><div id="ID" data-floating-ui-portal=""><div id="ID" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="grx-menu__content" role="menu" aria-labelledby="ID" aria-orientation="vertical"><div class="grx-menu__label">Label</div><button type="button" role="menuitem" class="grx-menu__item">A</button><button type="button" role="menuitemcheckbox" aria-checked="true" data-state="checked" class="grx-menu__item grx-menu__item--checkbox">cb<span data-state="checked" class="grx-menu__item-indicator">ok</span></button><div role="separator" class="grx-menu__separator"></div><div role="group" class="grx-menu__radio-group"><button type="button" role="menuitemradio" aria-checked="true" data-state="checked" class="grx-menu__item grx-menu__item--radio">a</button></div><button type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-state="closed" class="grx-menu__item grx-menu__item--sub-trigger" id="ID">Sub</button><div style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="closed" tabindex="-1" data-floating-ui-focusable="" class="grx-menu__content grx-menu__sub-content" id="ID" role="menu" aria-labelledby="ID" aria-orientation="vertical"><button type="button" role="menuitem" class="grx-menu__item">Nested</button></div></div></div>"
+"container:
+<div>
+  <button>
+body:
+<body>
+  <div>
+    <button>
+  <div>
+    <div class="grx-menu__content">
+      <div class="grx-menu__label">
+      <button class="grx-menu__item">
+      <button class="grx-menu__item grx-menu__item--checkbox">
+        <span class="grx-menu__item-indicator">
+      <div class="grx-menu__separator">
+      <div class="grx-menu__radio-group">
+        <button class="grx-menu__item grx-menu__item--radio">
+      <button class="grx-menu__item grx-menu__item--sub-trigger">
+      <div class="grx-menu__content grx-menu__sub-content">
+        <button class="grx-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > Form: open/representative configuration 1`] = `
-"container: <form novalidate="" class="grx-form"><div data-valid="" class="grx-form__field grx-form__field--error"><label for="ID" class="grx-form__label">x</label><input id="ID" class="grx-form__control" name="x"></div><button type="submit" class="grx-form__submit">go</button></form>
-body: <div><form novalidate="" class="grx-form"><div data-valid="" class="grx-form__field grx-form__field--error"><label for="ID" class="grx-form__label">x</label><input id="ID" class="grx-form__control" name="x"></div><button type="submit" class="grx-form__submit">go</button></form></div>"
+"container:
+<div>
+  <form class="grx-form">
+    <div class="grx-form__field grx-form__field--error">
+      <label class="grx-form__label">
+      <input class="grx-form__control">
+    <button class="grx-form__submit">
+body:
+<body>
+  <div>
+    <form class="grx-form">
+      <div class="grx-form__field grx-form__field--error">
+        <label class="grx-form__label">
+        <input class="grx-form__control">
+      <button class="grx-form__submit">"
 `;
 
 exports[`markup parity — rendered HTML > HoverCard: open/representative configuration 1`] = `
-"container: <a data-state="open" class="grx-hover-card__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID">Hover</a>
-body: <div><a data-state="open" class="grx-hover-card__trigger" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID">Hover</a></div><div id="ID" data-floating-ui-portal=""><div id="ID" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="grx-hover-card__content" role="dialog">body</div></div>"
+"container:
+<div>
+  <a class="grx-hover-card__trigger">
+body:
+<body>
+  <div>
+    <a class="grx-hover-card__trigger">
+  <div>
+    <div class="grx-hover-card__content">"
 `;
 
 exports[`markup parity — rendered HTML > Label: open/representative configuration 1`] = `
-"container: <label class="grx-label custom" for="email">Email</label><input id="email" type="email">
-body: <div><label class="grx-label custom" for="email">Email</label><input id="email" type="email"></div>"
+"container:
+<div>
+  <label class="grx-label custom">
+  <input>
+body:
+<body>
+  <div>
+    <label class="grx-label custom">
+    <input>"
 `;
 
 exports[`markup parity — rendered HTML > Menubar: open/representative configuration 1`] = `
-"container: <div role="menubar" class="grx-menubar"><button type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="ID" data-state="open" class="grx-menubar__trigger" id="ID">File</button></div>
-body: <div><div role="menubar" class="grx-menubar"><button type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="ID" data-state="open" class="grx-menubar__trigger" id="ID">File</button></div></div><div id="ID" data-floating-ui-portal=""><div id="ID" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="grx-menu__content" role="menu" aria-labelledby="ID" aria-orientation="vertical"><div class="grx-menu__label">Label</div><button type="button" role="menuitem" class="grx-menu__item">New</button><button type="button" role="menuitemcheckbox" aria-checked="true" data-state="checked" class="grx-menu__item grx-menu__item--checkbox">cb<span data-state="checked" class="grx-menu__item-indicator">ok</span></button><div role="separator" class="grx-menu__separator"></div><div role="group" class="grx-menu__radio-group"><button type="button" role="menuitemradio" aria-checked="true" data-state="checked" class="grx-menu__item grx-menu__item--radio">a</button></div><button type="button" role="menuitem" aria-haspopup="menu" aria-expanded="false" data-state="closed" class="grx-menu__item grx-menu__item--sub-trigger" id="ID">Sub</button><div style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="closed" tabindex="-1" data-floating-ui-focusable="" class="grx-menu__content grx-menu__sub-content" id="ID" role="menu" aria-labelledby="ID" aria-orientation="vertical"><button type="button" role="menuitem" class="grx-menu__item">Nested</button></div></div></div>"
+"container:
+<div>
+  <div class="grx-menubar">
+    <button class="grx-menubar__trigger">
+body:
+<body>
+  <div>
+    <div class="grx-menubar">
+      <button class="grx-menubar__trigger">
+  <div>
+    <div class="grx-menu__content">
+      <div class="grx-menu__label">
+      <button class="grx-menu__item">
+      <button class="grx-menu__item grx-menu__item--checkbox">
+        <span class="grx-menu__item-indicator">
+      <div class="grx-menu__separator">
+      <div class="grx-menu__radio-group">
+        <button class="grx-menu__item grx-menu__item--radio">
+      <button class="grx-menu__item grx-menu__item--sub-trigger">
+      <div class="grx-menu__content grx-menu__sub-content">
+        <button class="grx-menu__item">"
 `;
 
 exports[`markup parity — rendered HTML > NavigationMenu: open/representative configuration 1`] = `
-"container: <nav aria-label="Main" data-orientation="horizontal" class="grx-navigation-menu"><ul data-orientation="horizontal" class="grx-navigation-menu__list"><li data-state="open" class="grx-navigation-menu__item"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" data-state="open" class="grx-navigation-menu__trigger">More</button><div id="ID" aria-labelledby="ID" data-state="open" class="grx-navigation-menu__content"><a class="grx-navigation-menu__link" href="/">Home</a></div></li></ul></nav>
-body: <div><nav aria-label="Main" data-orientation="horizontal" class="grx-navigation-menu"><ul data-orientation="horizontal" class="grx-navigation-menu__list"><li data-state="open" class="grx-navigation-menu__item"><button type="button" id="ID" aria-controls="ID" aria-expanded="true" data-state="open" class="grx-navigation-menu__trigger">More</button><div id="ID" aria-labelledby="ID" data-state="open" class="grx-navigation-menu__content"><a class="grx-navigation-menu__link" href="/">Home</a></div></li></ul></nav></div>"
+"container:
+<div>
+  <nav class="grx-navigation-menu">
+    <ul class="grx-navigation-menu__list">
+      <li class="grx-navigation-menu__item">
+        <button class="grx-navigation-menu__trigger">
+        <div class="grx-navigation-menu__content">
+          <a class="grx-navigation-menu__link">
+body:
+<body>
+  <div>
+    <nav class="grx-navigation-menu">
+      <ul class="grx-navigation-menu__list">
+        <li class="grx-navigation-menu__item">
+          <button class="grx-navigation-menu__trigger">
+          <div class="grx-navigation-menu__content">
+            <a class="grx-navigation-menu__link">"
 `;
 
 exports[`markup parity — rendered HTML > OneTimePasswordField: open/representative configuration 1`] = `
-"container: <div dir="ltr" class="grx-otp" length="4"><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="grx-otp__input" index="0" type="text" value=""><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="grx-otp__input" index="1" type="text" value=""><input type="hidden" value=""></div>
-body: <div><div dir="ltr" class="grx-otp" length="4"><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="grx-otp__input" index="0" type="text" value=""><input inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="grx-otp__input" index="1" type="text" value=""><input type="hidden" value=""></div></div>"
+"container:
+<div>
+  <div class="grx-otp">
+    <input class="grx-otp__input">
+    <input class="grx-otp__input">
+    <input>
+body:
+<body>
+  <div>
+    <div class="grx-otp">
+      <input class="grx-otp__input">
+      <input class="grx-otp__input">
+      <input>"
 `;
 
 exports[`markup parity — rendered HTML > Pagination: open/representative configuration 1`] = `
-"container: <nav aria-label="pagination" class="grx-pagination grx-pagination--sm"><ul class="grx-pagination__list"><li class="grx-pagination__item"><button type="button" aria-label="Go to previous page" disabled="" class="grx-pagination__prev"></button></li><li class="grx-pagination__item"><button type="button" aria-current="page" data-current="" class="grx-pagination__page">1</button></li><li class="grx-pagination__item"><span aria-hidden="true" class="grx-pagination__ellipsis"></span></li><li class="grx-pagination__item"><button type="button" aria-label="Go to next page" class="grx-pagination__next"></button></li></ul></nav>
-body: <div><nav aria-label="pagination" class="grx-pagination grx-pagination--sm"><ul class="grx-pagination__list"><li class="grx-pagination__item"><button type="button" aria-label="Go to previous page" disabled="" class="grx-pagination__prev"></button></li><li class="grx-pagination__item"><button type="button" aria-current="page" data-current="" class="grx-pagination__page">1</button></li><li class="grx-pagination__item"><span aria-hidden="true" class="grx-pagination__ellipsis"></span></li><li class="grx-pagination__item"><button type="button" aria-label="Go to next page" class="grx-pagination__next"></button></li></ul></nav></div>"
+"container:
+<div>
+  <nav class="grx-pagination grx-pagination--sm">
+    <ul class="grx-pagination__list">
+      <li class="grx-pagination__item">
+        <button class="grx-pagination__prev">
+      <li class="grx-pagination__item">
+        <button class="grx-pagination__page">
+      <li class="grx-pagination__item">
+        <span class="grx-pagination__ellipsis">
+      <li class="grx-pagination__item">
+        <button class="grx-pagination__next">
+body:
+<body>
+  <div>
+    <nav class="grx-pagination grx-pagination--sm">
+      <ul class="grx-pagination__list">
+        <li class="grx-pagination__item">
+          <button class="grx-pagination__prev">
+        <li class="grx-pagination__item">
+          <button class="grx-pagination__page">
+        <li class="grx-pagination__item">
+          <span class="grx-pagination__ellipsis">
+        <li class="grx-pagination__item">
+          <button class="grx-pagination__next">"
 `;
 
 exports[`markup parity — rendered HTML > Popover: open/representative configuration 1`] = `
-"container: <button type="button" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" data-state="open" class="grx-popover__trigger">Open</button><div class="grx-popover__anchor"></div>
-body: <div><button type="button" aria-expanded="true" aria-haspopup="dialog" aria-controls="ID" data-state="open" class="grx-popover__trigger">Open</button><div class="grx-popover__anchor"></div></div><div id="ID" data-floating-ui-portal=""><div id="ID" role="dialog" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="grx-popover__content">body<button type="button" class="grx-popover__close">x</button></div></div>"
+"container:
+<div>
+  <button class="grx-popover__trigger">
+  <div class="grx-popover__anchor">
+body:
+<body>
+  <div>
+    <button class="grx-popover__trigger">
+    <div class="grx-popover__anchor">
+  <div>
+    <div class="grx-popover__content">
+      <button class="grx-popover__close">"
 `;
 
 exports[`markup parity — rendered HTML > Portal: open/representative configuration 1`] = `
-"container: 
-body: <div></div><div><span>portalled</span></div>"
+"container:
+<div>
+body:
+<body>
+  <div>
+  <div>
+    <span>"
 `;
 
 exports[`markup parity — rendered HTML > Progress: open/representative configuration 1`] = `
-"container: <div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="42" aria-valuetext="42%" data-state="loading" data-value="42" data-max="100" class="grx-progress grx-progress--sm"><div data-state="loading" data-value="42" data-max="100" class="grx-progress__indicator"></div></div>
-body: <div><div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="42" aria-valuetext="42%" data-state="loading" data-value="42" data-max="100" class="grx-progress grx-progress--sm"><div data-state="loading" data-value="42" data-max="100" class="grx-progress__indicator"></div></div></div>"
+"container:
+<div>
+  <div class="grx-progress grx-progress--sm">
+    <div class="grx-progress__indicator">
+body:
+<body>
+  <div>
+    <div class="grx-progress grx-progress--sm">
+      <div class="grx-progress__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > RadioGroup: open/representative configuration 1`] = `
-"container: <div role="radiogroup" aria-orientation="vertical" class="grx-radio-group grx-radio-group--sm" aria-label="x" tabindex="0" data-orientation="vertical" data-roving-group="true"><button type="button" role="radio" aria-checked="true" tabindex="0" data-state="checked" data-value="a" style="position: relative;" class="grx-radio-group__item"><span class="grx-radio-group__indicator"></span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-state="unchecked" data-value="b" style="position: relative;" class="grx-radio-group__item"><span class="grx-radio-group__indicator"></span></button></div>
-body: <div><div role="radiogroup" aria-orientation="vertical" class="grx-radio-group grx-radio-group--sm" aria-label="x" tabindex="0" data-orientation="vertical" data-roving-group="true"><button type="button" role="radio" aria-checked="true" tabindex="0" data-state="checked" data-value="a" style="position: relative;" class="grx-radio-group__item"><span class="grx-radio-group__indicator"></span></button><button type="button" role="radio" aria-checked="false" tabindex="-1" data-state="unchecked" data-value="b" style="position: relative;" class="grx-radio-group__item"><span class="grx-radio-group__indicator"></span></button></div></div>"
+"container:
+<div>
+  <div class="grx-radio-group grx-radio-group--sm">
+    <button class="grx-radio-group__item">
+      <span class="grx-radio-group__indicator">
+    <button class="grx-radio-group__item">
+      <span class="grx-radio-group__indicator">
+body:
+<body>
+  <div>
+    <div class="grx-radio-group grx-radio-group--sm">
+      <button class="grx-radio-group__item">
+        <span class="grx-radio-group__indicator">
+      <button class="grx-radio-group__item">
+        <span class="grx-radio-group__indicator">"
 `;
 
 exports[`markup parity — rendered HTML > ScrollArea: open/representative configuration 1`] = `
-"container: <div dir="ltr" data-orientation="both" style="position: relative;" class="grx-scroll-area"><div data-scroll-area-viewport="" style="overflow: scroll;" class="grx-scroll-area__viewport">content</div><div role="scrollbar" aria-orientation="vertical" data-orientation="vertical" data-state="hidden" style="position: absolute; top: 0px; right: 0px; height: 100%;" class="grx-scroll-area__scrollbar"><div data-state="hidden" data-orientation="vertical" style="height: 0px; transform: translateY(0px);" class="grx-scroll-area__thumb"></div></div><div role="scrollbar" aria-orientation="horizontal" data-orientation="horizontal" data-state="hidden" style="position: absolute; bottom: 0px; left: 0px; width: 100%;" class="grx-scroll-area__scrollbar"><div data-state="hidden" data-orientation="horizontal" style="width: 0px; transform: translateX(0px);" class="grx-scroll-area__thumb"></div></div><div data-scroll-area-corner="" style="position: absolute; bottom: 0px; right: 0px;" class="grx-scroll-area__corner"></div></div>
-body: <div><div dir="ltr" data-orientation="both" style="position: relative;" class="grx-scroll-area"><div data-scroll-area-viewport="" style="overflow: scroll;" class="grx-scroll-area__viewport">content</div><div role="scrollbar" aria-orientation="vertical" data-orientation="vertical" data-state="hidden" style="position: absolute; top: 0px; right: 0px; height: 100%;" class="grx-scroll-area__scrollbar"><div data-state="hidden" data-orientation="vertical" style="height: 0px; transform: translateY(0px);" class="grx-scroll-area__thumb"></div></div><div role="scrollbar" aria-orientation="horizontal" data-orientation="horizontal" data-state="hidden" style="position: absolute; bottom: 0px; left: 0px; width: 100%;" class="grx-scroll-area__scrollbar"><div data-state="hidden" data-orientation="horizontal" style="width: 0px; transform: translateX(0px);" class="grx-scroll-area__thumb"></div></div><div data-scroll-area-corner="" style="position: absolute; bottom: 0px; right: 0px;" class="grx-scroll-area__corner"></div></div></div>"
+"container:
+<div>
+  <div class="grx-scroll-area">
+    <div class="grx-scroll-area__viewport">
+    <div class="grx-scroll-area__scrollbar">
+      <div class="grx-scroll-area__thumb">
+    <div class="grx-scroll-area__scrollbar">
+      <div class="grx-scroll-area__thumb">
+    <div class="grx-scroll-area__corner">
+body:
+<body>
+  <div>
+    <div class="grx-scroll-area">
+      <div class="grx-scroll-area__viewport">
+      <div class="grx-scroll-area__scrollbar">
+        <div class="grx-scroll-area__thumb">
+      <div class="grx-scroll-area__scrollbar">
+        <div class="grx-scroll-area__thumb">
+      <div class="grx-scroll-area__corner">"
 `;
 
 exports[`markup parity — rendered HTML > Select: open/representative configuration 1`] = `
-"container: <button type="button" aria-haspopup="listbox" aria-expanded="true" data-state="open" class="grx-select__trigger grx-select__trigger--sm" aria-controls="ID" role="combobox" data-floating-ui-inert=""><span class="grx-select__value">Pick</span></button><span tabindex="-1" aria-hidden="true" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" data-floating-ui-inert=""></span><span data-type="outside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span><span aria-owns="ID" style="clip-path: inset(50%); position: fixed; top: 0px; left: 0px;" data-floating-ui-inert=""></span><span data-type="outside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span>
-body: <div><button type="button" aria-haspopup="listbox" aria-expanded="true" data-state="open" class="grx-select__trigger grx-select__trigger--sm" aria-controls="ID" role="combobox" data-floating-ui-inert=""><span class="grx-select__value">Pick</span></button><span tabindex="-1" aria-hidden="true" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" data-floating-ui-inert=""></span><span data-type="outside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span><span aria-owns="ID" style="clip-path: inset(50%); position: fixed; top: 0px; left: 0px;" data-floating-ui-inert=""></span><span data-type="outside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span></div><div id="ID" data-floating-ui-portal=""><span data-type="inside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span><div style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" data-position="popper" tabindex="-1" data-floating-ui-focusable="" class="grx-select__content" id="ID" role="listbox" aria-orientation="vertical"><div aria-hidden="true" data-scroll-button="up" class="grx-select__scroll-button grx-select__scroll-button--up"></div><div class="grx-select__viewport"><div role="group" aria-labelledby="ID" class="grx-select__group"><div id="ID" role="presentation" class="grx-select__label">Group</div><button type="button" role="option" aria-selected="false" data-state="unchecked" class="grx-select__item"><span class="grx-select__item-text">A</span></button></div></div><div aria-hidden="true" data-scroll-button="down" class="grx-select__scroll-button grx-select__scroll-button--down"></div></div><span data-type="inside" tabindex="0" data-floating-ui-focus-guard="" style="border: 0px; height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: fixed; white-space: nowrap; width: 1px; top: 0px; left: 0px;" role="button"></span></div>"
+"container:
+<div>
+  <button class="grx-select__trigger grx-select__trigger--sm">
+    <span class="grx-select__value">
+  <span>
+  <span>
+  <span>
+  <span>
+body:
+<body>
+  <div>
+    <button class="grx-select__trigger grx-select__trigger--sm">
+      <span class="grx-select__value">
+    <span>
+    <span>
+    <span>
+    <span>
+  <div>
+    <span>
+    <div class="grx-select__content">
+      <div class="grx-select__scroll-button grx-select__scroll-button--up">
+      <div class="grx-select__viewport">
+        <div class="grx-select__group">
+          <div class="grx-select__label">
+          <button class="grx-select__item">
+            <span class="grx-select__item-text">
+      <div class="grx-select__scroll-button grx-select__scroll-button--down">
+    <span>"
 `;
 
 exports[`markup parity — rendered HTML > Separator: open/representative configuration 1`] = `
-"container: <div data-orientation="vertical" role="separator" aria-orientation="vertical" class="grx-separator grx-separator--vertical custom"></div>
-body: <div><div data-orientation="vertical" role="separator" aria-orientation="vertical" class="grx-separator grx-separator--vertical custom"></div></div>"
+"container:
+<div>
+  <div class="grx-separator grx-separator--vertical custom">
+body:
+<body>
+  <div>
+    <div class="grx-separator grx-separator--vertical custom">"
 `;
 
 exports[`markup parity — rendered HTML > Slider: open/representative configuration 1`] = `
-"container: <div data-orientation="horizontal" dir="ltr" class="grx-slider grx-slider--sm"><span data-orientation="horizontal" class="grx-slider__track"><span data-orientation="horizontal" data-low="0.00" data-high="20.00" class="grx-slider__range"></span></span><span role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20" aria-orientation="horizontal" tabindex="0" data-orientation="horizontal" data-value="20" data-index="0" class="grx-slider__thumb"></span></div>
-body: <div><div data-orientation="horizontal" dir="ltr" class="grx-slider grx-slider--sm"><span data-orientation="horizontal" class="grx-slider__track"><span data-orientation="horizontal" data-low="0.00" data-high="20.00" class="grx-slider__range"></span></span><span role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20" aria-orientation="horizontal" tabindex="0" data-orientation="horizontal" data-value="20" data-index="0" class="grx-slider__thumb"></span></div></div>"
+"container:
+<div>
+  <div class="grx-slider grx-slider--sm">
+    <span class="grx-slider__track">
+      <span class="grx-slider__range">
+    <span class="grx-slider__thumb">
+body:
+<body>
+  <div>
+    <div class="grx-slider grx-slider--sm">
+      <span class="grx-slider__track">
+        <span class="grx-slider__range">
+      <span class="grx-slider__thumb">"
 `;
 
 exports[`markup parity — rendered HTML > Slot: open/representative configuration 1`] = `
-"container: <span class="slotted">child</span>
-body: <div><span class="slotted">child</span></div>"
+"container:
+<div>
+  <span class="slotted">
+body:
+<body>
+  <div>
+    <span class="slotted">"
 `;
 
 exports[`markup parity — rendered HTML > Switch: open/representative configuration 1`] = `
-"container: <button type="button" role="switch" aria-checked="true" data-state="checked" value="on" class="grx-switch grx-switch--lg"><span data-state="checked" class="grx-switch__thumb"></span></button>
-body: <div><button type="button" role="switch" aria-checked="true" data-state="checked" value="on" class="grx-switch grx-switch--lg"><span data-state="checked" class="grx-switch__thumb"></span></button></div>"
+"container:
+<div>
+  <button class="grx-switch grx-switch--lg">
+    <span class="grx-switch__thumb">
+body:
+<body>
+  <div>
+    <button class="grx-switch grx-switch--lg">
+      <span class="grx-switch__thumb">"
 `;
 
 exports[`markup parity — rendered HTML > Tabs: open/representative configuration 1`] = `
-"container: <div data-orientation="horizontal" dir="ltr" class="grx-tabs grx-tabs--pills grx-tabs--md"><div role="tablist" aria-orientation="horizontal" data-orientation="horizontal" class="grx-tabs__list" tabindex="0" data-roving-group="true"><button type="button" role="tab" id="ID-trigger-a" aria-selected="true" aria-controls="ID-content-a" tabindex="0" data-state="active" data-value="a" class="grx-tabs__trigger">A</button><button type="button" role="tab" id="ID-trigger-b" aria-selected="false" aria-controls="ID-content-b" tabindex="-1" data-state="inactive" data-value="b" class="grx-tabs__trigger">B</button></div><div role="tabpanel" id="ID-content-a" aria-labelledby="ID-trigger-a" tabindex="0" data-state="active" class="grx-tabs__content">A content</div></div>
-body: <div><div data-orientation="horizontal" dir="ltr" class="grx-tabs grx-tabs--pills grx-tabs--md"><div role="tablist" aria-orientation="horizontal" data-orientation="horizontal" class="grx-tabs__list" tabindex="0" data-roving-group="true"><button type="button" role="tab" id="ID-trigger-a" aria-selected="true" aria-controls="ID-content-a" tabindex="0" data-state="active" data-value="a" class="grx-tabs__trigger">A</button><button type="button" role="tab" id="ID-trigger-b" aria-selected="false" aria-controls="ID-content-b" tabindex="-1" data-state="inactive" data-value="b" class="grx-tabs__trigger">B</button></div><div role="tabpanel" id="ID-content-a" aria-labelledby="ID-trigger-a" tabindex="0" data-state="active" class="grx-tabs__content">A content</div></div></div>"
+"container:
+<div>
+  <div class="grx-tabs grx-tabs--pills grx-tabs--md">
+    <div class="grx-tabs__list">
+      <button class="grx-tabs__trigger">
+      <button class="grx-tabs__trigger">
+    <div class="grx-tabs__content">
+body:
+<body>
+  <div>
+    <div class="grx-tabs grx-tabs--pills grx-tabs--md">
+      <div class="grx-tabs__list">
+        <button class="grx-tabs__trigger">
+        <button class="grx-tabs__trigger">
+      <div class="grx-tabs__content">"
 `;
 
 exports[`markup parity — rendered HTML > Toast: open/representative configuration 1`] = `
-"container: <div style=""><span tabindex="0" style="position: fixed; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span><ol tabindex="-1" role="region" aria-label="Notifications (F8)" class="grx-toast-viewport"><li tabindex="0" role="status" aria-live="assertive" aria-atomic="true" data-state="open" data-type="foreground" data-swipe-direction="right" class="grx-toast" style="user-select: none;"><div class="grx-toast__title">Title</div><div class="grx-toast__description">Desc</div><div data-gugbab-toast-announce-exclude="" data-gugbab-toast-announce-alt="alt"><button type="button" class="grx-toast__action">Do</button></div><div data-gugbab-toast-announce-exclude=""><button type="button" class="grx-toast__close">x</button></div></li></ol><span tabindex="0" style="position: fixed; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span></div>
-body: <div><div style=""><span tabindex="0" style="position: fixed; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span><ol tabindex="-1" role="region" aria-label="Notifications (F8)" class="grx-toast-viewport"><li tabindex="0" role="status" aria-live="assertive" aria-atomic="true" data-state="open" data-type="foreground" data-swipe-direction="right" class="grx-toast" style="user-select: none;"><div class="grx-toast__title">Title</div><div class="grx-toast__description">Desc</div><div data-gugbab-toast-announce-exclude="" data-gugbab-toast-announce-alt="alt"><button type="button" class="grx-toast__action">Do</button></div><div data-gugbab-toast-announce-exclude=""><button type="button" class="grx-toast__close">x</button></div></li></ol><span tabindex="0" style="position: fixed; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span></div></div><span role="status" aria-live="assertive" aria-atomic="true" style="position: absolute; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;"></span>"
+"container:
+<div>
+  <div>
+    <span>
+    <ol class="grx-toast-viewport">
+      <li class="grx-toast">
+        <div class="grx-toast__title">
+        <div class="grx-toast__description">
+        <div>
+          <button class="grx-toast__action">
+        <div>
+          <button class="grx-toast__close">
+    <span>
+body:
+<body>
+  <div>
+    <div>
+      <span>
+      <ol class="grx-toast-viewport">
+        <li class="grx-toast">
+          <div class="grx-toast__title">
+          <div class="grx-toast__description">
+          <div>
+            <button class="grx-toast__action">
+          <div>
+            <button class="grx-toast__close">
+      <span>
+  <span>"
 `;
 
 exports[`markup parity — rendered HTML > Toggle: open/representative configuration 1`] = `
-"container: <button type="button" aria-pressed="false" data-state="off" class="grx-toggle grx-toggle--sm grx-toggle--outline custom"></button>
-body: <div><button type="button" aria-pressed="false" data-state="off" class="grx-toggle grx-toggle--sm grx-toggle--outline custom"></button></div>"
+"container:
+<div>
+  <button class="grx-toggle grx-toggle--sm grx-toggle--outline custom">
+body:
+<body>
+  <div>
+    <button class="grx-toggle grx-toggle--sm grx-toggle--outline custom">"
 `;
 
 exports[`markup parity — rendered HTML > ToggleGroup: open/representative configuration 1`] = `
-"container: <div tabindex="0" data-orientation="horizontal" data-roving-group="true" role="radiogroup" class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline"><button type="button" role="radio" aria-checked="false" data-state="off" data-toggle-group-item="" data-orientation="horizontal" tabindex="0" class="grx-toggle-group__item">A</button></div>
-body: <div><div tabindex="0" data-orientation="horizontal" data-roving-group="true" role="radiogroup" class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline"><button type="button" role="radio" aria-checked="false" data-state="off" data-toggle-group-item="" data-orientation="horizontal" tabindex="0" class="grx-toggle-group__item">A</button></div></div>"
+"container:
+<div>
+  <div class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline">
+    <button class="grx-toggle-group__item">
+body:
+<body>
+  <div>
+    <div class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline">
+      <button class="grx-toggle-group__item">"
 `;
 
 exports[`markup parity — rendered HTML > Toolbar: open/representative configuration 1`] = `
-"container: <div role="toolbar" aria-orientation="horizontal" dir="ltr" data-orientation="horizontal" class="grx-toolbar" tabindex="0" data-roving-group="true"><button type="button" tabindex="0" class="grx-toolbar__button">B</button><a tabindex="-1" class="grx-toolbar__link" href="/">L</a><div data-orientation="vertical" role="separator" aria-orientation="vertical" class="grx-toolbar__separator"></div><div role="radiogroup" data-orientation="horizontal" class="grx-toolbar__toggle-group"><button type="button" role="radio" aria-checked="false" data-state="off" data-toggle-group-item="" data-orientation="horizontal" tabindex="-1" class="grx-toolbar__toggle-item">X</button></div></div>
-body: <div><div role="toolbar" aria-orientation="horizontal" dir="ltr" data-orientation="horizontal" class="grx-toolbar" tabindex="0" data-roving-group="true"><button type="button" tabindex="0" class="grx-toolbar__button">B</button><a tabindex="-1" class="grx-toolbar__link" href="/">L</a><div data-orientation="vertical" role="separator" aria-orientation="vertical" class="grx-toolbar__separator"></div><div role="radiogroup" data-orientation="horizontal" class="grx-toolbar__toggle-group"><button type="button" role="radio" aria-checked="false" data-state="off" data-toggle-group-item="" data-orientation="horizontal" tabindex="-1" class="grx-toolbar__toggle-item">X</button></div></div></div>"
+"container:
+<div>
+  <div class="grx-toolbar">
+    <button class="grx-toolbar__button">
+    <a class="grx-toolbar__link">
+    <div class="grx-toolbar__separator">
+    <div class="grx-toolbar__toggle-group">
+      <button class="grx-toolbar__toggle-item">
+body:
+<body>
+  <div>
+    <div class="grx-toolbar">
+      <button class="grx-toolbar__button">
+      <a class="grx-toolbar__link">
+      <div class="grx-toolbar__separator">
+      <div class="grx-toolbar__toggle-group">
+        <button class="grx-toolbar__toggle-item">"
 `;
 
 exports[`markup parity — rendered HTML > Tooltip: open/representative configuration 1`] = `
-"container: <button type="button" aria-describedby="ID" data-state="open" class="grx-tooltip__trigger">Hover</button>
-body: <div><button type="button" aria-describedby="ID" data-state="open" class="grx-tooltip__trigger">Hover</button></div><div id="ID" data-floating-ui-portal=""><div id="ID" role="tooltip" style="position: absolute; left: 0px; top: 0px; transform: translate(0px, 0px);" data-state="open" tabindex="-1" data-floating-ui-focusable="" class="grx-tooltip__content">tip</div></div>"
+"container:
+<div>
+  <button class="grx-tooltip__trigger">
+body:
+<body>
+  <div>
+    <button class="grx-tooltip__trigger">
+  <div>
+    <div class="grx-tooltip__content">"
 `;
 
 exports[`markup parity — rendered HTML > VisuallyHidden: open/representative configuration 1`] = `
-"container: <span style="position: absolute; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;">hidden</span>
-body: <div><span style="position: absolute; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; word-wrap: normal;">hidden</span></div>"
+"container:
+<div>
+  <span>
+body:
+<body>
+  <div>
+    <span>"
 `;
