@@ -39,6 +39,9 @@ yarn-debug.log*
 
 # Codex local state (user-specific)
 .codex/
+# codex-review-guard per-session/per-machine markers
+.claude/.codex-review-done
+.claude/.codex-unavailable
 
 # Playwright visual regression
 playwright-report/
