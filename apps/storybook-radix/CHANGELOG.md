@@ -1,5 +1,17 @@
 # @gugbab/storybook-radix
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies [1b0479e]
+- Updated dependencies [1a26c3f]
+- Updated dependencies [b3672cf]
+- Updated dependencies [0d2c8ef]
+- Updated dependencies [6a99cf8]
+  - @gugbab/tokens@1.1.0
+  - @gugbab/styled-radix@1.1.0
+
 ## 0.0.6
 
 ### Patch Changes

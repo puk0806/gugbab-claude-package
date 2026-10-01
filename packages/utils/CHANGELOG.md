@@ -1,5 +1,29 @@
 # @gugbab/utils
 
+## 1.5.0
+
+### Minor Changes
+
+- 2398432: 보안·안정성 수정
+
+  - `readSSEStream`: 개행 없이 들어오는 라인에 상한(`maxBufferSize`, 기본 1,048,576자)을 두고, 초과하면 `RangeError`로 중단합니다(메모리 폭증 방지). **동작 변경:** 이전에는 통과하던, 개행 없이 1MB를 넘는 라인이 이제 오류가 됩니다. 상한 초과, 읽기 실패, `onEvent` 예외가 나면 스트림을 취소해 연결을 닫습니다. 옵션 타입 `ReadSSEStreamOptions`를 추가했습니다. 줄 구분자로 LF·CRLF뿐 아니라 CR 단독도 인식합니다(WHATWG event-stream). 이전에는 CR만 쓰는 서버의 이벤트를 받지 못했습니다.
+  - `parseSSELine`: 이벤트 형식을 런타임에 검증하고 정규화합니다. 필수 필드 타입이 틀리거나 알 수 없는 `type`이면 `null`을 반환합니다(**동작 변경:** 이전에는 그대로 전달됨. `text`가 없는 chunk 때문에 화면에 `"undefined"`가 붙을 수 있었음). 선택 필드의 `null`은 허용해 제거하고, `safety_block`의 `resources`가 없으면 `[]`로 채웁니다. 알려지지 않은 여분 필드는 결과에 포함하지 않습니다.
+  - `withRetry`: `maxRetries`·`baseDelay`·`maxDelay`가 비정상이면 `RangeError`를 던집니다(이전엔 `Infinity`면 무한 재시도). 대기 상한 `maxDelay`(기본 30초)를 추가했고, `signal`(AbortSignal)로 중단할 수 있습니다. `shouldRetry`가 예외를 던져도 원래 오류로 reject합니다.
+  - `groupBy`: `toString`·`constructor`·`__proto__` 같은 키에서 크래시하거나 프로토타입이 바뀌던 문제를 수정했습니다.
+  - `useSSEChat`: 언마운트하면 진행 중인 요청을 abort하고, 이후 `onChunk`·`onDone`·`onError`를 호출하지 않습니다. 언마운트 없이 effect만 정리되는 경우(예: `<Activity mode="hidden">`)에도 요청을 끊고 `status`를 `idle`로 되돌립니다.
+  - `groupBy`: `Object.hasOwn`(ES2022) 대신 `hasOwnProperty.call`을 써서 Safari 15.3 이하에서도 동작합니다.
+
+- 0d2c8ef: 구조·배포 정리
+
+  - styled-mui / styled-radix: `DirectionProvider`·`useDirection`(과 `Direction`·`DirectionProviderProps` 타입)을 다시 내보냅니다. `@gugbab/headless`를 따로 설치하지 않고 RTL을 설정할 수 있습니다. 앱에 다른 버전의 headless가 설치되어 있어도, styled 패키지에서 가져온 Provider는 styled 컴포넌트와 같은 Context를 씁니다.
+  - utils: SSE 이벤트 타입에 확장 지점을 추가했습니다.
+    - `SseCoreEvent`(chunk·done·error)를 새로 둡니다.
+    - `SseEvent<TExtra>`로 앱별 이벤트 **타입**을 선언할 수 있습니다. `SseEvent<never>`는 공통 이벤트만 포함합니다. 확장은 현재 **타입 전용**입니다. `parseSSELine`·`readSSEStream`·`toSSELine`은 공통 이벤트와 `safety_block`만 인식하고, 그 밖의 `type`은 파서가 버립니다.
+    - 기본 `SseEvent`는 기존과 동일합니다.
+    - relay 전용 `safety_block`은 `SseSafetyBlockEvent`로 분리하고 `@deprecated` 처리했습니다. 다음 major에서 타입과 파서 지원 모두 제거할 예정이며, 필요한 앱은 직접 선언해 `SseEvent<...>`로 넘기면 됩니다.
+  - headless: 사용하지 않던 `@gugbab/utils` 직접 의존성을 제거했습니다. utils는 hooks를 거쳐 여전히 전이 설치됩니다.
+  - tokens: README의 사용 예제를 실제 API(`muiTheme`·`radixTheme`·`renderThemeCss`)로 수정했습니다. 이전 예제의 `muiTokensLight` 등은 존재하지 않는 export였습니다.
+
 ## 1.4.0
 
 ### Minor Changes
