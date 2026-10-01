@@ -286,7 +286,9 @@ describe('Slider — inverted', () => {
 
   it('Root 밖의 Thumb은 명확한 에러로 거부한다 (오용)', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    expect(() => render(<Slider.Thumb aria-label="orphan" />)).toThrow('must be used inside <Slider.Root>');
+    expect(() => render(<Slider.Thumb aria-label="orphan" />)).toThrow(
+      'must be used inside <Slider.Root>',
+    );
     spy.mockRestore();
   });
 });
