@@ -1,4 +1,4 @@
-import { useIsomorphicLayoutEffect } from '@gugbab/hooks';
+import { useIsomorphicLayoutEffect, useMergedRefs } from '@gugbab/hooks';
 import {
   createContext,
   forwardRef,
@@ -8,6 +8,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -139,24 +140,38 @@ const Root = forwardRef<HTMLDivElement, ScrollAreaRootProps>(function ScrollArea
     (type === 'hover' && hovering) ||
     (type === 'scroll' && scrolling);
 
+  const ctxValue = useMemo<ScrollAreaContextValue>(
+    () => ({
+      type,
+      scrollHideDelay,
+      dir: direction,
+      viewport,
+      setViewport,
+      metrics,
+      recompute,
+      registerScrollbar,
+      hasScrollbar: { vertical: hasScrollbarVertical, horizontal: hasScrollbarHorizontal },
+      isVisible,
+      setHovering,
+      setScrolling,
+    }),
+    [
+      type,
+      scrollHideDelay,
+      direction,
+      viewport,
+      metrics,
+      recompute,
+      registerScrollbar,
+      hasScrollbarVertical,
+      hasScrollbarHorizontal,
+      isVisible,
+    ],
+  );
+
   const Comp = asChild ? Slot : 'div';
   return (
-    <ScrollAreaContext.Provider
-      value={{
-        type,
-        scrollHideDelay,
-        dir: direction,
-        viewport,
-        setViewport,
-        metrics,
-        recompute,
-        registerScrollbar,
-        hasScrollbar: { vertical: hasScrollbarVertical, horizontal: hasScrollbarHorizontal },
-        isVisible,
-        setHovering,
-        setScrolling,
-      }}
-    >
+    <ScrollAreaContext.Provider value={ctxValue}>
       <Comp
         ref={ref}
         dir={direction}
@@ -187,6 +202,7 @@ const Viewport = forwardRef<HTMLDivElement, ScrollAreaViewportProps>(function Sc
   const ctx = useCtx('ScrollArea.Viewport');
   const Comp = asChild ? Slot : 'div';
   const scrollTimerRef = useRef<number | null>(null);
+  const composedRef = useMergedRefs<HTMLDivElement>(ctx.setViewport, ref);
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     onScroll?.(e);
@@ -209,11 +225,7 @@ const Viewport = forwardRef<HTMLDivElement, ScrollAreaViewportProps>(function Sc
 
   return (
     <Comp
-      ref={(node: HTMLDivElement | null) => {
-        ctx.setViewport(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={composedRef}
       data-scroll-area-viewport=""
       style={{ overflow: 'scroll', ...style }}
       onScroll={handleScroll}
@@ -278,22 +290,28 @@ const Scrollbar = forwardRef<HTMLDivElement, ScrollAreaScrollbarProps>(function 
     (ctx.type === 'auto' && overflow) ||
     ((ctx.type === 'hover' || ctx.type === 'scroll') && ctx.isVisible && overflow);
 
-  const scrollFromPointer = (clientPx: number, trackOffset: number) => {
-    const node = ctx.viewport;
-    if (!node) return;
-    const localPx = clientPx - trackOffset;
-    const ratio = Math.max(0, Math.min(1, (localPx - thumbSize / 2) / maxThumbPosition));
-    const target = ratio * maxScroll;
-    if (isVertical) node.scrollTop = target;
-    else node.scrollLeft = target;
-  };
+  const { viewport: scrollViewport } = ctx;
+  const scrollFromPointer = useCallback(
+    (clientPx: number, trackOffset: number) => {
+      const node = scrollViewport;
+      if (!node) return;
+      const localPx = clientPx - trackOffset;
+      const ratio = Math.max(0, Math.min(1, (localPx - thumbSize / 2) / maxThumbPosition));
+      const target = ratio * maxScroll;
+      if (isVertical) node.scrollTop = target;
+      else node.scrollLeft = target;
+    },
+    [scrollViewport, thumbSize, maxThumbPosition, maxScroll, isVertical],
+  );
+  const scrollbarCtxValue = useMemo<ScrollbarContextValue>(
+    () => ({ orientation, thumbSize, thumbPosition, trackSize, scrollFromPointer }),
+    [orientation, thumbSize, thumbPosition, trackSize, scrollFromPointer],
+  );
 
   if (!visibleByType) return null;
 
   return (
-    <ScrollbarContext.Provider
-      value={{ orientation, thumbSize, thumbPosition, trackSize, scrollFromPointer }}
-    >
+    <ScrollbarContext.Provider value={scrollbarCtxValue}>
       <Comp
         ref={ref}
         role="scrollbar"

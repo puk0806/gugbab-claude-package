@@ -10,6 +10,7 @@ import {
   useCallback,
   useContext,
   useId,
+  useMemo,
   useState,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
@@ -87,10 +88,13 @@ const Field = forwardRef<HTMLDivElement, FormFieldProps>(function FormField(
   const clientInvalid = validity !== null && !validity.valid;
   const isInvalid = serverInvalid || clientInvalid;
 
+  const ctxValue = useMemo<FieldContextValue>(
+    () => ({ name, controlId, validity, value, serverInvalid, setValidity, setValue }),
+    [name, controlId, validity, value, serverInvalid],
+  );
+
   return (
-    <FieldContext.Provider
-      value={{ name, controlId, validity, value, serverInvalid, setValidity, setValue }}
-    >
+    <FieldContext.Provider value={ctxValue}>
       <Comp
         ref={ref}
         data-valid={!isInvalid ? '' : undefined}

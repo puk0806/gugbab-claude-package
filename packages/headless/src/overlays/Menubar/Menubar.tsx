@@ -11,7 +11,7 @@ import {
   useListNavigation,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -118,6 +118,7 @@ export interface MenubarMenuProps {
 
 function Menu({ value, placement = 'bottom-start', children }: MenubarMenuProps) {
   const bar = useMenubarContext('Menubar.Menu');
+  const { setValue: setBarValue } = bar;
   const isOpen = bar.value === value;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -126,7 +127,7 @@ function Menu({ value, placement = 'bottom-start', children }: MenubarMenuProps)
 
   const floating = useFloatingBase({
     open: isOpen,
-    onOpenChange: (next) => bar.setValue(next ? value : ''),
+    onOpenChange: (next) => setBarValue(next ? value : ''),
     placement,
   });
 
@@ -150,23 +151,42 @@ function Menu({ value, placement = 'bottom-start', children }: MenubarMenuProps)
   ]);
   const contentId = useId();
 
+  const setMenuOpen = useCallback(
+    (v: boolean) => setBarValue(v ? value : ''),
+    [setBarValue, value],
+  );
+  const { refs, context, floatingStyles } = floating;
+  const menuCtxValue = useMemo<MenuContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen: setMenuOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      elementsRef,
+      labelsRef,
+      activeIndex,
+      contentId,
+    }),
+    [
+      isOpen,
+      setMenuOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      activeIndex,
+      contentId,
+    ],
+  );
+
   return (
-    <MenuCtx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => bar.setValue(v ? value : ''),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        elementsRef,
-        labelsRef,
-        activeIndex,
-        contentId,
-      }}
-    >
+    <MenuCtx.Provider value={menuCtxValue}>
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {children}
       </FloatingList>
@@ -188,16 +208,13 @@ const Trigger = forwardRef<HTMLButtonElement, MenubarTriggerProps>(function Menu
 ) {
   const ctx = useMenuCtx('Menubar.Trigger');
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    ctx.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(ctx.refs.setReference, ref);
   const refProps = ctx.getReferenceProps(props) as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
     <Comp
       ref={setRef}
       type={asChild ? undefined : 'button'}
+      role="menuitem"
       aria-haspopup="menu"
       aria-expanded={ctx.open}
       aria-controls={ctx.contentId}
@@ -255,15 +272,9 @@ const Content = forwardRef<HTMLDivElement, MenubarContentProps>(function Menubar
 ) {
   const ctx = useMenuCtx('Menubar.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  const composeRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
   const Comp = asChild ? Slot : 'div';
-
-  const composeRef = (node: HTMLDivElement | null) => {
-    ctx.refs.setFloating(node);
-    presenceRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
 
   return (
     <DismissableLayer
@@ -314,11 +325,7 @@ const Item = forwardRef<HTMLButtonElement, MenubarItemProps>(function MenubarIte
   const inferredLabel = label ?? (typeof children === 'string' ? children : null);
   const { ref: itemRef } = useListItem({ label: inferredLabel });
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    itemRef(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(itemRef, ref);
   const itemProps = ctx.getItemProps({
     ...rest,
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -400,11 +407,7 @@ const CheckboxItem = forwardRef<HTMLButtonElement, MenubarCheckboxItemProps>(
     const inferredLabel = label ?? (typeof children === 'string' ? children : null);
     const { ref: itemRef } = useListItem({ label: inferredLabel });
     const Comp = asChild ? Slot : 'button';
-    const setRef = (node: HTMLButtonElement | null) => {
-      itemRef(node);
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
+    const setRef = useMergedRefs<HTMLButtonElement>(itemRef, ref);
     const itemProps = ctx.getItemProps({
       ...rest,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -505,11 +508,7 @@ const RadioItem = forwardRef<HTMLButtonElement, MenubarRadioItemProps>(function 
   const inferredLabel = label ?? (typeof children === 'string' ? children : null);
   const { ref: itemRef } = useListItem({ label: inferredLabel });
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    itemRef(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(itemRef, ref);
   const itemProps = ctx.getItemProps({
     ...rest,
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -640,22 +639,36 @@ function Sub({ open, defaultOpen, onOpenChange, children }: MenubarSubProps) {
     if (!parent.open && isOpen) setOpen(false);
   }, [parent.open, isOpen, setOpen]);
 
+  const { refs, context, floatingStyles } = floating;
+  const subCtxValue = useMemo<SubContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      elementsRef,
+      labelsRef,
+      parent,
+    }),
+    [
+      isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      parent,
+    ],
+  );
+
   return (
-    <SubCtx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        elementsRef,
-        labelsRef,
-        parent,
-      }}
-    >
+    <SubCtx.Provider value={subCtxValue}>
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {children}
       </FloatingList>
@@ -681,12 +694,7 @@ const SubTrigger = forwardRef<HTMLButtonElement, MenubarSubTriggerProps>(functio
   const parentItem = useListItem({ label: inferredLabel });
   const Comp = asChild ? Slot : 'button';
 
-  const setRef = (node: HTMLButtonElement | null) => {
-    parentItem.ref(node);
-    sub.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(parentItem.ref, sub.refs.setReference, ref);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     onKeyDown?.(e);
@@ -751,6 +759,7 @@ const SubContent = forwardRef<HTMLDivElement, MenubarSubContentProps>(function M
 ) {
   const sub = useSubCtx('Menubar.SubContent');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(sub.open);
+  const composedRef = useMergedRefs<HTMLDivElement>(sub.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
   const Comp = asChild ? Slot : 'div';
 
@@ -774,12 +783,7 @@ const SubContent = forwardRef<HTMLDivElement, MenubarSubContentProps>(function M
         onUnmountAutoFocus={onCloseAutoFocus}
       >
         <Comp
-          ref={(node: HTMLDivElement | null) => {
-            sub.refs.setFloating(node);
-            presenceRef.current = node;
-            if (typeof ref === 'function') ref(node);
-            else if (ref) ref.current = node;
-          }}
+          ref={composedRef}
           style={{ ...sub.floatingStyles, ...style }}
           data-state={sub.open ? 'open' : 'closed'}
           {...sub.getFloatingProps(props)}

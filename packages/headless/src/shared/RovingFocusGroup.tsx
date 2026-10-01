@@ -120,7 +120,9 @@ export const RovingFocusGroup = forwardRef<HTMLDivElement, RovingFocusGroupProps
     return (
       <RovingFocusContext.Provider value={contextValue}>
         <Comp
-          tabIndex={0}
+          // Roving tabindex (APG): only the current item is in the tab order.
+          // The container itself stays out, otherwise Tab stops twice.
+          tabIndex={-1}
           data-orientation={orientation}
           data-roving-group="true"
           {...rest}

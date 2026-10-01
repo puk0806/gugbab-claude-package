@@ -4,6 +4,7 @@ import {
   createContext,
   forwardRef,
   type HTMLAttributes,
+  useCallback,
   useContext,
   useMemo,
 } from 'react';
@@ -90,16 +91,22 @@ const Root = forwardRef<HTMLElement, PaginationRootProps>(function PaginationRoo
     defaultValue: defaultPage ?? 1,
     onChange: onPageChange,
   });
+  const setPageClamped = useCallback(
+    (p: number) => setPage(Math.max(1, Math.min(pageCount, p))),
+    [setPage, pageCount],
+  );
+  const ctxValue = useMemo<PaginationContextValue>(
+    () => ({
+      page: current,
+      pageCount,
+      setPage: setPageClamped,
+      siblingCount,
+      boundaryCount,
+    }),
+    [current, pageCount, setPageClamped, siblingCount, boundaryCount],
+  );
   return (
-    <Ctx.Provider
-      value={{
-        page: current,
-        pageCount,
-        setPage: (p) => setPage(Math.max(1, Math.min(pageCount, p))),
-        siblingCount,
-        boundaryCount,
-      }}
-    >
+    <Ctx.Provider value={ctxValue}>
       <nav ref={ref} aria-label="pagination" {...rest} />
     </Ctx.Provider>
   );

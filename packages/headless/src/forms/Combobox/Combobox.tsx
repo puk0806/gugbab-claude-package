@@ -1,22 +1,26 @@
 import {
   FloatingFocusManager,
+  FloatingList,
   FloatingPortal,
   type Placement,
   useClick,
   useDismiss,
   useInteractions,
+  useListItem,
   useListNavigation,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
   forwardRef,
   type HTMLAttributes,
   type InputHTMLAttributes,
+  type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
   useContext,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -115,26 +119,44 @@ function ComboboxRoot({
     listNav,
   ]);
 
+  const { refs, context, floatingStyles } = floating;
+  const ctxValue = useMemo<ComboboxContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      value: current,
+      setValue,
+      inputValue: text,
+      setInputValue: setText,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      listRef,
+      activeIndex,
+    }),
+    [
+      isOpen,
+      setOpen,
+      current,
+      setValue,
+      text,
+      setText,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      activeIndex,
+    ],
+  );
+
   return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        value: current,
-        setValue: (v) => setValue(v),
-        inputValue: text,
-        setInputValue: (v) => setText(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        listRef,
-        activeIndex,
-      }}
-    >
-      {children}
+    <Ctx.Provider value={ctxValue}>
+      <FloatingList elementsRef={listRef}>{children}</FloatingList>
     </Ctx.Provider>
   );
 }
@@ -142,21 +164,13 @@ function ComboboxRoot({
 const Anchor = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   function ComboboxAnchor(props, ref) {
     const ctx = useCtx('Combobox.Anchor');
-    return (
-      <div
-        ref={(node) => {
-          ctx.refs.setReference(node);
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
-        {...props}
-      />
-    );
+    const composedRef = useMergedRefs<HTMLDivElement>(ctx.refs.setReference, ref);
+    return <div ref={composedRef} {...props} />;
   },
 );
 
 const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
-  function ComboboxInput({ onChange, onFocus, value, ...rest }, ref) {
+  function ComboboxInput({ onChange, onFocus, onKeyDown, value, ...rest }, ref) {
     const ctx = useCtx('Combobox.Input');
     return (
       <input
@@ -174,6 +188,23 @@ const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>
           onFocus: (e: React.FocusEvent<HTMLInputElement>) => {
             onFocus?.(e);
             if (!ctx.open) ctx.setOpen(true);
+          },
+          onKeyDown: (e: ReactKeyboardEvent<HTMLInputElement>) => {
+            onKeyDown?.(e);
+            if (e.defaultPrevented) return;
+            // Virtual focus: the active option never receives DOM focus, so
+            // Enter on the input commits it (reusing the item's click logic,
+            // which already guards `disabled`).
+            if (e.key !== 'Enter' || !ctx.open || ctx.activeIndex === null) return;
+            // IME composition (e.g. Hangul): this Enter confirms the composed
+            // text, not the option.
+            if (e.nativeEvent.isComposing || e.keyCode === 229) return;
+            // The active option can vanish when the list is filtered — then
+            // leave Enter alone so the surrounding form still submits.
+            const active = ctx.listRef.current[ctx.activeIndex];
+            if (!active) return;
+            e.preventDefault();
+            active.click();
           },
         })}
       />
@@ -209,15 +240,19 @@ const Content = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(funct
   ref,
 ) {
   const ctx = useCtx('Combobox.Content');
+  const composedRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, ref);
   if (!ctx.open) return null;
   return (
-    <FloatingFocusManager context={ctx.context} initialFocus={-1} visuallyHiddenDismiss>
+    // modal={false}: focus stays in the input while typing (floating-ui's
+    // combobox pattern); a modal manager adds unnamed focus guards.
+    <FloatingFocusManager
+      context={ctx.context}
+      initialFocus={-1}
+      modal={false}
+      visuallyHiddenDismiss
+    >
       <div
-        ref={(node) => {
-          ctx.refs.setFloating(node);
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
+        ref={composedRef}
         style={{ ...ctx.floatingStyles, ...style }}
         data-state={ctx.open ? 'open' : 'closed'}
         {...ctx.getFloatingProps(props)}
@@ -236,20 +271,21 @@ const Item = forwardRef<HTMLButtonElement, ComboboxItemProps>(function ComboboxI
 ) {
   const ctx = useCtx('Combobox.Item');
   const selected = ctx.value === itemValue;
+  // FloatingList owns registration: index follows DOM order and unmounted
+  // items are removed, so reopening/filtering never leaves stale nodes.
+  const { ref: listItemRef, index } = useListItem();
+  const composedRef = useMergedRefs<HTMLButtonElement>(listItemRef, ref);
+  // `index` is null until FloatingList registers the item; without this guard
+  // every item would match `activeIndex === null` on its first commit.
+  const highlighted = index !== null && ctx.activeIndex === index;
 
   return (
     <button
-      ref={(node) => {
-        if (node) {
-          const idx = ctx.listRef.current.indexOf(node);
-          if (idx === -1) ctx.listRef.current.push(node);
-        }
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={composedRef}
       type={type}
       role="option"
       aria-selected={selected}
+      data-highlighted={highlighted ? '' : undefined}
       disabled={disabled}
       {...ctx.getItemProps({
         ...rest,

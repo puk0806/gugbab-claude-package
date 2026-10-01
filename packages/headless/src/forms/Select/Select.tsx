@@ -11,7 +11,7 @@ import {
   useRole,
   useTypeahead,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -165,31 +165,52 @@ function SelectRoot({
 
   const selectedLabel = valueLabelMap[current] ?? '';
 
+  const { refs, context, floatingStyles } = floating;
+  const ctxValue = useMemo<SelectContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      value: current,
+      setValue,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      elementsRef,
+      labelsRef,
+      activeIndex,
+      registerLabel,
+      unregisterLabel,
+      selectedLabel,
+      name,
+      form,
+      position: 'popper',
+      contentRef,
+    }),
+    [
+      isOpen,
+      setOpen,
+      current,
+      setValue,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      activeIndex,
+      registerLabel,
+      unregisterLabel,
+      selectedLabel,
+      name,
+      form,
+    ],
+  );
+
   return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        value: current,
-        setValue: (v) => setValue(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        elementsRef,
-        labelsRef,
-        activeIndex,
-        registerLabel,
-        unregisterLabel,
-        selectedLabel,
-        name,
-        form,
-        position: 'popper',
-        contentRef,
-      }}
-    >
+    <Ctx.Provider value={ctxValue}>
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {children}
       </FloatingList>
@@ -211,12 +232,7 @@ const Trigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(function Selec
   const Comp = asChild ? Slot : 'button';
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
-  const setRef = (node: HTMLButtonElement | null) => {
-    triggerRef.current = node;
-    ctx.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(triggerRef, ctx.refs.setReference, ref);
   const refProps = ctx.getReferenceProps(props) as ButtonHTMLAttributes<HTMLButtonElement>;
 
   return (
@@ -283,6 +299,12 @@ const Content = forwardRef<HTMLDivElement, SelectContentProps>(function SelectCo
 ) {
   const ctx = useCtx('Select.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  const composedRef = useMergedRefs<HTMLDivElement>(
+    ctx.refs.setFloating,
+    ctx.contentRef,
+    presenceRef,
+    ref,
+  );
   if (!mounted && !forceMount) return null;
 
   // item-aligned: override positioning so the floating element sits directly
@@ -301,13 +323,7 @@ const Content = forwardRef<HTMLDivElement, SelectContentProps>(function SelectCo
   return (
     <FloatingFocusManager context={ctx.context} modal={false}>
       <div
-        ref={(node) => {
-          ctx.refs.setFloating(node);
-          ctx.contentRef.current = node;
-          presenceRef.current = node;
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
+        ref={composedRef}
         style={positionStyle}
         data-state={ctx.open ? 'open' : 'closed'}
         data-position={position}
@@ -443,11 +459,7 @@ const Item = forwardRef<HTMLButtonElement, SelectItemProps>(function SelectItem(
   }, [registerLabel, unregisterLabel, itemValue, itemLabel]);
 
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    listItemRef(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(listItemRef, ref);
 
   return (
     <Comp

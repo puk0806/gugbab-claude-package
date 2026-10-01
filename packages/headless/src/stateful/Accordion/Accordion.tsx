@@ -101,18 +101,21 @@ const SingleRoot = forwardRef<HTMLDivElement, AccordionSingleProps & { disabled:
       [current, collapsible, setCurrent],
     );
 
+    const ctxValue = useMemo<AccordionContextValue>(
+      () => ({
+        type: 'single',
+        value: values,
+        disabled,
+        collapsible,
+        orientation,
+        dir: resolvedDir,
+        toggle,
+      }),
+      [values, disabled, collapsible, orientation, resolvedDir, toggle],
+    );
+
     return (
-      <AccordionContext.Provider
-        value={{
-          type: 'single',
-          value: values,
-          disabled,
-          collapsible,
-          orientation,
-          dir: resolvedDir,
-          toggle,
-        }}
-      >
+      <AccordionContext.Provider value={ctxValue}>
         <Impl ref={ref} disabled={disabled} orientation={orientation} dir={resolvedDir} {...rest} />
       </AccordionContext.Provider>
     );
@@ -139,18 +142,21 @@ const MultipleRoot = forwardRef<HTMLDivElement, AccordionMultipleProps & { disab
       [setCurrent],
     );
 
+    const ctxValue = useMemo<AccordionContextValue>(
+      () => ({
+        type: 'multiple',
+        value: current,
+        disabled,
+        collapsible: true,
+        orientation,
+        dir: resolvedDir,
+        toggle,
+      }),
+      [current, disabled, orientation, resolvedDir, toggle],
+    );
+
     return (
-      <AccordionContext.Provider
-        value={{
-          type: 'multiple',
-          value: current,
-          disabled,
-          collapsible: true,
-          orientation,
-          dir: resolvedDir,
-          toggle,
-        }}
-      >
+      <AccordionContext.Provider value={ctxValue}>
         <Impl ref={ref} disabled={disabled} orientation={orientation} dir={resolvedDir} {...rest} />
       </AccordionContext.Provider>
     );
@@ -202,11 +208,13 @@ const Item = forwardRef<HTMLDivElement, AccordionItemProps>(function AccordionIt
   const itemDisabled = disabled ?? root.disabled;
   const triggerId = useId();
   const contentId = useId();
+  const itemCtxValue = useMemo<AccordionItemContextValue>(
+    () => ({ open, disabled: itemDisabled, value, triggerId, contentId }),
+    [open, itemDisabled, value, triggerId, contentId],
+  );
 
   return (
-    <AccordionItemContext.Provider
-      value={{ open, disabled: itemDisabled, value, triggerId, contentId }}
-    >
+    <AccordionItemContext.Provider value={itemCtxValue}>
       <div
         ref={ref}
         data-state={open ? 'open' : 'closed'}
@@ -218,21 +226,34 @@ const Item = forwardRef<HTMLDivElement, AccordionItemProps>(function AccordionIt
   );
 });
 
-const Header = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadingElement>>(
-  function AccordionHeader(props, ref) {
-    const root = useAccordionContext('Accordion.Header');
-    const item = useAccordionItemContext('Accordion.Header');
-    return (
-      <h3
-        ref={ref}
-        data-state={item.open ? 'open' : 'closed'}
-        data-disabled={item.disabled ? '' : undefined}
-        data-orientation={root.orientation}
-        {...props}
-      />
-    );
-  },
-);
+export interface AccordionHeaderProps extends HTMLAttributes<HTMLHeadingElement> {
+  /**
+   * Heading level — match the page outline (WCAG 1.3.1).
+   * @defaultValue 3
+   */
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+const HEADING_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
+
+const Header = forwardRef<HTMLHeadingElement, AccordionHeaderProps>(function AccordionHeader(
+  { level = 3, ...props },
+  ref,
+) {
+  const root = useAccordionContext('Accordion.Header');
+  const item = useAccordionItemContext('Accordion.Header');
+  // Out-of-range input (untyped callers) falls back to the default h3.
+  const Tag = HEADING_TAGS[level - 1] ?? 'h3';
+  return (
+    <Tag
+      ref={ref}
+      data-state={item.open ? 'open' : 'closed'}
+      data-disabled={item.disabled ? '' : undefined}
+      data-orientation={root.orientation}
+      {...props}
+    />
+  );
+});
 
 export interface AccordionTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
@@ -301,14 +322,11 @@ const Content = forwardRef<HTMLDivElement, AccordionContentProps>(function Accor
   const root = useAccordionContext('Accordion.Content');
   const item = useAccordionItemContext('Accordion.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(item.open);
+  const composedRef = useMergedRefs<HTMLDivElement>(presenceRef, ref);
   if (!mounted && !forceMount) return null;
   return (
     <div
-      ref={(node) => {
-        presenceRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={composedRef}
       id={item.contentId}
       role="region"
       aria-labelledby={item.triggerId}

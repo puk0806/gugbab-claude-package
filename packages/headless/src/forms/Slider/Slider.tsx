@@ -1,4 +1,4 @@
-import { useControllableState, useIsomorphicLayoutEffect } from '@gugbab/hooks';
+import { useControllableState, useIsomorphicLayoutEffect, useMergedRefs } from '@gugbab/hooks';
 import {
   createContext,
   forwardRef,
@@ -8,6 +8,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -147,7 +148,9 @@ interface SliderBubbleInputProps {
 
 function SliderBubbleInput({ name, value, disabled }: SliderBubbleInputProps) {
   const ref = useRef<HTMLInputElement | null>(null);
-  const prevValue = useRef<number | undefined>(undefined);
+  // Seed with the initial value so mounting does not dispatch a synthetic
+  // input event (forms would see an `onInput`/`onChange` on first render).
+  const prevValue = useRef<number>(value);
 
   useEffect(() => {
     const input = ref.current;
@@ -275,27 +278,45 @@ const Root = forwardRef<HTMLDivElement, SliderRootProps>(function SliderRoot(
     onValueCommit?.(valuesRef.current);
   }, [onValueCommit]);
 
+  const ctxValue = useMemo<SliderContextValue>(
+    () => ({
+      values,
+      setValue,
+      setValueAndCommit,
+      commit,
+      min,
+      max,
+      step,
+      orientation,
+      disabled,
+      dir,
+      inverted,
+      name,
+      trackRef,
+      activeThumbRef,
+      thumbCount,
+      registerThumb,
+    }),
+    [
+      values,
+      setValue,
+      setValueAndCommit,
+      commit,
+      min,
+      max,
+      step,
+      orientation,
+      disabled,
+      dir,
+      inverted,
+      name,
+      thumbCount,
+      registerThumb,
+    ],
+  );
+
   return (
-    <Ctx.Provider
-      value={{
-        values,
-        setValue,
-        setValueAndCommit,
-        commit,
-        min,
-        max,
-        step,
-        orientation,
-        disabled,
-        dir,
-        inverted,
-        name,
-        trackRef,
-        activeThumbRef,
-        thumbCount,
-        registerThumb,
-      }}
-    >
+    <Ctx.Provider value={ctxValue}>
       <div
         ref={ref}
         data-orientation={orientation}
@@ -330,6 +351,7 @@ const Track = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(funct
   ref,
 ) {
   const ctx = useCtx('Slider.Track');
+  const composedRef = useMergedRefs<HTMLSpanElement>(ctx.trackRef, ref);
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLSpanElement>) => {
     onPointerDown?.(event);
@@ -377,11 +399,7 @@ const Track = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(funct
 
   return (
     <span
-      ref={(node) => {
-        ctx.trackRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={composedRef}
       data-orientation={ctx.orientation}
       data-disabled={ctx.disabled ? '' : undefined}
       onPointerDown={handlePointerDown}
@@ -447,7 +465,8 @@ const Thumb = forwardRef<HTMLSpanElement, SliderThumbProps>(function SliderThumb
   // Returns an unregister callback so the parent counter is kept in sync if
   // the Thumb unmounts (dynamic Thumb add/remove case).
   const autoIndexRef = useRef<number | null>(null);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: register-once-on-mount pattern; re-registering on every dep change would corrupt the thumb index
+  // Register once on mount — re-registering on dep changes would corrupt the thumb index.
+  // (Biome does not treat useIsomorphicLayoutEffect as an effect hook, so no suppression is needed.)
   useIsomorphicLayoutEffect(() => {
     if (explicitIndex !== undefined) return;
     if (autoIndexRef.current !== null) return;
@@ -502,17 +521,16 @@ const Thumb = forwardRef<HTMLSpanElement, SliderThumbProps>(function SliderThumb
         e.preventDefault();
         svc(index, value - ctx.step);
         break;
+      // Only horizontal sliders reach these cases (vertical ones match
+      // incrementKey/decrementKey above). APG: Up=increase / Down=decrease
+      // regardless of RTL or `inverted`.
       case 'ArrowUp':
-        if (!horizontal) {
-          e.preventDefault();
-          svc(index, inverted ? value - ctx.step : value + ctx.step);
-        }
+        e.preventDefault();
+        svc(index, value + ctx.step);
         break;
       case 'ArrowDown':
-        if (!horizontal) {
-          e.preventDefault();
-          svc(index, inverted ? value + ctx.step : value - ctx.step);
-        }
+        e.preventDefault();
+        svc(index, value - ctx.step);
         break;
       case 'Home':
         e.preventDefault();
