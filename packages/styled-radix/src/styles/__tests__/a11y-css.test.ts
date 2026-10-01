@@ -15,8 +15,8 @@ function declarations(selector: string): string {
     const css = allCss.replace(/\/\*[\s\S]*?\*\//g, "");
     const out: string[] = [];
     for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-        const selectors = m[1].split(",").map((s) => s.trim().replace(/\s+/g, " "));
-        if (selectors.includes(selector)) out.push(m[2]);
+        const selectors = (m[1] ?? "").split(",").map((s) => s.trim().replace(/\s+/g, " "));
+        if (selectors.includes(selector)) out.push(m[2] ?? "");
     }
     return out.join(";");
 }
@@ -27,7 +27,7 @@ const VISIBLE_INDICATOR =
 
 describe(`${P} CSS — 포커스 표시 (WCAG 2.4.7)`, () => {
     it("rgba(var(--hex)) 같은 무효 색 표기가 없다 — 토큰이 hex라 규칙 전체가 무시된다", () => {
-        const offenders = files.filter((f) => /rgba\(\s*var\(/.test(sources[f]));
+        const offenders = files.filter((f) => /rgba\(\s*var\(/.test(sources[f] ?? ""));
         expect(offenders).toEqual([]);
     });
 
@@ -52,7 +52,7 @@ describe(`${P} CSS — 포커스 표시 (WCAG 2.4.7)`, () => {
     });
 
     it("DropdownMenu 항목은 헤드리스가 설정하지 않는 [data-highlighted] 에 기대지 않는다 (죽은 선택자)", () => {
-        expect(sources["dropdown-menu.css"]).not.toMatch(/__item\[data-highlighted\]/);
+        expect(sources["dropdown-menu.css"] ?? "").not.toMatch(/__item\[data-highlighted\]/);
     });
 
     it.each([
@@ -89,5 +89,51 @@ describe(`${P} CSS — 컨트롤 경계 비텍스트 대비 (WCAG 1.4.11)`, () =
         const decl = declarations(`.${P}-toast__close button`);
         expect(decl).toMatch(/color:\s*var\(--gugbab-color-fg-/); // 선택자가 사라져 헛통과하지 않게
         expect(decl).not.toContain("--gugbab-color-fg-muted");
+    });
+});
+
+describe(`${P} CSS — 사용자 환경 설정·타깃 크기`, () => {
+    const a11y = sources["zz-a11y.css"] ?? "";
+
+    it("접근성 규칙 파일이 번들에서 마지막에 로드된다 (이름순 정렬 — 앞 규칙을 덮어써야 함)", () => {
+        expect(files.at(-1)).toBe("zz-a11y.css");
+    });
+
+    it("prefers-reduced-motion 에서 이 패키지의 애니메이션·전환을 끈다 (WCAG 2.3.3)", () => {
+        const block = /@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/.exec(a11y)?.[1] ?? "";
+        expect(block).toContain(`[class*="${P}-"]`);
+        expect(block).toMatch(/animation-duration:\s*0\.01ms\s*!important/);
+        expect(block).toMatch(/transition-duration:\s*0\.01ms\s*!important/);
+    });
+
+    it.each([
+        `.${P}-switch`,
+        `.${P}-checkbox`,
+        `.${P}-radio-group__item`,
+    ])("forced-colors 에서 %s 의 경계와 켜짐 상태가 시스템 색으로 보인다 (배경색 소거 대응)", (selector) => {
+        const block = /@media \(forced-colors: active\)\s*\{([\s\S]*?)\n\}/.exec(a11y)?.[1] ?? "";
+        expect(block).toContain(selector);
+        expect(block).toMatch(/CanvasText|ButtonText/);
+        expect(block).toMatch(/Highlight/);
+    });
+
+    it.each([
+        `.${P}-checkbox`,
+        `.${P}-radio-group__item`,
+        `.${P}-switch`,
+        `.${P}-toast__close button`,
+    ])("%s 는 보이지 않는 히트 영역으로 최소 24px 타깃을 보장한다 (WCAG 2.5.8)", (selector) => {
+        const hit = declarations(`${selector}::before`);
+        expect(hit).toMatch(/content:\s*""/);
+        expect(hit).toMatch(/min-width:\s*24px/);
+        expect(hit).toMatch(/min-height:\s*24px/);
+    });
+
+    it("히트 영역용 position 은 :where() 로 감싸 소비자의 position 재정의를 이기지 않는다 (경계)", () => {
+        const css = a11y.replace(/\/\*[\s\S]*?\*\//g, "");
+        const rule = css.match(/([^{}]+)\{\s*position:\s*relative;?\s*\}/);
+        expect(rule?.[1]?.trim()).toMatch(/^:where\(/);
+        // 특이도 0 이 아닌 형태로 새 position 을 강제하지 않는다
+        expect(css).not.toMatch(new RegExp(`(^|\\})\\s*\\.${P}-[a-z_-]+\\s*\\{[^}]*position:\\s*relative`));
     });
 });
