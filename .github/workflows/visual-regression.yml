@@ -58,10 +58,16 @@ jobs:
 
       - name: Detect mode
         id: mode
+        # Event fields go through env, not ${{ }} in the script: a label name is
+        # user-controlled text (the job-level `if` guards it today, but not forever).
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_ACTION: ${{ github.event.action }}
+          LABEL_NAME: ${{ github.event.label.name }}
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ] \
-              && [ "${{ github.event.action }}" = "labeled" ] \
-              && [ "${{ github.event.label.name }}" = "accept-baseline" ]; then
+          if [ "$EVENT_NAME" = "pull_request" ] \
+              && [ "$EVENT_ACTION" = "labeled" ] \
+              && [ "$LABEL_NAME" = "accept-baseline" ]; then
             echo "mode=accept" >> $GITHUB_OUTPUT
             echo "→ accept-baseline 라벨 감지 — baseline 갱신 모드"
           elif [ "${{ steps.changes.outputs.visual }}" != "true" ]; then
