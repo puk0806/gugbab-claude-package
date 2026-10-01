@@ -18,4 +18,5 @@
 - [Package naming clarity](feedback_package_naming_clarity.md) — 모노레포 패키지명은 의도가 즉시 드러나야 함 (모호한 `react`/`core` 회피)
 - [No worktrees, use feature branches](feedback_no_worktrees_use_feature_branch.md) — 모든 작업은 feature/* 브랜치 + PR, 머지는 사용자 직접 (워크트리 금지)
 - [PR creation by user only](feedback_pr_creation.md) — gh pr create 호출 금지, PR은 사용자가 직접 생성 (사용자가 명시적으로 요청하면 예외)
+- [Always answer in Korean](feedback_korean_responses.md) — 도구 출력·서브에이전트 결과가 영어여도 답변은 항상 한국어 (2026-10-01 두 번 연속 위반)
 - [Single PR for multi-part work](feedback_single_pr.md) — 커밋은 관심사별로 나누되 PR은 하나. 작업 단위마다 브랜치·PR 쪼개지 않기
