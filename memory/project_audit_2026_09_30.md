@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: f35db723-e646-4a91-90c9-1860c939e8df
-  modified: 2026-10-01T01:31:55.166Z
+  modified: 2026-10-01T04:39:07.610Z
 ---
 
 2026-09-30 전체 프로젝트 점검. a11y-auditor, security-auditor, codebase-domain-analyst, qa-engineer, pr-reviewer를 병렬로 돌렸다. 2026-10-01까지 모든 순위 작업을 마쳤다.
@@ -21,6 +21,12 @@ metadata:
 - feature PR 머지 = npm 자동 게시. 머지 시점은 사용자가 정한다. 4순위는 기본 외관이 바뀌므로 PR에서 VR `accept-baseline`이 필요하다
 
 **교훈 (병합 시뮬레이션이 잡은 것):** 텍스트 충돌이 없어도 브랜치 사이 의미 충돌이 생긴다. 3순위의 테스트 타입 검사와 1·4순위 새 테스트, 1순위의 headless Biome 활성화와 3순위 파일 포맷, 전체 HTML 스냅샷과 headless 마크업 변경이 그랬다. 여러 브랜치를 만들면 합친 트리에서 검증한다. styled 스냅샷은 접두사 클래스 요소만 고정한다.
+
+**전체 Claude 리뷰 (2026-10-01, 사용자 요청: Codex 대신 pr-reviewer 6개 병렬):**
+- 반영: Toast onClickCapture 소실(1), 토큰 검사기 주석·url() 우회(4), 비모달 Dialog 포커스(4), RadioGroup dir 상속(4), NavigationMenu SSR 경고(4), SSE CR 구분자·재분할 비용(2), groupBy 호환(2), VR 라벨 env(2), private 참조 빌드 가드(styled-factory), codex 마커 추적 해제(cleanup)
+- 오탐(테스트로 확인): 거부된 바깥 닫힘 뒤 포커스 유실, SSE BOM
+- 설치본 자산의 끊긴 참조(agent-design.md·skill-tester 등)는 원본 세션(00-gugbab-claude)에 SendMessage로 제보했다
+- semver 판단 대기: 1순위 DOM 계약 변경, 2순위 SSE·withRetry 동작 변경, 4순위 토큰 TypeError가 모두 minor다. major 여부는 사용자가 결정한다
 
 **사용자 결정 대기:**
 - D1 npm OIDC Trusted Publishing: 패키지 9개 등록 필요, pnpm publish의 OIDC 지원 미확인
