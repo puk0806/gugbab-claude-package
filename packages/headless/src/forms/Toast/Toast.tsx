@@ -397,6 +397,7 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
   const swipeDeltaRef = useRef<{ x: number; y: number } | null>(null);
   // Swallow only the click the browser fires right after a swipe's pointerup.
   const suppressClickRef = useRef(false);
+  const suppressClickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const duration = durationProp ?? ctx.duration;
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeTimerStartRef = useRef(0);
@@ -462,6 +463,7 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
   useEffect(() => {
     return () => {
       if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      if (suppressClickTimerRef.current) clearTimeout(suppressClickTimerRef.current);
     };
   }, []);
 
@@ -527,11 +529,14 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
       // dispatch the click in the same task as pointerup, so clear the flag
       // on the next task.
       suppressClickRef.current = true;
-      window.setTimeout(() => {
+      if (suppressClickTimerRef.current) clearTimeout(suppressClickTimerRef.current);
+      suppressClickTimerRef.current = setTimeout(() => {
         suppressClickRef.current = false;
+        suppressClickTimerRef.current = null;
       }, 0);
     },
     onClickCapture: (e: ReactMouseEvent<HTMLLIElement>) => {
+      rest.onClickCapture?.(e);
       if (!suppressClickRef.current) return;
       suppressClickRef.current = false;
       e.preventDefault();
