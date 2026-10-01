@@ -1,13 +1,17 @@
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
   forwardRef,
   type HTMLAttributes,
   type ReactNode,
+  type RefObject,
   useContext,
   useId,
+  useLayoutEffect,
   useMemo,
+  useRef,
+  useState,
 } from 'react';
 
 interface NavigationMenuContextValue {
@@ -24,7 +28,11 @@ const useCtx = (n: string) => {
 
 interface NavigationMenuItemContextValue {
   value: string;
+  /** The trigger's rendered id — the consumer's `id` if given, else a generated one. */
   triggerId: string;
+  defaultTriggerId: string;
+  setTriggerId: (id: string) => void;
+  triggerRef: RefObject<HTMLButtonElement | null>;
   contentId: string;
   open: boolean;
 }
@@ -75,20 +83,45 @@ export interface NavigationMenuItemProps extends HTMLAttributes<HTMLLIElement> {
 }
 
 const Item = forwardRef<HTMLLIElement, NavigationMenuItemProps>(function NavigationMenuItem(
-  { value, children, ...rest },
+  { value, children, onKeyDown, ...rest },
   ref,
 ) {
   const ctx = useCtx('NavigationMenu.Item');
   const open = ctx.value === value;
-  const triggerId = useId();
+  const generatedTriggerId = useId();
+  const [triggerId, setTriggerId] = useState(generatedTriggerId);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
   const contentId = useId();
   const itemCtxValue = useMemo(
-    () => ({ value, triggerId, contentId, open }),
-    [value, triggerId, contentId, open],
+    () => ({
+      value,
+      triggerId,
+      defaultTriggerId: generatedTriggerId,
+      setTriggerId,
+      triggerRef,
+      contentId,
+      open,
+    }),
+    [value, triggerId, generatedTriggerId, contentId, open],
   );
   return (
     <ItemCtx.Provider value={itemCtxValue}>
-      <li ref={ref} data-state={open ? 'open' : 'closed'} {...rest}>
+      <li
+        ref={ref}
+        data-state={open ? 'open' : 'closed'}
+        onKeyDown={(e) => {
+          onKeyDown?.(e);
+          if (e.defaultPrevented || e.key !== 'Escape' || !open) return;
+          // APG disclosure navigation: Escape closes the open submenu and
+          // returns focus to its trigger.
+          // Handled here — don't let an enclosing Dialog/Popover close too.
+          e.preventDefault();
+          e.stopPropagation();
+          ctx.setValue('');
+          triggerRef.current?.focus();
+        }}
+        {...rest}
+      >
         {children}
       </li>
     </ItemCtx.Provider>
@@ -96,14 +129,21 @@ const Item = forwardRef<HTMLLIElement, NavigationMenuItemProps>(function Navigat
 });
 
 const Trigger = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement>>(
-  function NavigationMenuTrigger({ onClick, type = 'button', ...rest }, ref) {
+  function NavigationMenuTrigger({ onClick, type = 'button', id: idProp, ...rest }, ref) {
     const nav = useCtx('NavigationMenu.Trigger');
     const item = useItem('NavigationMenu.Trigger');
+    const setRef = useMergedRefs<HTMLButtonElement>(item.triggerRef, ref);
+    // Same default as Item's initial triggerId, so server HTML is consistent.
+    const id = idProp ?? item.defaultTriggerId;
+    const { setTriggerId } = item;
+    // Content's aria-labelledby must point at the id actually rendered. Setting the
+    // same string again is a no-op, so this cannot loop.
+    useLayoutEffect(() => setTriggerId(id), [id, setTriggerId]);
     return (
       <button
-        ref={ref}
+        ref={setRef}
         type={type}
-        id={item.triggerId}
+        id={id}
         aria-controls={item.contentId}
         aria-expanded={item.open}
         data-state={item.open ? 'open' : 'closed'}
@@ -133,10 +173,23 @@ const Content = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   },
 );
 
-const Link = forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement>>(
-  function NavigationMenuLink(props, ref) {
-    return <a ref={ref} {...props} />;
-  },
-);
+export interface NavigationMenuLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  /** Marks the link for the current page — sets `aria-current="page"` and `data-active`. */
+  active?: boolean;
+}
+
+const Link = forwardRef<HTMLAnchorElement, NavigationMenuLinkProps>(function NavigationMenuLink(
+  { active, ...props },
+  ref,
+) {
+  return (
+    <a
+      ref={ref}
+      aria-current={active ? 'page' : undefined}
+      data-active={active ? '' : undefined}
+      {...props}
+    />
+  );
+});
 
 export const NavigationMenu = { Root, List, Item, Trigger, Content, Link };
