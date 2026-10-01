@@ -107,17 +107,16 @@ describe('Toast.Provider + Toast.Viewport', () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
-  it('Viewport renders as <ol role="region">', () => {
+  it('Viewport renders as <ol> inside a labelled region landmark', () => {
     render(<MultiToast count={1} />);
     const vp = screen.getByTestId('viewport');
     expect(vp.tagName).toBe('OL');
-    expect(vp).toHaveAttribute('role', 'region');
+    expect(vp.closest('[role="region"]')).not.toBeNull();
   });
 
   it('Viewport aria-label includes hotkey placeholder substitution', () => {
     render(<MultiToast count={1} />);
-    const vp = screen.getByTestId('viewport');
-    const label = vp.getAttribute('aria-label') ?? '';
+    const label = screen.getByRole('region').getAttribute('aria-label') ?? '';
     // Default label replaces {hotkey} with 'F8'
     expect(label).toContain('F8');
   });

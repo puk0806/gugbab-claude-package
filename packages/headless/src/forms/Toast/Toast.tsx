@@ -5,6 +5,7 @@ import {
   forwardRef,
   type HTMLAttributes,
   type KeyboardEvent as ReactKeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
   type PointerEvent as ReactPointerEvent,
   useCallback,
@@ -122,25 +123,33 @@ function Provider({
   const onToastAdd = useCallback(() => setToastCount((c) => c + 1), []);
   const onToastRemove = useCallback(() => setToastCount((c) => c - 1), []);
 
-  return (
-    <ProviderCtx.Provider
-      value={{
-        label,
-        duration,
-        swipeDirection,
-        swipeThreshold,
-        viewport,
-        onViewportChange: setViewport,
-        onToastAdd,
-        onToastRemove,
-        toastCount,
-        isFocusedToastEscapeKeyDownRef,
-        isClosePausedRef,
-      }}
-    >
-      {children}
-    </ProviderCtx.Provider>
+  const ctxValue = useMemo<ToastProviderContextValue>(
+    () => ({
+      label,
+      duration,
+      swipeDirection,
+      swipeThreshold,
+      viewport,
+      onViewportChange: setViewport,
+      onToastAdd,
+      onToastRemove,
+      toastCount,
+      isFocusedToastEscapeKeyDownRef,
+      isClosePausedRef,
+    }),
+    [
+      label,
+      duration,
+      swipeDirection,
+      swipeThreshold,
+      viewport,
+      onToastAdd,
+      onToastRemove,
+      toastCount,
+    ],
   );
+
+  return <ProviderCtx.Provider value={ctxValue}>{children}</ProviderCtx.Provider>;
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -270,16 +279,16 @@ const Viewport = forwardRef<HTMLOListElement, ToastViewportProps>(function Toast
   }, []);
 
   return (
-    <div ref={wrapperRef} style={{ pointerEvents: hasToasts ? undefined : 'none' }}>
+    // The landmark lives on the wrapper so the <ol> keeps list semantics
+    // (role="region" is not an allowed role for <ol>).
+    <div
+      ref={wrapperRef}
+      role="region"
+      aria-label={label.replace('{hotkey}', hotkeyLabel)}
+      style={{ pointerEvents: hasToasts ? undefined : 'none' }}
+    >
       {hasToasts && <FocusProxy ref={headProxyRef} viewport={internalRef} direction="forwards" />}
-      <ol
-        tabIndex={-1}
-        role="region"
-        aria-label={label.replace('{hotkey}', hotkeyLabel)}
-        {...rest}
-        ref={setRef}
-        style={style}
-      />
+      <ol tabIndex={-1} {...rest} ref={setRef} style={style} />
       {hasToasts && <FocusProxy ref={tailProxyRef} viewport={internalRef} direction="backwards" />}
     </div>
   );
@@ -330,8 +339,8 @@ export interface ToastRootProps extends HTMLAttributes<HTMLLIElement> {
   onOpenChange?: (open: boolean) => void;
   /**
    * Toast urgency type.
-   * - `'foreground'` → role="status" aria-live="assertive"
-   * - `'background'` → role="status" aria-live="polite"
+   * - `'foreground'` → announced via the live-region Announcer with aria-live="assertive"
+   * - `'background'` → announced with aria-live="polite"
    * @defaultValue 'foreground'
    */
   type?: 'foreground' | 'background';
@@ -383,6 +392,8 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
   const [node, setNode] = useState<HTMLLIElement | null>(null);
   const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
   const swipeDeltaRef = useRef<{ x: number; y: number } | null>(null);
+  // Swallow only the click the browser fires right after a swipe's pointerup.
+  const suppressClickRef = useRef(false);
   const duration = durationProp ?? ctx.duration;
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeTimerStartRef = useRef(0);
@@ -515,17 +526,29 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
         if (node)
           dispatchSwipeEvent(TOAST_SWIPE_CANCEL, onSwipeCancel, node, e.nativeEvent, delta, true);
       }
-      e.currentTarget.addEventListener('click', (ev) => ev.preventDefault(), { once: true });
+      // A persistent { once: true } listener would linger when no click
+      // follows (e.g. touch) and block the next genuine click. Browsers
+      // dispatch the click in the same task as pointerup, so clear the flag
+      // on the next task.
+      suppressClickRef.current = true;
+      window.setTimeout(() => {
+        suppressClickRef.current = false;
+      }, 0);
+    },
+    onClickCapture: (e: ReactMouseEvent<HTMLLIElement>) => {
+      if (!suppressClickRef.current) return;
+      suppressClickRef.current = false;
+      e.preventDefault();
     },
   };
 
   const li = (
     <InteractiveCtx.Provider value={interactiveCtxValue}>
+      {/* No live region here: the Announcer below is the single announcement
+          channel (a status role on the <li> was both an invalid role for <li>
+          and a second, duplicate announcement). */}
       <li
         tabIndex={0}
-        role="status"
-        aria-live={type === 'foreground' ? 'assertive' : 'polite'}
-        aria-atomic="true"
         data-state={open ? 'open' : 'closed'}
         data-type={type}
         data-swipe-direction={ctx.swipeDirection}
