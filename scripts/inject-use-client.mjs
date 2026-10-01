@@ -5,7 +5,7 @@
 // 사용:  node scripts/inject-use-client.mjs <file...>
 // 예:   node ../../scripts/inject-use-client.mjs dist/index.mjs dist/index.cjs
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const DIRECTIVE = '"use client";\n';
@@ -31,6 +31,17 @@ for (const arg of targets) {
         continue;
     }
     writeFileSync(p, DIRECTIVE + content, "utf8");
+    // The directive adds one line at the top — shift the sourcemap by one
+    // generated line (a leading ";" in VLQ mappings) so stack traces and
+    // debugger breakpoints still point at the right source line.
+    const mapPath = `${p}.map`;
+    if (existsSync(mapPath)) {
+        const map = JSON.parse(readFileSync(mapPath, "utf8"));
+        if (typeof map.mappings === "string") {
+            map.mappings = `;${map.mappings}`;
+            writeFileSync(mapPath, JSON.stringify(map), "utf8");
+        }
+    }
     touched++;
 }
 
