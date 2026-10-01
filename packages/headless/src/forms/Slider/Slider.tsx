@@ -1,4 +1,4 @@
-import { useControllableState, useIsomorphicLayoutEffect } from '@gugbab/hooks';
+import { useControllableState, useIsomorphicLayoutEffect, useMergedRefs } from '@gugbab/hooks';
 import {
   createContext,
   forwardRef,
@@ -351,6 +351,7 @@ const Track = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(funct
   ref,
 ) {
   const ctx = useCtx('Slider.Track');
+  const composedRef = useMergedRefs<HTMLSpanElement>(ctx.trackRef, ref);
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLSpanElement>) => {
     onPointerDown?.(event);
@@ -398,11 +399,7 @@ const Track = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(funct
 
   return (
     <span
-      ref={(node) => {
-        ctx.trackRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={composedRef}
       data-orientation={ctx.orientation}
       data-disabled={ctx.disabled ? '' : undefined}
       onPointerDown={handlePointerDown}

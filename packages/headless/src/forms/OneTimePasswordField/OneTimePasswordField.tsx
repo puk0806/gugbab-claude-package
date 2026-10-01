@@ -1,4 +1,4 @@
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ChangeEvent,
   type ClipboardEvent,
@@ -163,11 +163,7 @@ const Input = forwardRef<HTMLInputElement, OTPFieldInputProps>(function OTPField
     return ctx.registerInput(internalRef);
   }, [ctx]);
 
-  const setRef = (node: HTMLInputElement | null) => {
-    internalRef.current = node;
-    if (typeof forwardedRef === 'function') forwardedRef(node);
-    else if (forwardedRef) forwardedRef.current = node;
-  };
+  const setRef = useMergedRefs<HTMLInputElement>(internalRef, forwardedRef);
 
   const focusInput = (idx: number) => {
     const inputs = ctx.inputs;

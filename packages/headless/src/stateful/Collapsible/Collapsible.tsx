@@ -1,4 +1,4 @@
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -106,6 +106,7 @@ const Content = forwardRef<HTMLDivElement, CollapsibleContentProps>(function Col
   const ctx = useCollapsibleContext('Collapsible.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
   const sizeRef = useRef<HTMLDivElement | null>(null);
+  const composedRef = useMergedRefs<HTMLDivElement>(sizeRef, presenceRef, ref);
 
   useEffect(() => {
     const node = sizeRef.current;
@@ -126,12 +127,7 @@ const Content = forwardRef<HTMLDivElement, CollapsibleContentProps>(function Col
   if (!mounted && !forceMount) return null;
   return (
     <div
-      ref={(node) => {
-        sizeRef.current = node;
-        presenceRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={composedRef}
       id={ctx.contentId}
       role="region"
       aria-labelledby={ctx.triggerId}

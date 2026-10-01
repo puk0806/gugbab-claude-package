@@ -1,4 +1,4 @@
-import { useIsomorphicLayoutEffect } from '@gugbab/hooks';
+import { useIsomorphicLayoutEffect, useMergedRefs } from '@gugbab/hooks';
 import { forwardRef, type InputHTMLAttributes, useEffect, useRef, useState } from 'react';
 
 /**
@@ -25,6 +25,7 @@ export const BubbleInput = forwardRef<HTMLInputElement, BubbleInputProps>(functi
   forwardedRef,
 ) {
   const ref = useRef<HTMLInputElement | null>(null);
+  const composedRef = useMergedRefs<HTMLInputElement>(ref, forwardedRef);
   const prevChecked = usePrevious(checked);
   const controlSize = useSize(control);
 
@@ -49,11 +50,7 @@ export const BubbleInput = forwardRef<HTMLInputElement, BubbleInputProps>(functi
       defaultChecked={checked}
       tabIndex={-1}
       {...rest}
-      ref={(node) => {
-        ref.current = node;
-        if (typeof forwardedRef === 'function') forwardedRef(node);
-        else if (forwardedRef) forwardedRef.current = node;
-      }}
+      ref={composedRef}
       style={{
         ...style,
         ...controlSize,

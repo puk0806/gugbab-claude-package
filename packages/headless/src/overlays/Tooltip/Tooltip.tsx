@@ -6,7 +6,7 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -220,11 +220,7 @@ const Trigger = forwardRef<HTMLButtonElement, TooltipTriggerProps>(function Tool
 ) {
   const ctx = useCtx('Tooltip.Trigger');
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    ctx.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(ctx.refs.setReference, ref);
   const refProps = ctx.getReferenceProps(props) as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
     <Comp
@@ -266,15 +262,9 @@ const Content = forwardRef<HTMLDivElement, TooltipContentProps>(function Tooltip
 ) {
   const ctx = useCtx('Tooltip.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  const composeRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
   const Comp = asChild ? Slot : 'div';
-
-  const composeRef = (node: HTMLDivElement | null) => {
-    ctx.refs.setFloating(node);
-    presenceRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
 
   return (
     <DismissableLayer

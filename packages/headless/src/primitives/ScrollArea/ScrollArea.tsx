@@ -1,4 +1,4 @@
-import { useIsomorphicLayoutEffect } from '@gugbab/hooks';
+import { useIsomorphicLayoutEffect, useMergedRefs } from '@gugbab/hooks';
 import {
   createContext,
   forwardRef,
@@ -202,6 +202,7 @@ const Viewport = forwardRef<HTMLDivElement, ScrollAreaViewportProps>(function Sc
   const ctx = useCtx('ScrollArea.Viewport');
   const Comp = asChild ? Slot : 'div';
   const scrollTimerRef = useRef<number | null>(null);
+  const composedRef = useMergedRefs<HTMLDivElement>(ctx.setViewport, ref);
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     onScroll?.(e);
@@ -224,11 +225,7 @@ const Viewport = forwardRef<HTMLDivElement, ScrollAreaViewportProps>(function Sc
 
   return (
     <Comp
-      ref={(node: HTMLDivElement | null) => {
-        ctx.setViewport(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={composedRef}
       data-scroll-area-viewport=""
       style={{ overflow: 'scroll', ...style }}
       onScroll={handleScroll}

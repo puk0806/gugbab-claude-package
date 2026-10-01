@@ -10,7 +10,7 @@ import {
   useListNavigation,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -164,16 +164,8 @@ function ComboboxRoot({
 const Anchor = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   function ComboboxAnchor(props, ref) {
     const ctx = useCtx('Combobox.Anchor');
-    return (
-      <div
-        ref={(node) => {
-          ctx.refs.setReference(node);
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
-        {...props}
-      />
-    );
+    const composedRef = useMergedRefs<HTMLDivElement>(ctx.refs.setReference, ref);
+    return <div ref={composedRef} {...props} />;
   },
 );
 
@@ -248,6 +240,7 @@ const Content = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(funct
   ref,
 ) {
   const ctx = useCtx('Combobox.Content');
+  const composedRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, ref);
   if (!ctx.open) return null;
   return (
     // modal={false}: focus stays in the input while typing (floating-ui's
@@ -259,11 +252,7 @@ const Content = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(funct
       visuallyHiddenDismiss
     >
       <div
-        ref={(node) => {
-          ctx.refs.setFloating(node);
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
+        ref={composedRef}
         style={{ ...ctx.floatingStyles, ...style }}
         data-state={ctx.open ? 'open' : 'closed'}
         {...ctx.getFloatingProps(props)}
@@ -285,17 +274,14 @@ const Item = forwardRef<HTMLButtonElement, ComboboxItemProps>(function ComboboxI
   // FloatingList owns registration: index follows DOM order and unmounted
   // items are removed, so reopening/filtering never leaves stale nodes.
   const { ref: listItemRef, index } = useListItem();
+  const composedRef = useMergedRefs<HTMLButtonElement>(listItemRef, ref);
   // `index` is null until FloatingList registers the item; without this guard
   // every item would match `activeIndex === null` on its first commit.
   const highlighted = index !== null && ctx.activeIndex === index;
 
   return (
     <button
-      ref={(node) => {
-        listItemRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={composedRef}
       type={type}
       role="option"
       aria-selected={selected}
