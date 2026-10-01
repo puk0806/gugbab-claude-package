@@ -2,9 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { Dialog } from './Dialog';
 
-function Sample(
-  props: Parameters<typeof Dialog.Root>[0] = {} as Parameters<typeof Dialog.Root>[0],
-) {
+function Sample(props: Omit<Parameters<typeof Dialog.Root>[0], 'children'> = {}) {
   return (
     <Dialog.Root {...props}>
       <Dialog.Trigger>open</Dialog.Trigger>

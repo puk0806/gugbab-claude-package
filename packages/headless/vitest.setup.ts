@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach, expect } from 'vitest';
 import * as matchers from 'vitest-axe/matchers';
+import type { AxeMatchers } from 'vitest-axe/matchers';
 
 // jsdom does not implement PointerEvent — provide a minimal polyfill
 if (typeof window !== 'undefined' && !window.PointerEvent) {
@@ -26,10 +27,8 @@ afterEach(() => {
 });
 
 declare module 'vitest' {
-  interface Assertion<T = unknown> {
-    toHaveNoViolations(): T;
-  }
-  interface AsymmetricMatchersContaining {
-    toHaveNoViolations(): unknown;
-  }
+  // vitest 3 augmentation (vitest-axe/extend-expect still targets the legacy `Vi` namespace).
+  // The unused T satisfies TS2428 (merged interfaces need identical type parameters).
+  interface Assertion<T> extends AxeMatchers {}
+  interface AsymmetricMatchersContaining extends AxeMatchers {}
 }

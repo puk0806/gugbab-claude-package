@@ -24,7 +24,13 @@ describe("Separator (styled-radix)", () => {
 
     it("forwards ref", () => {
         let captured: HTMLDivElement | null = null;
-        render(<Separator ref={(el) => (captured = el)} />);
+        render(
+            <Separator
+                ref={(el) => {
+                    captured = el;
+                }}
+            />,
+        );
         expect(captured).toBeInstanceOf(HTMLDivElement);
     });
 });

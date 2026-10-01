@@ -52,7 +52,8 @@ describe("readSSEStream", () => {
 
         expect(events).toEqual([{ type: "done", summary: "summary text" }]);
         const done = events[0];
-        expect(done.type === "done" ? done.summary : undefined).toBe("summary text");
+        expect(done).toBeDefined();
+        expect(done?.type === "done" ? done.summary : undefined).toBe("summary text");
     });
 
     it("resolves when stream ends", async () => {

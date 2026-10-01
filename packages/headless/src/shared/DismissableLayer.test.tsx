@@ -128,7 +128,7 @@ describe('DismissableLayer — onEscapeKeyDown', () => {
     );
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(onEscapeKeyDown).toHaveBeenCalledTimes(1);
-    expect(onEscapeKeyDown.mock.calls[0][0]).toBeInstanceOf(KeyboardEvent);
+    expect(onEscapeKeyDown.mock.calls[0]?.[0]).toBeInstanceOf(KeyboardEvent);
   });
 
   it('does not fire on other keys', () => {
