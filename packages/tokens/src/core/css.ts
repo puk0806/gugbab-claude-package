@@ -90,8 +90,65 @@ export function tokensToVars(tokens: DesignTokens): Record<string, string> {
     return vars;
 }
 
+const SAFE_KEY = /^[a-z0-9._-]+$/i;
+const CLOSERS: Record<string, string> = { "(": ")", "[": "]", "{": "}" };
+
+/**
+ * Token values are emitted verbatim, so a custom theme must not be able to end
+ * the declaration or block (e.g. `red; } body { display: none`) or the
+ * surrounding `<style>` element. `;`/`{`/`}` are fine inside quotes or brackets
+ * (data URIs), as long as quotes close and brackets nest. Line breaks outside
+ * quotes are collapsed to a space. Returns the value to emit, or null if unsafe.
+ */
+function sanitizeValue(value: string): string | null {
+    if (value.includes("</")) return null;
+    const stack: string[] = [];
+    let quote = "";
+    let out = "";
+    for (let i = 0; i < value.length; i++) {
+        const ch = value.charAt(i);
+        if (ch === "\\") {
+            const next = value.charAt(i + 1);
+            if (next === "" || next === "\n" || next === "\r") return null;
+            out += ch + next;
+            i++;
+            continue;
+        }
+        if (quote) {
+            if (ch === "\n" || ch === "\r") return null;
+            if (ch === quote) quote = "";
+        } else if (ch === '"' || ch === "'") {
+            quote = ch;
+        } else if (ch === "(" || ch === "[" || ch === "{") {
+            if (ch === "{" && stack.length === 0) return null;
+            stack.push(CLOSERS[ch] ?? "");
+        } else if (ch === ")" || ch === "]" || ch === "}") {
+            if (stack.pop() !== ch) return null;
+        } else if (ch === ";" && stack.length === 0) {
+            return null;
+        } else if (ch === "\n" || ch === "\r") {
+            // Collapse the break and its surrounding indentation into one space.
+            out = `${out.trimEnd()} `;
+            while (/[ \t\n\r]/.test(value.charAt(i + 1))) i++;
+            continue;
+        }
+        out += ch;
+    }
+    if (quote || stack.length > 0) return null;
+    const trimmed = out.trim();
+    return trimmed === "" ? null : trimmed;
+}
+
 function setVar(map: Record<string, string>, key: string, value: string) {
-    map[`--gugbab-${key}`] = value;
+    if (!SAFE_KEY.test(key)) {
+        throw new TypeError(`Invalid token name "${key}" — use letters, digits, ".", "_" and "-" only`);
+    }
+    const safe = typeof value === "string" ? sanitizeValue(value) : null;
+    if (safe === null) {
+        throw new TypeError(`Invalid value for --gugbab-${key}: ${JSON.stringify(value)}`);
+    }
+    // `.` is not an identifier character — escape it so `space-0.5` stays one name.
+    map[`--gugbab-${key.replace(/\./g, "\\.")}`] = safe;
 }
 
 /**
@@ -112,7 +169,9 @@ export function renderThemeCss(theme: ThemeTokens, header?: string): string {
     const darkVars = tokensToVars(theme.dark);
 
     const lines: string[] = [];
-    if (header) lines.push(`/* ${header} */`, "");
+    // `*/` would close the comment early and expose the rest as CSS; `</` would end
+    // a surrounding <style> element if the output is inlined (HTML ignores comments).
+    if (header) lines.push(`/* ${header.replace(/\*\//g, "*\\/").replace(/<\//g, "<\\/")} */`, "");
     lines.push(":root {");
     lines.push(renderVars(lightVars));
     lines.push("}");
