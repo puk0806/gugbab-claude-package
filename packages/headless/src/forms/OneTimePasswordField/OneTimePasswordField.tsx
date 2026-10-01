@@ -9,6 +9,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
@@ -97,7 +98,11 @@ const Root = forwardRef<HTMLDivElement, OTPFieldRootProps>(function OTPFieldRoot
   const registerInput = useCallback((r: React.RefObject<HTMLInputElement | null>) => {
     inputsRef.current.push(r);
     return () => {
-      inputsRef.current = inputsRef.current.filter((x) => x !== r);
+      // Mutate in place: the memoized context hands this same array to Inputs,
+      // so reassigning would leave them holding a list with unmounted slots.
+      const list = inputsRef.current;
+      const i = list.indexOf(r);
+      if (i !== -1) list.splice(i, 1);
     };
   }, []);
   const getIndex = useCallback(
@@ -114,21 +119,28 @@ const Root = forwardRef<HTMLDivElement, OTPFieldRootProps>(function OTPFieldRoot
     [setCurrent, maxLength, inputType],
   );
 
+  const isLtr = direction === 'ltr';
+  // `inputs` is read from the ref during render on purpose: it is the live
+  // registration list handed to Inputs, which re-register whenever the context
+  // changes. The ref object itself is stable, so it is not a dependency.
+  const ctxValue = useMemo<OTPContextValue>(
+    () => ({
+      value: current,
+      setValue: setValueClamped,
+      maxLength,
+      inputs: inputsRef.current,
+      registerInput,
+      getIndex,
+      disabled,
+      isLtr,
+      inputType,
+    }),
+    [current, setValueClamped, maxLength, registerInput, getIndex, disabled, isLtr, inputType],
+  );
+
   const Comp = asChild ? Slot : 'div';
   return (
-    <OTPContext.Provider
-      value={{
-        value: current,
-        setValue: setValueClamped,
-        maxLength,
-        inputs: inputsRef.current,
-        registerInput,
-        getIndex,
-        disabled,
-        isLtr: direction === 'ltr',
-        inputType,
-      }}
-    >
+    <OTPContext.Provider value={ctxValue}>
       <Comp ref={ref} dir={direction} data-disabled={disabled ? '' : undefined} {...rest} />
     </OTPContext.Provider>
   );

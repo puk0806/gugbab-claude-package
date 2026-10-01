@@ -14,6 +14,7 @@ import {
   type HTMLAttributes,
   useContext,
   useId,
+  useMemo,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import {
@@ -101,21 +102,21 @@ function HoverCardRoot({
   const { getReferenceProps, getFloatingProps } = useInteractions([hover, role]);
   const contentId = useId();
 
-  return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        contentId,
-      }}
-    >
-      {children}
-    </Ctx.Provider>
+  const { refs, floatingStyles } = floating;
+  const ctxValue = useMemo<HoverCardContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      contentId,
+    }),
+    [isOpen, setOpen, refs, floatingStyles, getReferenceProps, getFloatingProps, contentId],
   );
+
+  return <Ctx.Provider value={ctxValue}>{children}</Ctx.Provider>;
 }
 
 const Trigger = forwardRef<HTMLAnchorElement, HoverCardTriggerProps>(function HoverCardTrigger(

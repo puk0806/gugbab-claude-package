@@ -22,6 +22,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -98,26 +99,36 @@ function ContextMenuRoot({ children }: ContextMenuRootProps) {
   ]);
   const contentId = useId();
 
-  return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs,
-        context,
-        floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        listRef,
-        activeIndex,
-        setCoords,
-        contentId,
-      }}
-    >
-      {children}
-    </Ctx.Provider>
+  const ctxValue = useMemo<ContextMenuContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      listRef,
+      activeIndex,
+      setCoords,
+      contentId,
+    }),
+    [
+      isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      activeIndex,
+      contentId,
+    ],
   );
+
+  return <Ctx.Provider value={ctxValue}>{children}</Ctx.Provider>;
 }
 
 const Trigger = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
@@ -345,23 +356,33 @@ function Sub({ open, defaultOpen, onOpenChange, children }: ContextMenuSubProps)
     if (!parent.open && isOpen) setOpen(false);
   }, [parent.open, isOpen, setOpen]);
 
-  return (
-    <SubCtx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        parent,
-      }}
-    >
-      {children}
-    </SubCtx.Provider>
+  const { refs, context, floatingStyles } = floating;
+  const subCtxValue = useMemo<ContextMenuSubContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      parent,
+    }),
+    [
+      isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      parent,
+    ],
   );
+
+  return <SubCtx.Provider value={subCtxValue}>{children}</SubCtx.Provider>;
 }
 
 export interface ContextMenuSubTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {

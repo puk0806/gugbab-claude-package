@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
@@ -55,16 +56,13 @@ const Root = forwardRef<HTMLDivElement, CollapsibleRootProps>(function Collapsib
   const contentId = useId();
   const triggerId = useId();
 
+  const ctxValue = useMemo<CollapsibleContextValue>(
+    () => ({ open: isOpen, disabled, contentId, triggerId, setOpen }),
+    [isOpen, disabled, contentId, triggerId, setOpen],
+  );
+
   return (
-    <CollapsibleContext.Provider
-      value={{
-        open: isOpen,
-        disabled,
-        contentId,
-        triggerId,
-        setOpen: (v) => setOpen(v),
-      }}
-    >
+    <CollapsibleContext.Provider value={ctxValue}>
       <div
         ref={ref}
         data-state={isOpen ? 'open' : 'closed'}

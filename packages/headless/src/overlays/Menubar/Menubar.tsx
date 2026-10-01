@@ -118,6 +118,7 @@ export interface MenubarMenuProps {
 
 function Menu({ value, placement = 'bottom-start', children }: MenubarMenuProps) {
   const bar = useMenubarContext('Menubar.Menu');
+  const { setValue: setBarValue } = bar;
   const isOpen = bar.value === value;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -126,7 +127,7 @@ function Menu({ value, placement = 'bottom-start', children }: MenubarMenuProps)
 
   const floating = useFloatingBase({
     open: isOpen,
-    onOpenChange: (next) => bar.setValue(next ? value : ''),
+    onOpenChange: (next) => setBarValue(next ? value : ''),
     placement,
   });
 
@@ -150,23 +151,42 @@ function Menu({ value, placement = 'bottom-start', children }: MenubarMenuProps)
   ]);
   const contentId = useId();
 
+  const setMenuOpen = useCallback(
+    (v: boolean) => setBarValue(v ? value : ''),
+    [setBarValue, value],
+  );
+  const { refs, context, floatingStyles } = floating;
+  const menuCtxValue = useMemo<MenuContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen: setMenuOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      elementsRef,
+      labelsRef,
+      activeIndex,
+      contentId,
+    }),
+    [
+      isOpen,
+      setMenuOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      activeIndex,
+      contentId,
+    ],
+  );
+
   return (
-    <MenuCtx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => bar.setValue(v ? value : ''),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        elementsRef,
-        labelsRef,
-        activeIndex,
-        contentId,
-      }}
-    >
+    <MenuCtx.Provider value={menuCtxValue}>
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {children}
       </FloatingList>
@@ -640,22 +660,36 @@ function Sub({ open, defaultOpen, onOpenChange, children }: MenubarSubProps) {
     if (!parent.open && isOpen) setOpen(false);
   }, [parent.open, isOpen, setOpen]);
 
+  const { refs, context, floatingStyles } = floating;
+  const subCtxValue = useMemo<SubContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      elementsRef,
+      labelsRef,
+      parent,
+    }),
+    [
+      isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      parent,
+    ],
+  );
+
   return (
-    <SubCtx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        elementsRef,
-        labelsRef,
-        parent,
-      }}
-    >
+    <SubCtx.Provider value={subCtxValue}>
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {children}
       </FloatingList>

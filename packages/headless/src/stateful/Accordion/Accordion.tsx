@@ -101,18 +101,21 @@ const SingleRoot = forwardRef<HTMLDivElement, AccordionSingleProps & { disabled:
       [current, collapsible, setCurrent],
     );
 
+    const ctxValue = useMemo<AccordionContextValue>(
+      () => ({
+        type: 'single',
+        value: values,
+        disabled,
+        collapsible,
+        orientation,
+        dir: resolvedDir,
+        toggle,
+      }),
+      [values, disabled, collapsible, orientation, resolvedDir, toggle],
+    );
+
     return (
-      <AccordionContext.Provider
-        value={{
-          type: 'single',
-          value: values,
-          disabled,
-          collapsible,
-          orientation,
-          dir: resolvedDir,
-          toggle,
-        }}
-      >
+      <AccordionContext.Provider value={ctxValue}>
         <Impl ref={ref} disabled={disabled} orientation={orientation} dir={resolvedDir} {...rest} />
       </AccordionContext.Provider>
     );
@@ -139,18 +142,21 @@ const MultipleRoot = forwardRef<HTMLDivElement, AccordionMultipleProps & { disab
       [setCurrent],
     );
 
+    const ctxValue = useMemo<AccordionContextValue>(
+      () => ({
+        type: 'multiple',
+        value: current,
+        disabled,
+        collapsible: true,
+        orientation,
+        dir: resolvedDir,
+        toggle,
+      }),
+      [current, disabled, orientation, resolvedDir, toggle],
+    );
+
     return (
-      <AccordionContext.Provider
-        value={{
-          type: 'multiple',
-          value: current,
-          disabled,
-          collapsible: true,
-          orientation,
-          dir: resolvedDir,
-          toggle,
-        }}
-      >
+      <AccordionContext.Provider value={ctxValue}>
         <Impl ref={ref} disabled={disabled} orientation={orientation} dir={resolvedDir} {...rest} />
       </AccordionContext.Provider>
     );
@@ -202,11 +208,13 @@ const Item = forwardRef<HTMLDivElement, AccordionItemProps>(function AccordionIt
   const itemDisabled = disabled ?? root.disabled;
   const triggerId = useId();
   const contentId = useId();
+  const itemCtxValue = useMemo<AccordionItemContextValue>(
+    () => ({ open, disabled: itemDisabled, value, triggerId, contentId }),
+    [open, itemDisabled, value, triggerId, contentId],
+  );
 
   return (
-    <AccordionItemContext.Provider
-      value={{ open, disabled: itemDisabled, value, triggerId, contentId }}
-    >
+    <AccordionItemContext.Provider value={itemCtxValue}>
       <div
         ref={ref}
         data-state={open ? 'open' : 'closed'}

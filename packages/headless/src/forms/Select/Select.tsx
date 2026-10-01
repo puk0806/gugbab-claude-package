@@ -165,31 +165,52 @@ function SelectRoot({
 
   const selectedLabel = valueLabelMap[current] ?? '';
 
+  const { refs, context, floatingStyles } = floating;
+  const ctxValue = useMemo<SelectContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      value: current,
+      setValue,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      elementsRef,
+      labelsRef,
+      activeIndex,
+      registerLabel,
+      unregisterLabel,
+      selectedLabel,
+      name,
+      form,
+      position: 'popper',
+      contentRef,
+    }),
+    [
+      isOpen,
+      setOpen,
+      current,
+      setValue,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      activeIndex,
+      registerLabel,
+      unregisterLabel,
+      selectedLabel,
+      name,
+      form,
+    ],
+  );
+
   return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        value: current,
-        setValue: (v) => setValue(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        elementsRef,
-        labelsRef,
-        activeIndex,
-        registerLabel,
-        unregisterLabel,
-        selectedLabel,
-        name,
-        form,
-        position: 'popper',
-        contentRef,
-      }}
-    >
+    <Ctx.Provider value={ctxValue}>
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {children}
       </FloatingList>

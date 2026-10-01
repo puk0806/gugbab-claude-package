@@ -197,21 +197,21 @@ function TooltipRoot({
   const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, role]);
   const contentId = useId();
 
-  return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        contentId,
-      }}
-    >
-      {children}
-    </Ctx.Provider>
+  const { refs, floatingStyles } = floating;
+  const ctxValue = useMemo<TooltipContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      contentId,
+    }),
+    [isOpen, setOpen, refs, floatingStyles, getReferenceProps, getFloatingProps, contentId],
   );
+
+  return <Ctx.Provider value={ctxValue}>{children}</Ctx.Provider>;
 }
 
 const Trigger = forwardRef<HTMLButtonElement, TooltipTriggerProps>(function TooltipTrigger(
