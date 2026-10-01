@@ -61,6 +61,15 @@ describe("tokens CSS 생성 — 악성·비정상 값 (CSS 인젝션 방어)", (
     });
 
     it.each([
+        ['a /* " */ ; } body{x:y} /* " */'], // 주석 안 따옴표로 스캐너를 속여 블록 탈출
+        ["a /* ; } body{x:y}"], // 닫히지 않은 주석
+        ['url(a"b) ;} p{x:y} q:")'], // 따옴표 없는 url( 안의 " 는 bad-url — 첫 ) 에서 끝난다
+        ["url(a(b) ;} p{x:y}"], // 따옴표 없는 url( 안의 ( 도 bad-url
+    ])("주석·따옴표 없는 url() 을 이용한 우회 %j 는 거부한다 (보안)", (value) => {
+        expect(() => renderThemeCss(withAccent(value))).toThrow(TypeError);
+    });
+
+    it.each([
         ['url("a.svg'], // 닫히지 않은 따옴표 — 뒤 선언을 삼킨다
         ["calc(1px + 2px"], // 닫히지 않은 괄호
         ["1px)"], // 짝 없는 닫는 괄호

@@ -117,6 +117,18 @@ function sanitizeValue(value: string): string | null {
         if (quote) {
             if (ch === "\n" || ch === "\r") return null;
             if (ch === quote) quote = "";
+        } else if (ch === "/" && value.charAt(i + 1) === "*") {
+            // Comments are invisible to this scanner's quote tracking — a quote
+            // inside one could hide a real `;}`. Token values never need them.
+            return null;
+        } else if (ch === "(" && /(?:^|[^a-z0-9_-])url$/i.test(out) && !/^\s*["']/.test(value.slice(i + 1))) {
+            // Unquoted url(...) is one CSS token ending at the first `)`; quotes,
+            // `(` or inner whitespace make it a bad-url that ends early.
+            const end = scanRawUrl(value, i + 1);
+            if (end === -1) return null;
+            out += value.slice(i, end + 1);
+            i = end;
+            continue;
         } else if (ch === '"' || ch === "'") {
             quote = ch;
         } else if (ch === "(" || ch === "[" || ch === "{") {
@@ -137,6 +149,30 @@ function sanitizeValue(value: string): string | null {
     if (quote || stack.length > 0) return null;
     const trimmed = out.trim();
     return trimmed === "" ? null : trimmed;
+}
+
+/** Index of the `)` closing an unquoted url( body starting at `start`, or -1 if malformed. */
+function scanRawUrl(value: string, start: number): number {
+    let i = start;
+    while (/[ \t]/.test(value.charAt(i))) i++;
+    for (; i < value.length; i++) {
+        const ch = value.charAt(i);
+        if (ch === ")") return i;
+        if (ch === "\\") {
+            const next = value.charAt(i + 1);
+            if (next === "" || next === "\n" || next === "\r") return -1;
+            i++;
+            continue;
+        }
+        if (/[ \t]/.test(ch)) {
+            // Whitespace is allowed only right before the closing `)`.
+            let j = i;
+            while (/[ \t]/.test(value.charAt(j))) j++;
+            return value.charAt(j) === ")" ? j : -1;
+        }
+        if (ch === '"' || ch === "'" || ch === "(" || ch === "\n" || ch === "\r") return -1;
+    }
+    return -1;
 }
 
 function setVar(map: Record<string, string>, key: string, value: string) {
