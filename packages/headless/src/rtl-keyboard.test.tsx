@@ -121,7 +121,9 @@ describe('RTL keyboard — RadioGroup 선택·포커스 일치 (3항목)', () =>
 
   it('Root 밖의 Item 은 명확한 에러로 거부한다 (오용)', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    expect(() => render(<RadioGroup.Item value="x">X</RadioGroup.Item>)).toThrow('must be used inside');
+    expect(() => render(<RadioGroup.Item value="x">X</RadioGroup.Item>)).toThrow(
+      'must be used inside',
+    );
     spy.mockRestore();
   });
 });

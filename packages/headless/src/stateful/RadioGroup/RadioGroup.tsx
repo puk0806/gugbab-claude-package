@@ -8,6 +8,7 @@ import {
   type Ref,
   useContext,
   useId,
+  useMemo,
   useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
@@ -34,7 +35,8 @@ const useCtx = (n: string) => {
   return ctx;
 };
 
-export interface RadioGroupRootProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'dir'> {
+export interface RadioGroupRootProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'dir'> {
   value?: string;
   defaultValue?: string;
   onValueChange?: (v: string) => void;
@@ -70,18 +72,22 @@ const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(function RadioGroup
   const groupName = name ?? generatedName;
   const dir = useDirection(dirProp);
 
+  const hasName = name !== undefined;
+  const ctxValue = useMemo<RadioGroupContextValue>(
+    () => ({
+      value: current,
+      setValue,
+      disabled,
+      name: groupName,
+      hasName,
+      orientation,
+      dir,
+    }),
+    [current, setValue, disabled, groupName, hasName, orientation, dir],
+  );
+
   return (
-    <Ctx.Provider
-      value={{
-        value: current,
-        setValue: (v) => setValue(v),
-        disabled,
-        name: groupName,
-        hasName: name !== undefined,
-        orientation,
-        dir,
-      }}
-    >
+    <Ctx.Provider value={ctxValue}>
       <RovingFocusGroup asChild orientation={orientation} dir={dir} loop>
         <div
           ref={ref}

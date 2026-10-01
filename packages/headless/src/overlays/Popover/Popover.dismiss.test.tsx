@@ -177,4 +177,3 @@ describe('Popover — 리뷰 반영 회귀 (모달·Anchor·빈 영역)', () => 
     expect(document.activeElement).toBe(screen.getByText('open'));
   });
 });
-

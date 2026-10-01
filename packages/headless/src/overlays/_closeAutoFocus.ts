@@ -11,7 +11,11 @@
  *   keyboard users are not stranded (e.g. inside a modal Dialog's trap).
  * - No usable trigger (never rendered / unmounted) → let FocusScope restore.
  */
-export function handleCloseAutoFocus(event: Event, trigger: HTMLElement | null, interactedOutside: boolean): void {
+export function handleCloseAutoFocus(
+  event: Event,
+  trigger: HTMLElement | null,
+  interactedOutside: boolean,
+): void {
   if (event.defaultPrevented) return;
   const active = document.activeElement;
   const focusLost = active === null || active === document.body;

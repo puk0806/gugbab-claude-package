@@ -5,7 +5,7 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -15,6 +15,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
@@ -83,7 +84,7 @@ function PopoverRoot({
 
   const floating = useFloatingBase({
     open: isOpen,
-    onOpenChange: (v) => setOpen(v),
+    onOpenChange: setOpen,
     placement,
   });
 
@@ -94,24 +95,34 @@ function PopoverRoot({
   const contentId = useId();
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
-  return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        contentId,
-        modal,
-        triggerRef,
-      }}
-    >
-      {children}
-    </Ctx.Provider>
+  const { refs, context, floatingStyles } = floating;
+  const ctxValue = useMemo<PopoverContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      contentId,
+      modal,
+      triggerRef,
+    }),
+    [
+      isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      contentId,
+      modal,
+    ],
   );
+
+  return <Ctx.Provider value={ctxValue}>{children}</Ctx.Provider>;
 }
 
 const Trigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>(function PopoverTrigger(
@@ -120,12 +131,7 @@ const Trigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>(function Popo
 ) {
   const ctx = useCtx('Popover.Trigger');
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    ctx.refs.setReference(node);
-    ctx.triggerRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(ctx.refs.setReference, ctx.triggerRef, ref);
   const refProps = ctx.getReferenceProps(props) as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
     <Comp
@@ -192,16 +198,10 @@ const Content = forwardRef<HTMLDivElement, PopoverContentProps>(function Popover
   useEffect(() => {
     if (ctx.open) hasInteractedOutsideRef.current = false;
   }, [ctx.open]);
+  const composeRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
 
   const Comp = asChild ? Slot : 'div';
-
-  const composeRef = (node: HTMLDivElement | null) => {
-    ctx.refs.setFloating(node);
-    presenceRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
 
   return (
     <DismissableLayer
@@ -262,16 +262,8 @@ const Anchor = forwardRef<HTMLDivElement, PopoverAnchorProps>(function PopoverAn
 ) {
   const ctx = useCtx('Popover.Anchor');
   const Comp = asChild ? Slot : 'div';
-  return (
-    <Comp
-      ref={(node: HTMLDivElement | null) => {
-        ctx.refs.setReference(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
-      {...rest}
-    />
-  );
+  const setRef = useMergedRefs<HTMLDivElement>(ctx.refs.setReference, ref);
+  return <Comp ref={setRef} {...rest} />;
 });
 
 const Close = forwardRef<HTMLButtonElement, PopoverCloseProps>(function PopoverClose(

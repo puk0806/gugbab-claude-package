@@ -116,7 +116,9 @@ describe('DropdownMenu 서브메뉴 — 방향별 열기 키 (WCAG 2.1.1, APG Me
 
   it('Root 밖의 SubTrigger 는 명확한 에러로 거부한다 (오용)', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    expect(() => render(<DropdownMenu.SubTrigger>x</DropdownMenu.SubTrigger>)).toThrow('must be used inside');
+    expect(() => render(<DropdownMenu.SubTrigger>x</DropdownMenu.SubTrigger>)).toThrow(
+      'must be used inside',
+    );
     spy.mockRestore();
   });
 });

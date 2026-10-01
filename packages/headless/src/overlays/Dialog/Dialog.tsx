@@ -6,7 +6,7 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -15,6 +15,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
@@ -73,7 +74,7 @@ function DialogRoot({
 
   const { refs, context } = useFloating({
     open: isOpen,
-    onOpenChange: (next) => setOpen(next),
+    onOpenChange: setOpen,
   });
 
   // Dismissal handled by <DismissableLayer> on Content; floating-ui only
@@ -86,25 +87,36 @@ function DialogRoot({
   const titleId = useId();
   const descriptionId = useId();
 
-  return (
-    <DialogContext.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs,
-        context,
-        getReferenceProps,
-        getFloatingProps,
-        contentId,
-        titleId,
-        descriptionId,
-        role,
-        modal,
-      }}
-    >
-      {children}
-    </DialogContext.Provider>
+  const ctxValue = useMemo<DialogContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      context,
+      getReferenceProps,
+      getFloatingProps,
+      contentId,
+      titleId,
+      descriptionId,
+      role,
+      modal,
+    }),
+    [
+      isOpen,
+      setOpen,
+      refs,
+      context,
+      getReferenceProps,
+      getFloatingProps,
+      contentId,
+      titleId,
+      descriptionId,
+      role,
+      modal,
+    ],
   );
+
+  return <DialogContext.Provider value={ctxValue}>{children}</DialogContext.Provider>;
 }
 
 export interface DialogTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -119,11 +131,7 @@ const Trigger = forwardRef<HTMLButtonElement, DialogTriggerProps>(function Dialo
   const Comp = asChild ? Slot : 'button';
   // biome-ignore lint/suspicious/noExplicitAny: floating-ui getReferenceProps narrows data-*/aria-*
   const combined = ctx.getReferenceProps(props as any) as Record<string, unknown>;
-  const mergedRef = (node: HTMLButtonElement | null) => {
-    ctx.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const mergedRef = useMergedRefs<HTMLButtonElement>(ctx.refs.setReference, ref);
   const final = {
     ...combined,
     ref: mergedRef,
@@ -238,7 +246,6 @@ const Content = forwardRef<HTMLDivElement, DialogContentProps>(function DialogCo
           'or use a visually hidden title: <Dialog.Title asChild><VisuallyHidden>…</VisuallyHidden></Dialog.Title>.',
       );
     }
-    // biome-ignore lint/correctness/useExhaustiveDependencies: dev warning runs only on title binding change; including all deps would re-fire on every render
   }, [mounted, ctx.titleId]);
 
   // modal: hide siblings from assistive technology
@@ -249,17 +256,16 @@ const Content = forwardRef<HTMLDivElement, DialogContentProps>(function DialogCo
     return hideOthers(node);
   }, [ctx.modal, mounted]);
 
+  const composeRef = useMergedRefs<HTMLDivElement>(
+    contentNodeRef,
+    ctx.refs.setFloating,
+    presenceRef,
+    ref,
+  );
+
   if (!mounted && !forceMount) return null;
   const isAlert = ctx.role === 'alertdialog';
   const Comp = asChild ? Slot : 'div';
-
-  const composeRef = (node: HTMLDivElement | null) => {
-    contentNodeRef.current = node;
-    ctx.refs.setFloating(node);
-    presenceRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
 
   return (
     <DismissableLayer

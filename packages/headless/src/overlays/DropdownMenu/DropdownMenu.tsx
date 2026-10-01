@@ -10,7 +10,7 @@ import {
   useListNavigation,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -27,13 +27,13 @@ import {
   useState,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
+import { useDirection } from '../../shared/DirectionProvider';
 import {
   DismissableLayer,
   type EscapeKeyDownEvent,
   type FocusOutsideEvent,
   type PointerDownOutsideEvent,
 } from '../../shared/DismissableLayer';
-import { useDirection } from '../../shared/DirectionProvider';
 import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
 import { handleCloseAutoFocus } from '../_closeAutoFocus';
@@ -101,7 +101,7 @@ function DropdownMenuRoot({
 
   const floating = useFloatingBase({
     open: isOpen,
-    onOpenChange: (v) => setOpen(v),
+    onOpenChange: setOpen,
     placement,
   });
 
@@ -121,23 +121,38 @@ function DropdownMenuRoot({
   ]);
   const contentId = useId();
 
+  const { refs, context, floatingStyles } = floating;
+  const ctxValue = useMemo<DropdownMenuContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      elementsRef,
+      labelsRef,
+      activeIndex,
+      contentId,
+    }),
+    [
+      isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      activeIndex,
+      contentId,
+    ],
+  );
+
   return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        elementsRef,
-        labelsRef,
-        activeIndex,
-        contentId,
-      }}
-    >
+    <Ctx.Provider value={ctxValue}>
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {children}
       </FloatingList>
@@ -149,11 +164,7 @@ const Trigger = forwardRef<HTMLButtonElement, DropdownMenuTriggerProps>(
   function DropdownMenuTrigger({ asChild, ...props }, ref) {
     const ctx = useCtx('DropdownMenu.Trigger');
     const Comp = asChild ? Slot : 'button';
-    const setRef = (node: HTMLButtonElement | null) => {
-      ctx.refs.setReference(node);
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
+    const setRef = useMergedRefs<HTMLButtonElement>(ctx.refs.setReference, ref);
     const refProps = ctx.getReferenceProps(props) as ButtonHTMLAttributes<HTMLButtonElement>;
     return (
       <Comp
@@ -203,6 +214,7 @@ const Content = forwardRef<HTMLDivElement, DropdownMenuContentProps>(function Dr
   useEffect(() => {
     if (ctx.open) hasInteractedOutsideRef.current = false;
   }, [ctx.open]);
+  const setContentRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
   return (
     <DismissableLayer
@@ -243,12 +255,7 @@ const Content = forwardRef<HTMLDivElement, DropdownMenuContentProps>(function Dr
         }}
       >
         <div
-          ref={(node) => {
-            ctx.refs.setFloating(node);
-            presenceRef.current = node;
-            if (typeof ref === 'function') ref(node);
-            else if (ref) ref.current = node;
-          }}
+          ref={setContentRef}
           id={ctx.contentId}
           style={{ ...ctx.floatingStyles, ...style }}
           data-state={ctx.open ? 'open' : 'closed'}
@@ -274,11 +281,7 @@ const Item = forwardRef<HTMLButtonElement, DropdownMenuItemProps>(function Dropd
   const inferredLabel = label ?? (typeof children === 'string' ? children : null);
   const { ref: itemRef } = useListItem({ label: inferredLabel });
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    itemRef(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(itemRef, ref);
   const itemProps = ctx.getItemProps({
     ...rest,
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -356,11 +359,7 @@ const CheckboxItem = forwardRef<HTMLButtonElement, DropdownMenuCheckboxItemProps
     const inferredLabel = label ?? (typeof children === 'string' ? children : null);
     const { ref: itemRef } = useListItem({ label: inferredLabel });
     const Comp = asChild ? Slot : 'button';
-    const setRef = (node: HTMLButtonElement | null) => {
-      itemRef(node);
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
+    const setRef = useMergedRefs<HTMLButtonElement>(itemRef, ref);
     const itemProps = ctx.getItemProps({
       ...rest,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -458,11 +457,7 @@ const RadioItem = forwardRef<HTMLButtonElement, DropdownMenuRadioItemProps>(
     const inferredLabel = label ?? (typeof children === 'string' ? children : null);
     const { ref: itemRef } = useListItem({ label: inferredLabel });
     const Comp = asChild ? Slot : 'button';
-    const setRef = (node: HTMLButtonElement | null) => {
-      itemRef(node);
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
+    const setRef = useMergedRefs<HTMLButtonElement>(itemRef, ref);
     const itemProps = ctx.getItemProps({
       ...rest,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -559,7 +554,7 @@ function Sub({ open, defaultOpen, onOpenChange, children }: DropdownMenuSubProps
   const [triggerDisabled, setTriggerDisabled] = useState(false);
   const floating = useFloatingBase({
     open: isOpen,
-    onOpenChange: (v) => setOpen(v),
+    onOpenChange: setOpen,
     placement: dir === 'rtl' ? 'left-start' : 'right-start',
   });
 
@@ -598,23 +593,37 @@ function Sub({ open, defaultOpen, onOpenChange, children }: DropdownMenuSubProps
     if (!parent.open && isOpen) setOpen(false);
   }, [parent.open, isOpen, setOpen]);
 
+  const { refs, context, floatingStyles } = floating;
+  const subCtxValue = useMemo<SubContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      elementsRef,
+      labelsRef,
+      parent,
+      setTriggerDisabled,
+    }),
+    [
+      isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      getItemProps,
+      parent,
+    ],
+  );
+
   return (
-    <SubCtx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        getItemProps,
-        elementsRef,
-        labelsRef,
-        parent,
-        setTriggerDisabled,
-      }}
-    >
+    <SubCtx.Provider value={subCtxValue}>
       <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {children}
       </FloatingList>
@@ -643,12 +652,7 @@ const SubTrigger = forwardRef<HTMLButtonElement, DropdownMenuSubTriggerProps>(
     const parentItem = useListItem({ label: inferredLabel });
     const Comp = asChild ? Slot : 'button';
 
-    const setRef = (node: HTMLButtonElement | null) => {
-      parentItem.ref(node);
-      sub.refs.setReference(node);
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
+    const setRef = useMergedRefs<HTMLButtonElement>(parentItem.ref, sub.refs.setReference, ref);
 
     const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
       onKeyDown?.(e);
@@ -665,7 +669,9 @@ const SubTrigger = forwardRef<HTMLButtonElement, DropdownMenuSubTriggerProps>(
     // trigger keeps parent list semantics but gets none of the submenu's
     // open interactions (hover / click / arrow key).
     const itemProps = sub.parent.getItemProps({ ...rest });
-    const merged = (disabled ? itemProps : sub.getReferenceProps(itemProps)) as ButtonHTMLAttributes<HTMLButtonElement>;
+    const merged = (
+      disabled ? itemProps : sub.getReferenceProps(itemProps)
+    ) as ButtonHTMLAttributes<HTMLButtonElement>;
 
     return (
       <Comp
@@ -713,6 +719,7 @@ const SubContent = forwardRef<HTMLDivElement, DropdownMenuSubContentProps>(
   ) {
     const sub = useSubCtx('DropdownMenu.SubContent');
     const { mounted, presenceRef } = usePresence<HTMLDivElement>(sub.open);
+    const setContentRef = useMergedRefs<HTMLDivElement>(sub.refs.setFloating, presenceRef, ref);
     if (!mounted && !forceMount) return null;
     return (
       <DismissableLayer
@@ -732,12 +739,7 @@ const SubContent = forwardRef<HTMLDivElement, DropdownMenuSubContentProps>(
           onUnmountAutoFocus={onCloseAutoFocus}
         >
           <div
-            ref={(node) => {
-              sub.refs.setFloating(node);
-              presenceRef.current = node;
-              if (typeof ref === 'function') ref(node);
-              else if (ref) ref.current = node;
-            }}
+            ref={setContentRef}
             style={{ ...sub.floatingStyles, ...style }}
             data-state={sub.open ? 'open' : 'closed'}
             {...sub.getFloatingProps(props)}
