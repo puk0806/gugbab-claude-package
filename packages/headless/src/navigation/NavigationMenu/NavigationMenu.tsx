@@ -1,4 +1,4 @@
-import { useControllableState, useMergedRefs } from '@gugbab/hooks';
+import { useControllableState, useIsomorphicLayoutEffect, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -8,7 +8,6 @@ import {
   type RefObject,
   useContext,
   useId,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -138,7 +137,8 @@ const Trigger = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonEle
     const { setTriggerId } = item;
     // Content's aria-labelledby must point at the id actually rendered. Setting the
     // same string again is a no-op, so this cannot loop.
-    useLayoutEffect(() => setTriggerId(id), [id, setTriggerId]);
+    // Isomorphic: no SSR warning on React 18 (useLayoutEffect is a no-op there).
+    useIsomorphicLayoutEffect(() => setTriggerId(id), [id, setTriggerId]);
     return (
       <button
         ref={setRef}

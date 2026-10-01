@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import { BubbleInput } from '../../shared/BubbleInput';
-import { useDirection } from '../../shared/DirectionProvider';
+import { useDirection, useExplicitDirection } from '../../shared/DirectionProvider';
 import { RovingFocusGroup, useRovingFocusGroupItem } from '../../shared/RovingFocusGroup';
 
 interface RadioGroupContextValue {
@@ -71,6 +71,8 @@ const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(function RadioGroup
   const generatedName = useId();
   const groupName = name ?? generatedName;
   const dir = useDirection(dirProp);
+  // Render `dir` only when explicit, so an inherited <html dir> still applies.
+  const explicitDir = useExplicitDirection(dirProp);
 
   const hasName = name !== undefined;
   const ctxValue = useMemo<RadioGroupContextValue>(
@@ -94,7 +96,7 @@ const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(function RadioGroup
           role="radiogroup"
           aria-required={required}
           aria-orientation={orientation}
-          dir={dir}
+          dir={explicitDir}
           data-disabled={disabled ? '' : undefined}
           {...rest}
         >

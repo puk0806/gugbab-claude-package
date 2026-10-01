@@ -25,6 +25,7 @@ import {
   type PointerDownOutsideEvent,
 } from '../../shared/DismissableLayer';
 import { FocusScope } from '../../shared/FocusScope';
+import { handleCloseAutoFocus } from '../_closeAutoFocus';
 import { usePresence } from '../../shared/usePresence';
 
 interface DialogContextValue {
@@ -232,6 +233,11 @@ const Content = forwardRef<HTMLDivElement, DialogContentProps>(function DialogCo
   const ctx = useDialogContext('Dialog.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
   const contentNodeRef = useRef<HTMLDivElement | null>(null);
+  // Non-modal only: an outside press may have moved focus somewhere useful.
+  const hasInteractedOutsideRef = useRef(false);
+  useEffect(() => {
+    if (ctx.open) hasInteractedOutsideRef.current = false;
+  }, [ctx.open]);
 
   // dev-only: warn when Dialog.Title is absent
   useEffect(() => {
@@ -277,7 +283,10 @@ const Content = forwardRef<HTMLDivElement, DialogContentProps>(function DialogCo
         onPointerDownOutside?.(event);
       }}
       onFocusOutside={onFocusOutside}
-      onInteractOutside={onInteractOutside}
+      onInteractOutside={(event) => {
+        onInteractOutside?.(event);
+        if (!event.defaultPrevented && !ctx.modal) hasInteractedOutsideRef.current = true;
+      }}
       onEscapeKeyDown={(event) => {
         // AlertDialog: Escape never closes.
         if (isAlert) event.preventDefault();
@@ -293,6 +302,18 @@ const Content = forwardRef<HTMLDivElement, DialogContentProps>(function DialogCo
         onUnmountAutoFocus={(event) => {
           onCloseAutoFocus?.(event);
           if (event.defaultPrevented) return;
+          const triggerEl = ctx.refs.domReference.current;
+          if (!ctx.modal) {
+            // Non-modal (as Radix): after an outside press leave focus where the
+            // user put it; otherwise return to the trigger.
+            handleCloseAutoFocus(
+              event,
+              triggerEl instanceof HTMLElement ? triggerEl : null,
+              hasInteractedOutsideRef.current,
+            );
+            hasInteractedOutsideRef.current = false;
+            return;
+          }
           // Modal dialog: return to the trigger (APG). The element focused at
           // open time can be <body> — Safari does not focus buttons on click —
           // so restore explicitly. Without a mounted trigger (controlled open,
