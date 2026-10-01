@@ -44,7 +44,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 5. `packages/hooks` (선택) — React 공용 훅
 6. `packages/headless` — `@gugbab/headless` (헤드리스 React 컴포넌트, 35종)
 7. `packages/tokens` — 추상 디자인 토큰 타입 + 정적 MUI/Radix 스냅샷 → `dist/{mui,radix}.css` CSS variables. 외부 라이브러리 의존성 0
-8. `packages/styled-mui` / `packages/styled-radix` — 헤드리스 위에 얹는 스타일 패키지 (각각 35종, `gmui-*` / `grx-*` 클래스). 컴포넌트 래퍼는 비공개 `packages/styled-factory`(`create<Name>(prefix)`)를 공유하고 tsup이 번들에 포함한다 — 래퍼 수정은 팩토리에서 한 번만
+8. `packages/styled-mui` / `packages/styled-radix` — 헤드리스 위에 얹는 스타일 패키지 (각각 35종, `gmui-*` / `grx-*` 클래스)
 9. `apps/storybook-mui` / `apps/storybook-radix` — 시스템별 독립 쇼케이스 (Storybook 10)
 
 ---
