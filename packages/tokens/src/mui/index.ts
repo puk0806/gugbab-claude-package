@@ -50,6 +50,8 @@ export const muiTheme: ThemeTokens = {
                 base: "rgba(0, 0, 0, 0.12)",
                 strong: "rgba(0, 0, 0, 0.23)",
                 focus: "#d50000",
+                // MUI Checkbox/Radio use palette.text.secondary for the unchecked control.
+                control: "rgba(0, 0, 0, 0.6)",
             },
             overlay: "rgba(0, 0, 0, 0.5)",
         },
@@ -150,6 +152,8 @@ export const muiTheme: ThemeTokens = {
                 base: "rgba(255, 255, 255, 0.12)",
                 strong: "rgba(255, 255, 255, 0.23)",
                 focus: "#ff5252",
+                // MUI dark palette.text.secondary
+                control: "rgba(255, 255, 255, 0.7)",
             },
             overlay: "rgba(0, 0, 0, 0.5)",
         },

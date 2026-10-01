@@ -138,7 +138,7 @@
 }
 
 .gmui-slider__thumb:hover {
-  box-shadow: 0 0 0 8px rgba(var(--gugbab-color-accent-base, 0 0 0) / 0.12);
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--gugbab-color-accent-base) 12%, transparent);
 }
 
 .gmui-slider__thumb[data-disabled] {

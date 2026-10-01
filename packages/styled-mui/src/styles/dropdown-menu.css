@@ -66,7 +66,7 @@
 }
 
 .gmui-menu__item:hover,
-.gmui-menu__item[data-highlighted] {
+.gmui-menu__item:focus-visible {
   background: var(--gugbab-color-bg-inset);
 }
 
@@ -130,4 +130,10 @@
 .gmui-menu__radio-group {
   display: flex;
   flex-direction: column;
+}
+
+/* 항목은 실제 DOM 포커스를 받는다 — 키보드 포커스 표시 (WCAG 2.4.7) */
+.gmui-menu__item:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: -2px;
 }

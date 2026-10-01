@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 2px solid var(--gugbab-color-border-base);
+  border: 2px solid var(--gugbab-color-border-control);
   border-radius: var(--gugbab-radius-sm);
   background-color: var(--gugbab-color-bg-app);
   cursor: pointer;

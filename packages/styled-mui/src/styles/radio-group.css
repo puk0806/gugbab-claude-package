@@ -27,7 +27,7 @@
   width: 20px;
   height: 20px;
   border-radius: var(--gugbab-radius-full);
-  border: 2px solid var(--gugbab-color-border-base);
+  border: 2px solid var(--gugbab-color-border-control);
   background: var(--gugbab-color-bg-surface);
   color: transparent;
   cursor: pointer;

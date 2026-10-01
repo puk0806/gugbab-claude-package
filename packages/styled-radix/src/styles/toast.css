@@ -104,7 +104,7 @@
   border: none;
   border-radius: var(--gugbab-radius-sm);
   background: transparent;
-  color: var(--gugbab-color-fg-muted);
+  color: var(--gugbab-color-fg-secondary);
   cursor: pointer;
   transition: background var(--gugbab-duration-fast) ease;
   position: absolute;
