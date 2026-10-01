@@ -1,4 +1,4 @@
-import { type Dispatch, type SetStateAction, useCallback, useState } from "react";
+import { type Dispatch, type SetStateAction, useCallback, useRef, useState } from "react";
 import { useLatestRef } from "../ref/use-latest-ref";
 
 export interface UseControllableStateOptions<T> {
@@ -22,25 +22,25 @@ export function useControllableState<T>(options: UseControllableStateOptions<T>)
     const isControlled = value !== undefined;
 
     const [internal, setInternal] = useState<T>(defaultValue as T);
+    // Latest internal value — lets the setter compute `next` outside a state
+    // updater. Updaters must stay pure: React runs them twice under StrictMode,
+    // which would fire `onChange` twice.
+    const internalRef = useRef<T>(internal);
     const current = (isControlled ? value : internal) as T;
 
     const ctxRef = useLatestRef({ isControlled, value, onChange });
 
     const setter = useCallback<Dispatch<SetStateAction<T>>>(
         (update) => {
-            const resolve = (prev: T): T => (typeof update === "function" ? (update as (p: T) => T)(prev) : update);
-
             const ctx = ctxRef.current;
-            if (ctx.isControlled) {
-                const next = resolve(ctx.value as T);
-                ctx.onChange?.(next);
-            } else {
-                setInternal((prev) => {
-                    const next = resolve(prev);
-                    ctx.onChange?.(next);
-                    return next;
-                });
+            const prev = ctx.isControlled ? (ctx.value as T) : internalRef.current;
+            const next = typeof update === "function" ? (update as (p: T) => T)(prev) : update;
+
+            if (!ctx.isControlled) {
+                internalRef.current = next;
+                setInternal(next);
             }
+            ctx.onChange?.(next);
         },
         [ctxRef],
     );

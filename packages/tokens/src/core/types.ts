@@ -66,6 +66,11 @@ export interface ColorTokens {
         base: string;
         strong: string;
         focus: string;
+        /**
+         * Boundary of interactive controls (checkbox, radio, switch track, input) — ≥ 3:1 vs bg (WCAG 1.4.11).
+         * Optional for backward compatibility; falls back to `strong` when omitted.
+         */
+        control?: string;
     };
     /** Overlay (modal scrim) */
     overlay: string;

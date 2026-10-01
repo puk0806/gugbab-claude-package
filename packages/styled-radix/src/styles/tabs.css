@@ -125,3 +125,9 @@
 .grx-tabs__content[hidden] {
   display: none;
 }
+
+/* 패널은 tabIndex=0 — 키보드 포커스 표시 (WCAG 2.4.7) */
+.grx-tabs__content:focus-visible {
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: 2px;
+}

@@ -1,4 +1,4 @@
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -81,16 +81,13 @@ const Root = forwardRef<HTMLButtonElement, CheckboxRootProps>(function CheckboxR
   }, [button, setState]);
 
   const Comp = asChild ? Slot : 'button';
+  const composedRef = useMergedRefs<HTMLButtonElement>(setButton, ref);
 
   const ctxValue = useMemo(() => ({ state, disabled: !!disabled }), [state, disabled]);
   return (
     <Ctx.Provider value={ctxValue}>
       <Comp
-        ref={(node: HTMLButtonElement | null) => {
-          setButton(node);
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-        }}
+        ref={composedRef}
         type={asChild ? undefined : type}
         role="checkbox"
         aria-checked={ariaChecked}

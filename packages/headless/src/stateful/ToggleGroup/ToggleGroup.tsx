@@ -5,7 +5,9 @@ import {
   forwardRef,
   type HTMLAttributes,
   type Ref,
+  useCallback,
   useContext,
+  useMemo,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import {
@@ -138,21 +140,26 @@ const SingleInner = forwardRef<HTMLDivElement, InnerSingleProps>(function Single
     defaultValue: defaultValue ?? '',
     onChange: onValueChange,
   });
-  const values = current ? [current] : [];
-  const toggle = (v: string) => setCurrent(current === v ? '' : v);
+  const values = useMemo(() => (current ? [current] : []), [current]);
+  const toggle = useCallback(
+    (v: string) => setCurrent(current === v ? '' : v),
+    [current, setCurrent],
+  );
+  const ctxValue = useMemo<ToggleGroupContextValue>(
+    () => ({
+      type: 'single',
+      value: values,
+      disabled,
+      orientation,
+      toggle,
+      hasAnyPressed: values.length > 0,
+      rovingFocus,
+    }),
+    [values, disabled, orientation, toggle, rovingFocus],
+  );
 
   return (
-    <Ctx.Provider
-      value={{
-        type: 'single',
-        value: values,
-        disabled,
-        orientation,
-        toggle,
-        hasAnyPressed: values.length > 0,
-        rovingFocus,
-      }}
-    >
+    <Ctx.Provider value={ctxValue}>
       <Container
         ref={ref}
         orientation={orientation}
@@ -180,21 +187,26 @@ const MultipleInner = forwardRef<HTMLDivElement, InnerMultipleProps>(function Mu
     defaultValue: defaultValue ?? [],
     onChange: onValueChange,
   });
-  const toggle = (v: string) =>
-    setCurrent((prev) => (prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v]));
+  const toggle = useCallback(
+    (v: string) =>
+      setCurrent((prev) => (prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v])),
+    [setCurrent],
+  );
+  const ctxValue = useMemo<ToggleGroupContextValue>(
+    () => ({
+      type: 'multiple',
+      value: current,
+      disabled,
+      orientation,
+      toggle,
+      hasAnyPressed: current.length > 0,
+      rovingFocus,
+    }),
+    [current, disabled, orientation, toggle, rovingFocus],
+  );
 
   return (
-    <Ctx.Provider
-      value={{
-        type: 'multiple',
-        value: current,
-        disabled,
-        orientation,
-        toggle,
-        hasAnyPressed: current.length > 0,
-        rovingFocus,
-      }}
-    >
+    <Ctx.Provider value={ctxValue}>
       <Container
         ref={ref}
         orientation={orientation}

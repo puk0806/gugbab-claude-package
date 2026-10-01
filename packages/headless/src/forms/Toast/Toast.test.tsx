@@ -65,18 +65,30 @@ describe('Toast', () => {
     expect(spy).toHaveBeenCalledWith(false);
   });
 
-  it('aria-live is assertive for foreground, polite for background', () => {
+  it('Announcer 의 aria-live 는 foreground=assertive, background=polite (단일 낭독 채널)', () => {
     const { rerender } = render(<BasicToast type="foreground" title="A" />);
-    expect(screen.getByTestId('toast').getAttribute('aria-live')).toBe('assertive');
+    const live = () => Array.from(document.querySelectorAll('[aria-live]'));
+    expect(live().map((el) => el.getAttribute('aria-live'))).toEqual(['assertive']);
     rerender(<BasicToast type="background" title="A" />);
-    expect(screen.getByTestId('toast').getAttribute('aria-live')).toBe('polite');
+    expect(live().map((el) => el.getAttribute('aria-live'))).toEqual(['polite']);
   });
 
-  it('viewport has role=region with accessible label', () => {
+  it('토스트 <li> 자체는 낭독 영역이 아니다 (이중 낭독·허용되지 않은 role 방지)', () => {
+    render(<BasicToast />);
+    const toast = screen.getByTestId('toast');
+    expect(toast.tagName).toBe('LI');
+    expect(toast).not.toHaveAttribute('role');
+    expect(toast).not.toHaveAttribute('aria-live');
+  });
+
+  it('viewport 랜드마크(region)는 래퍼에 있고 <ol> 은 목록 의미를 유지한다', () => {
     render(<BasicToast />);
     const viewport = screen.getByTestId('viewport');
-    expect(viewport).toHaveAttribute('role', 'region');
-    expect(viewport).toHaveAttribute('aria-label');
+    expect(viewport.tagName).toBe('OL');
+    expect(viewport).not.toHaveAttribute('role');
+    const region = screen.getByRole('region');
+    expect(region).toHaveAttribute('aria-label');
+    expect(region.contains(viewport)).toBe(true);
   });
 
   it('auto-dismisses after duration', () => {

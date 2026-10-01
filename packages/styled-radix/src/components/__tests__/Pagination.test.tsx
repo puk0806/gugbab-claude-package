@@ -5,7 +5,7 @@ import { Pagination } from "../Pagination";
 describe("Pagination (styled-radix)", () => {
     it("Root applies grx-pagination with default md size", () => {
         const { container } = render(
-            <Pagination.Root data-testid="root">
+            <Pagination.Root pageCount={1} data-testid="root">
                 <Pagination.List />
             </Pagination.Root>,
         );
@@ -16,7 +16,7 @@ describe("Pagination (styled-radix)", () => {
 
     it.each(["sm", "md"] as const)("size %s applies modifier", (size) => {
         const { container } = render(
-            <Pagination.Root data-testid="root" size={size}>
+            <Pagination.Root pageCount={1} data-testid="root" size={size}>
                 <Pagination.List />
             </Pagination.Root>,
         );
@@ -25,7 +25,7 @@ describe("Pagination (styled-radix)", () => {
 
     it("List/Item/Page/Previous/Next/Ellipsis have BEM classes", () => {
         const { container } = render(
-            <Pagination.Root>
+            <Pagination.Root pageCount={1}>
                 <Pagination.List data-testid="list">
                     <Pagination.Item data-testid="item">
                         <Pagination.Previous data-testid="prev" />

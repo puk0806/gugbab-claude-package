@@ -5,14 +5,18 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
   forwardRef,
   type HTMLAttributes,
+  type RefObject,
   useContext,
+  useEffect,
   useId,
+  useMemo,
+  useRef,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import {
@@ -22,6 +26,7 @@ import {
 } from '../../shared/DismissableLayer';
 import { FocusScope } from '../../shared/FocusScope';
 import { usePresence } from '../../shared/usePresence';
+import { handleCloseAutoFocus } from '../_closeAutoFocus';
 import { useFloatingBase } from '../_floatingBase';
 
 export interface PopoverTriggerProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -42,6 +47,8 @@ interface PopoverContextValue {
   getFloatingProps: ReturnType<typeof useInteractions>['getFloatingProps'];
   contentId: string;
   modal: boolean;
+  /** The trigger button only — `refs.domReference` becomes the Anchor when one is rendered. */
+  triggerRef: RefObject<HTMLButtonElement | null>;
 }
 
 const Ctx = createContext<PopoverContextValue | null>(null);
@@ -77,7 +84,7 @@ function PopoverRoot({
 
   const floating = useFloatingBase({
     open: isOpen,
-    onOpenChange: (v) => setOpen(v),
+    onOpenChange: setOpen,
     placement,
   });
 
@@ -86,24 +93,36 @@ function PopoverRoot({
   const role = useRole(floating.context, { role: 'dialog' });
   const { getReferenceProps, getFloatingProps } = useInteractions([click, role]);
   const contentId = useId();
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
 
-  return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        context: floating.context,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        contentId,
-        modal,
-      }}
-    >
-      {children}
-    </Ctx.Provider>
+  const { refs, context, floatingStyles } = floating;
+  const ctxValue = useMemo<PopoverContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      contentId,
+      modal,
+      triggerRef,
+    }),
+    [
+      isOpen,
+      setOpen,
+      refs,
+      context,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      contentId,
+      modal,
+    ],
   );
+
+  return <Ctx.Provider value={ctxValue}>{children}</Ctx.Provider>;
 }
 
 const Trigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>(function PopoverTrigger(
@@ -112,11 +131,7 @@ const Trigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>(function Popo
 ) {
   const ctx = useCtx('Popover.Trigger');
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    ctx.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(ctx.refs.setReference, ctx.triggerRef, ref);
   const refProps = ctx.getReferenceProps(props) as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
     <Comp
@@ -177,16 +192,16 @@ const Content = forwardRef<HTMLDivElement, PopoverContentProps>(function Popover
 ) {
   const ctx = useCtx('Popover.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  // Closed by an outside interaction → focus stays where the user put it.
+  const hasInteractedOutsideRef = useRef(false);
+  // Reset on every open — a rejected (controlled) close must not leak into the next one.
+  useEffect(() => {
+    if (ctx.open) hasInteractedOutsideRef.current = false;
+  }, [ctx.open]);
+  const composeRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
 
   const Comp = asChild ? Slot : 'div';
-
-  const composeRef = (node: HTMLDivElement | null) => {
-    ctx.refs.setFloating(node);
-    presenceRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
 
   return (
     <DismissableLayer
@@ -194,7 +209,21 @@ const Content = forwardRef<HTMLDivElement, PopoverContentProps>(function Popover
       disableOutsidePointerEvents={ctx.modal}
       onPointerDownOutside={onPointerDownOutside}
       onFocusOutside={onFocusOutside}
-      onInteractOutside={onInteractOutside}
+      onInteractOutside={(event) => {
+        onInteractOutside?.(event);
+        if (event.defaultPrevented) return;
+        // A press on the trigger is not "outside": let its click toggle the
+        // popover closed instead of dismissing here and re-opening on click.
+        const trigger = ctx.triggerRef.current;
+        const target = event.detail.originalEvent.target;
+        if (trigger && target instanceof Node && trigger.contains(target)) {
+          event.preventDefault();
+          return;
+        }
+        // Modal: outside pointer events are blocked, so the click cannot have
+        // moved focus anywhere useful — keep the default return-to-trigger.
+        if (!ctx.modal) hasInteractedOutsideRef.current = true;
+      }}
       onEscapeKeyDown={onEscapeKeyDown}
       onDismiss={() => ctx.setOpen(false)}
     >
@@ -203,7 +232,11 @@ const Content = forwardRef<HTMLDivElement, PopoverContentProps>(function Popover
         trapped={ctx.modal}
         loop
         onMountAutoFocus={onOpenAutoFocus}
-        onUnmountAutoFocus={onCloseAutoFocus}
+        onUnmountAutoFocus={(event) => {
+          onCloseAutoFocus?.(event);
+          handleCloseAutoFocus(event, ctx.triggerRef.current, hasInteractedOutsideRef.current);
+          hasInteractedOutsideRef.current = false;
+        }}
       >
         <Comp
           ref={composeRef}
@@ -229,16 +262,8 @@ const Anchor = forwardRef<HTMLDivElement, PopoverAnchorProps>(function PopoverAn
 ) {
   const ctx = useCtx('Popover.Anchor');
   const Comp = asChild ? Slot : 'div';
-  return (
-    <Comp
-      ref={(node: HTMLDivElement | null) => {
-        ctx.refs.setReference(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
-      {...rest}
-    />
-  );
+  const setRef = useMergedRefs<HTMLDivElement>(ctx.refs.setReference, ref);
+  return <Comp ref={setRef} {...rest} />;
 });
 
 const Close = forwardRef<HTMLButtonElement, PopoverCloseProps>(function PopoverClose(

@@ -11,12 +11,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 ```
 01_gugbab-claude-package/
 ├── CLAUDE.md              # 프로젝트 지침
-├── .claude/               # Claude Code 자산
-│   ├── agents/            # 서브에이전트
-│   ├── skills/            # 스킬
-│   ├── hooks/             # 훅
-│   ├── rules/             # 규칙 문서
-│   └── settings.json      # Claude Code 설정·플러그인
+├── .claude/               # Claude Code 자산 (원본 레포 gugbab-claude의 설치본)
 ├── .husky/                # Git 훅 (pre-commit / commit-msg / pre-push)
 ├── .changeset/            # Changesets 버전 기록
 ├── packages/              # 배포 대상 패키지 (@gugbab/*)
@@ -45,12 +40,12 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 | `@gugbab/tsconfig`            | 공용 TS 프리셋 (base / react-library / node-library) | 1.0.0 |
 | `@gugbab/biome-config`        | 공용 Biome 프리셋 (base.json) | 1.0.1 |
 | `@gugbab/commitlint-config`   | 공용 commitlint 컨벤션 (`[category] Type: Subject`) | 1.1.0 |
-| `@gugbab/utils`               | 프레임워크 독립 순수 유틸 (string/object/array/guard/fn/format/sse/history, 32개 함수) | 1.3.0 |
-| `@gugbab/hooks`               | 헤드리스 공용 React 훅 (lifecycle/ref/binding/state/dom/network/speech, 14개 훅) | 1.2.1 |
-| `@gugbab/headless`               | 헤드리스 React 컴포넌트 35종 + Form (Radix 1:1 ~90%, 426 tests) | 1.0.1 |
+| `@gugbab/utils`               | 프레임워크 독립 순수 유틸 (string/object/array/guard/fn/format/sse/history, 32개 함수) | 1.4.0 |
+| `@gugbab/hooks`               | 헤드리스 공용 React 훅 (lifecycle/ref/binding/state/dom/network/speech, 14개 훅) | 1.3.0 |
+| `@gugbab/headless`               | 헤드리스 React 컴포넌트 35종(Form 포함, Radix 1:1 ~90%, 426 tests) | 1.0.5 |
 | `@gugbab/tokens`              | 추상 디자인 토큰 + 정적 MUI/Radix 스냅샷 → CSS variables (`dist/{mui,radix}.css`). 외부 라이브러리 의존성 0 | 1.0.0 |
-| `@gugbab/styled-mui`          | MUI 외관 styled 컴포넌트 35종 (`gmui-*` 클래스, `dist/styles.css` 99 blocks) | 1.0.2 |
-| `@gugbab/styled-radix`        | Radix 외관 styled 컴포넌트 35종 (`grx-*` 클래스, `dist/styles.css` 99 blocks) | 1.0.2 |
+| `@gugbab/styled-mui`          | MUI 외관 styled 컴포넌트 35종 (`gmui-*` 클래스, `dist/styles.css` 99 blocks) | 1.0.6 |
+| `@gugbab/styled-radix`        | Radix 외관 styled 컴포넌트 35종 (`grx-*` 클래스, `dist/styles.css` 99 blocks) | 1.0.6 |
 | `@gugbab/relay-types`         | gugbab-claude-relay API OpenAPI 타입 자동 생성 (13종: ChatRequest, SSEEvent 등). 스펙 변경 시 타임스탬프 버전 자동 publish (changesets 비대상) | 1.0.0-{timestamp} |
 
 ## 개발 워크플로우
@@ -83,58 +78,6 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 
 Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 
-## Claude 자산 현황
-
-### 에이전트 (35개)
-
-| 카테고리        | 항목                                                                                          |
-| --------------- | --------------------------------------------------------------------------------------------- |
-| backend (3)     | build-error-resolver, typescript-backend-architect, typescript-backend-developer              |
-| devops (1)      | devops-engineer                                                                               |
-| domain (6)      | api-spec-designer, business-domain-analyst, codebase-domain-analyst, frontend-domain-refactorer, product-planner, ui-ux-designer |
-| frontend (2)    | frontend-architect, frontend-developer                                                        |
-| meta (8)        | agent-creator, changelog-writer, claude-code-guide, freshness-auditor, project-scaffolder, skill-creator, skill-tester, tech-stack-advisor |
-| research (5)    | competitor-analyst, data-analyst, deep-researcher, research-reviewer, web-searcher            |
-| validation (10) | a11y-auditor, build-perf-benchmarker, content-quality-reviewer, fact-checker, perf-report-writer, pr-reviewer, qa-engineer, security-auditor, seo-auditor, source-validator |
-
-### 스킬 (112개)
-
-| 카테고리       | 수  | 항목 |
-| -------------- | :-: | ---- |
-| architecture   |  5  | ddd, dream-journal-data-modeling, frontend-domain-structure, incremental-refactoring, module-boundaries |
-| backend        |  1  | claude-code-headless |
-| devops         | 10  | docker-deployment, github-actions, github-actions-visual-regression, n8n-error-handling, n8n-llm-integration, n8n-self-hosting, n8n-webhook-patterns, n8n-workflow-design, site-migration-seo, vercel-sandbox |
-| frontend       | 81  | ag-grid, animation, bot-management-seo, build-perf-benchmarking, bundle-size-analysis, bundling-compiler, chat-ui-pattern, claude-api-streaming-frontend, code-convention, core-web-vitals-optimization, cra-to-vite-migration, design-token-scss, dev-server-hmr-benchmarking, dream-app-onboarding, dream-export-import, dream-image-generation, dream-privacy-consent-ui, dream-recurrence-detection, dream-sharing-anonymized, dream-statistics-visualization, dream-symbol-tagging, e2e-testing, ecommerce-seo, emotion-tagging-input, error-handling, font-optimization, form-handling, geo-ai-discoverability, google-indexing-api, i18n-seo, image-optimization-seo, indexeddb-dexie, kakao-share-optimization, lighthouse-ci-setup, local-business-seo, media-accessibility, media-recorder-api, mobile-seo-pwa, monorepo-turborepo, mui-v5, mui-v9, naver-seo-specifics, nextjs, og-image-generation, performance, pwa-offline-llm-fallback, pwa-push-notifications, radix-ui, react-dnd, react-virtuoso, recoil-to-zustand-migration, rsbuild, schema-org-patterns, search-console-webmaster, security-headers-seo, seo-monitoring-automation, seo-nextjs, seo-static-html, seo-vite-spa, srs-spaced-repetition, state-management, storybook, storybook-visual-testing, structured-data-validation-api, swiper, tanstack-query, tanstack-query-v4-to-v5-migration, testing, tsup, typescript-v4, typescript-v5, url-canonicalization-redirects, vite-advanced-splitting, vite-pwa-service-worker, voice-input-ui, wcag-2.2-checklist, web-speech-api-stt, web-speech-api-tts, web-vitals-rum-comparison, webpack-vite-config-mapping, whisper-api-integration |
-| health         |  5  | ingredient-management, korean-food-nutrition, meal-recommendation-prompt, nutrition-analysis-prompt, nutrition-basics |
-| meta           |  6  | claude-code-hook-authoring, dream-app-ab-testing-prompts, dream-interpretation-prompt-engineering, dream-safety-classifier-prompts, ralph-loop, riper-workflow |
-| writing        |  4  | accessibility-vpat-writing, content-eeat-quality, multilingual-content-strategy, ymyl-content-seo |
-
-### 훅 (23개 = 실행 훅 21종 + `_lib.js` + `statusline.sh`)
-
-상세 목록·이벤트·동작은 [docs/hooks/README.md](docs/hooks/README.md)가 단일 소스.
-
-- **세션**: session-start, instructions-loaded, staleness-check, cc-notify, statusline
-- **가드·품질**: auto-approve, bash-guard, branch-protection, protect-secrets, agent-md-guard, skill-md-guard, verification-guard, deliverable-guard, adversarial-test-guard, fake-impl-guard, test-fake-guard, typescript-quality
-- **메모리·기록**: memory-sync, memory-pull, session-export
-- **Codex 리뷰**: codex-review-guard, parry
-- **유틸**: _lib
-
-### 규칙 (8개)
-
-- `adversarial-testing.md` — 적대적 테스트 3계층 원칙 (훅으로 강제)
-- `agent-design.md` — 에이전트 설계 기준 (모델·도구·구조)
-- `codex-review.md` — Codex 적대적 리뷰 워크플로우 (최대 3라운드)
-- `git.md` — Git 커밋 컨벤션 (`[category] Type: Subject`)
-- `info-verification.md` — 외부 정보 검증 원칙 (소스 신뢰도 4단계)
-- `memory-sync.md` — 메모리 동기화 정책 (전역 1차 + 레포 미러)
-- `task-workflow.md` — 작업 착수 전 확인 절차
-- `typescript.md` — TypeScript·React 코딩 규칙
-
-### 플러그인 (프로젝트 레벨)
-
-- [`codex@openai-codex`](https://github.com/openai/codex-plugin-cc) — 2차 코드 리뷰 (Codex가 Claude 외부에서 독립 검토)
-- [`superpowers@superpowers-marketplace`](https://github.com/obra/superpowers) — TDD 강제(RED→GREEN→REFACTOR) + 7단계 워크플로우
-
 ---
 
 ## 업데이트 로그
@@ -164,3 +107,5 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-09-04 | Claude 자산 대규모 개편 정리 커밋 — 에이전트 통합(planner·spec-writer 제거, mvp-scope-planner→product-planner 흡수, seo-content-writer-coach 제거, frontend-domain-refactorer·build-error-resolver 추가), 스킬 9종 추가(tanstack-query 2종, mui-v9, ag-grid, recoil-to-zustand-migration, architecture 3종, claude-code-hook-authoring) + 대량 재검증(v4, references/ 분리), 슬래시 커맨드 10종 최초 커밋. 훅 개편: tdd-guard 제거(superpowers TDD로 대체), typescript-quality `--changed-only`, deliverable-guard `--no-readme`, 차단 메시지 stderr 회귀 수정. rules 4종 삭제(creation-workflow·verification-policy·readme-update·commands)에 따른 잔존 참조 정리(CLAUDE.md·훅·에이전트·커맨드). README 자산 현황 실측 재생성(에이전트 35·스킬 112·훅 23). |
 | 2026-09-03 | Web Speech API 공통화 — 형제 앱 3곳(꿈일기·영어회화·건강)에 복붙되어 있던 마이크(STT)·TTS 모듈을 패키지로 승격. `@gugbab/hooks` 신규 `speech` 카테고리: `useSpeechRecognition`(stale 세션 가드·언마운트 abort), `useSpeak`(voice 비동기 로딩 대응), `createRecognizer`(lang 파라미터화, resultIndex 배치 유실 방지), `pickVoice`/`listVoices`, 지원 감지 2종(부분 구현 방어). `@gugbab/utils`: `appendTranscript`(서로게이트 쌍 안전 절단). 테스트 89개 추가 (적대적·경계 계층 포함, Codex 리뷰 반영 — stale utterance 가드·부분 구현 방어·핸들 오염 방지). |
 | 2026-08-14 | relay 입력 상한 대응 이력 압축 유틸 — `@gugbab/utils` v1.3.0: `history` 모듈 순수 함수 4종(`totalContentBytes`·`fitMessagesToBudget`·`compressHistory`·`isHistoryValidationError`). 상한 값 파라미터 주입, 타 패키지 의존 없음, 첫·마지막 role=user 계약 보장. 적대적·경계 테스트 21개 추가 (Codex 3라운드 리뷰 반영 — 꼬리 assistant 계약 파괴 수정). `@gugbab/commitlint-config` v1.1.0: `[export] sync: <파일명>` 예외 형식 허용 — git.md 컨벤션과 검증 불일치 해소, export 커밋의 `--no-verify` 우회 제거. |
+| 2026-09-30 | Claude 자산을 원본 레포 최신 설치본(react-spa·nextjs, 작성 도구 제외, `--legacy`·README 가드·staleness 강제)으로 교체 후 정리 — 설치 목록 밖 잔재 스킬 57종(꿈 앱·SEO·health·n8n·writing)·에이전트 2종(seo-auditor·content-quality-reviewer)과 스킬 없는 검증 문서 143개 삭제, 원본 제거 스킬 9종(radix-ui 등) 반영. 원본에서 수정된 훅 버그 반영(차단 훅 5종 stderr, `/agent-status` git 기반 집계, `hooks/package.json`). 템플릿으로 덮인 CLAUDE.md를 프로젝트 내용으로 복원·병합(biome·commitlint 스택, 빌드 순서 현행화). README 자산 현황(에이전트 30·스킬 53·훅 24·규칙 7)·패키지 버전 현행화. |
+| 2026-10-01 | README에서 Claude 자산 현황(에이전트·스킬·훅·규칙·플러그인 목록) 섹션 제거 — 자산은 원본 레포 설치본이라 여기서 목록을 유지하지 않는다. 훅 상세는 `docs/hooks/README.md` |

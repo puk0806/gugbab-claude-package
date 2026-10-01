@@ -78,7 +78,7 @@ describe('Menubar — Phase 4 infra callbacks (Content)', () => {
   });
 
   it('onEscapeKeyDown preventDefault stops Content from closing', () => {
-    const onEscapeKeyDown = vi.fn((e: KeyboardEvent) => e.preventDefault());
+    const onEscapeKeyDown = vi.fn((e: React.KeyboardEvent) => e.preventDefault());
     render(<BasicMenubar contentProps={{ onEscapeKeyDown }} />);
     openContent();
 

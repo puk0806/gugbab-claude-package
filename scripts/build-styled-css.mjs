@@ -15,6 +15,7 @@
  * 순서가 중요 — 토큰 먼저, 컴포넌트 CSS 다음 (var(--gugbab-*) 참조 가능하게).
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { resolve } from "node:path";
 
 const args = process.argv.slice(2);
@@ -59,7 +60,16 @@ const cwd = process.cwd();
 const pkgDir = cwd; // package.json 의 build 스크립트는 패키지 루트에서 실행됨
 const distDir = resolve(pkgDir, "dist");
 const stylesDir = resolve(pkgDir, "src", "styles");
-const tokensCss = resolve(pkgDir, "..", "tokens", "dist", `${variant}.css`);
+// 형제 디렉토리 경로가 아니라 패키지 해석(`@gugbab/tokens/<variant>.css` export)으로 찾는다 —
+// 모노레포 레이아웃에 묶이지 않고, 의존성 선언과 실제 입력이 일치한다.
+let tokensCss;
+try {
+    tokensCss = createRequire(resolve(pkgDir, "package.json")).resolve(`@gugbab/tokens/${variant}.css`);
+} catch (error) {
+    console.error(`build-styled-css: @gugbab/tokens/${variant}.css 를 해석할 수 없습니다 — tokens 를 먼저 빌드하세요.`);
+    console.error(`  ${error instanceof Error ? error.message : String(error)}`);
+    process.exit(1);
+}
 const pkgName = `@gugbab/styled-${variant}`;
 
 if (!existsSync(distDir)) mkdirSync(distDir, { recursive: true });
@@ -68,11 +78,12 @@ const parts = [];
 parts.push(`/* ${pkgName} — bundled styles (tokens + components) */`);
 parts.push("");
 
-if (existsSync(tokensCss)) {
-    parts.push(readFileSync(tokensCss, "utf8"));
-} else {
-    console.warn(`! tokens CSS not found at ${tokensCss}`);
+// 토큰 없는 styles.css 가 배포되면 모든 CSS 변수가 비어 화면이 깨진다 — 경고가 아니라 빌드 실패.
+if (!existsSync(tokensCss)) {
+    console.error(`build-styled-css: tokens CSS 가 없습니다: ${tokensCss} — tokens 를 먼저 빌드하세요.`);
+    process.exit(1);
 }
+parts.push(readFileSync(tokensCss, "utf8"));
 
 if (existsSync(stylesDir)) {
     const files = readdirSync(stylesDir)

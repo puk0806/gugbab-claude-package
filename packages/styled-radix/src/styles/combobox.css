@@ -14,7 +14,7 @@
 .grx-combobox__input {
   width: 100%;
   border-radius: var(--gugbab-radius-md);
-  border: 1px solid var(--gugbab-color-border-base);
+  border: 1px solid var(--gugbab-color-border-control);
   background: var(--gugbab-color-bg-surface);
   color: var(--gugbab-color-fg-primary);
   font-family: var(--gugbab-font-family-sans);
@@ -37,13 +37,13 @@
 }
 
 .grx-combobox__input:hover {
-  border-color: var(--gugbab-color-border-strong);
+  border-color: var(--gugbab-color-fg-secondary);
 }
 
 .grx-combobox__input:focus {
   outline: none;
-  border-color: var(--gugbab-color-accent-subtle);
-  box-shadow: 0 0 0 2px var(--gugbab-color-accent-subtle);
+  border-color: var(--gugbab-color-border-focus);
+  box-shadow: 0 0 0 2px var(--gugbab-color-border-focus);
 }
 
 .grx-combobox__input:disabled {
@@ -160,4 +160,11 @@
   opacity: 0.38;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+/* 키보드 활성 항목 — 가상 포커스라 :focus 대신 헤드리스의 data-highlighted 사용 (WCAG 2.4.7) */
+.grx-combobox__item[data-highlighted] {
+  background: var(--gugbab-color-accent-subtle);
+  outline: 2px solid var(--gugbab-color-accent-base);
+  outline-offset: -2px;
 }

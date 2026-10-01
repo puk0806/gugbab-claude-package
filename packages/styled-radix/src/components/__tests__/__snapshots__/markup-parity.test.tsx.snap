@@ -1,0 +1,874 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`markup parity — boundary cases > Tabs default variant and size are frozen (the only per-package difference) 1`] = `"grx-tabs grx-tabs--pills grx-tabs--md"`;
+
+exports[`markup parity — boundary cases > consumer className and hostile attribute values are preserved verbatim 1`] = `
+"container:
+<div class="grx-separator grx-separator--horizontal "><script>alert(1)</script>">
+body:
+<div class="grx-separator grx-separator--horizontal "><script>alert(1)</script>">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 1`] = `
+"container:
+<button class="grx-switch grx-switch--md">
+body:
+<button class="grx-switch grx-switch--md">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 2`] = `
+"container:
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+body:
+<button class="grx-switch grx-switch--md">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 3`] = `
+"container:
+<div class="grx-accordion grx-accordion--default">
+body:
+<button class="grx-switch grx-switch--md">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+<div class="grx-accordion grx-accordion--default">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 4`] = `
+"container:
+<form class="grx-form">
+body:
+<button class="grx-switch grx-switch--md">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+<div class="grx-accordion grx-accordion--default">
+<form class="grx-form">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 5`] = `
+"container:
+<div class="grx-toolbar">
+body:
+<button class="grx-switch grx-switch--md">
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+<div class="grx-accordion grx-accordion--default">
+<form class="grx-form">
+<div class="grx-toolbar">"
+`;
+
+exports[`markup parity — export shape (35 components) > Accordion: keys and part display names are frozen 1`] = `
+{
+  "Content": "AccordionContent",
+  "Header": "AccordionHeader",
+  "Item": "AccordionItem",
+  "Root": "AccordionRoot",
+  "Trigger": "AccordionTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > AlertDialog: keys and part display names are frozen 1`] = `
+{
+  "Action": "AlertDialogAction",
+  "Cancel": "AlertDialogCancel",
+  "Content": "AlertDialogContent",
+  "Description": "AlertDialogDescription",
+  "Overlay": "AlertDialogOverlay",
+  "Portal": "Portal3",
+  "Root": "AlertDialogRoot",
+  "Title": "AlertDialogTitle",
+  "Trigger": "AlertDialogTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > AspectRatio: keys and part display names are frozen 1`] = `
+{
+  "name": "AspectRatio2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Avatar: keys and part display names are frozen 1`] = `
+{
+  "Fallback": "AvatarFallback",
+  "Image": "AvatarImage",
+  "Root": "AvatarRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Breadcrumbs: keys and part display names are frozen 1`] = `
+{
+  "Item": "BreadcrumbsItem",
+  "Link": "BreadcrumbsLink",
+  "List": "BreadcrumbsList",
+  "Page": "BreadcrumbsPage",
+  "Root": "BreadcrumbsRoot",
+  "Separator": "BreadcrumbsSeparator",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Checkbox: keys and part display names are frozen 1`] = `
+{
+  "Indicator": "CheckboxIndicator",
+  "Root": "CheckboxRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Collapsible: keys and part display names are frozen 1`] = `
+{
+  "Content": "CollapsibleContent",
+  "Root": "CollapsibleRoot",
+  "Trigger": "CollapsibleTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Combobox: keys and part display names are frozen 1`] = `
+{
+  "Anchor": "ComboboxAnchor",
+  "Content": "ComboboxContent",
+  "Input": "ComboboxInput",
+  "Item": "ComboboxItem",
+  "Portal": "Portal",
+  "Root": "Root",
+  "Trigger": "ComboboxTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > ContextMenu: keys and part display names are frozen 1`] = `
+{
+  "Content": "ContextMenuContent",
+  "Item": "ContextMenuItem",
+  "Portal": "Portal4",
+  "Root": "ContextMenuRoot",
+  "Sub": "Sub",
+  "SubContent": "ContextMenuSubContent",
+  "SubTrigger": "ContextMenuSubTrigger",
+  "Trigger": "ContextMenuTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Dialog: keys and part display names are frozen 1`] = `
+{
+  "Close": "DialogClose",
+  "Content": "DialogContent",
+  "Description": "DialogDescription",
+  "Overlay": "DialogOverlay",
+  "Portal": "Portal3",
+  "Root": "DialogRoot",
+  "Title": "DialogTitle",
+  "Trigger": "DialogTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > DropdownMenu: keys and part display names are frozen 1`] = `
+{
+  "CheckboxItem": "DropdownMenuCheckboxItem",
+  "Content": "DropdownMenuContent",
+  "Item": "DropdownMenuItem",
+  "ItemIndicator": "DropdownMenuItemIndicator",
+  "Label": "DropdownMenuLabel",
+  "Portal": "Portal5",
+  "RadioGroup": "DropdownMenuRadioGroup",
+  "RadioItem": "DropdownMenuRadioItem",
+  "Root": "DropdownMenuRoot",
+  "Separator": "DropdownMenuSeparator",
+  "Sub": "Sub2",
+  "SubContent": "DropdownMenuSubContent",
+  "SubTrigger": "DropdownMenuSubTrigger",
+  "Trigger": "DropdownMenuTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Form: keys and part display names are frozen 1`] = `
+{
+  "Control": "FormControl",
+  "Field": "FormField",
+  "Label": "FormLabel",
+  "Message": "FormMessage",
+  "Root": "FormRoot",
+  "Submit": "FormSubmit",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > HoverCard: keys and part display names are frozen 1`] = `
+{
+  "Content": "HoverCardContent",
+  "Portal": "Portal6",
+  "Root": "HoverCardRoot",
+  "Trigger": "HoverCardTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Label: keys and part display names are frozen 1`] = `
+{
+  "name": "Label2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Menubar: keys and part display names are frozen 1`] = `
+{
+  "CheckboxItem": "MenubarCheckboxItem",
+  "Content": "MenubarContent",
+  "Item": "MenubarItem",
+  "ItemIndicator": "MenubarItemIndicator",
+  "Label": "MenubarLabel",
+  "Menu": "Menu",
+  "Portal": "Portal7",
+  "RadioGroup": "MenubarRadioGroup",
+  "RadioItem": "MenubarRadioItem",
+  "Root": "MenubarRoot",
+  "Separator": "MenubarSeparator",
+  "Sub": "Sub3",
+  "SubContent": "MenubarSubContent",
+  "SubTrigger": "MenubarSubTrigger",
+  "Trigger": "MenubarTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > NavigationMenu: keys and part display names are frozen 1`] = `
+{
+  "Content": "NavigationMenuContent",
+  "Item": "NavigationMenuItem",
+  "Link": "NavigationMenuLink",
+  "List": "NavigationMenuList",
+  "Root": "NavigationMenuRoot",
+  "Trigger": "NavigationMenuTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > OneTimePasswordField: keys and part display names are frozen 1`] = `
+{
+  "HiddenInput": "OTPFieldHiddenInput",
+  "Input": "OTPFieldInput",
+  "Root": "OTPFieldRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Pagination: keys and part display names are frozen 1`] = `
+{
+  "Ellipsis": "PaginationEllipsis",
+  "Item": "PaginationItem",
+  "List": "PaginationList",
+  "Next": "PaginationNext",
+  "Page": "PaginationPage",
+  "Previous": "PaginationPrevious",
+  "Root": "PaginationRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Popover: keys and part display names are frozen 1`] = `
+{
+  "Anchor": "PopoverAnchor",
+  "Close": "PopoverClose",
+  "Content": "PopoverContent",
+  "Portal": "Portal8",
+  "Root": "PopoverRoot",
+  "Trigger": "PopoverTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Portal: keys and part display names are frozen 1`] = `
+{
+  "name": "Portal11",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Progress: keys and part display names are frozen 1`] = `
+{
+  "Indicator": "ProgressIndicator",
+  "Root": "ProgressRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > RadioGroup: keys and part display names are frozen 1`] = `
+{
+  "Indicator": "RadioGroupIndicator",
+  "Item": "RadioGroupItem",
+  "Root": "RadioGroupRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > ScrollArea: keys and part display names are frozen 1`] = `
+{
+  "Corner": "ScrollAreaCorner",
+  "Root": "ScrollAreaRoot",
+  "Scrollbar": "ScrollAreaScrollbar",
+  "Thumb": "ScrollAreaThumb",
+  "Viewport": "ScrollAreaViewport",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Select: keys and part display names are frozen 1`] = `
+{
+  "Content": "SelectContent",
+  "Group": "SelectGroup",
+  "Item": "SelectItem",
+  "ItemText": "SelectItemText",
+  "Label": "SelectLabel",
+  "Portal": "Portal",
+  "Root": "Root",
+  "ScrollDownButton": "SelectScrollDownButton",
+  "ScrollUpButton": "SelectScrollUpButton",
+  "Trigger": "SelectTrigger",
+  "Value": "SelectValue",
+  "Viewport": "SelectViewport",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Separator: keys and part display names are frozen 1`] = `
+{
+  "name": "Separator2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Slider: keys and part display names are frozen 1`] = `
+{
+  "Range": "SliderRange",
+  "Root": "SliderRoot",
+  "Thumb": "SliderThumb",
+  "Track": "SliderTrack",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Slot: keys and part display names are frozen 1`] = `
+{
+  "name": "Slot2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Switch: keys and part display names are frozen 1`] = `
+{
+  "Root": "SwitchRoot",
+  "Thumb": "SwitchThumb",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Tabs: keys and part display names are frozen 1`] = `
+{
+  "Content": "TabsContent",
+  "List": "TabsList",
+  "Root": "TabsRoot",
+  "Trigger": "TabsTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Toast: keys and part display names are frozen 1`] = `
+{
+  "Action": "ToastAction",
+  "Close": "ToastClose",
+  "Description": "ToastDescription",
+  "Provider": "ToastProvider",
+  "Root": "ToastRoot",
+  "Title": "ToastTitle",
+  "Viewport": "ToastViewport",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Toggle: keys and part display names are frozen 1`] = `
+{
+  "name": "Toggle2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > ToggleGroup: keys and part display names are frozen 1`] = `
+{
+  "Item": "ToggleGroupItem",
+  "Root": "ToggleGroupRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Toolbar: keys and part display names are frozen 1`] = `
+{
+  "Button": "ToolbarButton",
+  "Link": "ToolbarLink",
+  "Root": "ToolbarRoot",
+  "Separator": "ToolbarSeparator",
+  "ToggleGroup": "ToolbarToggleGroup",
+  "ToggleItem": "ToolbarToggleItem",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Tooltip: keys and part display names are frozen 1`] = `
+{
+  "Content": "TooltipContent",
+  "Portal": "Portal9",
+  "Provider": "TooltipProvider",
+  "Root": "TooltipRoot",
+  "Trigger": "TooltipTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > VisuallyHidden: keys and part display names are frozen 1`] = `
+{
+  "name": "VisuallyHidden2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > exposes exactly the expected public component names 1`] = `
+[
+  "Accordion",
+  "AlertDialog",
+  "AspectRatio",
+  "Avatar",
+  "Breadcrumbs",
+  "Checkbox",
+  "Collapsible",
+  "Combobox",
+  "ContextMenu",
+  "Dialog",
+  "DropdownMenu",
+  "Form",
+  "HoverCard",
+  "Label",
+  "Menubar",
+  "NavigationMenu",
+  "OneTimePasswordField",
+  "Pagination",
+  "Popover",
+  "Portal",
+  "Progress",
+  "RadioGroup",
+  "ScrollArea",
+  "Select",
+  "Separator",
+  "Slider",
+  "Slot",
+  "Switch",
+  "Tabs",
+  "Toast",
+  "Toggle",
+  "ToggleGroup",
+  "Toolbar",
+  "Tooltip",
+  "VisuallyHidden",
+]
+`;
+
+exports[`markup parity — rendered HTML > Accordion: open/representative configuration 1`] = `
+"container:
+<div class="grx-accordion grx-accordion--outline">
+  <div class="grx-accordion__item">
+    <h3 class="grx-accordion__header">
+      <button class="grx-accordion__trigger">
+    <div class="grx-accordion__content">
+body:
+<div class="grx-accordion grx-accordion--outline">
+  <div class="grx-accordion__item">
+    <h3 class="grx-accordion__header">
+      <button class="grx-accordion__trigger">
+    <div class="grx-accordion__content">"
+`;
+
+exports[`markup parity — rendered HTML > AlertDialog: open/representative configuration 1`] = `
+"container:
+<button class="grx-alert-dialog__trigger">
+body:
+<button class="grx-alert-dialog__trigger">
+<div class="grx-alert-dialog__overlay">
+<div class="grx-alert-dialog__content grx-alert-dialog__content--lg">
+  <h2 class="grx-alert-dialog__title">
+  <p class="grx-alert-dialog__description">
+  <button class="grx-alert-dialog__cancel">
+  <button class="grx-alert-dialog__action grx-alert-dialog__action--danger">"
+`;
+
+exports[`markup parity — rendered HTML > AspectRatio: open/representative configuration 1`] = `
+"container:
+<div class="grx-aspect-ratio custom">
+body:
+<div class="grx-aspect-ratio custom">"
+`;
+
+exports[`markup parity — rendered HTML > Avatar: open/representative configuration 1`] = `
+"container:
+<span class="grx-avatar grx-avatar--lg">
+  <span class="grx-avatar__fallback">
+body:
+<span class="grx-avatar grx-avatar--lg">
+  <span class="grx-avatar__fallback">"
+`;
+
+exports[`markup parity — rendered HTML > Breadcrumbs: open/representative configuration 1`] = `
+"container:
+<nav class="grx-breadcrumbs grx-breadcrumbs--slash">
+  <ol class="grx-breadcrumbs__list">
+    <li class="grx-breadcrumbs__item">
+      <a class="grx-breadcrumbs__link">
+    <span class="grx-breadcrumbs__separator">
+    <li class="grx-breadcrumbs__item">
+      <span class="grx-breadcrumbs__page">
+body:
+<nav class="grx-breadcrumbs grx-breadcrumbs--slash">
+  <ol class="grx-breadcrumbs__list">
+    <li class="grx-breadcrumbs__item">
+      <a class="grx-breadcrumbs__link">
+    <span class="grx-breadcrumbs__separator">
+    <li class="grx-breadcrumbs__item">
+      <span class="grx-breadcrumbs__page">"
+`;
+
+exports[`markup parity — rendered HTML > Checkbox: open/representative configuration 1`] = `
+"container:
+<button class="grx-checkbox grx-checkbox--sm">
+  <span class="grx-checkbox__indicator">
+body:
+<button class="grx-checkbox grx-checkbox--sm">
+  <span class="grx-checkbox__indicator">"
+`;
+
+exports[`markup parity — rendered HTML > Collapsible: open/representative configuration 1`] = `
+"container:
+<div class="grx-collapsible">
+  <button class="grx-collapsible__trigger">
+  <div class="grx-collapsible__content">
+body:
+<div class="grx-collapsible">
+  <button class="grx-collapsible__trigger">
+  <div class="grx-collapsible__content">"
+`;
+
+exports[`markup parity — rendered HTML > Combobox: open/representative configuration 1`] = `
+"container:
+<div class="grx-combobox__anchor">
+  <input class="grx-combobox__input grx-combobox__input--sm">
+  <button class="grx-combobox__trigger">
+body:
+<div class="grx-combobox__anchor">
+  <input class="grx-combobox__input grx-combobox__input--sm">
+  <button class="grx-combobox__trigger">
+<div class="grx-combobox__content">
+  <button class="grx-combobox__item">"
+`;
+
+exports[`markup parity — rendered HTML > ContextMenu: open/representative configuration 1`] = `
+"container:
+
+body:
+<div class="grx-menu__content">
+  <button class="grx-menu__item">
+  <button class="grx-menu__item grx-menu__item--sub-trigger">
+  <div class="grx-menu__content grx-menu__sub-content">
+    <button class="grx-menu__item">"
+`;
+
+exports[`markup parity — rendered HTML > Dialog: open/representative configuration 1`] = `
+"container:
+<button class="grx-dialog__trigger">
+body:
+<button class="grx-dialog__trigger">
+<div class="grx-dialog__overlay">
+<div class="grx-dialog__content grx-dialog__content--xl">
+  <h2 class="grx-dialog__title">
+  <p class="grx-dialog__description">
+  <button class="grx-dialog__close">"
+`;
+
+exports[`markup parity — rendered HTML > DropdownMenu: open/representative configuration 1`] = `
+"container:
+
+body:
+<div class="grx-menu__content">
+  <div class="grx-menu__label">
+  <button class="grx-menu__item">
+  <button class="grx-menu__item grx-menu__item--checkbox">
+    <span class="grx-menu__item-indicator">
+  <div class="grx-menu__separator">
+  <div class="grx-menu__radio-group">
+    <button class="grx-menu__item grx-menu__item--radio">
+  <button class="grx-menu__item grx-menu__item--sub-trigger">
+  <div class="grx-menu__content grx-menu__sub-content">
+    <button class="grx-menu__item">"
+`;
+
+exports[`markup parity — rendered HTML > Form: open/representative configuration 1`] = `
+"container:
+<form class="grx-form">
+  <div class="grx-form__field grx-form__field--error">
+    <label class="grx-form__label">
+    <input class="grx-form__control">
+  <button class="grx-form__submit">
+body:
+<form class="grx-form">
+  <div class="grx-form__field grx-form__field--error">
+    <label class="grx-form__label">
+    <input class="grx-form__control">
+  <button class="grx-form__submit">"
+`;
+
+exports[`markup parity — rendered HTML > HoverCard: open/representative configuration 1`] = `
+"container:
+<a class="grx-hover-card__trigger">
+body:
+<a class="grx-hover-card__trigger">
+<div class="grx-hover-card__content">"
+`;
+
+exports[`markup parity — rendered HTML > Label: open/representative configuration 1`] = `
+"container:
+<label class="grx-label custom">
+body:
+<label class="grx-label custom">"
+`;
+
+exports[`markup parity — rendered HTML > Menubar: open/representative configuration 1`] = `
+"container:
+<div class="grx-menubar">
+  <button class="grx-menubar__trigger">
+body:
+<div class="grx-menubar">
+  <button class="grx-menubar__trigger">
+<div class="grx-menu__content">
+  <div class="grx-menu__label">
+  <button class="grx-menu__item">
+  <button class="grx-menu__item grx-menu__item--checkbox">
+    <span class="grx-menu__item-indicator">
+  <div class="grx-menu__separator">
+  <div class="grx-menu__radio-group">
+    <button class="grx-menu__item grx-menu__item--radio">
+  <button class="grx-menu__item grx-menu__item--sub-trigger">
+  <div class="grx-menu__content grx-menu__sub-content">
+    <button class="grx-menu__item">"
+`;
+
+exports[`markup parity — rendered HTML > NavigationMenu: open/representative configuration 1`] = `
+"container:
+<nav class="grx-navigation-menu">
+  <ul class="grx-navigation-menu__list">
+    <li class="grx-navigation-menu__item">
+      <button class="grx-navigation-menu__trigger">
+      <div class="grx-navigation-menu__content">
+        <a class="grx-navigation-menu__link">
+body:
+<nav class="grx-navigation-menu">
+  <ul class="grx-navigation-menu__list">
+    <li class="grx-navigation-menu__item">
+      <button class="grx-navigation-menu__trigger">
+      <div class="grx-navigation-menu__content">
+        <a class="grx-navigation-menu__link">"
+`;
+
+exports[`markup parity — rendered HTML > OneTimePasswordField: open/representative configuration 1`] = `
+"container:
+<div class="grx-otp">
+  <input class="grx-otp__input">
+  <input class="grx-otp__input">
+body:
+<div class="grx-otp">
+  <input class="grx-otp__input">
+  <input class="grx-otp__input">"
+`;
+
+exports[`markup parity — rendered HTML > Pagination: open/representative configuration 1`] = `
+"container:
+<nav class="grx-pagination grx-pagination--sm">
+  <ul class="grx-pagination__list">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__prev">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__page">
+    <li class="grx-pagination__item">
+      <span class="grx-pagination__ellipsis">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__next">
+body:
+<nav class="grx-pagination grx-pagination--sm">
+  <ul class="grx-pagination__list">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__prev">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__page">
+    <li class="grx-pagination__item">
+      <span class="grx-pagination__ellipsis">
+    <li class="grx-pagination__item">
+      <button class="grx-pagination__next">"
+`;
+
+exports[`markup parity — rendered HTML > Popover: open/representative configuration 1`] = `
+"container:
+<button class="grx-popover__trigger">
+<div class="grx-popover__anchor">
+body:
+<button class="grx-popover__trigger">
+<div class="grx-popover__anchor">
+<div class="grx-popover__content">
+  <button class="grx-popover__close">"
+`;
+
+exports[`markup parity — rendered HTML > Portal: open/representative configuration 1`] = `
+"container:
+
+body:
+"
+`;
+
+exports[`markup parity — rendered HTML > Progress: open/representative configuration 1`] = `
+"container:
+<div class="grx-progress grx-progress--sm">
+  <div class="grx-progress__indicator">
+body:
+<div class="grx-progress grx-progress--sm">
+  <div class="grx-progress__indicator">"
+`;
+
+exports[`markup parity — rendered HTML > RadioGroup: open/representative configuration 1`] = `
+"container:
+<div class="grx-radio-group grx-radio-group--sm">
+  <button class="grx-radio-group__item">
+    <span class="grx-radio-group__indicator">
+  <button class="grx-radio-group__item">
+    <span class="grx-radio-group__indicator">
+body:
+<div class="grx-radio-group grx-radio-group--sm">
+  <button class="grx-radio-group__item">
+    <span class="grx-radio-group__indicator">
+  <button class="grx-radio-group__item">
+    <span class="grx-radio-group__indicator">"
+`;
+
+exports[`markup parity — rendered HTML > ScrollArea: open/representative configuration 1`] = `
+"container:
+<div class="grx-scroll-area">
+  <div class="grx-scroll-area__viewport">
+  <div class="grx-scroll-area__scrollbar">
+    <div class="grx-scroll-area__thumb">
+  <div class="grx-scroll-area__scrollbar">
+    <div class="grx-scroll-area__thumb">
+  <div class="grx-scroll-area__corner">
+body:
+<div class="grx-scroll-area">
+  <div class="grx-scroll-area__viewport">
+  <div class="grx-scroll-area__scrollbar">
+    <div class="grx-scroll-area__thumb">
+  <div class="grx-scroll-area__scrollbar">
+    <div class="grx-scroll-area__thumb">
+  <div class="grx-scroll-area__corner">"
+`;
+
+exports[`markup parity — rendered HTML > Select: open/representative configuration 1`] = `
+"container:
+<button class="grx-select__trigger grx-select__trigger--sm">
+  <span class="grx-select__value">
+body:
+<button class="grx-select__trigger grx-select__trigger--sm">
+  <span class="grx-select__value">
+<div class="grx-select__content">
+  <div class="grx-select__scroll-button grx-select__scroll-button--up">
+  <div class="grx-select__viewport">
+    <div class="grx-select__group">
+      <div class="grx-select__label">
+      <button class="grx-select__item">
+        <span class="grx-select__item-text">
+  <div class="grx-select__scroll-button grx-select__scroll-button--down">"
+`;
+
+exports[`markup parity — rendered HTML > Separator: open/representative configuration 1`] = `
+"container:
+<div class="grx-separator grx-separator--vertical custom">
+body:
+<div class="grx-separator grx-separator--vertical custom">"
+`;
+
+exports[`markup parity — rendered HTML > Slider: open/representative configuration 1`] = `
+"container:
+<div class="grx-slider grx-slider--sm">
+  <span class="grx-slider__track">
+    <span class="grx-slider__range">
+  <span class="grx-slider__thumb">
+body:
+<div class="grx-slider grx-slider--sm">
+  <span class="grx-slider__track">
+    <span class="grx-slider__range">
+  <span class="grx-slider__thumb">"
+`;
+
+exports[`markup parity — rendered HTML > Slot: open/representative configuration 1`] = `
+"container:
+
+body:
+"
+`;
+
+exports[`markup parity — rendered HTML > Switch: open/representative configuration 1`] = `
+"container:
+<button class="grx-switch grx-switch--lg">
+  <span class="grx-switch__thumb">
+body:
+<button class="grx-switch grx-switch--lg">
+  <span class="grx-switch__thumb">"
+`;
+
+exports[`markup parity — rendered HTML > Tabs: open/representative configuration 1`] = `
+"container:
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+  <div class="grx-tabs__list">
+    <button class="grx-tabs__trigger">
+    <button class="grx-tabs__trigger">
+  <div class="grx-tabs__content">
+body:
+<div class="grx-tabs grx-tabs--pills grx-tabs--md">
+  <div class="grx-tabs__list">
+    <button class="grx-tabs__trigger">
+    <button class="grx-tabs__trigger">
+  <div class="grx-tabs__content">"
+`;
+
+exports[`markup parity — rendered HTML > Toast: open/representative configuration 1`] = `
+"container:
+<ol class="grx-toast-viewport">
+  <li class="grx-toast">
+    <div class="grx-toast__title">
+    <div class="grx-toast__description">
+    <button class="grx-toast__action">
+    <button class="grx-toast__close">
+body:
+<ol class="grx-toast-viewport">
+  <li class="grx-toast">
+    <div class="grx-toast__title">
+    <div class="grx-toast__description">
+    <button class="grx-toast__action">
+    <button class="grx-toast__close">"
+`;
+
+exports[`markup parity — rendered HTML > Toggle: open/representative configuration 1`] = `
+"container:
+<button class="grx-toggle grx-toggle--sm grx-toggle--outline custom">
+body:
+<button class="grx-toggle grx-toggle--sm grx-toggle--outline custom">"
+`;
+
+exports[`markup parity — rendered HTML > ToggleGroup: open/representative configuration 1`] = `
+"container:
+<div class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline">
+  <button class="grx-toggle-group__item">
+body:
+<div class="grx-toggle-group grx-toggle-group--sm grx-toggle-group--outline">
+  <button class="grx-toggle-group__item">"
+`;
+
+exports[`markup parity — rendered HTML > Toolbar: open/representative configuration 1`] = `
+"container:
+<div class="grx-toolbar">
+  <button class="grx-toolbar__button">
+  <a class="grx-toolbar__link">
+  <div class="grx-toolbar__separator">
+  <div class="grx-toolbar__toggle-group">
+    <button class="grx-toolbar__toggle-item">
+body:
+<div class="grx-toolbar">
+  <button class="grx-toolbar__button">
+  <a class="grx-toolbar__link">
+  <div class="grx-toolbar__separator">
+  <div class="grx-toolbar__toggle-group">
+    <button class="grx-toolbar__toggle-item">"
+`;
+
+exports[`markup parity — rendered HTML > Tooltip: open/representative configuration 1`] = `
+"container:
+<button class="grx-tooltip__trigger">
+body:
+<button class="grx-tooltip__trigger">
+<div class="grx-tooltip__content">"
+`;
+
+exports[`markup parity — rendered HTML > VisuallyHidden: open/representative configuration 1`] = `
+"container:
+
+body:
+"
+`;

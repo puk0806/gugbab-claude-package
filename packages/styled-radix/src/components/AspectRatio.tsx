@@ -1,12 +1,5 @@
-import { type AspectRatioProps, AspectRatio as HeadlessAspectRatio } from "@gugbab/headless";
-import { cn } from "@gugbab/utils";
-import { forwardRef } from "react";
+import { createAspectRatio } from "@gugbab/styled-factory";
 
-export interface StyledAspectRatioProps extends AspectRatioProps {}
+export const AspectRatio = /* @__PURE__ */ createAspectRatio("grx");
 
-export const AspectRatio = forwardRef<HTMLDivElement, StyledAspectRatioProps>(function AspectRatio(
-    { className, ...rest },
-    ref,
-) {
-    return <HeadlessAspectRatio ref={ref} className={cn("grx-aspect-ratio", className)} {...rest} />;
-});
+export type { StyledAspectRatioProps } from "@gugbab/styled-factory";

@@ -8,6 +8,7 @@ import {
   type Ref,
   useContext,
   useId,
+  useMemo,
 } from 'react';
 import { Slot } from '../../primitives/Slot/Slot';
 import { useDirection } from '../../shared/DirectionProvider';
@@ -65,18 +66,21 @@ const Root = forwardRef<HTMLDivElement, TabsRootProps>(function TabsRoot(
   const baseId = useId();
   const resolvedDir = useDirection(dir);
 
+  const ctxValue = useMemo<TabsContextValue>(
+    () => ({
+      value: current,
+      setValue,
+      orientation,
+      activationMode,
+      baseId,
+      loop,
+      dir: resolvedDir,
+    }),
+    [current, setValue, orientation, activationMode, baseId, loop, resolvedDir],
+  );
+
   return (
-    <TabsContext.Provider
-      value={{
-        value: current,
-        setValue: (v) => setValue(v),
-        orientation,
-        activationMode,
-        baseId,
-        loop,
-        dir: resolvedDir,
-      }}
-    >
+    <TabsContext.Provider value={ctxValue}>
       <div ref={ref} data-orientation={orientation} dir={resolvedDir} {...rest} />
     </TabsContext.Provider>
   );

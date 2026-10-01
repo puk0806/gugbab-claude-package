@@ -1,0 +1,12 @@
+{
+  "extends": "@gugbab/tsconfig/react-library.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [],
+    "incremental": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules", "coverage", ".turbo"]
+}

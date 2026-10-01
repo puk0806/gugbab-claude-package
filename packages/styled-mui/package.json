@@ -53,11 +53,11 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsup && node ../../scripts/build-styled-css.mjs mui && node ../../scripts/inject-use-client.mjs dist/index.mjs dist/index.cjs",
+    "build": "tsup && node ../../scripts/build-styled-css.mjs mui && node ../../scripts/inject-use-client.mjs dist/index.mjs dist/index.cjs && node ../../scripts/assert-no-private-imports.mjs @gugbab/styled-factory dist/index.mjs dist/index.cjs dist/index.d.ts dist/index.d.cts",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "clean": "rm -rf dist .turbo coverage"
   },
   "dependencies": {
@@ -66,10 +66,11 @@
     "@gugbab/utils": "workspace:*"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
+    "@gugbab/styled-factory": "workspace:*",
     "@gugbab/tsconfig": "workspace:*",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -80,6 +81,6 @@
     "react-dom": "^19.0.0",
     "tsup": "^8.3.6",
     "typescript": "^5.7.2",
-    "vitest": "^2.1.9"
+    "vitest": "^3.2.7"
   }
 }

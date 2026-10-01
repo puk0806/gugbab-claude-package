@@ -1,11 +1,14 @@
 - [Package project goal](project_package_goal.md) — Claude-only 범용 헤드리스 UI + 정적 토큰 + 스타일 9 패키지 모노레포. v1.0.0 publish 완료.
 - [Reference monorepo](project_reference_monorepo.md) — 참고 레포(gugbab-integrated-admin-poc) 구조·스택 요약
 - [Headless React package roadmap](project_react_roadmap.md) — @gugbab/headless 5-tier 35 컴포넌트의 설계 결정·카탈로그·다음 후보
-- [npm v1 publishing — DONE](project_npm_v1_publishing.md) — v1.0.0 9개 + v1.0.1 5개 npm 게시 완료. 2026-05-11 부터 feature PR 머지 1회로 publish 자동 (auto-merge 흐름).
-- [Claude hooks system](project_hooks_system.md) — 훅 23종 운영. 메모리·세션 export 동기화, Codex 리뷰, 품질 가드. 훅 self-commit은 --no-verify 필수.
+- [npm v1 publishing — DONE](project_npm_v1_publishing.md) — v1.0.0 9개 + v1.0.1 5개 npm 게시 완료. feature PR 머지 1회로 publish 자동. 2026-10-01부터 main 엄격 보호(PR 필수·ci·visual-regression 필수·우회 없음), 봇 PR은 ci-verify-bot-pr.sh로 검증·상태 등록
+- [Claude hooks system](project_hooks_system.md) — 훅 24개 운영(원본 레포 설치본, 작성 도구 미설치). 메모리·세션 export 동기화, Codex 리뷰, 품질 가드. 브랜치 전환 시 전역 메모리 퇴행 주의.
+- [2026-09-30 audit & priorities](project_audit_2026_09_30.md) — 1~4순위 + styled 통합 완료, 단일 PR(feature/project-audit-2026-09)로 푸시. semver minor 유지, 배포 후 dream·voca·health 점검. 결정 D1~D4·Codex 설정 대기
+- [No git stash for temp comparisons](feedback_no_git_stash.md) — 기존 stash 항목이 있어 pop 사고 발생(09-30). 사본 교체·복원으로 비교, 사용자 stash는 절대 pop/drop 금지
+- [Report upstream asset bugs](feedback_report_upstream_asset_bugs.md) — 설치본 .claude 자산 버그는 원본(00_gugbab-claude) 세션에 SendMessage로 전달 후 재설치
 - [relay-types + types-generator](project_relay_types_generator.md) — OpenAPI→TS 타입 자동 publish 파이프라인 완성·운영 중 (1.0.0-{ts}, relay 배포 성공 → 자동 게시). PAT 만료 주의.
 - [utils history module](project_utils_history_module.md) — utils 1.3.0 이력 압축 순수 함수 4종. 상한 값 파라미터 주입, relay-types 의존 금지 (사용자 확정)
-- [Speech common package](project_speech_common.md) — Web Speech API(STT/TTS) 공통화: hooks speech 카테고리 + utils appendTranscript. 3앱 마이그레이션 예정. pnpm pack 주의.
+- [Speech common package](project_speech_common.md) — Web Speech API(STT/TTS) 공통화 완료: hooks 1.3.0·utils 1.4.0 게시 + 3앱 마이그레이션 브랜치 푸시(2026-09-04). 남은 것: 앱 PR 머지·실기기 확인. pnpm pack 주의.
 - [Visual check script](reference_visual_check.md) — `scripts/visual-check.{mjs,sh}` Playwright 시각 검수 도구
 - [Batched execution preference](feedback_batched_execution.md) — 섹션별 승인 대신 초반 방향만 대화 후 일괄 진행, 전체 승인 1회
 - [Commit at end of session](feedback_commit_at_end.md) — 다단계 누적 세션은 마지막에 한 번만 커밋, 중간 커밋 금지
@@ -14,4 +17,6 @@
 - [No external design deps](feedback_no_external_design_deps.md) — 디자인 토큰은 외부 라이브러리(MUI/Radix 등)에 의존하지 않고 정적으로 박제
 - [Package naming clarity](feedback_package_naming_clarity.md) — 모노레포 패키지명은 의도가 즉시 드러나야 함 (모호한 `react`/`core` 회피)
 - [No worktrees, use feature branches](feedback_no_worktrees_use_feature_branch.md) — 모든 작업은 feature/* 브랜치 + PR, 머지는 사용자 직접 (워크트리 금지)
-- [PR creation by user only](feedback_pr_creation.md) — gh pr create 호출 금지, PR은 사용자가 직접 생성
+- [PR creation by user only](feedback_pr_creation.md) — gh pr create 호출 금지, PR은 사용자가 직접 생성 (사용자가 명시적으로 요청하면 예외)
+- [Always answer in Korean](feedback_korean_responses.md) — 도구 출력·서브에이전트 결과가 영어여도 답변은 항상 한국어 (2026-10-01 두 번 연속 위반)
+- [Single PR for multi-part work](feedback_single_pr.md) — 커밋은 관심사별로 나누되 PR은 하나. 작업 단위마다 브랜치·PR 쪼개지 않기

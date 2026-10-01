@@ -1,0 +1,874 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`markup parity — boundary cases > Tabs default variant and size are frozen (the only per-package difference) 1`] = `"gmui-tabs gmui-tabs--underline gmui-tabs--md"`;
+
+exports[`markup parity — boundary cases > consumer className and hostile attribute values are preserved verbatim 1`] = `
+"container:
+<div class="gmui-separator gmui-separator--horizontal "><script>alert(1)</script>">
+body:
+<div class="gmui-separator gmui-separator--horizontal "><script>alert(1)</script>">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 1`] = `
+"container:
+<button class="gmui-switch gmui-switch--md">
+body:
+<button class="gmui-switch gmui-switch--md">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 2`] = `
+"container:
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+body:
+<button class="gmui-switch gmui-switch--md">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 3`] = `
+"container:
+<div class="gmui-accordion gmui-accordion--default">
+body:
+<button class="gmui-switch gmui-switch--md">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+<div class="gmui-accordion gmui-accordion--default">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 4`] = `
+"container:
+<form class="gmui-form">
+body:
+<button class="gmui-switch gmui-switch--md">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+<div class="gmui-accordion gmui-accordion--default">
+<form class="gmui-form">"
+`;
+
+exports[`markup parity — boundary cases > renders roots with no props and no children 5`] = `
+"container:
+<div class="gmui-toolbar">
+body:
+<button class="gmui-switch gmui-switch--md">
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+<div class="gmui-accordion gmui-accordion--default">
+<form class="gmui-form">
+<div class="gmui-toolbar">"
+`;
+
+exports[`markup parity — export shape (35 components) > Accordion: keys and part display names are frozen 1`] = `
+{
+  "Content": "AccordionContent",
+  "Header": "AccordionHeader",
+  "Item": "AccordionItem",
+  "Root": "AccordionRoot",
+  "Trigger": "AccordionTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > AlertDialog: keys and part display names are frozen 1`] = `
+{
+  "Action": "AlertDialogAction",
+  "Cancel": "AlertDialogCancel",
+  "Content": "AlertDialogContent",
+  "Description": "AlertDialogDescription",
+  "Overlay": "AlertDialogOverlay",
+  "Portal": "Portal3",
+  "Root": "AlertDialogRoot",
+  "Title": "AlertDialogTitle",
+  "Trigger": "AlertDialogTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > AspectRatio: keys and part display names are frozen 1`] = `
+{
+  "name": "AspectRatio2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Avatar: keys and part display names are frozen 1`] = `
+{
+  "Fallback": "AvatarFallback",
+  "Image": "AvatarImage",
+  "Root": "AvatarRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Breadcrumbs: keys and part display names are frozen 1`] = `
+{
+  "Item": "BreadcrumbsItem",
+  "Link": "BreadcrumbsLink",
+  "List": "BreadcrumbsList",
+  "Page": "BreadcrumbsPage",
+  "Root": "BreadcrumbsRoot",
+  "Separator": "BreadcrumbsSeparator",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Checkbox: keys and part display names are frozen 1`] = `
+{
+  "Indicator": "CheckboxIndicator",
+  "Root": "CheckboxRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Collapsible: keys and part display names are frozen 1`] = `
+{
+  "Content": "CollapsibleContent",
+  "Root": "CollapsibleRoot",
+  "Trigger": "CollapsibleTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Combobox: keys and part display names are frozen 1`] = `
+{
+  "Anchor": "ComboboxAnchor",
+  "Content": "ComboboxContent",
+  "Input": "ComboboxInput",
+  "Item": "ComboboxItem",
+  "Portal": "Portal",
+  "Root": "Root",
+  "Trigger": "ComboboxTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > ContextMenu: keys and part display names are frozen 1`] = `
+{
+  "Content": "ContextMenuContent",
+  "Item": "ContextMenuItem",
+  "Portal": "Portal4",
+  "Root": "ContextMenuRoot",
+  "Sub": "Sub",
+  "SubContent": "ContextMenuSubContent",
+  "SubTrigger": "ContextMenuSubTrigger",
+  "Trigger": "ContextMenuTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Dialog: keys and part display names are frozen 1`] = `
+{
+  "Close": "DialogClose",
+  "Content": "DialogContent",
+  "Description": "DialogDescription",
+  "Overlay": "DialogOverlay",
+  "Portal": "Portal3",
+  "Root": "DialogRoot",
+  "Title": "DialogTitle",
+  "Trigger": "DialogTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > DropdownMenu: keys and part display names are frozen 1`] = `
+{
+  "CheckboxItem": "DropdownMenuCheckboxItem",
+  "Content": "DropdownMenuContent",
+  "Item": "DropdownMenuItem",
+  "ItemIndicator": "DropdownMenuItemIndicator",
+  "Label": "DropdownMenuLabel",
+  "Portal": "Portal5",
+  "RadioGroup": "DropdownMenuRadioGroup",
+  "RadioItem": "DropdownMenuRadioItem",
+  "Root": "DropdownMenuRoot",
+  "Separator": "DropdownMenuSeparator",
+  "Sub": "Sub2",
+  "SubContent": "DropdownMenuSubContent",
+  "SubTrigger": "DropdownMenuSubTrigger",
+  "Trigger": "DropdownMenuTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Form: keys and part display names are frozen 1`] = `
+{
+  "Control": "FormControl",
+  "Field": "FormField",
+  "Label": "FormLabel",
+  "Message": "FormMessage",
+  "Root": "FormRoot",
+  "Submit": "FormSubmit",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > HoverCard: keys and part display names are frozen 1`] = `
+{
+  "Content": "HoverCardContent",
+  "Portal": "Portal6",
+  "Root": "HoverCardRoot",
+  "Trigger": "HoverCardTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Label: keys and part display names are frozen 1`] = `
+{
+  "name": "Label2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Menubar: keys and part display names are frozen 1`] = `
+{
+  "CheckboxItem": "MenubarCheckboxItem",
+  "Content": "MenubarContent",
+  "Item": "MenubarItem",
+  "ItemIndicator": "MenubarItemIndicator",
+  "Label": "MenubarLabel",
+  "Menu": "Menu",
+  "Portal": "Portal7",
+  "RadioGroup": "MenubarRadioGroup",
+  "RadioItem": "MenubarRadioItem",
+  "Root": "MenubarRoot",
+  "Separator": "MenubarSeparator",
+  "Sub": "Sub3",
+  "SubContent": "MenubarSubContent",
+  "SubTrigger": "MenubarSubTrigger",
+  "Trigger": "MenubarTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > NavigationMenu: keys and part display names are frozen 1`] = `
+{
+  "Content": "NavigationMenuContent",
+  "Item": "NavigationMenuItem",
+  "Link": "NavigationMenuLink",
+  "List": "NavigationMenuList",
+  "Root": "NavigationMenuRoot",
+  "Trigger": "NavigationMenuTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > OneTimePasswordField: keys and part display names are frozen 1`] = `
+{
+  "HiddenInput": "OTPFieldHiddenInput",
+  "Input": "OTPFieldInput",
+  "Root": "OTPFieldRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Pagination: keys and part display names are frozen 1`] = `
+{
+  "Ellipsis": "PaginationEllipsis",
+  "Item": "PaginationItem",
+  "List": "PaginationList",
+  "Next": "PaginationNext",
+  "Page": "PaginationPage",
+  "Previous": "PaginationPrevious",
+  "Root": "PaginationRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Popover: keys and part display names are frozen 1`] = `
+{
+  "Anchor": "PopoverAnchor",
+  "Close": "PopoverClose",
+  "Content": "PopoverContent",
+  "Portal": "Portal8",
+  "Root": "PopoverRoot",
+  "Trigger": "PopoverTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Portal: keys and part display names are frozen 1`] = `
+{
+  "name": "Portal11",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Progress: keys and part display names are frozen 1`] = `
+{
+  "Indicator": "ProgressIndicator",
+  "Root": "ProgressRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > RadioGroup: keys and part display names are frozen 1`] = `
+{
+  "Indicator": "RadioGroupIndicator",
+  "Item": "RadioGroupItem",
+  "Root": "RadioGroupRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > ScrollArea: keys and part display names are frozen 1`] = `
+{
+  "Corner": "ScrollAreaCorner",
+  "Root": "ScrollAreaRoot",
+  "Scrollbar": "ScrollAreaScrollbar",
+  "Thumb": "ScrollAreaThumb",
+  "Viewport": "ScrollAreaViewport",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Select: keys and part display names are frozen 1`] = `
+{
+  "Content": "SelectContent",
+  "Group": "SelectGroup",
+  "Item": "SelectItem",
+  "ItemText": "SelectItemText",
+  "Label": "SelectLabel",
+  "Portal": "Portal",
+  "Root": "Root",
+  "ScrollDownButton": "SelectScrollDownButton",
+  "ScrollUpButton": "SelectScrollUpButton",
+  "Trigger": "SelectTrigger",
+  "Value": "SelectValue",
+  "Viewport": "SelectViewport",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Separator: keys and part display names are frozen 1`] = `
+{
+  "name": "Separator2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Slider: keys and part display names are frozen 1`] = `
+{
+  "Range": "SliderRange",
+  "Root": "SliderRoot",
+  "Thumb": "SliderThumb",
+  "Track": "SliderTrack",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Slot: keys and part display names are frozen 1`] = `
+{
+  "name": "Slot2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Switch: keys and part display names are frozen 1`] = `
+{
+  "Root": "SwitchRoot",
+  "Thumb": "SwitchThumb",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Tabs: keys and part display names are frozen 1`] = `
+{
+  "Content": "TabsContent",
+  "List": "TabsList",
+  "Root": "TabsRoot",
+  "Trigger": "TabsTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Toast: keys and part display names are frozen 1`] = `
+{
+  "Action": "ToastAction",
+  "Close": "ToastClose",
+  "Description": "ToastDescription",
+  "Provider": "ToastProvider",
+  "Root": "ToastRoot",
+  "Title": "ToastTitle",
+  "Viewport": "ToastViewport",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Toggle: keys and part display names are frozen 1`] = `
+{
+  "name": "Toggle2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > ToggleGroup: keys and part display names are frozen 1`] = `
+{
+  "Item": "ToggleGroupItem",
+  "Root": "ToggleGroupRoot",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Toolbar: keys and part display names are frozen 1`] = `
+{
+  "Button": "ToolbarButton",
+  "Link": "ToolbarLink",
+  "Root": "ToolbarRoot",
+  "Separator": "ToolbarSeparator",
+  "ToggleGroup": "ToolbarToggleGroup",
+  "ToggleItem": "ToolbarToggleItem",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > Tooltip: keys and part display names are frozen 1`] = `
+{
+  "Content": "TooltipContent",
+  "Portal": "Portal9",
+  "Provider": "TooltipProvider",
+  "Root": "TooltipRoot",
+  "Trigger": "TooltipTrigger",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > VisuallyHidden: keys and part display names are frozen 1`] = `
+{
+  "name": "VisuallyHidden2",
+}
+`;
+
+exports[`markup parity — export shape (35 components) > exposes exactly the expected public component names 1`] = `
+[
+  "Accordion",
+  "AlertDialog",
+  "AspectRatio",
+  "Avatar",
+  "Breadcrumbs",
+  "Checkbox",
+  "Collapsible",
+  "Combobox",
+  "ContextMenu",
+  "Dialog",
+  "DropdownMenu",
+  "Form",
+  "HoverCard",
+  "Label",
+  "Menubar",
+  "NavigationMenu",
+  "OneTimePasswordField",
+  "Pagination",
+  "Popover",
+  "Portal",
+  "Progress",
+  "RadioGroup",
+  "ScrollArea",
+  "Select",
+  "Separator",
+  "Slider",
+  "Slot",
+  "Switch",
+  "Tabs",
+  "Toast",
+  "Toggle",
+  "ToggleGroup",
+  "Toolbar",
+  "Tooltip",
+  "VisuallyHidden",
+]
+`;
+
+exports[`markup parity — rendered HTML > Accordion: open/representative configuration 1`] = `
+"container:
+<div class="gmui-accordion gmui-accordion--outline">
+  <div class="gmui-accordion__item">
+    <h3 class="gmui-accordion__header">
+      <button class="gmui-accordion__trigger">
+    <div class="gmui-accordion__content">
+body:
+<div class="gmui-accordion gmui-accordion--outline">
+  <div class="gmui-accordion__item">
+    <h3 class="gmui-accordion__header">
+      <button class="gmui-accordion__trigger">
+    <div class="gmui-accordion__content">"
+`;
+
+exports[`markup parity — rendered HTML > AlertDialog: open/representative configuration 1`] = `
+"container:
+<button class="gmui-alert-dialog__trigger">
+body:
+<button class="gmui-alert-dialog__trigger">
+<div class="gmui-alert-dialog__overlay">
+<div class="gmui-alert-dialog__content gmui-alert-dialog__content--lg">
+  <h2 class="gmui-alert-dialog__title">
+  <p class="gmui-alert-dialog__description">
+  <button class="gmui-alert-dialog__cancel">
+  <button class="gmui-alert-dialog__action gmui-alert-dialog__action--danger">"
+`;
+
+exports[`markup parity — rendered HTML > AspectRatio: open/representative configuration 1`] = `
+"container:
+<div class="gmui-aspect-ratio custom">
+body:
+<div class="gmui-aspect-ratio custom">"
+`;
+
+exports[`markup parity — rendered HTML > Avatar: open/representative configuration 1`] = `
+"container:
+<span class="gmui-avatar gmui-avatar--lg">
+  <span class="gmui-avatar__fallback">
+body:
+<span class="gmui-avatar gmui-avatar--lg">
+  <span class="gmui-avatar__fallback">"
+`;
+
+exports[`markup parity — rendered HTML > Breadcrumbs: open/representative configuration 1`] = `
+"container:
+<nav class="gmui-breadcrumbs gmui-breadcrumbs--slash">
+  <ol class="gmui-breadcrumbs__list">
+    <li class="gmui-breadcrumbs__item">
+      <a class="gmui-breadcrumbs__link">
+    <span class="gmui-breadcrumbs__separator">
+    <li class="gmui-breadcrumbs__item">
+      <span class="gmui-breadcrumbs__page">
+body:
+<nav class="gmui-breadcrumbs gmui-breadcrumbs--slash">
+  <ol class="gmui-breadcrumbs__list">
+    <li class="gmui-breadcrumbs__item">
+      <a class="gmui-breadcrumbs__link">
+    <span class="gmui-breadcrumbs__separator">
+    <li class="gmui-breadcrumbs__item">
+      <span class="gmui-breadcrumbs__page">"
+`;
+
+exports[`markup parity — rendered HTML > Checkbox: open/representative configuration 1`] = `
+"container:
+<button class="gmui-checkbox gmui-checkbox--sm">
+  <span class="gmui-checkbox__indicator">
+body:
+<button class="gmui-checkbox gmui-checkbox--sm">
+  <span class="gmui-checkbox__indicator">"
+`;
+
+exports[`markup parity — rendered HTML > Collapsible: open/representative configuration 1`] = `
+"container:
+<div class="gmui-collapsible">
+  <button class="gmui-collapsible__trigger">
+  <div class="gmui-collapsible__content">
+body:
+<div class="gmui-collapsible">
+  <button class="gmui-collapsible__trigger">
+  <div class="gmui-collapsible__content">"
+`;
+
+exports[`markup parity — rendered HTML > Combobox: open/representative configuration 1`] = `
+"container:
+<div class="gmui-combobox__anchor">
+  <input class="gmui-combobox__input gmui-combobox__input--sm">
+  <button class="gmui-combobox__trigger">
+body:
+<div class="gmui-combobox__anchor">
+  <input class="gmui-combobox__input gmui-combobox__input--sm">
+  <button class="gmui-combobox__trigger">
+<div class="gmui-combobox__content">
+  <button class="gmui-combobox__item">"
+`;
+
+exports[`markup parity — rendered HTML > ContextMenu: open/representative configuration 1`] = `
+"container:
+
+body:
+<div class="gmui-menu__content">
+  <button class="gmui-menu__item">
+  <button class="gmui-menu__item gmui-menu__item--sub-trigger">
+  <div class="gmui-menu__content gmui-menu__sub-content">
+    <button class="gmui-menu__item">"
+`;
+
+exports[`markup parity — rendered HTML > Dialog: open/representative configuration 1`] = `
+"container:
+<button class="gmui-dialog__trigger">
+body:
+<button class="gmui-dialog__trigger">
+<div class="gmui-dialog__overlay">
+<div class="gmui-dialog__content gmui-dialog__content--xl">
+  <h2 class="gmui-dialog__title">
+  <p class="gmui-dialog__description">
+  <button class="gmui-dialog__close">"
+`;
+
+exports[`markup parity — rendered HTML > DropdownMenu: open/representative configuration 1`] = `
+"container:
+
+body:
+<div class="gmui-menu__content">
+  <div class="gmui-menu__label">
+  <button class="gmui-menu__item">
+  <button class="gmui-menu__item gmui-menu__item--checkbox">
+    <span class="gmui-menu__item-indicator">
+  <div class="gmui-menu__separator">
+  <div class="gmui-menu__radio-group">
+    <button class="gmui-menu__item gmui-menu__item--radio">
+  <button class="gmui-menu__item gmui-menu__item--sub-trigger">
+  <div class="gmui-menu__content gmui-menu__sub-content">
+    <button class="gmui-menu__item">"
+`;
+
+exports[`markup parity — rendered HTML > Form: open/representative configuration 1`] = `
+"container:
+<form class="gmui-form">
+  <div class="gmui-form__field gmui-form__field--error">
+    <label class="gmui-form__label">
+    <input class="gmui-form__control">
+  <button class="gmui-form__submit">
+body:
+<form class="gmui-form">
+  <div class="gmui-form__field gmui-form__field--error">
+    <label class="gmui-form__label">
+    <input class="gmui-form__control">
+  <button class="gmui-form__submit">"
+`;
+
+exports[`markup parity — rendered HTML > HoverCard: open/representative configuration 1`] = `
+"container:
+<a class="gmui-hover-card__trigger">
+body:
+<a class="gmui-hover-card__trigger">
+<div class="gmui-hover-card__content">"
+`;
+
+exports[`markup parity — rendered HTML > Label: open/representative configuration 1`] = `
+"container:
+<label class="gmui-label custom">
+body:
+<label class="gmui-label custom">"
+`;
+
+exports[`markup parity — rendered HTML > Menubar: open/representative configuration 1`] = `
+"container:
+<div class="gmui-menubar">
+  <button class="gmui-menubar__trigger">
+body:
+<div class="gmui-menubar">
+  <button class="gmui-menubar__trigger">
+<div class="gmui-menu__content">
+  <div class="gmui-menu__label">
+  <button class="gmui-menu__item">
+  <button class="gmui-menu__item gmui-menu__item--checkbox">
+    <span class="gmui-menu__item-indicator">
+  <div class="gmui-menu__separator">
+  <div class="gmui-menu__radio-group">
+    <button class="gmui-menu__item gmui-menu__item--radio">
+  <button class="gmui-menu__item gmui-menu__item--sub-trigger">
+  <div class="gmui-menu__content gmui-menu__sub-content">
+    <button class="gmui-menu__item">"
+`;
+
+exports[`markup parity — rendered HTML > NavigationMenu: open/representative configuration 1`] = `
+"container:
+<nav class="gmui-navigation-menu">
+  <ul class="gmui-navigation-menu__list">
+    <li class="gmui-navigation-menu__item">
+      <button class="gmui-navigation-menu__trigger">
+      <div class="gmui-navigation-menu__content">
+        <a class="gmui-navigation-menu__link">
+body:
+<nav class="gmui-navigation-menu">
+  <ul class="gmui-navigation-menu__list">
+    <li class="gmui-navigation-menu__item">
+      <button class="gmui-navigation-menu__trigger">
+      <div class="gmui-navigation-menu__content">
+        <a class="gmui-navigation-menu__link">"
+`;
+
+exports[`markup parity — rendered HTML > OneTimePasswordField: open/representative configuration 1`] = `
+"container:
+<div class="gmui-otp">
+  <input class="gmui-otp__input">
+  <input class="gmui-otp__input">
+body:
+<div class="gmui-otp">
+  <input class="gmui-otp__input">
+  <input class="gmui-otp__input">"
+`;
+
+exports[`markup parity — rendered HTML > Pagination: open/representative configuration 1`] = `
+"container:
+<nav class="gmui-pagination gmui-pagination--sm">
+  <ul class="gmui-pagination__list">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__prev">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__page">
+    <li class="gmui-pagination__item">
+      <span class="gmui-pagination__ellipsis">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__next">
+body:
+<nav class="gmui-pagination gmui-pagination--sm">
+  <ul class="gmui-pagination__list">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__prev">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__page">
+    <li class="gmui-pagination__item">
+      <span class="gmui-pagination__ellipsis">
+    <li class="gmui-pagination__item">
+      <button class="gmui-pagination__next">"
+`;
+
+exports[`markup parity — rendered HTML > Popover: open/representative configuration 1`] = `
+"container:
+<button class="gmui-popover__trigger">
+<div class="gmui-popover__anchor">
+body:
+<button class="gmui-popover__trigger">
+<div class="gmui-popover__anchor">
+<div class="gmui-popover__content">
+  <button class="gmui-popover__close">"
+`;
+
+exports[`markup parity — rendered HTML > Portal: open/representative configuration 1`] = `
+"container:
+
+body:
+"
+`;
+
+exports[`markup parity — rendered HTML > Progress: open/representative configuration 1`] = `
+"container:
+<div class="gmui-progress gmui-progress--sm">
+  <div class="gmui-progress__indicator">
+body:
+<div class="gmui-progress gmui-progress--sm">
+  <div class="gmui-progress__indicator">"
+`;
+
+exports[`markup parity — rendered HTML > RadioGroup: open/representative configuration 1`] = `
+"container:
+<div class="gmui-radio-group gmui-radio-group--sm">
+  <button class="gmui-radio-group__item">
+    <span class="gmui-radio-group__indicator">
+  <button class="gmui-radio-group__item">
+    <span class="gmui-radio-group__indicator">
+body:
+<div class="gmui-radio-group gmui-radio-group--sm">
+  <button class="gmui-radio-group__item">
+    <span class="gmui-radio-group__indicator">
+  <button class="gmui-radio-group__item">
+    <span class="gmui-radio-group__indicator">"
+`;
+
+exports[`markup parity — rendered HTML > ScrollArea: open/representative configuration 1`] = `
+"container:
+<div class="gmui-scroll-area">
+  <div class="gmui-scroll-area__viewport">
+  <div class="gmui-scroll-area__scrollbar">
+    <div class="gmui-scroll-area__thumb">
+  <div class="gmui-scroll-area__scrollbar">
+    <div class="gmui-scroll-area__thumb">
+  <div class="gmui-scroll-area__corner">
+body:
+<div class="gmui-scroll-area">
+  <div class="gmui-scroll-area__viewport">
+  <div class="gmui-scroll-area__scrollbar">
+    <div class="gmui-scroll-area__thumb">
+  <div class="gmui-scroll-area__scrollbar">
+    <div class="gmui-scroll-area__thumb">
+  <div class="gmui-scroll-area__corner">"
+`;
+
+exports[`markup parity — rendered HTML > Select: open/representative configuration 1`] = `
+"container:
+<button class="gmui-select__trigger gmui-select__trigger--sm">
+  <span class="gmui-select__value">
+body:
+<button class="gmui-select__trigger gmui-select__trigger--sm">
+  <span class="gmui-select__value">
+<div class="gmui-select__content">
+  <div class="gmui-select__scroll-button gmui-select__scroll-button--up">
+  <div class="gmui-select__viewport">
+    <div class="gmui-select__group">
+      <div class="gmui-select__label">
+      <button class="gmui-select__item">
+        <span class="gmui-select__item-text">
+  <div class="gmui-select__scroll-button gmui-select__scroll-button--down">"
+`;
+
+exports[`markup parity — rendered HTML > Separator: open/representative configuration 1`] = `
+"container:
+<div class="gmui-separator gmui-separator--vertical custom">
+body:
+<div class="gmui-separator gmui-separator--vertical custom">"
+`;
+
+exports[`markup parity — rendered HTML > Slider: open/representative configuration 1`] = `
+"container:
+<div class="gmui-slider gmui-slider--sm">
+  <span class="gmui-slider__track">
+    <span class="gmui-slider__range">
+  <span class="gmui-slider__thumb">
+body:
+<div class="gmui-slider gmui-slider--sm">
+  <span class="gmui-slider__track">
+    <span class="gmui-slider__range">
+  <span class="gmui-slider__thumb">"
+`;
+
+exports[`markup parity — rendered HTML > Slot: open/representative configuration 1`] = `
+"container:
+
+body:
+"
+`;
+
+exports[`markup parity — rendered HTML > Switch: open/representative configuration 1`] = `
+"container:
+<button class="gmui-switch gmui-switch--lg">
+  <span class="gmui-switch__thumb">
+body:
+<button class="gmui-switch gmui-switch--lg">
+  <span class="gmui-switch__thumb">"
+`;
+
+exports[`markup parity — rendered HTML > Tabs: open/representative configuration 1`] = `
+"container:
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+  <div class="gmui-tabs__list">
+    <button class="gmui-tabs__trigger">
+    <button class="gmui-tabs__trigger">
+  <div class="gmui-tabs__content">
+body:
+<div class="gmui-tabs gmui-tabs--underline gmui-tabs--md">
+  <div class="gmui-tabs__list">
+    <button class="gmui-tabs__trigger">
+    <button class="gmui-tabs__trigger">
+  <div class="gmui-tabs__content">"
+`;
+
+exports[`markup parity — rendered HTML > Toast: open/representative configuration 1`] = `
+"container:
+<ol class="gmui-toast-viewport">
+  <li class="gmui-toast">
+    <div class="gmui-toast__title">
+    <div class="gmui-toast__description">
+    <button class="gmui-toast__action">
+    <button class="gmui-toast__close">
+body:
+<ol class="gmui-toast-viewport">
+  <li class="gmui-toast">
+    <div class="gmui-toast__title">
+    <div class="gmui-toast__description">
+    <button class="gmui-toast__action">
+    <button class="gmui-toast__close">"
+`;
+
+exports[`markup parity — rendered HTML > Toggle: open/representative configuration 1`] = `
+"container:
+<button class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom">
+body:
+<button class="gmui-toggle gmui-toggle--sm gmui-toggle--outline custom">"
+`;
+
+exports[`markup parity — rendered HTML > ToggleGroup: open/representative configuration 1`] = `
+"container:
+<div class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline">
+  <button class="gmui-toggle-group__item">
+body:
+<div class="gmui-toggle-group gmui-toggle-group--sm gmui-toggle-group--outline">
+  <button class="gmui-toggle-group__item">"
+`;
+
+exports[`markup parity — rendered HTML > Toolbar: open/representative configuration 1`] = `
+"container:
+<div class="gmui-toolbar">
+  <button class="gmui-toolbar__button">
+  <a class="gmui-toolbar__link">
+  <div class="gmui-toolbar__separator">
+  <div class="gmui-toolbar__toggle-group">
+    <button class="gmui-toolbar__toggle-item">
+body:
+<div class="gmui-toolbar">
+  <button class="gmui-toolbar__button">
+  <a class="gmui-toolbar__link">
+  <div class="gmui-toolbar__separator">
+  <div class="gmui-toolbar__toggle-group">
+    <button class="gmui-toolbar__toggle-item">"
+`;
+
+exports[`markup parity — rendered HTML > Tooltip: open/representative configuration 1`] = `
+"container:
+<button class="gmui-tooltip__trigger">
+body:
+<button class="gmui-tooltip__trigger">
+<div class="gmui-tooltip__content">"
+`;
+
+exports[`markup parity — rendered HTML > VisuallyHidden: open/representative configuration 1`] = `
+"container:
+
+body:
+"
+`;

@@ -32,7 +32,13 @@ describe("Toggle (styled-mui)", () => {
 
     it("forwards ref", () => {
         let captured: HTMLButtonElement | null = null;
-        render(<Toggle ref={(el) => (captured = el)} />);
+        render(
+            <Toggle
+                ref={(el) => {
+                    captured = el;
+                }}
+            />,
+        );
         expect(captured).toBeInstanceOf(HTMLButtonElement);
     });
 });

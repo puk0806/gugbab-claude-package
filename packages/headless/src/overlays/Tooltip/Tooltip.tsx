@@ -6,7 +6,7 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { useControllableState } from '@gugbab/hooks';
+import { useControllableState, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
@@ -197,21 +197,21 @@ function TooltipRoot({
   const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, role]);
   const contentId = useId();
 
-  return (
-    <Ctx.Provider
-      value={{
-        open: isOpen,
-        setOpen: (v) => setOpen(v),
-        refs: floating.refs,
-        floatingStyles: floating.floatingStyles,
-        getReferenceProps,
-        getFloatingProps,
-        contentId,
-      }}
-    >
-      {children}
-    </Ctx.Provider>
+  const { refs, floatingStyles } = floating;
+  const ctxValue = useMemo<TooltipContextValue>(
+    () => ({
+      open: isOpen,
+      setOpen,
+      refs,
+      floatingStyles,
+      getReferenceProps,
+      getFloatingProps,
+      contentId,
+    }),
+    [isOpen, setOpen, refs, floatingStyles, getReferenceProps, getFloatingProps, contentId],
   );
+
+  return <Ctx.Provider value={ctxValue}>{children}</Ctx.Provider>;
 }
 
 const Trigger = forwardRef<HTMLButtonElement, TooltipTriggerProps>(function TooltipTrigger(
@@ -220,11 +220,7 @@ const Trigger = forwardRef<HTMLButtonElement, TooltipTriggerProps>(function Tool
 ) {
   const ctx = useCtx('Tooltip.Trigger');
   const Comp = asChild ? Slot : 'button';
-  const setRef = (node: HTMLButtonElement | null) => {
-    ctx.refs.setReference(node);
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
+  const setRef = useMergedRefs<HTMLButtonElement>(ctx.refs.setReference, ref);
   const refProps = ctx.getReferenceProps(props) as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
     <Comp
@@ -266,15 +262,9 @@ const Content = forwardRef<HTMLDivElement, TooltipContentProps>(function Tooltip
 ) {
   const ctx = useCtx('Tooltip.Content');
   const { mounted, presenceRef } = usePresence<HTMLDivElement>(ctx.open);
+  const composeRef = useMergedRefs<HTMLDivElement>(ctx.refs.setFloating, presenceRef, ref);
   if (!mounted && !forceMount) return null;
   const Comp = asChild ? Slot : 'div';
-
-  const composeRef = (node: HTMLDivElement | null) => {
-    ctx.refs.setFloating(node);
-    presenceRef.current = node;
-    if (typeof ref === 'function') ref(node);
-    else if (ref) ref.current = node;
-  };
 
   return (
     <DismissableLayer

@@ -74,7 +74,7 @@ describe("Dialog Content size", () => {
 describe("Pagination size", () => {
     it.each(["sm", "md"] as const)("renders gmui-pagination--%s", (size) => {
         const { container } = render(
-            <Pagination.Root data-testid="root" size={size}>
+            <Pagination.Root pageCount={1} data-testid="root" size={size}>
                 <Pagination.List>
                     <Pagination.Item />
                 </Pagination.List>

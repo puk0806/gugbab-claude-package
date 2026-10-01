@@ -9,7 +9,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 - **패키지 관리 레포** — 최종 산출물은 앱이 아니라 `packages/*` (배포 대상). `apps/`는 문서·Storybook 같은 검증용.
 - **모든 프론트엔드 개발자 대상** — 특정 프로젝트 종속 없이 범용·재사용·공개 배포 퀄리티를 목표로 한다.
 - **UI는 headless, React 전용** — 동작·상태·접근성만 제공, 스타일은 소비자 지정.
-- **bottom-up 구축** — 기반 툴링(tsconfig, eslint-config 등)부터 쌓고 UI는 그 위에.
+- **bottom-up 구축** — 기반 툴링(tsconfig, biome-config 등)부터 쌓고 UI는 그 위에.
 - **Claude-only 제약** — 외부 CLI·웹 서비스 의존 최소화. Claude Code 에이전트·스킬·훅·슬래시 커맨드 우선.
 
 ### 개발 워크플로우 (플러그인 기반)
@@ -32,20 +32,21 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 ### 기술 스택 기본값
 
 - pnpm workspace + Turborepo + Changesets + tsup
-- Husky (+ lint-staged, commitlint은 선택)
+- Biome(`@gugbab/biome-config`) + Husky + commitlint(`@gugbab/commitlint-config`)
 - 스코프: `@gugbab/*`
 
 ### 빌드 순서 (의존성 방향)
 
 1. 레포 인프라 (`pnpm-workspace.yaml`, `turbo.json`, `.changeset`, Husky)
-2. `packages/tsconfig` — 공용 tsconfig 프리셋
-3. `packages/eslint-config` — 공용 ESLint 프리셋
-4. `packages/utils` — 프레임워크 독립 순수 유틸
-5. `packages/hooks` (선택) — React 공용 훅
-6. `packages/headless` — `@gugbab/headless` (헤드리스 React 컴포넌트, 35종)
-7. `packages/tokens` — 추상 디자인 토큰 타입 + 정적 MUI/Radix 스냅샷 → `dist/{mui,radix}.css` CSS variables. 외부 라이브러리 의존성 0
-8. `packages/styled-mui` / `packages/styled-radix` — 헤드리스 위에 얹는 스타일 패키지 (각각 35종, `gmui-*` / `grx-*` 클래스)
-9. `apps/storybook-mui` / `apps/storybook-radix` — 시스템별 독립 쇼케이스 (Storybook 10)
+2. `packages/tsconfig` · `packages/biome-config` · `packages/commitlint-config` — 공용 툴링 프리셋
+3. `packages/utils` — 프레임워크 독립 순수 유틸
+4. `packages/hooks` — React 공용 훅
+5. `packages/headless` — `@gugbab/headless` (헤드리스 React 컴포넌트, 35종)
+6. `packages/tokens` — 추상 디자인 토큰 타입 + 정적 MUI/Radix 스냅샷 → `dist/{mui,radix}.css` CSS variables. 외부 라이브러리 의존성 0
+7. `packages/styled-mui` / `packages/styled-radix` — 헤드리스 위에 얹는 스타일 패키지 (각각 35종, `gmui-*` / `grx-*` 클래스)
+8. `apps/storybook-mui` / `apps/storybook-radix` — 시스템별 독립 쇼케이스 (Storybook 10)
+
+별도 트랙: `packages/types-generator`(내부 도구, 비배포) → `packages/relay-types`(OpenAPI 타입 자동 게시)
 
 ---
 
@@ -59,23 +60,30 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 
 ## 금지 사항
 
+- **커밋·푸시는 사용자가 명시적으로 요청할 때만 진행한다. 작업 완료 후 자동 커밋 제안·실행 금지**
+- 요청된 것만 수정한다. 요청 범위 밖의 코드는 건드리지 않는다
 - API 키·토큰·비밀번호를 파일에 직접 작성 금지
 - 검증되지 않은 외부 소스 그대로 복붙 금지
 - `apps/`에 웹 서비스 추가 금지 — 문서/쇼케이스 용도만 허용
 - 특정 프로젝트·스타일에 종속된 구현 금지 — 범용성 훼손
 - 테스트되지 않은 에이전트를 main 브랜치에 직접 커밋 금지
-- verification.md, SKILL.md를 Bash(sed/awk 등)로 수정 금지 — Write/Edit 도구 사용
+- verification.md, SKILL.md를 Bash(sed/awk 등)로 수정 금지 — Write/Edit 도구 사용 (verification-guard·skill-md-guard 훅 검사 대상)
 - PENDING_TEST → APPROVED 일괄 전환 금지 — 스킬별 개별 검증 필수
+- 모노레포 `apps/*`·`packages/*` 경계를 넘는 상대경로 import 금지 — workspace 패키지의 public export만 사용
+
+> **워크트리 사용 금지** — 모든 작업(시각화 테스트 포함)은 `feature/{설명}` 피처 브랜치로 진행하고 PR로 머지한다. 머지는 사용자가 직접 수행한다. `superpowers:using-git-worktrees` 스킬보다 우선 적용.
 
 ---
 
-## 상황별 규칙 참조
+## 규칙 참조
 
-| 상황                          | 참조 파일                             |
-| ----------------------------- | ------------------------------------- |
-| Git 커밋 컨벤션               | @.claude/rules/git.md                 |
-| 외부 정보 조사·검증           | @.claude/rules/info-verification.md   |
-| 에이전트 설계·작성            | @.claude/rules/agent-design.md        |
-| TypeScript / React 코딩       | @.claude/rules/typescript.md          |
-
-> **워크트리 사용 금지** — 모든 작업(시각화 테스트 포함)은 `feature/{설명}` 피처 브랜치로 진행하고 PR로 머지한다. 머지는 사용자가 직접 수행한다. `superpowers:using-git-worktrees` 스킬보다 우선 적용.
+| 상황                              | 참조 파일                                                                                                           |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| 작업 착수 전 확인                 | @.claude/rules/task-workflow.md                                                                                     |
+| Git 커밋 컨벤션                   | @.claude/rules/git.md                                                                                               |
+| 외부 정보 조사·검증               | @.claude/rules/info-verification.md                                                                                 |
+| TypeScript / React 코딩           | @.claude/rules/typescript.md                                                                                        |
+| 테스트 작성 (적대적 3계층)        | @.claude/rules/adversarial-testing.md                                                                               |
+| Codex 적대적 코드 리뷰            | @.claude/rules/codex-review.md                                                                                      |
+| 메모리 동기화·커밋 전 정리        | @.claude/rules/memory-sync.md                                                                                       |
+| 도메인 폴더 구조·모듈 경계·대규모 이동 | `frontend-domain-refactorer` 에이전트 + `.claude/skills/architecture/{frontend-domain-structure,module-boundaries,incremental-refactoring}` |

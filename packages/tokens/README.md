@@ -40,9 +40,15 @@ dark 모드는 `<html data-theme="dark">`로 토글합니다.
 `ThemeTokens` 타입과 정적 스냅샷이 필요하면 직접 import.
 
 ```ts
-import { muiTokensLight, muiTokensDark, radixTokensLight, type ThemeTokens } from '@gugbab/tokens';
+import { muiTheme, radixTheme, renderThemeCss, type ThemeTokens } from '@gugbab/tokens';
 
-const accent = muiTokensLight.color.accent.base;
+// ThemeTokens = { light: DesignTokens; dark: DesignTokens }
+const theme: ThemeTokens = muiTheme;
+const accent = muiTheme.light.color.accent.base; // "#1976d2"
+const darkBg = radixTheme.dark.color.bg.app;
+
+// 커스텀 테마를 CSS 변수 문자열로 렌더 (dist/{mui,radix}.css 와 같은 형식)
+const css = renderThemeCss(muiTheme);
 ```
 
 ## 토큰 카테고리

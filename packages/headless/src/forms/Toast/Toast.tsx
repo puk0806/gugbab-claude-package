@@ -1,10 +1,11 @@
-import { useIsomorphicLayoutEffect, useLatestRef } from '@gugbab/hooks';
+import { useIsomorphicLayoutEffect, useLatestRef, useMergedRefs } from '@gugbab/hooks';
 import {
   type ButtonHTMLAttributes,
   createContext,
   forwardRef,
   type HTMLAttributes,
   type KeyboardEvent as ReactKeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
   type PointerEvent as ReactPointerEvent,
   useCallback,
@@ -29,6 +30,7 @@ type SwipeDirection = 'up' | 'down' | 'left' | 'right';
 
 interface ToastProviderContextValue {
   label: string;
+  closeLabel: string;
   duration: number;
   swipeDirection: SwipeDirection;
   swipeThreshold: number;
@@ -91,6 +93,12 @@ export interface ToastProviderProps {
    */
   label?: string;
   /**
+   * Author-localized accessible name for icon-only `Toast.Close` buttons.
+   * A button's own `aria-label` takes precedence.
+   * @defaultValue 'Close'
+   */
+  closeLabel?: string;
+  /**
    * Default duration (ms) each toast remains visible.
    * @defaultValue 5000
    */
@@ -110,10 +118,13 @@ export interface ToastProviderProps {
 function Provider({
   children,
   label = 'Notification',
+  closeLabel: closeLabelProp,
   duration = 5000,
   swipeDirection = 'right',
   swipeThreshold = 50,
 }: ToastProviderProps) {
+  // Blank strings would leave the icon button nameless — fall back to the default.
+  const closeLabel = closeLabelProp?.trim() ? closeLabelProp : 'Close';
   const [viewport, setViewport] = useState<HTMLOListElement | null>(null);
   const [toastCount, setToastCount] = useState(0);
   const isFocusedToastEscapeKeyDownRef = useRef(false);
@@ -122,25 +133,35 @@ function Provider({
   const onToastAdd = useCallback(() => setToastCount((c) => c + 1), []);
   const onToastRemove = useCallback(() => setToastCount((c) => c - 1), []);
 
-  return (
-    <ProviderCtx.Provider
-      value={{
-        label,
-        duration,
-        swipeDirection,
-        swipeThreshold,
-        viewport,
-        onViewportChange: setViewport,
-        onToastAdd,
-        onToastRemove,
-        toastCount,
-        isFocusedToastEscapeKeyDownRef,
-        isClosePausedRef,
-      }}
-    >
-      {children}
-    </ProviderCtx.Provider>
+  const ctxValue = useMemo<ToastProviderContextValue>(
+    () => ({
+      label,
+      closeLabel,
+      duration,
+      swipeDirection,
+      swipeThreshold,
+      viewport,
+      onViewportChange: setViewport,
+      onToastAdd,
+      onToastRemove,
+      toastCount,
+      isFocusedToastEscapeKeyDownRef,
+      isClosePausedRef,
+    }),
+    [
+      label,
+      closeLabel,
+      duration,
+      swipeDirection,
+      swipeThreshold,
+      viewport,
+      onToastAdd,
+      onToastRemove,
+      toastCount,
+    ],
   );
+
+  return <ProviderCtx.Provider value={ctxValue}>{children}</ProviderCtx.Provider>;
 }
 
 /* -------------------------------------------------------------------------------------------------
@@ -173,16 +194,7 @@ const Viewport = forwardRef<HTMLOListElement, ToastViewportProps>(function Toast
   const hotkeyLabel = hotkey.join('+').replace(/Key/g, '').replace(/Digit/g, '');
 
   // Merge forwarded ref + internal ref + notify Provider
-  // biome-ignore lint/correctness/useExhaustiveDependencies: forwardedRef is a ref object/callback — adding it would cause infinite re-renders with inline ref callbacks
-  const setRef = useCallback(
-    (el: HTMLOListElement | null) => {
-      (internalRef as React.MutableRefObject<HTMLOListElement | null>).current = el;
-      ctx.onViewportChange(el);
-      if (typeof forwardedRef === 'function') forwardedRef(el);
-      else if (forwardedRef) forwardedRef.current = el;
-    },
-    [ctx.onViewportChange],
-  );
+  const setRef = useMergedRefs<HTMLOListElement>(internalRef, ctx.onViewportChange, forwardedRef);
 
   // Hotkey: focus viewport when key combo is pressed.
   // Use a latestRef so an inline `hotkey={[...]}` prop doesn't churn the effect
@@ -270,16 +282,16 @@ const Viewport = forwardRef<HTMLOListElement, ToastViewportProps>(function Toast
   }, []);
 
   return (
-    <div ref={wrapperRef} style={{ pointerEvents: hasToasts ? undefined : 'none' }}>
+    // The landmark lives on the wrapper so the <ol> keeps list semantics
+    // (role="region" is not an allowed role for <ol>).
+    <div
+      ref={wrapperRef}
+      role="region"
+      aria-label={label.replace('{hotkey}', hotkeyLabel)}
+      style={{ pointerEvents: hasToasts ? undefined : 'none' }}
+    >
       {hasToasts && <FocusProxy ref={headProxyRef} viewport={internalRef} direction="forwards" />}
-      <ol
-        tabIndex={-1}
-        role="region"
-        aria-label={label.replace('{hotkey}', hotkeyLabel)}
-        {...rest}
-        ref={setRef}
-        style={style}
-      />
+      <ol tabIndex={-1} {...rest} ref={setRef} style={style} />
       {hasToasts && <FocusProxy ref={tailProxyRef} viewport={internalRef} direction="backwards" />}
     </div>
   );
@@ -330,8 +342,8 @@ export interface ToastRootProps extends HTMLAttributes<HTMLLIElement> {
   onOpenChange?: (open: boolean) => void;
   /**
    * Toast urgency type.
-   * - `'foreground'` → role="status" aria-live="assertive"
-   * - `'background'` → role="status" aria-live="polite"
+   * - `'foreground'` → announced via the live-region Announcer with aria-live="assertive"
+   * - `'background'` → announced with aria-live="polite"
    * @defaultValue 'foreground'
    */
   type?: 'foreground' | 'background';
@@ -383,20 +395,16 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
   const [node, setNode] = useState<HTMLLIElement | null>(null);
   const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
   const swipeDeltaRef = useRef<{ x: number; y: number } | null>(null);
+  // Swallow only the click the browser fires right after a swipe's pointerup.
+  const suppressClickRef = useRef(false);
+  const suppressClickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const duration = durationProp ?? ctx.duration;
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeTimerStartRef = useRef(0);
   const closeTimerRemainingRef = useRef(duration);
   const { onToastAdd, onToastRemove } = ctx;
 
-  const composedRef = useCallback(
-    (el: HTMLLIElement | null) => {
-      setNode(el);
-      if (typeof forwardedRef === 'function') forwardedRef(el);
-      else if (forwardedRef) forwardedRef.current = el;
-    },
-    [forwardedRef],
-  );
+  const composedRef = useMergedRefs<HTMLLIElement>(setNode, forwardedRef);
 
   const handleClose = useCallback(() => {
     const focusInToast = node?.contains(document.activeElement);
@@ -455,6 +463,7 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
   useEffect(() => {
     return () => {
       if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+      if (suppressClickTimerRef.current) clearTimeout(suppressClickTimerRef.current);
     };
   }, []);
 
@@ -515,17 +524,32 @@ const Root = forwardRef<HTMLLIElement, ToastRootProps>(function ToastRoot(props,
         if (node)
           dispatchSwipeEvent(TOAST_SWIPE_CANCEL, onSwipeCancel, node, e.nativeEvent, delta, true);
       }
-      e.currentTarget.addEventListener('click', (ev) => ev.preventDefault(), { once: true });
+      // A persistent { once: true } listener would linger when no click
+      // follows (e.g. touch) and block the next genuine click. Browsers
+      // dispatch the click in the same task as pointerup, so clear the flag
+      // on the next task.
+      suppressClickRef.current = true;
+      if (suppressClickTimerRef.current) clearTimeout(suppressClickTimerRef.current);
+      suppressClickTimerRef.current = setTimeout(() => {
+        suppressClickRef.current = false;
+        suppressClickTimerRef.current = null;
+      }, 0);
+    },
+    onClickCapture: (e: ReactMouseEvent<HTMLLIElement>) => {
+      rest.onClickCapture?.(e);
+      if (!suppressClickRef.current) return;
+      suppressClickRef.current = false;
+      e.preventDefault();
     },
   };
 
   const li = (
     <InteractiveCtx.Provider value={interactiveCtxValue}>
+      {/* No live region here: the Announcer below is the single announcement
+          channel (a status role on the <li> was both an invalid role for <li>
+          and a second, duplicate announcement). */}
       <li
         tabIndex={0}
-        role="status"
-        aria-live={type === 'foreground' ? 'assertive' : 'polite'}
-        aria-atomic="true"
         data-state={open ? 'open' : 'closed'}
         data-type={type}
         data-swipe-direction={ctx.swipeDirection}
@@ -668,16 +692,17 @@ const Action = forwardRef<HTMLButtonElement, ToastActionProps>(function ToastAct
 export interface ToastCloseProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 const Close = forwardRef<HTMLButtonElement, ToastCloseProps>(function ToastClose(
-  { onClick, type = 'button', children, ...rest },
+  { onClick, type = 'button', children, 'aria-label': ariaLabel, ...rest },
   ref,
 ) {
   const { onClose } = useInteractiveCtx('Toast.Close');
+  const { closeLabel } = useProviderCtx('Toast.Close');
   return (
     <div data-gugbab-toast-announce-exclude="">
       <button
         ref={ref}
         type={type}
-        aria-label={children ? undefined : 'Close'}
+        aria-label={ariaLabel ?? (children ? undefined : closeLabel)}
         {...rest}
         onClick={(e) => {
           onClick?.(e);

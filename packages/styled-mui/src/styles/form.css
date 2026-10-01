@@ -44,7 +44,7 @@
   height: 40px;
   padding: 0 var(--gugbab-space-4);
   border-radius: var(--gugbab-radius-sm);
-  border: 1px solid var(--gugbab-color-border-base);
+  border: 1px solid var(--gugbab-color-border-control);
   background: var(--gugbab-color-bg-surface);
   color: var(--gugbab-color-fg-primary);
   font-family: var(--gugbab-font-family-sans);
@@ -55,13 +55,13 @@
 }
 
 .gmui-form__control:hover {
-  border-color: var(--gugbab-color-border-strong);
+  border-color: var(--gugbab-color-fg-primary);
 }
 
 .gmui-form__control:focus {
   outline: none;
   border-color: var(--gugbab-color-accent-base);
-  box-shadow: 0 0 0 3px rgba(var(--gugbab-color-accent-base, 0 0 0) / 0.2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gugbab-color-accent-base) 20%, transparent);
 }
 
 .gmui-form__control:disabled {
@@ -77,7 +77,7 @@
 
 .gmui-form__field--error .gmui-form__control:focus,
 .gmui-form__field--serverInvalid .gmui-form__control:focus {
-  box-shadow: 0 0 0 3px rgba(var(--gugbab-color-danger-base, 211 47 47) / 0.2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gugbab-color-danger-base) 20%, transparent);
 }
 
 .gmui-form__field--success .gmui-form__control {
@@ -85,7 +85,7 @@
 }
 
 .gmui-form__field--success .gmui-form__control:focus {
-  box-shadow: 0 0 0 3px rgba(var(--gugbab-color-success-base, 46 125 50) / 0.2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gugbab-color-success-base) 20%, transparent);
 }
 
 .gmui-form__field--warning .gmui-form__control {
@@ -93,7 +93,7 @@
 }
 
 .gmui-form__field--warning .gmui-form__control:focus {
-  box-shadow: 0 0 0 3px rgba(var(--gugbab-color-warning-base, 230 81 0) / 0.2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gugbab-color-warning-base) 20%, transparent);
 }
 
 /* ─── Message ────────────────────────────────────────────────────────────── */

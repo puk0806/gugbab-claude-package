@@ -1,24 +1,9 @@
-import { Toggle as HeadlessToggle, type ToggleProps } from "@gugbab/headless";
-import { cn } from "@gugbab/utils";
-import { forwardRef } from "react";
+import { createToggle } from "@gugbab/styled-factory";
 
-export type ToggleSize = "sm" | "md";
-export type ToggleVariant = "default" | "outline";
+export const Toggle = /* @__PURE__ */ createToggle("grx");
 
-export interface StyledToggleProps extends ToggleProps {
-    size?: ToggleSize;
-    variant?: ToggleVariant;
-}
-
-export const Toggle = forwardRef<HTMLButtonElement, StyledToggleProps>(function Toggle(
-    { size = "md", variant = "default", className, ...rest },
-    ref,
-) {
-    return (
-        <HeadlessToggle
-            ref={ref}
-            className={cn("grx-toggle", `grx-toggle--${size}`, `grx-toggle--${variant}`, className)}
-            {...rest}
-        />
-    );
-});
+export type {
+    StyledToggleProps,
+    ToggleSize,
+    ToggleVariant,
+} from "@gugbab/styled-factory";

@@ -6,6 +6,7 @@ import {
   type ImgHTMLAttributes,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -28,13 +29,15 @@ function useAvatarContext(consumerName: string): AvatarContextValue {
 const AvatarRoot = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(
   function AvatarRoot(props, ref) {
     const [imageLoadingStatus, setImageLoadingStatus] = useState<ImageLoadingStatus>('idle');
+    const ctxValue = useMemo<AvatarContextValue>(
+      () => ({
+        imageLoadingStatus,
+        onImageLoadingStatusChange: setImageLoadingStatus,
+      }),
+      [imageLoadingStatus],
+    );
     return (
-      <AvatarContext.Provider
-        value={{
-          imageLoadingStatus,
-          onImageLoadingStatusChange: setImageLoadingStatus,
-        }}
-      >
+      <AvatarContext.Provider value={ctxValue}>
         <span ref={ref} data-state={imageLoadingStatus} {...props} />
       </AvatarContext.Provider>
     );

@@ -3,7 +3,7 @@ name: npm v1 publishing — DONE (v1.0.1 + auto-merge)
 description: @gugbab/* 9개 v1.0.0 (2026-05-09) + 5개 v1.0.1 (2026-05-11) publish 완료. 자동 publish 흐름은 feature PR 머지 1회로 끝나도록 진화.
 type: project
 originSessionId: d38b63bc-10e0-4db4-8ff1-14cf943313c2
-modified: 2026-08-14T05:48:35.916Z
+modified: 2026-10-01T06:02:56.326Z
 ---
 `@gugbab/*` 패키지 npm public 게시 자동화 운영 중. v1.0.0 (9 패키지) 첫 publish 2026-05-09, v1.0.1 (5 publishable patch) 2026-05-11. 2026-05-11 자동화 한 단계 진화 — *사용자 머지 1회로 publish까지 자동*.
 
@@ -74,6 +74,16 @@ Version PR #40 이 열린 채 방치 → 사용자 수동 머지로 publish 완�
 (GitHub 재귀 방지 정책, `workflow_dispatch`·`repository_dispatch` 만 예외 — 공식 문서 확인).
 따라서 폴백 직후 `gh workflow run release -f mode=changeset` 으로 publish 를 명시 재트리거.
 `changeset publish` 는 npm 에 이미 있는 버전을 건너뛰므로 중복 실행 안전.
+
+## 2026-10-01 엄격 보호 복원 (05-11 결정 대체)
+
+05-11에 필수 검사를 뺀 탓에 시각 회귀가 도는 중이거나 실패해도 머지 버튼이 열려 있었다(PR #50에서 사용자가 발견하고 "매우 큰 이슈"로 지적).
+
+- **main ruleset (id 15765729):** 브랜치 삭제 금지, 강제 푸시 금지, **PR 필수(승인 0)**, **필수 검사 `ci`·`visual-regression`(GitHub Actions 15368, strict)**, **우회 없음**
+- **`ci.yml` 신설:** frozen install, `biome ci`, typecheck, test, build
+- **봇 PR 처리:** Version PR과 relay-types baseline PR은 `scripts/ci-verify-bot-pr.sh`로 처리한다. 허용 파일만 바뀌었는지 확인하고, 같은 전체 검사를 돌린 뒤 `ci`·`visual-regression` 성공 상태를 등록하고 머지한다. 봇 bypass(422) 없이 자동 배포를 유지하는 방법이다. release는 머지 후 `workflow_dispatch`로 publish를 재트리거한다
+- **archive:** main 대신 `vrt-archive` 브랜치에 보관(삭제 금지 ruleset에 포함)
+- **알아둘 점:** `visual-regression-baseline.yml`(봇 PR, 수동)은 검사가 돌지 않는다. 그 브랜치에 사용자가 한 번 푸시해야 검사가 돈다. voca·dream·health도 같은 기준으로 통일할 예정이다 — [[project_audit_2026_09_30]]
 
 ## 첫 publish 가 막혔던 5-layer 장애 (참고용)
 

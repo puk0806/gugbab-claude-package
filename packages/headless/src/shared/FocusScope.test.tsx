@@ -86,7 +86,7 @@ describe('FocusScope — auto focus on mount', () => {
   });
 
   it('fires onMountAutoFocus with a cancellable event', () => {
-    const onMountAutoFocus = vi.fn<[Event], void>();
+    const onMountAutoFocus = vi.fn<(event: Event) => void>();
     render(
       <FocusScope onMountAutoFocus={onMountAutoFocus}>
         <button type="button" data-testid="first">
@@ -95,9 +95,9 @@ describe('FocusScope — auto focus on mount', () => {
       </FocusScope>,
     );
     expect(onMountAutoFocus).toHaveBeenCalledTimes(1);
-    const event = onMountAutoFocus.mock.calls[0]?.[0] as CustomEvent;
+    const event = onMountAutoFocus.mock.calls[0]?.[0];
     expect(event).toBeInstanceOf(CustomEvent);
-    expect(event.cancelable).toBe(true);
+    expect(event?.cancelable).toBe(true);
   });
 
   it('skips auto-focus when onMountAutoFocus calls preventDefault', () => {
@@ -153,7 +153,7 @@ describe('FocusScope — auto focus on unmount', () => {
   });
 
   it('fires onUnmountAutoFocus with a cancellable event', () => {
-    const onUnmountAutoFocus = vi.fn<[Event], void>();
+    const onUnmountAutoFocus = vi.fn<(event: Event) => void>();
 
     function Tree({ open }: { open: boolean }) {
       return open ? (
@@ -169,9 +169,9 @@ describe('FocusScope — auto focus on unmount', () => {
       vi.advanceTimersByTime(1);
     });
     expect(onUnmountAutoFocus).toHaveBeenCalledTimes(1);
-    const event = onUnmountAutoFocus.mock.calls[0]?.[0] as CustomEvent;
+    const event = onUnmountAutoFocus.mock.calls[0]?.[0];
     expect(event).toBeInstanceOf(CustomEvent);
-    expect(event.cancelable).toBe(true);
+    expect(event?.cancelable).toBe(true);
   });
 
   it('skips focus restore when onUnmountAutoFocus calls preventDefault', () => {
@@ -389,7 +389,11 @@ describe('FocusScope — falls back to scope element when no tabbable child', ()
     function Tree() {
       const [focused, setFocused] = useState(false);
       return (
-        <FocusScope ref={(node) => node && !focused && setFocused(true)}>
+        <FocusScope
+          ref={(node) => {
+            if (node && !focused) setFocused(true);
+          }}
+        >
           <span>not tabbable</span>
         </FocusScope>
       );

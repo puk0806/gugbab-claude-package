@@ -11,7 +11,7 @@ describe("Menubar (styled-radix)", () => {
     it("Trigger applies grx-menubar__trigger", () => {
         const { container } = render(
             <Menubar.Root>
-                <Menubar.Menu>
+                <Menubar.Menu value="file">
                     <Menubar.Trigger data-testid="trigger">File</Menubar.Trigger>
                 </Menubar.Menu>
             </Menubar.Root>,

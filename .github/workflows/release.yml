@@ -25,7 +25,8 @@ permissions:
   contents: write       # changesets/action 의 Version PR / 태그 생성용
   pull-requests: write  # Version PR 생성용
   id-token: write       # provenance (sigstore) 인증
-  actions: write        # 직접 머지 폴백 후 workflow_dispatch 재트리거용 (gh workflow run)
+  actions: write        # 머지 후 workflow_dispatch 재트리거용 (gh workflow run)
+  statuses: write       # Version PR 검증 후 ci·visual-regression 상태 등록용
 
 concurrency:
   group: release-${{ github.ref }}
@@ -35,16 +36,16 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: pnpm/action-setup@v6
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
           version: 9.9.0
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version: 22.13.1
           cache: 'pnpm'
@@ -69,7 +70,7 @@ jobs:
         if: |
           github.event_name == 'push' ||
           (github.event_name == 'workflow_dispatch' && inputs.mode == 'changeset')
-        uses: changesets/action@v1
+        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
           publish: pnpm changeset publish
           version: pnpm changeset version
@@ -83,32 +84,37 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: 'true'
 
-      # changesets/action 이 Version PR 을 새로 만들었거나 업데이트한 경우 머지를 자동화한다.
-      # 이로써 사용자는 feature PR 한 번만 머지하면 npm publish 까지 자동 진행된다.
+      # changesets/action 이 Version PR 을 새로 만들었거나 업데이트한 경우 머지까지 자동화한다.
+      # 사용자는 feature PR 한 번만 머지하면 npm publish 까지 자동 진행된다.
       # (publish 모드로 실행된 경우 pullRequestNumber 가 비어 있어 이 step 은 skip.)
       #
-      # 1차: GitHub auto-merge — main 에 branch protection rule 이 있을 때만 가능.
-      #   검사 통과 즉시 GitHub 이 머지하고, 그 push 가 release 를 재실행해 publish 한다.
-      # 2차 폴백: protection rule 부재 시 auto-merge 는 GraphQL 에러로 거부되므로
-      #   즉시 직접 머지한다 (Version PR 은 changesets 가 생성한 버전·CHANGELOG
-      #   변경만 담으므로 저위험). 단, GITHUB_TOKEN 이 만든 push 는 on:push 를
-      #   재트리거하지 않으므로 (GitHub 재귀 방지 정책 — workflow_dispatch 는 예외)
-      #   publish 를 workflow_dispatch(mode=changeset) 로 명시 재트리거한다.
-      #   재트리거된 run 은 남은 changeset 이 0개라 publish 단계를 실행하며,
-      #   changeset publish 는 이미 npm 에 있는 버전을 건너뛰므로 중복 실행에 안전하다.
-      - name: Merge Version PR (auto-merge, fallback to direct merge)
+      # main 규칙은 `ci`·`visual-regression` 필수 검사 + PR 필수 + 우회 없음이다.
+      # GITHUB_TOKEN 이 만든 Version PR 에는 두 검사 워크플로우가 돌지 않으므로
+      # scripts/ci-verify-bot-pr.sh 가 ① 버전·CHANGELOG·changeset 파일만 바뀌었는지 확인하고
+      # ② 같은 전체 검사를 직접 수행한 뒤 ③ 통과 시에만 두 상태를 등록한다.
+      # 검증에 실패하면 상태가 없어 Version PR 은 막힌 채 남는다(사람이 확인).
+      #
+      # 머지 후: GITHUB_TOKEN 의 push 는 on:push 를 재트리거하지 않으므로
+      # (GitHub 재귀 방지 정책 — workflow_dispatch 는 예외) publish 를 명시 재트리거한다.
+      # changeset publish 는 npm 에 이미 있는 버전을 건너뛰므로 중복 실행에 안전하다.
+      - name: Verify Version PR and register required checks
         if: steps.changesets.outputs.pullRequestNumber != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ steps.changesets.outputs.pullRequestNumber }}
         run: |
-          if gh pr merge --auto --merge --repo "$GITHUB_REPOSITORY" "$PR_NUMBER"; then
-            echo "auto-merge 예약 완료 — 검사 통과 후 GitHub 이 머지·재트리거"
-            exit 0
-          fi
-          echo "auto-merge 불가 (branch protection 없음) — 직접 머지로 폴백"
+          # 스크립트가 PR 커밋을 체크아웃하므로 실행 중 파일이 바뀌지 않게 복사본으로 실행한다
+          cp scripts/ci-verify-bot-pr.sh "$RUNNER_TEMP/"
+          bash "$RUNNER_TEMP/ci-verify-bot-pr.sh" "$PR_NUMBER" \
+            '^(\.changeset/.*|(.*/)?CHANGELOG\.md|(.*/)?package\.json)$'
+
+      - name: Merge Version PR and trigger publish
+        if: steps.changesets.outputs.pullRequestNumber != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.changesets.outputs.pullRequestNumber }}
+        run: |
           gh pr merge --merge --repo "$GITHUB_REPOSITORY" "$PR_NUMBER"
-          echo "GITHUB_TOKEN push 는 on:push 를 재트리거하지 않으므로 publish 명시 트리거"
           gh workflow run release --repo "$GITHUB_REPOSITORY" --ref main -f mode=changeset
 
       # ─────────────────────────────────────────────────────────────

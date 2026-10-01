@@ -34,6 +34,7 @@ describe("toSSELine", () => {
     it("output is parseable by parseSSELine", () => {
         const event = { type: "chunk" as const, text: "round-trip" };
         const line = toSSELine(event).split("\n")[0];
-        expect(parseSSELine(line)).toEqual(event);
+        expect(line).toBeDefined();
+        expect(parseSSELine(line ?? "")).toEqual(event);
     });
 });
