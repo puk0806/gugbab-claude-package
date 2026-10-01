@@ -1,7 +1,7 @@
 - [Package project goal](project_package_goal.md) — Claude-only 범용 헤드리스 UI + 정적 토큰 + 스타일 9 패키지 모노레포. v1.0.0 publish 완료.
 - [Reference monorepo](project_reference_monorepo.md) — 참고 레포(gugbab-integrated-admin-poc) 구조·스택 요약
 - [Headless React package roadmap](project_react_roadmap.md) — @gugbab/headless 5-tier 35 컴포넌트의 설계 결정·카탈로그·다음 후보
-- [npm v1 publishing — DONE](project_npm_v1_publishing.md) — v1.0.0 9개 + v1.0.1 5개 npm 게시 완료. 2026-05-11 부터 feature PR 머지 1회로 publish 자동 (auto-merge 흐름).
+- [npm v1 publishing — DONE](project_npm_v1_publishing.md) — v1.0.0 9개 + v1.0.1 5개 npm 게시 완료. feature PR 머지 1회로 publish 자동. 2026-10-01부터 main 엄격 보호(PR 필수·ci·visual-regression 필수·우회 없음), 봇 PR은 ci-verify-bot-pr.sh로 검증·상태 등록
 - [Claude hooks system](project_hooks_system.md) — 훅 24개 운영(원본 레포 설치본, 작성 도구 미설치). 메모리·세션 export 동기화, Codex 리뷰, 품질 가드. 브랜치 전환 시 전역 메모리 퇴행 주의.
 - [2026-09-30 audit & priorities](project_audit_2026_09_30.md) — 1~4순위 + styled 통합 완료, 단일 PR(feature/project-audit-2026-09)로 푸시. semver minor 유지, 배포 후 dream·voca·health 점검. 결정 D1~D4·Codex 설정 대기
 - [No git stash for temp comparisons](feedback_no_git_stash.md) — 기존 stash 항목이 있어 pop 사고 발생(09-30). 사본 교체·복원으로 비교, 사용자 stash는 절대 pop/drop 금지
