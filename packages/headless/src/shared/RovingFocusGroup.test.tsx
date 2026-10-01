@@ -85,7 +85,7 @@ describe('RovingFocusGroup — 탭 스톱 (경계)', () => {
     expect(tabbables).toHaveLength(1);
     // 항목 래퍼(기본 span)가 탭 스톱이며, 첫 번째 항목이어야 한다
     expect(tabbables[0]).not.toBe(group);
-    expect(tabbables[0].contains(screen.getByTestId('a'))).toBe(true);
+    expect(tabbables[0]?.contains(screen.getByTestId('a'))).toBe(true);
   });
 
   it('항목이 없는 빈 그룹은 탭 가능한 요소가 없다', () => {

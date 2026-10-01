@@ -81,7 +81,7 @@ describe('Combobox — 키보드 선택', () => {
       .filter((o) => o.hasAttribute('data-highlighted'));
     expect(highlighted).toHaveLength(1);
     expect(highlighted[0]).toHaveTextContent('apple');
-    expect(input.getAttribute('aria-activedescendant')).toBe(highlighted[0].id);
+    expect(input.getAttribute('aria-activedescendant')).toBe(highlighted[0]?.id);
   });
 });
 
