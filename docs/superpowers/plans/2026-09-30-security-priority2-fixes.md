@@ -563,3 +563,9 @@ Expected: `clean`. YAML 파싱은 Task 5 Step 3과 같다.
 - 워크플로우: SNAPBRANCH push도 `refs/heads/` 접두사. Dependabot은 minor/patch만 그룹화, major는 개별 PR
 - changeset: 동작 변경(1MB 초과 라인 오류, 무효 이벤트 폐기) 명시
 - 미반영(추적): Dependabot PR의 읽기 전용 토큰으로 코멘트 단계가 403 실패할 가능성(미확인) → 첫 Dependabot PR에서 확인
+
+## 후속 반영 (2026-10-01, "남은 작업 전부" 요청)
+
+- `withRetry` (감사 L-5): 옵션 검증(RangeError), `maxDelay` 상한(기본 30초), `AbortSignal` 지원, `shouldRetry` 예외가 원래 오류를 가리지 않게 했다. 테스트 12건은 모두 수정 전 RED였다.
+- `total-content-bytes` waiver (qa 지적): **유지**. qa가 제안한 경계 케이스(멀티바이트·이모지·빈 값·깨진 서로게이트)가 이미 있고, 상한 파라미터가 없는 함수라 NaN·음수 케이스는 해당하지 않는다. waiver 사유가 사실과 일치한다.
+- `pnpm audit`·lifecycle 스크립트 허용 목록은 lockfile을 건드려서 3순위 브랜치(lockfile 소유)에서 처리한다.
