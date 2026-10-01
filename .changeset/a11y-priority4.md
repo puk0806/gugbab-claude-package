@@ -20,7 +20,7 @@
 - Toast 닫기 아이콘 색을 `fg-muted`에서 `fg-secondary`로 올렸습니다.
 
 **headless**
-- RadioGroup: RTL에서 선택 값과 포커스 위치가 어긋나던 문제를 고쳤습니다. `dir` prop(`'ltr' | 'rtl'`)을 지원하고, 루트에 해석된 `dir` 속성을 렌더링합니다(Tabs 등과 같은 방식). Provider 없이 `<html dir="rtl">`만 쓰는 페이지는 `dir` prop이나 `DirectionProvider`를 지정해 주세요.
+- RadioGroup: RTL에서 선택 값과 포커스 위치가 어긋나던 문제를 고쳤습니다. `dir` prop(`'ltr' | 'rtl'`)을 지원합니다. 루트의 `dir` 속성은 prop이나 `DirectionProvider`로 명시했을 때만 렌더링하므로 `<html dir="rtl">`을 상속하는 화면 표시는 그대로입니다. 다만 키보드 방향은 명시값(없으면 LTR)을 따르므로, Provider 없이 `<html dir="rtl">`만 쓰는 페이지는 `dir` prop이나 `DirectionProvider`를 지정해 주세요.
 - Popover·DropdownMenu:
   - 바깥을 클릭해 닫을 때 포커스를 트리거로 빼앗던 문제를 고쳤습니다.
   - 열린 트리거를 누르면 닫혔다가 바로 다시 열리던 문제를 고쳤습니다.
