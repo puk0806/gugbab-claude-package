@@ -75,7 +75,8 @@ function toMicError(raw: string): MicError {
 }
 
 export function createRecognizer(options: CreateRecognizerOptions): SpeechRecognizer {
-    const w = window as unknown as Record<string, unknown>;
+    // SSR: no window — report the documented "not supported" error instead of a ReferenceError.
+    const w = (typeof window === "undefined" ? {} : window) as unknown as Record<string, unknown>;
     const Ctor = (w.SpeechRecognition ?? w.webkitSpeechRecognition) as SpeechRecognitionCtor | undefined;
 
     if (typeof Ctor !== "function") {
