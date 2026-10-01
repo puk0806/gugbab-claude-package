@@ -12,6 +12,10 @@ export interface ReadSSEStreamOptions {
 }
 
 const DEFAULT_MAX_BUFFER_SIZE = 1_048_576;
+// WHATWG event-stream line endings: CRLF, LF or a lone CR. A CRLF split across
+// two chunks yields one extra empty line, which parses to nothing.
+const LINE_BREAKS = /\r\n|\r|\n/;
+const LINE_BREAK = /[\r\n]/;
 
 export async function readSSEStream(
     body: ReadableStream<Uint8Array>,
@@ -36,11 +40,16 @@ export async function readSSEStream(
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
-            buffer += decoder.decode(value, { stream: true });
+            const chunk = decoder.decode(value, { stream: true });
+            buffer += chunk;
 
-            const lines = buffer.split("\n");
-            buffer = lines.pop() ?? "";
-            for (const line of lines) emit(line);
+            // Re-split only when a line ended — scanning the whole tail on every
+            // small newline-free chunk would be quadratic up to maxBufferSize.
+            if (LINE_BREAK.test(chunk)) {
+                const lines = buffer.split(LINE_BREAKS);
+                buffer = lines.pop() ?? "";
+                for (const line of lines) emit(line);
+            }
 
             if (buffer.length > maxBufferSize) {
                 throw new RangeError(`SSE line exceeded maxBufferSize (${maxBufferSize} characters)`);
@@ -49,7 +58,7 @@ export async function readSSEStream(
 
         // flush decoder's internal multibyte buffer, then process any remaining lines
         buffer += decoder.decode();
-        for (const line of buffer.split("\n")) emit(line);
+        for (const line of buffer.split(LINE_BREAKS)) emit(line);
     } catch (error) {
         // Stop the producer — otherwise the connection stays open after we give up.
         // Not awaited: a source whose cancel() never settles must not swallow the error.
