@@ -1,19 +1,5 @@
-import { Separator as HeadlessSeparator, type SeparatorProps } from "@gugbab/headless";
-import { cn } from "@gugbab/utils";
-import { forwardRef } from "react";
+import { createSeparator } from "@gugbab/styled-factory";
 
-export interface StyledSeparatorProps extends SeparatorProps {}
+export const Separator = /* @__PURE__ */ createSeparator("grx");
 
-export const Separator = forwardRef<HTMLDivElement, StyledSeparatorProps>(function Separator(
-    { className, orientation = "horizontal", ...rest },
-    ref,
-) {
-    return (
-        <HeadlessSeparator
-            ref={ref}
-            orientation={orientation}
-            className={cn("grx-separator", `grx-separator--${orientation}`, className)}
-            {...rest}
-        />
-    );
-});
+export type { StyledSeparatorProps } from "@gugbab/styled-factory";

@@ -1,31 +1,8 @@
-import { RadioGroup as Headless, type RadioGroupItemProps, type RadioGroupRootProps } from "@gugbab/headless";
-import { cn } from "@gugbab/utils";
-import { forwardRef, type HTMLAttributes } from "react";
+import { createRadioGroup } from "@gugbab/styled-factory";
 
-export type RadioGroupSize = "sm" | "md";
+export const RadioGroup = /* @__PURE__ */ createRadioGroup("gmui");
 
-export interface RadioGroupRootStyledProps extends RadioGroupRootProps {
-    size?: RadioGroupSize;
-}
-
-const Root = forwardRef<HTMLDivElement, RadioGroupRootStyledProps>(function RadioGroupRoot(
-    { size = "md", className, ...rest },
-    ref,
-) {
-    return (
-        <Headless.Root ref={ref} className={cn("gmui-radio-group", `gmui-radio-group--${size}`, className)} {...rest} />
-    );
-});
-
-const Item = forwardRef<HTMLButtonElement, RadioGroupItemProps>(function RadioGroupItem({ className, ...rest }, ref) {
-    return <Headless.Item ref={ref} className={cn("gmui-radio-group__item", className)} {...rest} />;
-});
-
-const Indicator = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(function RadioGroupIndicator(
-    { className, ...rest },
-    ref,
-) {
-    return <span ref={ref} className={cn("gmui-radio-group__indicator", className)} {...rest} />;
-});
-
-export const RadioGroup = { Root, Item, Indicator };
+export type {
+    RadioGroupRootStyledProps,
+    RadioGroupSize,
+} from "@gugbab/styled-factory";

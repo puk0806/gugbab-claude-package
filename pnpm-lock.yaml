@@ -297,6 +297,27 @@ importers:
         specifier: ^3.2.7
         version: 3.2.7(@types/node@25.6.0)(jiti@2.6.1)(jsdom@25.0.1)(tsx@4.23.0)(yaml@2.8.3)
 
+  packages/styled-factory:
+    devDependencies:
+      '@gugbab/headless':
+        specifier: workspace:*
+        version: link:../headless
+      '@gugbab/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
+      '@gugbab/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.14
+      react:
+        specifier: ^19.0.0
+        version: 19.2.5
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   packages/styled-mui:
     dependencies:
       '@gugbab/headless':
@@ -309,6 +330,9 @@ importers:
         specifier: workspace:*
         version: link:../utils
     devDependencies:
+      '@gugbab/styled-factory':
+        specifier: workspace:*
+        version: link:../styled-factory
       '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -355,6 +379,9 @@ importers:
         specifier: workspace:*
         version: link:../utils
     devDependencies:
+      '@gugbab/styled-factory':
+        specifier: workspace:*
+        version: link:../styled-factory
       '@gugbab/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig

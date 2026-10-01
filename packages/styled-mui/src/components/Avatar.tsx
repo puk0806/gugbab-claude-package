@@ -1,26 +1,8 @@
-import { type AvatarFallbackProps, type AvatarImageProps, Avatar as Headless } from "@gugbab/headless";
-import { cn } from "@gugbab/utils";
-import { forwardRef, type HTMLAttributes } from "react";
+import { createAvatar } from "@gugbab/styled-factory";
 
-export type AvatarSize = "sm" | "md" | "lg";
+export const Avatar = /* @__PURE__ */ createAvatar("gmui");
 
-export interface AvatarRootProps extends HTMLAttributes<HTMLSpanElement> {
-    size?: AvatarSize;
-}
-
-const Root = forwardRef<HTMLSpanElement, AvatarRootProps>(function AvatarRoot(
-    { size = "md", className, ...rest },
-    ref,
-) {
-    return <Headless.Root ref={ref} className={cn("gmui-avatar", `gmui-avatar--${size}`, className)} {...rest} />;
-});
-
-const Image = forwardRef<HTMLImageElement, AvatarImageProps>(function AvatarImage({ className, ...rest }, ref) {
-    return <Headless.Image ref={ref} className={cn("gmui-avatar__image", className)} {...rest} />;
-});
-
-const Fallback = forwardRef<HTMLSpanElement, AvatarFallbackProps>(function AvatarFallback({ className, ...rest }, ref) {
-    return <Headless.Fallback ref={ref} className={cn("gmui-avatar__fallback", className)} {...rest} />;
-});
-
-export const Avatar = { Root, Image, Fallback };
+export type {
+    AvatarRootProps,
+    AvatarSize,
+} from "@gugbab/styled-factory";

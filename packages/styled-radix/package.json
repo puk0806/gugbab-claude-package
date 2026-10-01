@@ -53,7 +53,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build": "tsup && node ../../scripts/build-styled-css.mjs radix && node ../../scripts/inject-use-client.mjs dist/index.mjs dist/index.cjs",
+    "build": "tsup && node ../../scripts/build-styled-css.mjs radix && node ../../scripts/inject-use-client.mjs dist/index.mjs dist/index.cjs && node ../../scripts/assert-no-private-imports.mjs @gugbab/styled-factory dist/index.mjs dist/index.cjs dist/index.d.ts dist/index.d.cts",
     "dev": "tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -70,6 +70,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
+    "@gugbab/styled-factory": "workspace:*",
     "@gugbab/tsconfig": "workspace:*",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
