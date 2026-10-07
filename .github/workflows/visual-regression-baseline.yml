@@ -73,7 +73,7 @@ jobs:
           fi
 
       - name: Create PR with new baselines
-        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7.0.11
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         env:
           # peter-evans 가 내부적으로 git commit 할 때 husky pre-commit/commit-msg 가
           # 도는 것을 차단. CI 환경이라 hook 의 의미가 없으며 commitlint 가 자동 메시지를
