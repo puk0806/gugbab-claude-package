@@ -7,7 +7,15 @@ updates:
     schedule:
       interval: weekly
     groups:
-      # minor/patch 는 한 PR로 묶고, major 는 액션별 개별 PR로 받아 변경점을 따로 검토한다.
-      actions-minor-patch:
+      # major 를 포함한 모든 액션 업데이트를 PR 하나로 묶는다(작업 단위마다 PR 을 쪼개지 않는다).
+      # major 는 머지 전에 릴리스 노트의 호환성 변경을 반드시 확인한다 — PR 검사는 배포
+      # 흐름(release.yml, main 머지 후 실행)을 검증하지 못한다.
+      github-actions:
         patterns: ["*"]
-        update-types: ["minor", "patch"]
+        update-types: ["major", "minor", "patch"]
+    ignore:
+      # changesets/action v2 는 Changesets CLI v3 를 요구하고(v2 CLI 는 거부) 입력·출력 이름이
+      # 바뀌었다(publish→publish-script, pullRequestNumber→pr-number, 토큰은 github-token 입력).
+      # CLI v3 마이그레이션과 release.yml 수정을 함께 할 때까지 v1 에 머문다.
+      - dependency-name: changesets/action
+        update-types: ["version-update:semver-major"]

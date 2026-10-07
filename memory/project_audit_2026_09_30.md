@@ -1,16 +1,16 @@
 ---
 name: project_audit_2026_09_30
-description: "2026-09-30 전체 점검 — 1~4순위·styled 통합까지 6개 브랜치 전부 커밋(미푸시), 병합 시뮬레이션 GREEN. 남은 것: 푸시·D1~D4·Codex 설정"
+description: "2026-09-30 전체 점검 — 1~4순위·styled 통합을 단일 PR #50으로 머지하고 2026-10-01 npm 배포 완료. 남은 것: 앱 3곳 회신 후 ruleset 적용, D1~D3, Codex 설정"
 metadata:
   node_type: memory
   type: project
   originSessionId: f35db723-e646-4a91-90c9-1860c939e8df
-  modified: 2026-10-01T05:01:35.305Z
+  modified: 2026-10-02T00:40:04.884Z
 ---
 
 2026-09-30 전체 프로젝트 점검. a11y-auditor, security-auditor, codebase-domain-analyst, qa-engineer, pr-reviewer를 병렬로 돌렸다. 2026-10-01까지 모든 순위 작업을 마쳤다.
 
-**브랜치 (모두 커밋, 미푸시 — 사용자가 마지막에 한 번에 푸시. PR은 사용자가 생성)**
+**브랜치 (작업 당시 기록 — 이후 단일 PR #50으로 합쳐 머지했고, 6개 원격 브랜치는 남아 있다)**
 - `feature/claude-assets-cleanup`: Claude 자산 정리 + memory/export
 - `feature/fix-headless-priority1`: main 기준. 동작 버그, 메뉴 axe 위반(HoverCard role 제거·ContextMenu 트리거 aria 제거·Menubar 트리거 menuitem), Accordion.Header `level`, Toast `closeLabel`, ref 병합 안정화(useMergedRefs)
 - `feature/fix-security-priority2`: main 기준
@@ -30,13 +30,20 @@ metadata:
 
 **푸시·PR (2026-10-01, 사용자 명시 요청으로 PR까지 생성):** 처음에는 #44~#49 6개로 만들었다. 사용자가 PR 하나를 원해서 `feature/project-audit-2026-09`(main에서 분기, 6개 브랜치를 순서대로 머지)로 단일 PR을 만들고 6개는 닫았다. 원격 브랜치는 남겨 뒀다. 4순위 외관 변경 때문에 VR `accept-baseline`이 필요하다. 머지는 사용자가 한다. 배포 뒤 소비 앱 테스트로 이어진다. 커밋이 관심사별로 나뉘어 있으면 PR은 하나로 충분하다는 것이 사용자 선호다 — [[feedback_single_pr]]
 
+**배포 완료 (2026-10-01 07:26 UTC):** headless 1.1.0, hooks 1.3.1, utils 1.5.0, tokens 1.1.0, styled-mui·styled-radix 1.1.0을 npm에서 확인했다. dream·voca·health 세션에 업그레이드와 CI 보호 통일(ci.yml, VR 보안 수정, ci 승계 단계, vrt-archive) 요청을 보냈다. **다음 할 일:** 각 앱이 ci.yml을 main에 머지했다고 회신하면, 이 세션이 그 레포 main에 ruleset을 적용한다. 기준은 PR 필수, ci·visual-regression 필수 검사(strict), 우회 없음, 강제 푸시·삭제 금지다. classic 보호는 제거하고, `allow_auto_merge`는 끈 상태를 유지한다.
+- **voca 완료 (2026-10-01):** PR #29 머지(main 4430e09) 확인 → ruleset "main"(id 24297855) 생성 → classic 보호 제거 → vrt-snapshots ruleset에 vrt-archive 추가. 우회는 never. voca만 pnpm 9.15.0이다
+- **health 완료 (2026-10-02):** PR #20 머지(main 42e0589) 확인 → ruleset "main"(id 24341813) 생성, vrt-snapshots·vrt-archive 보호 ruleset(id 24341814) 신설 → classic 보호 제거. health는 처음에 `biome ci`가 11건 실패해서 선행 정리가 필요했다
+- dream 회신 대기(health가 알려 준 함정을 전달함)
+- relay: sonnet·opus 5.5가 400을 내서 health 프로덕션 채팅이 실패 중이다(haiku는 정상). relay 세션(05)이 원인을 확정했다. Vercel Sandbox 스냅샷에 claude CLI가 빠져 `executable_not_found: claude`가 난 것이다(10-01 주간 템플릿 교체 때 설치 실패가 검증 없이 채택됨). haiku는 샌드박스를 거치지 않는 direct 경로라 정상이었다. 내가 처음 짐작한 원인(모델 ID·파라미터)은 틀렸다 — SDK 오류 문자열만 보고 짐작하지 말 것. 복구는 relay 사용자 승인 대기
+- dream: 작업 트리에 요청 1~5 반영 완료(`biome ci` 0건). `.claude` 재설치 결정과 커밋 요청을 사용자가 해야 한다
+
 **소비 프로젝트 (사용자 확인):** gugbab-dream·gugbab-voca·gugbab-health 세션이 `@gugbab/*`를 쓴다. relay(API)는 대상이 아니다. 배포 뒤 각 세션에 영향 변경 목록(utils SSE 동작, hooks peer와 useSSEChat, headless DOM과 role, styled 외관, tokens TypeError)을 전달하고, 업그레이드 브랜치에서 테스트와 시각 회귀로 확인한다
 
 **사용자 결정 대기:**
 - D1 npm OIDC Trusted Publishing: 패키지 9개 등록 필요, pnpm publish의 OIDC 지원 미확인
 - D2 relay-types 게시 승인 게이트와 main 직접 push
 - D3 VR 워크플로우 job 분리
-- D4 GitHub 설정 점검
+- D4 GitHub 설정 점검 → package 레포는 2026-10-01 엄격 보호로 해결. 앱 3곳은 회신 대기
 - Codex: `~/.codex/config.toml`의 `model = "gpt-5.4"`가 ChatGPT 계정에서 400 오류를 낸다. 리뷰는 pr-reviewer로 대체했다
 
 **후속 (미착수):** SSE 함수 제네릭화, 다음 major에서 safety_block 제거, CSS `var`·`data-*` 계약 테스트, `color-mix` 지원 브라우저 README 명시, dev 전용 취약점(vitest v4·uuid v11·esbuild)
