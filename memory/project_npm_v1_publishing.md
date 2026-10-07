@@ -3,7 +3,7 @@ name: npm v1 publishing — DONE (v1.0.1 + auto-merge)
 description: @gugbab/* 9개 v1.0.0 (2026-05-09) + 5개 v1.0.1 (2026-05-11) publish 완료. 자동 publish 흐름은 feature PR 머지 1회로 끝나도록 진화.
 type: project
 originSessionId: d38b63bc-10e0-4db4-8ff1-14cf943313c2
-modified: 2026-10-07T00:24:54.112Z
+modified: 2026-10-07T01:12:44.889Z
 ---
 `@gugbab/*` 패키지 npm public 게시 자동화 운영 중. v1.0.0 (9 패키지) 첫 publish 2026-05-09, v1.0.1 (5 publishable patch) 2026-05-11. 2026-05-11 자동화 한 단계 진화 — *사용자 머지 1회로 publish까지 자동*.
 
@@ -110,6 +110,7 @@ Version PR #40 이 열린 채 방치 → 사용자 수동 머지로 publish 완�
 - **2026-10-01 만료로 publish 실패:** `NPM_TOKEN`을 06-16에 등록했고 09-14에 만료됐다. #50 머지 → Version PR #56 자동 머지까지는 정상이었지만, publish 단계에서 6개 패키지가 모두 `E404 Not Found - PUT`으로 실패했다(만료 토큰은 404로 보인다). 재발급하면 `gh workflow run release --ref main -f mode=changeset`으로 다시 게시한다. 첫 재발급 토큰은 "Bypass 2FA"가 꺼져 있어 EOTP로 또 실패했고, 세 번째 토큰(Secret 갱신 2026-10-01 07:22 UTC)으로 6개 게시에 성공했다. **이 토큰은 약 2026-12-30에 만료된다(90일). publish 전에 `gh secret list`로 NPM_TOKEN 날짜를 확인할 것**(날짜 + 90일)
 - 갱신 주기: 만료 1주 전 알림 보고 새 토큰 발급 + GitHub Secret 갱신
 - Token: 발급 직후 한 번만 노출 → 즉시 GitHub Secret 에 저장
-- **changesets/action은 v1에 고정 (2026-10-07):** v2는 Changesets CLI v3를 요구하고(현재 CLI 2.31은 거부됨) 입력·출력 이름이 바뀌었다(publish→publish-script, version→version-script, commit→commit-message, title→pr-title, pullRequestNumber→pr-number, 토큰은 `github-token` 입력만 받음). 그대로 올리면 release.yml이 조용히 깨진다. dependabot.yml에서 major를 ignore했다. CLI v3로 옮길 때 release.yml과 함께 고친다
-- **Dependabot:** 모든 액션 업데이트(major 포함)를 PR 하나로 묶는다. major는 릴리스 노트에서 호환성 변경을 확인한 뒤 머지한다(PR 검사로는 release 흐름을 검증할 수 없다)
+- **changesets/action은 v1에 고정 (2026-10-07):** v2는 Changesets CLI v3를 요구하고(현재 CLI 2.31은 거부됨) 입력·출력 이름이 바뀌었다(publish→publish-script, version→version-script, commit→commit-message, title→pr-title, pullRequestNumber→pr-number, 토큰은 `github-token` 입력만 받음). 그대로 올리면 release.yml이 조용히 깨진다. CLI v3로 옮길 때 release.yml과 함께 고친다
+- **2026-10-07 #57 머지 후 검증:** checkout 7.0.1·setup-node 7.0.0·pnpm/action-setup 6.1.0으로 release가 성공했다. 새로 배포할 버전이 없어 publish는 건너뛰었다(9개 모두 이미 게시됨). 이로써 액션 업데이트가 배포 흐름을 깨지 않음을 확인했다. relay-types의 PR 방식 baseline 갱신은 10-02 두 번 실행 모두 스펙 변경이 없어 **아직 실제로 동작한 적이 없다** — 첫 스펙 변경 때 확인할 것
+- **Dependabot은 끔 (2026-10-07, 사용자 결정 "당장 꺼"):** 09-30에 요청 없이 추가했다가 제거했다 — [[feedback_no_unrequested_automation]]. 액션은 SHA 고정 그대로라 탈취 방어는 유지되지만 업데이트는 수동이다(가끔 직접 확인). 확인하지 않은 업데이트 후보: create-pull-request 8.1.1, upload-artifact 7.0.1(Node 24 전환뿐). major는 릴리스 노트의 호환성 변경을 확인한 뒤 올린다(PR 검사로는 release 흐름을 검증할 수 없다)
 - Provenance: GitHub Actions OIDC + sigstore 자동 서명 (`--provenance` 플래그)

@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: project
   originSessionId: f35db723-e646-4a91-90c9-1860c939e8df
-  modified: 2026-10-02T00:40:04.884Z
+  modified: 2026-10-07T01:12:48.090Z
 ---
 
 2026-09-30 전체 프로젝트 점검. a11y-auditor, security-auditor, codebase-domain-analyst, qa-engineer, pr-reviewer를 병렬로 돌렸다. 2026-10-01까지 모든 순위 작업을 마쳤다.
@@ -36,6 +36,13 @@ metadata:
 - dream 회신 대기(health가 알려 준 함정을 전달함)
 - relay: sonnet·opus 5.5가 400을 내서 health 프로덕션 채팅이 실패 중이다(haiku는 정상). relay 세션(05)이 원인을 확정했다. Vercel Sandbox 스냅샷에 claude CLI가 빠져 `executable_not_found: claude`가 난 것이다(10-01 주간 템플릿 교체 때 설치 실패가 검증 없이 채택됨). haiku는 샌드박스를 거치지 않는 direct 경로라 정상이었다. 내가 처음 짐작한 원인(모델 ID·파라미터)은 틀렸다 — SDK 오류 문자열만 보고 짐작하지 말 것. 복구는 relay 사용자 승인 대기
 - dream: 작업 트리에 요청 1~5 반영 완료(`biome ci` 0건). `.claude` 재설치 결정과 커밋 요청을 사용자가 해야 한다
+
+**2026-10-07 정리 상태:**
+- 완료: npm 배포, package·voca·health 엄격 보호, #57(액션 major 4종, changesets/action v1 고정) 머지와 release 검증
+- Dependabot: 사용자가 끄기로 결정(요청하지 않은 기능이었음). #58은 닫았고 설정 파일을 삭제하는 PR을 올림
+- 대기: dream 엄격 보호(dream 세션이 커밋·PR·머지한 뒤 회신하면 적용)
+- 대기: relay 400 복구(relay 사용자 승인), 원본 설치본 재설치(원본 머지 후)
+- 후속: Changesets CLI v3 + changesets/action v2 마이그레이션(release.yml 입력·출력 이름 변경 포함)
 
 **소비 프로젝트 (사용자 확인):** gugbab-dream·gugbab-voca·gugbab-health 세션이 `@gugbab/*`를 쓴다. relay(API)는 대상이 아니다. 배포 뒤 각 세션에 영향 변경 목록(utils SSE 동작, hooks peer와 useSSEChat, headless DOM과 role, styled 외관, tokens TypeError)을 전달하고, 업그레이드 브랜치에서 테스트와 시각 회귀로 확인한다
 
