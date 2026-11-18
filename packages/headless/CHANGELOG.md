@@ -1,5 +1,12 @@
 # @gugbab/headless
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [67f2a53]
+  - @gugbab/hooks@1.4.0
+
 ## 1.1.0
 
 ### Minor Changes

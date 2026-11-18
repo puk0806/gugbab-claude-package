@@ -1,5 +1,11 @@
 # @gugbab/storybook-radix
 
+## 0.0.8
+
+### Patch Changes
+
+- @gugbab/styled-radix@1.1.1
+
 ## 0.0.7
 
 ### Patch Changes
