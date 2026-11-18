@@ -28,7 +28,8 @@ jobs:
       github.event_name != 'pull_request' ||
       github.event.action != 'labeled' ||
       github.event.label.name == 'accept-baseline'
-    runs-on: ubuntu-latest
+    # ubuntu-latest(26.04)는 Playwright 1.59가 chromium 미지원 + baseline이 24.04 렌더링 기준
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

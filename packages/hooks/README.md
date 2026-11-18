@@ -26,6 +26,8 @@
 | speech | `createRecognizer` | 프레임워크 독립 STT 코어 (훅 없이 직접 제어할 때) |
 | speech | `pickVoice` / `listVoices` | voice 선택 유틸 (preferredURI > lang 정확 일치 > primary subtag) |
 | speech | `isSpeechRecognitionSupported` / `isSpeechSynthesisSupported` | 지원 감지 (부분 구현 방어 포함) |
+| push | `usePushSubscription` | Web Push 구독·해지 — 권한 요청(제스처 유지)·중복 탭 방어·VAPID 키 교체·서버 저장 실패 시 되돌림 |
+| push | `getPushSupport` | `supported` / `ios-needs-install`(iOS 홈 화면 PWA 필요) / `unsupported` |
 
 ## 설치
 
@@ -51,3 +53,47 @@ function Popover(props: { open?: boolean; defaultOpen?: boolean; onOpenChange?: 
   return open ? <div ref={ref}>...</div> : null;
 }
 ```
+
+### 웹 푸시 구독
+
+브라우저 쪽(권한·구독·해지)만 다룬다. 서비스워커의 `push` 이벤트 처리와 서버 발송(`web-push` 등)은 앱에서 구현한다.
+
+```tsx
+'use client';
+import { usePushSubscription } from '@gugbab/hooks';
+
+const MESSAGES = {
+  'permission-denied': '브라우저 설정에서 알림을 허용해 주세요',
+  'ios-needs-install': '공유 → 홈 화면에 추가 후 앱에서 다시 시도해 주세요',
+} as const;
+
+function PushToggle() {
+  const push = usePushSubscription({
+    vapidPublicKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? '',
+    // 서비스워커 등록 완료까지 기다리려면 지정 (기본은 getRegistration — 미등록이면 no-service-worker)
+    getRegistration: () => navigator.serviceWorker.ready,
+    onSubscribe: async (sub) => {
+      const res = await fetch('/api/push/subscribe', { method: 'POST', body: JSON.stringify(sub) });
+      if (!res.ok) throw new Error('save failed'); // throw → sync-failed + 새 구독 되돌림
+    },
+    onUnsubscribe: async (sub) => {
+      await fetch('/api/push/unsubscribe', { method: 'POST', body: JSON.stringify({ endpoint: sub.endpoint }) });
+    },
+  });
+
+  if (push.support === 'unsupported') return null;
+  const busy = push.status !== 'idle';
+
+  return (
+    <>
+      {/* subscribe()는 반드시 클릭 핸들러 안에서 — iOS는 사용자 제스처 밖 권한 요청을 거부 */}
+      <button disabled={busy} onClick={() => (push.subscription ? push.unsubscribe() : push.subscribe())}>
+        {push.subscription ? '알림 끄기' : '알림 켜기'}
+      </button>
+      {push.error && <p>{MESSAGES[push.error as keyof typeof MESSAGES] ?? '알림 설정에 실패했어요'}</p>}
+    </>
+  );
+}
+```
+
+`PushError`: `unsupported` · `ios-needs-install` · `invalid-key` · `permission-denied` · `permission-dismissed` · `no-service-worker` · `subscribe-failed` · `unsubscribe-failed` · `sync-failed`

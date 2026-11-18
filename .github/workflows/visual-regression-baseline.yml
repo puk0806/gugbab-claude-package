@@ -25,7 +25,8 @@ concurrency:
 
 jobs:
   generate-baseline:
-    runs-on: ubuntu-latest
+    # visual-regression.yml과 같은 OS로 고정 — baseline 렌더링 일치
+    runs-on: ubuntu-24.04
     # peter-evans / github-actions bot 의 PR 자동 머지로 인한 push 는 skip
     if: github.actor != 'github-actions[bot]'
     steps:

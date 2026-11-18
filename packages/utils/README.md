@@ -80,6 +80,16 @@ import { camelCase, chunk, debounce, isNil, formatBytes } from '@gugbab/utils';
 | `formatPercent(ratio, opts?)` | `0.5` → `50%` |
 | `formatBytes(bytes, { fractionDigits?, base? })` | 바이트 크기 (binary 기본, decimal 옵션) |
 
+### push
+
+Web Push(VAPID) 브라우저·서버 공용 순수 함수. React 훅은 `@gugbab/hooks`의 `usePushSubscription`.
+
+| 함수 | 설명 |
+| --- | --- |
+| `urlBase64ToUint8Array(input)` | base64url(표준 base64도 허용) → `Uint8Array`. `applicationServerKey` 변환용, 형식 오류는 `TypeError` |
+| `isVapidPublicKey(key)` | VAPID 공개키 형식 검증 (65바이트·0x04 시작) — 비밀키를 넣는 실수 방지 |
+| `serializePushSubscription(sub)` | `PushSubscription` → `{ endpoint, expirationTime, keys: { p256dh, auth } }`. https endpoint·키 형식 검증, 실패 시 `null` |
+
 ## 라이선스
 
 MIT
