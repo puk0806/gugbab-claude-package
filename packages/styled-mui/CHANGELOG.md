@@ -1,5 +1,13 @@
 # @gugbab/styled-mui
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [67f2a53]
+  - @gugbab/utils@1.6.0
+  - @gugbab/headless@1.1.1
+
 ## 1.1.0
 
 ### Minor Changes
