@@ -11,7 +11,6 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 ```
 01_gugbab-claude-package/
 ├── CLAUDE.md              # 프로젝트 지침
-├── .claude/               # Claude Code 자산 (원본 레포 gugbab-claude의 설치본)
 ├── .husky/                # Git 훅 (pre-commit / commit-msg / pre-push)
 ├── .changeset/            # Changesets 버전 기록
 ├── packages/              # 배포 대상 패키지 (@gugbab/*)
@@ -29,7 +28,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 ├── apps/
 │   ├── storybook-mui/     # @gugbab/storybook-mui (styled-mui 전용 쇼케이스)
 │   └── storybook-radix/   # @gugbab/storybook-radix (styled-radix 전용 쇼케이스)
-├── docs/                  # 에이전트·스킬 검증 문서 및 리서치
+├── docs/                  # 리서치·설계 문서 (radix-parity, research, superpowers)
 └── examples/              # CLAUDE.md 템플릿
 ```
 
@@ -109,3 +108,4 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-08-14 | relay 입력 상한 대응 이력 압축 유틸 — `@gugbab/utils` v1.3.0: `history` 모듈 순수 함수 4종(`totalContentBytes`·`fitMessagesToBudget`·`compressHistory`·`isHistoryValidationError`). 상한 값 파라미터 주입, 타 패키지 의존 없음, 첫·마지막 role=user 계약 보장. 적대적·경계 테스트 21개 추가 (Codex 3라운드 리뷰 반영 — 꼬리 assistant 계약 파괴 수정). `@gugbab/commitlint-config` v1.1.0: `[export] sync: <파일명>` 예외 형식 허용 — git.md 컨벤션과 검증 불일치 해소, export 커밋의 `--no-verify` 우회 제거. |
 | 2026-09-30 | Claude 자산을 원본 레포 최신 설치본(react-spa·nextjs, 작성 도구 제외, `--legacy`·README 가드·staleness 강제)으로 교체 후 정리 — 설치 목록 밖 잔재 스킬 57종(꿈 앱·SEO·health·n8n·writing)·에이전트 2종(seo-auditor·content-quality-reviewer)과 스킬 없는 검증 문서 143개 삭제, 원본 제거 스킬 9종(radix-ui 등) 반영. 원본에서 수정된 훅 버그 반영(차단 훅 5종 stderr, `/agent-status` git 기반 집계, `hooks/package.json`). 템플릿으로 덮인 CLAUDE.md를 프로젝트 내용으로 복원·병합(biome·commitlint 스택, 빌드 순서 현행화). README 자산 현황(에이전트 30·스킬 53·훅 24·규칙 7)·패키지 버전 현행화. |
 | 2026-10-01 | README에서 Claude 자산 현황(에이전트·스킬·훅·규칙·플러그인 목록) 섹션 제거 — 자산은 원본 레포 설치본이라 여기서 목록을 유지하지 않는다. 훅 상세는 `docs/hooks/README.md` |
+| 2026-11-19 | 프로젝트 로컬 Claude 하네스 제거 — `.claude/`(에이전트·스킬·훅·룰·커맨드·settings.json 157개)와 그 검증 문서(`docs/agents`·`docs/skills`·`docs/hooks`)를 삭제하고 `gugbab-claude` 래퍼의 공통 하네스로 전환(켜기·끄기는 `/harness`). `CLAUDE.md`는 프로젝트 지침만 남기고 로컬 `.claude/rules` 참조·스킬 검증 규칙 제거. `.gitignore`의 `.install-manifest.json` 항목 제거(Codex 리뷰 마커 항목은 공통 하네스가 계속 쓰므로 유지). |
