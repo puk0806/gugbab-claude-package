@@ -56,7 +56,6 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 | pre-commit   | `lint-staged`     | staged 파일에 `biome check --write` | ✅ |
 | commit-msg   | `commitlint`      | `[category] Type: Subject` 정규식 | ✅ |
 | **pre-push** | `pnpm typecheck && pnpm exec biome ci .` | 전체 레포 typecheck + biome CI | ✅ |
-| **pre-push** | `codex review --base <upstream>` | Codex 독립 리뷰 (advisory) | ❌ |
 
 ### Storybook (apps/storybook-mui · apps/storybook-radix)
 
@@ -76,8 +75,6 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 추가 인자는 그대로 전달된다 (`bash scripts/storybook-build.sh mui --skip-deps` 로 deps 빌드 생략 등).
 
 > Storybook 10은 Node ≥20.19 또는 ≥22.12를 요구한다. 두 스크립트 모두 `scripts/_use-node22.sh` 헬퍼로 nvm에 설치된 Node 22.x(또는 20.19+)를 자동 PATH에 prepend 한다. nvm이 없으면 `NODE_BIN=/path/to/node-bin pnpm sb:dev:mui`로 직접 지정 가능.
-
-Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 
 ---
 
@@ -110,4 +107,4 @@ Codex 리뷰 생략: `SKIP_CODEX=1 git push ...`
 | 2026-08-14 | relay 입력 상한 대응 이력 압축 유틸 — `@gugbab/utils` v1.3.0: `history` 모듈 순수 함수 4종(`totalContentBytes`·`fitMessagesToBudget`·`compressHistory`·`isHistoryValidationError`). 상한 값 파라미터 주입, 타 패키지 의존 없음, 첫·마지막 role=user 계약 보장. 적대적·경계 테스트 21개 추가 (Codex 3라운드 리뷰 반영 — 꼬리 assistant 계약 파괴 수정). `@gugbab/commitlint-config` v1.1.0: `[export] sync: <파일명>` 예외 형식 허용 — git.md 컨벤션과 검증 불일치 해소, export 커밋의 `--no-verify` 우회 제거. |
 | 2026-09-30 | Claude 자산을 원본 레포 최신 설치본(react-spa·nextjs, 작성 도구 제외, `--legacy`·README 가드·staleness 강제)으로 교체 후 정리 — 설치 목록 밖 잔재 스킬 57종(꿈 앱·SEO·health·n8n·writing)·에이전트 2종(seo-auditor·content-quality-reviewer)과 스킬 없는 검증 문서 143개 삭제, 원본 제거 스킬 9종(radix-ui 등) 반영. 원본에서 수정된 훅 버그 반영(차단 훅 5종 stderr, `/agent-status` git 기반 집계, `hooks/package.json`). 템플릿으로 덮인 CLAUDE.md를 프로젝트 내용으로 복원·병합(biome·commitlint 스택, 빌드 순서 현행화). README 자산 현황(에이전트 30·스킬 53·훅 24·규칙 7)·패키지 버전 현행화. |
 | 2026-10-01 | README에서 Claude 자산 현황(에이전트·스킬·훅·규칙·플러그인 목록) 섹션 제거 — 자산은 원본 레포 설치본이라 여기서 목록을 유지하지 않는다. 훅 상세는 `docs/hooks/README.md` |
-| 2026-11-19 | 프로젝트 로컬 Claude 하네스 제거 — `.claude/`(에이전트·스킬·훅·룰·커맨드·settings.json 157개)와 그 검증 문서(`docs/agents`·`docs/skills`·`docs/hooks`)를 삭제하고 `gugbab-claude` 래퍼의 공통 하네스로 전환(켜기·끄기는 `/harness`). 루트 `CLAUDE.md`·`examples/`(설치용 CLAUDE.md 템플릿)도 삭제하고 꼭 필요한 금지 사항 3줄은 README "작업 원칙"으로 이동. 레포의 `memory/`·`exports/` 미러 삭제 후 `.gitignore`에 추가(원본은 전역 메모리 폴더). `.gitignore`의 `.install-manifest.json` 항목 제거(Codex 리뷰 마커 항목은 공통 하네스가 계속 쓰므로 유지). |
+| 2026-11-19 | 프로젝트 로컬 Claude 하네스 제거 — `.claude/`(에이전트·스킬·훅·룰·커맨드·settings.json 157개)와 그 검증 문서(`docs/agents`·`docs/skills`·`docs/hooks`)를 삭제하고 `gugbab-claude` 래퍼의 공통 하네스로 전환(켜기·끄기는 `/harness`). 루트 `CLAUDE.md`·`examples/`(설치용 CLAUDE.md 템플릿)도 삭제하고 꼭 필요한 금지 사항 3줄은 README "작업 원칙"으로 이동. 레포의 `memory/`·`exports/` 미러 삭제 후 `.gitignore`에 추가(원본은 전역 메모리 폴더). `.gitignore`의 `.install-manifest.json` 항목 제거(Codex 리뷰 마커 항목은 공통 하네스가 계속 쓰므로 유지). 잔재 추가 정리: 미사용 `.githooks/`(시크릿 검사 — 공통 `protect-secrets`와 중복) 삭제, `.husky/pre-push`의 Codex 리뷰 단계 제거(공통 `codex-review-guard`와 중복 — typecheck·biome ci만 유지), `biome.json`의 `.claude`·`.githooks` 제외 항목 제거. |

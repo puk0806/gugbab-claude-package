@@ -1,4 +1,4 @@
-echo "🔍 pre-push: typecheck → biome ci → codex review (advisory)"
+echo "🔍 pre-push: typecheck → biome ci"
 
 # delete-only push (예: 머지된 브랜치 정리) 는 검증할 변경이 없으므로 skip.
 # stdin 으로 들어오는 ref 정보의 local_sha 가 모두 zero-sha 면 delete-only.
@@ -19,15 +19,6 @@ if [ "$has_input" = "true" ] && [ "$all_deletes" = "true" ]; then
   exit 0
 fi
 
-# 1) 필수 검증 — 실패 시 push 차단
+# 필수 검증 — 실패 시 push 차단 (Codex 리뷰는 gugbab-claude 공통 하네스가 담당)
 pnpm typecheck || exit 1
 pnpm exec biome ci . || exit 1
-
-# 2) Codex 리뷰 — advisory (실패해도 push 차단 안 함)
-if [ "$SKIP_CODEX" = "1" ]; then
-  echo "⏭️  SKIP_CODEX=1 — Codex 리뷰 생략"
-else
-  UPSTREAM=$(git rev-parse --abbrev-ref "HEAD@{upstream}" 2>/dev/null || echo "origin/main")
-  echo "🤖 Codex 리뷰 (base=$UPSTREAM, 생략: SKIP_CODEX=1 git push ...)"
-  codex review --base "$UPSTREAM" || echo "⚠️  Codex 리뷰 실행 실패/미인증 — push는 계속 진행"
-fi
