@@ -14,7 +14,7 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 
 ### 개발 워크플로우 (플러그인 기반)
 
-`.claude/settings.json`의 `enabledPlugins`로 두 플러그인을 강제 적용한다.
+하네스(훅·룰·스킬·플러그인)는 프로젝트 안에 두지 않고 `gugbab-claude` 래퍼의 공통 설정으로 적용한다. 켜기·끄기는 `/harness`. 아래 두 플러그인을 사용한다.
 
 | 플러그인                                                                     | 역할                                                                                                       | 주요 커맨드                                  |
 | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
@@ -66,24 +66,6 @@ Claude Code만을 이용해 구축·운영하는 **공용 프론트엔드 패키
 - 검증되지 않은 외부 소스 그대로 복붙 금지
 - `apps/`에 웹 서비스 추가 금지 — 문서/쇼케이스 용도만 허용
 - 특정 프로젝트·스타일에 종속된 구현 금지 — 범용성 훼손
-- 테스트되지 않은 에이전트를 main 브랜치에 직접 커밋 금지
-- verification.md, SKILL.md를 Bash(sed/awk 등)로 수정 금지 — Write/Edit 도구 사용 (verification-guard·skill-md-guard 훅 검사 대상)
-- PENDING_TEST → APPROVED 일괄 전환 금지 — 스킬별 개별 검증 필수
 - 모노레포 `apps/*`·`packages/*` 경계를 넘는 상대경로 import 금지 — workspace 패키지의 public export만 사용
 
 > **워크트리 사용 금지** — 모든 작업(시각화 테스트 포함)은 `feature/{설명}` 피처 브랜치로 진행하고 PR로 머지한다. 머지는 사용자가 직접 수행한다. `superpowers:using-git-worktrees` 스킬보다 우선 적용.
-
----
-
-## 규칙 참조
-
-| 상황                              | 참조 파일                                                                                                           |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| 작업 착수 전 확인                 | @.claude/rules/task-workflow.md                                                                                     |
-| Git 커밋 컨벤션                   | @.claude/rules/git.md                                                                                               |
-| 외부 정보 조사·검증               | @.claude/rules/info-verification.md                                                                                 |
-| TypeScript / React 코딩           | @.claude/rules/typescript.md                                                                                        |
-| 테스트 작성 (적대적 3계층)        | @.claude/rules/adversarial-testing.md                                                                               |
-| Codex 적대적 코드 리뷰            | @.claude/rules/codex-review.md                                                                                      |
-| 메모리 동기화·커밋 전 정리        | @.claude/rules/memory-sync.md                                                                                       |
-| 도메인 폴더 구조·모듈 경계·대규모 이동 | `frontend-domain-refactorer` 에이전트 + `.claude/skills/architecture/{frontend-domain-structure,module-boundaries,incremental-refactoring}` |
